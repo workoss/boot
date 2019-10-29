@@ -13,16 +13,118 @@
         <module>boot-util</module>
     </modules>
 
+
+    <scm>
+        <url>https://github.com/workoss/boot</url>
+        <connection>
+            scm:git:git://github.com/workoss/boot.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://git@github.com/workoss/boot.git
+        </developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <organization>
+        <name>Workoss Software, Inc.</name>
+        <url>https://www.workoss.com</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <comments>
+                Copyright 2018-2019 the original author or authors.
+
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+
+                https://www.apache.org/licenses/LICENSE-2.0
+
+                Unless required by applicable law or agreed to in writing, software
+                distributed under the License is distributed on an "AS IS" BASIS,
+                WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+                implied.
+
+                See the License for the specific language governing permissions and
+                limitations under the License.
+            </comments>
+        </license>
+    </licenses>
+
+
+
     <developers>
         <developer>
             <id>workoss</id>
             <name>workoss</name>
-            <email>ossworker@gmail.com</email>
+            <email>workoss@icloud.com</email>
+           <!-- <organization>Pivotal Software, Inc.</organization>
+            <organizationUrl>https://www.spring.io</organizationUrl>-->
             <roles>
-                <role>develop</role>
+                <role>Project leader</role>
             </roles>
         </developer>
     </developers>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <addSvnKeyWords>false</addSvnKeyWords>
+                    <licenseName>my_license</licenseName>
+                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
+                    <organizationName>Workoss Software, Inc.</organizationName>
+                    <inceptionYear>2019</inceptionYear>
+                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+                    <useJavaNoReformatCommentStartTag>false</useJavaNoReformatCommentStartTag>
+                    <descriptionTemplate>${project.basedir}/src/license/file-header-description.ftl</descriptionTemplate>
+                    <includeOptional>false</includeOptional>
+                    <useMissingFile>false</useMissingFile>
+                    <failOnMissing>false</failOnMissing>
+                    <sectionDelimiter></sectionDelimiter>
+                    <licenseMerges>
+                        <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version
+                            2.0|ASF 2.0|Apache 2|Apache-2.0|Apache 2.0 License|Apache 2.0|Apache License v2.0|Apache License 2.0|The Apache License, Version 2.0|The Apache Software License, Version 2.0
+                        </licenseMerge>
+                        <licenseMerge>The MIT License|MIT License</licenseMerge>
+                        <licenseMerge>The 3-Clause BSD License|New BSD License|3-Clause BSD
+                            License|BSD|3-Clause BSD License|The New BSD License
+                        </licenseMerge>
+                    </licenseMerges>
+                    <excludes>
+                        <exclude>*package-info*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <roots>
+                                <root>src/main/java</root>
+                                <root>src/test</root>
+                            </roots>
+                            <excludes>
+                                <exclude>*.png</exclude>
+                                <exclude>*.txt</exclude>
+                                <exclude>*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

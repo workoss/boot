@@ -13,5 +13,17 @@
     <artifactId>boot-util</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba.fastsql</groupId>
+            <artifactId>fastsql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
+    </dependencies>
+
+
 
 </project>

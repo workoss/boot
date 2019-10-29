@@ -13,44 +13,58 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
 
+        <fastsql.version>2.0.0_preview_973</fastsql.version>
+        <jakarta.persistence-api.version>2.2.3</jakarta.persistence-api.version>
 
-        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
-        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
-        <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
-        <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
-        <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
-        <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
-        <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
+        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
-        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
-        <maven-install-plugin.version>3.0.0-M1</maven-install-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+        <spring-javaformat-maven-plugin.version>0.0.15</spring-javaformat-maven-plugin.version>
+        <license-maven-plugin.version>2.0.0</license-maven-plugin.version>
         <git-commit-id-plugin.version>3.0.1</git-commit-id-plugin.version>
-        <jib-maven-plugin.version>1.7.0</jib-maven-plugin.version>
+
+        <license.verbose>false</license.verbose>
+        <license.addSvnKeyWords>false</license.addSvnKeyWords>
+        <license.licenseName>my_license</license.licenseName>
+        <license.licenseResolver>${project.baseUri}/../src/license</license.licenseResolver>
+        <license.organizationName>Workoss Software, Inc.</license.organizationName>
+        <license.inceptionYear>2019</license.inceptionYear>
+        <license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
+        <license.useJavaNoReformatCommentStartTag>false</license.useJavaNoReformatCommentStartTag>
+        <license.descriptionTemplate>${project.basedir}/../src/license/file-header-description.ftl</license.descriptionTemplate>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba.fastsql</groupId>
+                <artifactId>fastsql</artifactId>
+                <version>${fastsql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta.persistence-api.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <distributionManagement>
         <repository>
             <id>github</id>
             <name>GitHub workoss Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/workoss/REPOSITORY</url>
+            <url>https://maven.pkg.github.com/workoss/boot</url>
         </repository>
     </distributionManagement>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>${maven-clean-plugin.version}</version>
-            </plugin>             <!-- 编译的时候使用JDK7和UTF8编码 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -60,212 +74,133 @@
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
-                    <!-- Replacing default-compile as it is treated specially by maven -->
                     <execution>
-                        <id>default-compile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <!-- Replacing default-testCompile as it is treated specially by maven -->
-                    <execution>
-                        <id>default-testCompile</id>
-                        <phase>none</phase>
-                    </execution>
-                    <execution>
-                        <id>java-compile</id>
-                        <phase>compile</phase>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>java-test-compile</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>${maven-install-plugin.version}</version>
-            </plugin>             <!--配置resources插件，设定所有配置文件字符集为UTF-8 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources-plugin.version}</version>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>                 <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
+                    <failOnMissingWebXml>false
+                    </failOnMissingWebXml>                 <!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>${maven-site-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <forkMode>once</forkMode>
-                    <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
-                    <argLine>--add-modules jdk.unsupported</argLine>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war-plugin.version}</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <warSourceExcludes>*/classes/*</warSourceExcludes>
-                    <packagingExcludes>*/classes/*</packagingExcludes>
-                    <archive>
-                        <addMavenDescriptor>false</addMavenDescriptor>
-                        <manifestEntries>
-                            <Implementation-BuildNumber>${project.version}</Implementation-BuildNumber>
-                            <Built-Time>${maven.build.timestamp}</Built-Time>
-                            <Specification-Vendor>workoss.com</Specification-Vendor>
-                            <Implementation-Vendor>https://github.com/workoss/summary</Implementation-Vendor>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                        </manifestEntries>
-                        <manifest>                             <!--<mainClass>${start-class}</mainClass>-->
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>              <!-- 编译jar包 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.yufengx.boot.BootApplication</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <!-- <configuration>
-                <archive> <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                </archive> </configuration> -->
-            </plugin>             <!-- 源代码打包 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
-                <configuration>
-                    <recompressZippedFiles>false</recompressZippedFiles>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven-dependency-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven-shade-plugin.version}</version>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring-javaformat-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc-plugin.version}</version>
-            </plugin>
+
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
                 <version>${git-commit-id-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>${jib-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <container>
-                        <jvmFlags>
-                            <!--<jvmFlag>-Xms256m</jvmFlag>-->
-                            <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
-                            <jvmFlag>-Duser.timezone=GMT+08</jvmFlag>
-                        </jvmFlags>
-                        <mainClass>com.workoss.demo.summary.SummaryApplication</mainClass>
-                        <ports>
-                            <port>8080</port>
-                        </ports>
-                        <args>
-                            <arg>-Dspring.profiles.active=DEV</arg>
-                            <arg>-Dspring.cloud.nacos.config.serverAddr=192.168.230.39</arg>
-                            <arg>-Dspring.cloud.nacos.config.file-extension=yml
-                            </arg>
-                            <!--<arg>-Dspring.cloud.nacos.config.prefix=summary</arg>-->
-                            <arg>-Dspring.cloud.nacos.config.group=DEMO_GROUP</arg>
-                            <arg>-Dspring.cloud.nacos.config.namespace=7a489789-f683-482b-b779-28ac69f83ad1</arg>
-                        </args>
-                        <useCurrentTimestamp>true</useCurrentTimestamp>
-                    </container>
-                    <from>
-                        <image>openjdk:11.0.2-jre-stretch</image>
-                    </from>
-                    <to>
-                        <image>
-                            registry.cn-hangzhou.aliyuncs.com/workoss/workoss_dev:${project.artifactId}-${project.version}
-                        </image>
-                        <auth>
-                            <username>lfwork@qq.com</username>
-                            <password>Demo0120</password>
-                        </auth>
-                        <!-- <image>dockerhub.qingcloud.com/xoneregister/xone:${project.artifactId}-${project.version} 
-                        </image> 
-                        <auth> 
-                        <username>xone-center</username> 
-                        <password>xone-center@123</password> 
-                        </auth>-->
-                        <!--<image>http://120.76.157.34:8089/repository/docker/demo:${project.artifactId}-${project.version}-->
-                        <!--</image>-->
-                        <!--<auth>-->
-                        <!--<username>admin</username>-->
-                        <!--<password>admin456</password>-->
-                        <!--</auth>-->
-                    </to>
-                    <allowInsecureRegistries>true</allowInsecureRegistries>
-                    <extraDirectory>${project.basedir}/src/main/jib</extraDirectory>
+                    <verbose>true</verbose>
+                    <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>
+                        ${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
+                    <skipPoms>false</skipPoms>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <includeOptional>false</includeOptional>
+                    <useMissingFile>false</useMissingFile>
+                    <failOnMissing>false</failOnMissing>
+                    <sectionDelimiter></sectionDelimiter>
+                    <licenseMerges>
+                        <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version
+                            2.0|ASF 2.0|Apache 2|Apache-2.0|Apache 2.0 License|Apache 2.0|Apache License v2.0|Apache License 2.0|The Apache License, Version 2.0|The Apache Software License, Version 2.0
+                        </licenseMerge>
+                        <licenseMerge>The MIT License|MIT License</licenseMerge>
+                        <licenseMerge>The 3-Clause BSD License|New BSD License|3-Clause BSD
+                            License|BSD|3-Clause BSD License|The New BSD License
+                        </licenseMerge>
+                    </licenseMerges>
+                    <excludes>
+                        <exclude>*package-info.java</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <roots>
+                                <root>src/main/java</root>
+                                <root>src/test</root>
+                            </roots>
+                            <excludes>
+                                <exclude>*.png</exclude>
+                                <exclude>*.txt</exclude>
+                                <exclude>*Test.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
+
 
 </project>
