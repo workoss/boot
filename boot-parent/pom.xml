@@ -1,206 +1,447 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.workoss.boot</groupId>
-    <artifactId>boot-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<groupId>com.workoss.boot</groupId>
+	<artifactId>boot-parent</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>11</java.version>
 
-        <fastsql.version>2.0.0_preview_973</fastsql.version>
-        <jakarta.persistence-api.version>2.2.3</jakarta.persistence-api.version>
+		<slf4j.version>1.7.29</slf4j.version>
+		<log4j2.version>2.12.1</log4j2.version>
 
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
-        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
-        <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
-        <spring-javaformat-maven-plugin.version>0.0.15</spring-javaformat-maven-plugin.version>
-        <license-maven-plugin.version>2.0.0</license-maven-plugin.version>
-        <git-commit-id-plugin.version>3.0.1</git-commit-id-plugin.version>
+		<jackson-bom.version>2.10.1</jackson-bom.version>
+		<netty.version>4.1.43.Final</netty.version>
+		<asm.version>7.2</asm.version>
+		<reactor-bom.version>Dysprosium-SR1</reactor-bom.version>
+		<rsocket-bom.version>1.0.0-RC5</rsocket-bom.version>
 
-        <license.verbose>false</license.verbose>
-        <license.addSvnKeyWords>false</license.addSvnKeyWords>
-        <license.licenseName>my_license</license.licenseName>
-        <license.licenseResolver>${project.baseUri}/../src/license</license.licenseResolver>
-        <license.organizationName>Workoss Software, Inc.</license.organizationName>
-        <license.inceptionYear>2019</license.inceptionYear>
-        <license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
-        <license.useJavaNoReformatCommentStartTag>false</license.useJavaNoReformatCommentStartTag>
-        <license.descriptionTemplate>${project.basedir}/../src/license/file-header-description.ftl</license.descriptionTemplate>
-    </properties>
+		<jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
+		<hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.alibaba.fastsql</groupId>
-                <artifactId>fastsql</artifactId>
-                <version>${fastsql.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.persistence</groupId>
-                <artifactId>jakarta.persistence-api</artifactId>
-                <version>${jakarta.persistence-api.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub workoss Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/workoss/boot</url>
-        </repository>
-    </distributionManagement>
+		<aspectj.version>1.9.4</aspectj.version>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <configuration>
-                    <includes>
-                        <include>**/*.*</include>
-                    </includes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war-plugin.version}</version>
-                <configuration>                 <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
-                    <failOnMissingWebXml>false
-                    </failOnMissingWebXml>                 <!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
-            </plugin>
 
-            <plugin>
-                <groupId>io.spring.javaformat</groupId>
-                <artifactId>spring-javaformat-maven-plugin</artifactId>
-                <version>${spring-javaformat-maven-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle-plugin.version}</version>
-            </plugin>
+		<spring.version>5.2.1.RELEASE</spring.version>
+		<spring-boot.version>2.2.1.RELEASE</spring-boot.version>
+		<spring-cloud.version>2.1.8.RELEASE</spring-cloud.version>
 
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>${git-commit-id-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <verbose>true</verbose>
-                    <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
-                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                    <generateGitPropertiesFilename>
-                        ${project.build.outputDirectory}/git.properties
-                    </generateGitPropertiesFilename>
-                    <skipPoms>false</skipPoms>
-                </configuration>
-            </plugin>
+		<mybatis.version>3.5.3</mybatis.version>
+		<mybatis-spring.version>2.0.3</mybatis-spring.version>
+		<mybatis-spring-boot-starter.version>2.1.1</mybatis-spring-boot-starter.version>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.0.0</version>
-                <configuration>
-                    <includeOptional>false</includeOptional>
-                    <useMissingFile>false</useMissingFile>
-                    <failOnMissing>false</failOnMissing>
-                    <sectionDelimiter></sectionDelimiter>
-                    <licenseMerges>
-                        <licenseMerge>Apache License, Version 2.0|The Apache Software License, Version
-                            2.0|ASF 2.0|Apache 2|Apache-2.0|Apache 2.0 License|Apache 2.0|Apache License v2.0|Apache License 2.0|The Apache License, Version 2.0|The Apache Software License, Version 2.0
-                        </licenseMerge>
-                        <licenseMerge>The MIT License|MIT License</licenseMerge>
-                        <licenseMerge>The 3-Clause BSD License|New BSD License|3-Clause BSD
-                            License|BSD|3-Clause BSD License|The New BSD License
-                        </licenseMerge>
-                    </licenseMerges>
-                    <excludes>
-                        <exclude>*package-info.java</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>first</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <roots>
-                                <root>src/main/java</root>
-                                <root>src/test</root>
-                            </roots>
-                            <excludes>
-                                <exclude>*.png</exclude>
-                                <exclude>*.txt</exclude>
-                                <exclude>*Test.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+		<HikariCP.version>3.4.1</HikariCP.version>
 
-        </plugins>
-    </build>
+
+		<fastsql.version>2.0.0_preview_973</fastsql.version>
+		<jakarta.persistence-api.version>2.2.3</jakarta.persistence-api.version>
+
+		<lombok.version>1.18.10</lombok.version>
+		<mapstruct.version>1.3.1.Final</mapstruct.version>
+
+		<junit-jupiter.version>5.6.0-M1</junit-jupiter.version>
+		<mockito-core.version>3.1.0</mockito-core.version>
+
+
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+		<maven-source-plugin.version>3.2.0</maven-source-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+		<maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+		<maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+		<spring-javaformat-maven-plugin.version>0.0.15
+		</spring-javaformat-maven-plugin.version>
+		<license-maven-plugin.version>2.0.0</license-maven-plugin.version>
+		<git-commit-id-plugin.version>3.0.1</git-commit-id-plugin.version>
+
+		<license.verbose>false</license.verbose>
+		<license.addSvnKeyWords>false</license.addSvnKeyWords>
+		<license.licenseName>my_license</license.licenseName>
+		<license.licenseResolver>${project.baseUri}/../src/license
+		</license.licenseResolver>
+		<license.organizationName>Workoss Software, Inc.</license.organizationName>
+		<license.inceptionYear>2019</license.inceptionYear>
+		<license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
+		<license.useJavaNoReformatCommentStartTag>false
+		</license.useJavaNoReformatCommentStartTag>
+		<license.descriptionTemplate>
+			${project.basedir}/../src/license/file-header-description.ftl
+		</license.descriptionTemplate>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-parent</artifactId>
+				<version>${slf4j.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-bom</artifactId>
+				<version>${log4j2.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson</groupId>
+				<artifactId>jackson-bom</artifactId>
+				<version>${jackson-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-bom</artifactId>
+				<version>${netty.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>io.projectreactor</groupId>
+				<artifactId>reactor-bom</artifactId>
+				<version>${reactor-bom.version}</version>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>io.rsocket</groupId>
+				<artifactId>rsocket-bom</artifactId>
+				<version>${rsocket-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring-boot.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.ow2.asm</groupId>
+				<artifactId>asm</artifactId>
+				<version>${asm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>${mybatis-spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis-spring-boot-starter.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${HikariCP.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>jakarta.validation</groupId>
+				<artifactId>jakarta.validation-api</artifactId>
+				<version>${jakarta.validation-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate.validator</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>${hibernate-validator.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>com.alibaba.fastsql</groupId>
+				<artifactId>fastsql</artifactId>
+				<version>${fastsql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.persistence</groupId>
+				<artifactId>jakarta.persistence-api</artifactId>
+				<version>${jakarta.persistence-api.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${junit-jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito-core.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-junit-jupiter</artifactId>
+				<version>${mockito-core.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mapstruct</groupId>
+				<artifactId>mapstruct</artifactId>
+				<version>${mapstruct.version}</version>
+			</dependency>
+
+
+		</dependencies>
+	</dependencyManagement>
+
+
+	<repositories>
+		<repository>
+			<id>github</id>
+			<name>GitHub workoss Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/workoss/</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>central</name>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>alimaven</id>
+			<name>aliyun maven</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+	</repositories>
+
+
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub workoss Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/workoss/boot</url>
+		</repository>
+	</distributionManagement>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<configuration>
+					<includes>
+						<include>**/*.*</include>
+					</includes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>                 <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
+					<failOnMissingWebXml>false
+					</failOnMissingWebXml>                 <!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>${spring-javaformat-maven-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>${git-commit-id-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<verbose>true</verbose>
+					<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>
+						${project.build.outputDirectory}/git.properties
+					</generateGitPropertiesFilename>
+					<skipPoms>false</skipPoms>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<configuration>
+					<includeOptional>false</includeOptional>
+					<useMissingFile>false</useMissingFile>
+					<failOnMissing>false</failOnMissing>
+					<sectionDelimiter></sectionDelimiter>
+					<licenseMerges>
+						<licenseMerge>Apache License, Version 2.0|The Apache Software
+							License, Version
+							2.0|ASF 2.0|Apache 2|Apache-2.0|Apache 2.0 License|Apache
+							2.0|Apache License v2.0|Apache License 2.0|The Apache License,
+							Version 2.0|The Apache Software License, Version 2.0
+						</licenseMerge>
+						<licenseMerge>The MIT License|MIT License</licenseMerge>
+						<licenseMerge>The 3-Clause BSD License|New BSD License|3-Clause
+							BSD
+							License|BSD|3-Clause BSD License|The New BSD License
+						</licenseMerge>
+					</licenseMerges>
+					<excludes>
+						<exclude>*package-info.java</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<roots>
+								<root>src/main/java</root>
+								<root>src/test</root>
+							</roots>
+							<excludes>
+								<exclude>*.png</exclude>
+								<exclude>*.txt</exclude>
+								<exclude>*Test.java</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
 
 
 </project>
