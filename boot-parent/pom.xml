@@ -31,8 +31,8 @@
 		<aspectj.version>1.9.5</aspectj.version>
 
 
-		<spring.version>5.2.1.RELEASE</spring.version>
-		<spring-boot.version>2.2.1.RELEASE</spring-boot.version>
+		<spring.version>5.2.2.RELEASE</spring.version>
+		<spring-boot.version>2.2.2.RELEASE</spring-boot.version>
 		<spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
 
 		<mybatis.version>3.5.3</mybatis.version>
