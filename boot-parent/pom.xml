@@ -6,7 +6,7 @@
 
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot-parent</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 
