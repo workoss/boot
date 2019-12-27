@@ -6,7 +6,7 @@
 
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot-parent</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 
@@ -320,7 +320,6 @@
 			</dependency>
 
 
-
 		</dependencies>
 	</dependencyManagement>
 
@@ -367,10 +366,13 @@
 
 	<distributionManagement>
 		<repository>
-			<id>github</id>
-			<name>GitHub workoss Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/workoss/boot</url>
+			<id>rdc-releases</id>
+			<url>https://repo.rdc.aliyun.com/repository/16912-release-G6xvVV/</url>
 		</repository>
+		<snapshotRepository>
+			<id>rdc-snapshots</id>
+			<url>https://repo.rdc.aliyun.com/repository/16912-snapshot-FCDUrc/</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 
@@ -489,7 +491,8 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${maven-war-plugin.version}</version>
 				<configuration>                 <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
-					<failOnMissingWebXml>false</failOnMissingWebXml>                 <!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
+					<failOnMissingWebXml>false
+					</failOnMissingWebXml>                 <!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
 				</configuration>
 			</plugin>
 
