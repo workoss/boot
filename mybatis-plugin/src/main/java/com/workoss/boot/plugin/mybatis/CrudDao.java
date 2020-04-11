@@ -14,15 +14,15 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis;
+package com.workoss.boot.plugin.mybatis;
 
 import java.util.List;
 
 
-import com.workoss.boot.util.plugin.mybatis.provider.CrudDeleteProvider;
-import com.workoss.boot.util.plugin.mybatis.provider.CrudInsertProvider;
-import com.workoss.boot.util.plugin.mybatis.provider.CrudSelectProvider;
-import com.workoss.boot.util.plugin.mybatis.provider.CrudUpdateProvider;
+import com.workoss.boot.plugin.mybatis.provider.CrudDeleteProvider;
+import com.workoss.boot.plugin.mybatis.provider.CrudInsertProvider;
+import com.workoss.boot.plugin.mybatis.provider.CrudSelectProvider;
+import com.workoss.boot.plugin.mybatis.provider.CrudUpdateProvider;
 import org.apache.ibatis.annotations.*;
 
 public interface CrudDao<T, ID> {

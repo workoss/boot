@@ -14,34 +14,32 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis;
+package com.workoss.boot.plugin.mybatis;
 
-public class SqlParam {
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.ArrayList;
+
+/**
+ * @Description: 分页工具类page对象
+ * @Author: luanfeng
+ * @Date: 2017/8/11 8:10
+ * @Version: 1.0.0
+ */
+public class PageResult<E> extends ArrayList<E> implements Closeable {
 
     private int offset = 0;
 
     private int limit = 10;
 
-    private int count;
+    private int count = 0;
 
-    private int page = 1;
+    private int pageNo = 1;
 
     private String sortBy;
 
-    private boolean shouldCount = false;
+    private boolean shouldCount=false;
 
-    private boolean shouldPage = true;
-
-    public SqlParam() {
-    }
-
-    public SqlParam(int offset, int limit, String sortBy, boolean shoudlPage, boolean shouldCount) {
-        this.offset = offset;
-        this.limit = limit;
-        this.sortBy = sortBy;
-        this.shouldPage = shoudlPage;
-        this.shouldCount = shouldCount;
-    }
 
     public int getOffset() {
         return offset;
@@ -67,12 +65,15 @@ public class SqlParam {
         this.count = count;
     }
 
-    public int getPage() {
-        return page;
+    public int getPageNo() {
+        if (this.limit>0){
+            return this.offset/this.limit+1;
+        }
+        return 1;
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
     }
 
     public String getSortBy() {
@@ -91,11 +92,9 @@ public class SqlParam {
         this.shouldCount = shouldCount;
     }
 
-    public boolean getShouldPage() {
-        return shouldPage;
+    @Override
+    public void close() throws IOException {
+        SqlHelper.clearSqlParam();
     }
 
-    public void setShouldPage(boolean shouldPage) {
-        this.shouldPage = shouldPage;
-    }
 }

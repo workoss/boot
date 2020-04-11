@@ -14,7 +14,7 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis.provider;
+package com.workoss.boot.plugin.mybatis.provider;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -24,14 +24,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
+import com.workoss.boot.plugin.mybatis.CrudDao;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
-import com.workoss.boot.util.plugin.mybatis.CrudDao;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

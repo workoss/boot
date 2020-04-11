@@ -14,7 +14,7 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis;
+package com.workoss.boot.plugin.mybatis;
 
 import com.alibaba.fastsql.DbType;
 import com.alibaba.fastsql.util.JdbcConstants;

@@ -14,14 +14,11 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis.provider;
+package com.workoss.boot.plugin.mybatis.provider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Data;
-
-@Data
 public class TableColumnInfo {
 
     private String tableName;
@@ -60,4 +57,52 @@ public class TableColumnInfo {
         return this;
     }
 
+
+    String getTableName() {
+        return tableName;
+    }
+
+    void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    String getIdPropertyName() {
+        return idPropertyName;
+    }
+
+    void setIdPropertyName(String idPropertyName) {
+        this.idPropertyName = idPropertyName;
+    }
+
+    String getIdColumnName() {
+        return idColumnName;
+    }
+
+    void setIdColumnName(String idColumnName) {
+        this.idColumnName = idColumnName;
+    }
+
+    List<Class> getPropertyTypes() {
+        return propertyTypes;
+    }
+
+    void setPropertyTypes(List<Class> propertyTypes) {
+        this.propertyTypes = propertyTypes;
+    }
+
+    List<String> getPropertyNames() {
+        return propertyNames;
+    }
+
+    void setPropertyNames(List<String> propertyNames) {
+        this.propertyNames = propertyNames;
+    }
+
+    List<String> getColumnNames() {
+        return columnNames;
+    }
+
+    void setColumnNames(List<String> columnNames) {
+        this.columnNames = columnNames;
+    }
 }

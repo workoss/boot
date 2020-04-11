@@ -14,17 +14,16 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis;
+package com.workoss.boot.plugin.mybatis;
 
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.alibaba.fastsql.DbType;
 import com.alibaba.fastsql.sql.PagerUtils;
@@ -33,13 +32,15 @@ import com.alibaba.fastsql.sql.builder.SQLSelectBuilder;
 import com.workoss.boot.util.reflect.ReflectUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.jdbc.ConnectionLogger;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.MappedStatement.Builder;
-import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
@@ -54,69 +55,61 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Intercepts({
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+		        RowBounds.class, ResultHandler.class}),
 		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class}),
-		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
+                RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
 })
-public class SqlInterceptor implements Interceptor {
+public class OldSqlInterceptor implements Interceptor {
 	public static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
-	protected static final Map<String, MappedStatement> COUNT_MS_MAPPEDSTATEMENT_CACHE = new ConcurrentHashMap<>();
-	private static final List<ResultMapping> EMPTY_RESULTMAPPING = new ArrayList<ResultMapping>(0);
 	private static DbType dbType;
 	private static String pageSqlId;
+
 	private final String ORDER_QUERY_MAIN = "order";
 	private final String ORDER_QUERY_BY = "by";
 	private final String ORDER_BY_SEPERATE = ",";
 	private final String PAGE_SQL_ID = "Page";
 	private final String PAGE_PARAM = "page";
+	private final String MYBATIS_METAPARAMETERS = "metaParameters";
+
 	private final String MYBATIS_ADDITIONALPARAMTERS = "additionalParameters";
-	private String countSuffix = "_COUNT";
 
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		Executor executor = (Executor) invocation.getTarget();
-		Object[] args = invocation.getArgs();
+        Object[] args = invocation.getArgs();
 		MappedStatement mappedStatement = (MappedStatement) args[0];
-		Object parameter = args[1];
-		RowBounds rowBounds = (RowBounds) args[2];
-		ResultHandler resultHandler = (ResultHandler) args[3];
-		CacheKey cacheKey;
+		Object param = args[1];
 		BoundSql boundSql;
-		if (args.length == 4) {
-			boundSql = mappedStatement.getBoundSql(parameter);
-			cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds,
-					boundSql);
-		}
-		else {
-			cacheKey = (CacheKey) args[4];
-			boundSql = (BoundSql) args[5];
-		}
+
+		if (args.length==4){
+            boundSql = mappedStatement.getBoundSql(param);
+        }else{
+            boundSql = (BoundSql) args[5];
+        }
+
 
 		SqlParam sqlParam = SqlHelper.getLocalSqlParam();
 		if (sqlParam == null) {
 			if (mappedStatement.getId().contains(pageSqlId)) {
-				sqlParam = initPage(parameter);
+				sqlParam = initPage(param);
 			}
 		}
 		SqlHelper.clearSqlParam();
 		if (sqlParam == null) {
 			return invocation.proceed();
 		}
-		initDbType(executor.getTransaction().getConnection());
 		// 排序查询
 		String sql = boundSql.getSql();
 		boolean changeSql = false;
 		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN)
-				&& sql.toLowerCase().contains(ORDER_QUERY_BY)) {
+                && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
 			log.debug("sql have order by ，ignore page.orderBy");
-		}
-		else {
+		}else {
 			String orderBy = sqlParam.getSortBy();
 			if (!(orderBy == null || orderBy.length() == 0)) {
-				SQLSelectBuilder builder = SQLBuilderFactory
-						.createSelectSQLBuilder(sql, dbType);
+				SQLSelectBuilder builder = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType);
 				builder.orderBy(orderBy.split(ORDER_BY_SEPERATE));
 				sql = builder.toString();
 				changeSql = true;
@@ -129,15 +122,22 @@ public class SqlInterceptor implements Interceptor {
 			pageResult.setLimit(sqlParam.getLimit());
 			pageResult.setSortBy(sqlParam.getSortBy());
 			if (sqlParam.getShouldCount()) {
-				Long count = count(executor, mappedStatement, parameter, rowBounds,
-						resultHandler, boundSql);
-				pageResult.setCount(count.intValue());
+				Connection connection = executor.getTransaction().getConnection();
+				initDbType(connection);
+				Log statementLog = mappedStatement.getStatementLog();
+				if (statementLog.isDebugEnabled()) {
+					connection = ConnectionLogger
+							.newInstance(connection, statementLog, 0);
+				}
+
+				String countSql = PagerUtils.count(boundSql.getSql(), dbType);
+				int count = getPageTotal(mappedStatement, connection, countSql, boundSql);
+				pageResult.setCount(count);
 				if (count <= 0) {
 					return pageResult;
 				}
 			}
-			sql = PagerUtils.limit(sql, dbType, sqlParam.getOffset(),
-					sqlParam.getLimit());
+			sql = PagerUtils.limit(sql, dbType, sqlParam.getOffset(), sqlParam.getLimit());
 			changeSql = true;
 		}
 
@@ -148,19 +148,33 @@ public class SqlInterceptor implements Interceptor {
 
 		BoundSql newBoundSql = new BoundSql(mappedStatement.getConfiguration(), sql,
 				boundSql.getParameterMappings(), boundSql.getParameterObject());
-		Object additionalParamters = ReflectUtils.getFieldValue(boundSql,
-				MYBATIS_ADDITIONALPARAMTERS);
+		// 解决MyBatis 分页foreach 参数失效 start
+		Object metaObject = ReflectUtils.getFieldValue(boundSql, MYBATIS_METAPARAMETERS);
+		if (metaObject != null) {
+			ReflectUtils.setFieldValue(newBoundSql, MYBATIS_METAPARAMETERS,
+					(MetaObject) metaObject);
+		}
+		//解决MyBatis 分页foreach 参数失效 end
+		Object additionalParamters = ReflectUtils
+				.getFieldValue(boundSql, MYBATIS_ADDITIONALPARAMTERS);
 		if (additionalParamters != null) {
 			ReflectUtils.setFieldValue(newBoundSql, MYBATIS_ADDITIONALPARAMTERS,
-					(Map<String, Object>) additionalParamters);
+                    (Map<String, Object>) additionalParamters);
 		}
-		List<Object> list = executor.query(mappedStatement, parameter, RowBounds.DEFAULT,
-				resultHandler, cacheKey, boundSql);
+		MappedStatement newMs = copyFromMappedStatement(mappedStatement,
+                new BoundSqlSqlSource(newBoundSql));
+		invocation.getArgs()[0] = newMs;
+
+
 		if (sqlParam.getShouldPage()) {
-			pageResult.addAll(list);
+			invocation.getArgs()[2] = new RowBounds(RowBounds.NO_ROW_OFFSET, RowBounds.NO_ROW_LIMIT);
+			Object result = invocation.proceed();
+			pageResult.addAll((List) result);
 			return pageResult;
 		}
-		return list;
+
+		return invocation.proceed();
+
 	}
 
 	/**
@@ -191,9 +205,11 @@ public class SqlInterceptor implements Interceptor {
 
 	private void initDbType(Connection connection) {
 		if (dbType == null) {
+			String url;
 			try {
-				String url = connection.getMetaData().getURL();
+				url = connection.getMetaData().getURL();
 				dbType = JdbcUtil.getDbType(url);
+
 			}
 			catch (SQLException e) {
 				log.error("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 ", e);
@@ -208,93 +224,40 @@ public class SqlInterceptor implements Interceptor {
 		}
 		else if (parameterObject instanceof Map) {
 			Map<String, Object> paraMap = (Map<String, Object>) parameterObject;
-			if (paraMap.containsKey(PAGE_PARAM)) {
-				page = (SqlParam) paraMap.get(PAGE_PARAM);
-			}
-			else {
-				Optional<SqlParam> optional = paraMap.entrySet().stream()
-						.filter(entry -> entry.getValue() instanceof SqlParam)
-						.map(entry -> (SqlParam) entry.getValue())
-						.findFirst();
-				page = optional.isPresent() ? optional.get() : null;
+			for (String key : paraMap.keySet()) {
+				if (PAGE_PARAM.equals(key)) {
+					page = (SqlParam) paraMap.get(key);
+					break;
+				}
+				else {
+					if (paraMap.get(key) instanceof SqlParam) {
+						page = (SqlParam) paraMap.get(key);
+						break;
+					}
+				}
 			}
 		}
 		else {
-			log.warn("入参没有分页相关数据");
+			log.error("入参没有分页相关数据");
 		}
 		return page;
 	}
 
-	private Long count(Executor executor, MappedStatement mappedStatement, Object parameter,
-			RowBounds rowBounds, ResultHandler resultHandler,
+	private int getPageTotal(MappedStatement mappedStatement, Connection connection, String countSql,
 			BoundSql boundSql) throws SQLException {
-		String countMsId = mappedStatement.getId() + countSuffix;
-		//判断是否存在count
-		MappedStatement countMappedStatement = mappedStatement.getConfiguration()
-				.getMappedStatement(countMsId, false);
-		CacheKey countKey = executor.createCacheKey(mappedStatement, parameter, rowBounds,
+		int count = 0;
+		PreparedStatement preparedStatement = connection.prepareStatement(countSql);
+		DefaultParameterHandler handler = new DefaultParameterHandler(mappedStatement, boundSql
+				.getParameterObject(),
 				boundSql);
-		BoundSql countBoundSql;
-		//生成 count
-		if (countMappedStatement == null) {
-			countMappedStatement = COUNT_MS_MAPPEDSTATEMENT_CACHE.get(countMsId);
-			if (countMappedStatement == null) {
-				countMappedStatement = newCountMappedStatement(mappedStatement, countMsId);
-				COUNT_MS_MAPPEDSTATEMENT_CACHE.put(countMsId, mappedStatement);
-			}
-
-			String countSql = PagerUtils.count(boundSql.getSql(), dbType);
-			countBoundSql = new BoundSql(countMappedStatement.getConfiguration(),
-					countSql, boundSql.getParameterMappings(), parameter);
-			//当使用动态 SQL 时，可能会产生临时的参数，这些参数需要手动设置到新的 BoundSql 中
-			Object additionalParamters = ReflectUtils
-					.getFieldValue(boundSql, MYBATIS_ADDITIONALPARAMTERS);
-			if (additionalParamters != null) {
-				ReflectUtils.setFieldValue(countBoundSql, MYBATIS_ADDITIONALPARAMTERS,
-						(Map<String, Object>) additionalParamters);
-			}
+		handler.setParameters(preparedStatement);
+		ResultSet rs = preparedStatement.executeQuery();
+		if (rs.next()) {
+			count = rs.getInt(1);
 		}
-		else {
-			countBoundSql = countMappedStatement.getBoundSql(parameter);
-		}
-		List list = executor.query(countMappedStatement, parameter, RowBounds.DEFAULT,
-				resultHandler, countKey, countBoundSql);
-		if (!(list != null && list.size() > 0)) {
-			return 0L;
-		}
-		return (Long) list.get(0);
-	}
-
-
-	private MappedStatement newCountMappedStatement(MappedStatement ms, String newMsId) {
-		MappedStatement.Builder builder = new MappedStatement.Builder(ms
-				.getConfiguration(), newMsId, ms.getSqlSource(), ms.getSqlCommandType());
-		builder.resource(ms.getResource());
-		builder.fetchSize(ms.getFetchSize());
-		builder.statementType(ms.getStatementType());
-		builder.keyGenerator(ms.getKeyGenerator());
-		if (ms.getKeyProperties() != null && ms.getKeyProperties().length != 0) {
-			StringBuilder keyProperties = new StringBuilder();
-			for (String keyProperty : ms.getKeyProperties()) {
-				keyProperties.append(keyProperty).append(",");
-			}
-			keyProperties.delete(keyProperties.length() - 1, keyProperties.length());
-			builder.keyProperty(keyProperties.toString());
-		}
-		builder.timeout(ms.getTimeout());
-		builder.parameterMap(ms.getParameterMap());
-		//count查询返回值int
-		List<ResultMap> resultMaps = new ArrayList<ResultMap>();
-		ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms
-				.getId(), Long.class, EMPTY_RESULTMAPPING).build();
-		resultMaps.add(resultMap);
-		builder.resultMaps(resultMaps);
-		builder.resultSetType(ms.getResultSetType());
-		builder.cache(ms.getCache());
-		builder.flushCacheRequired(ms.isFlushCacheRequired());
-		builder.useCache(ms.isUseCache());
-
-		return builder.build();
+		rs.close();
+		preparedStatement.close();
+		return count;
 	}
 
 	/**

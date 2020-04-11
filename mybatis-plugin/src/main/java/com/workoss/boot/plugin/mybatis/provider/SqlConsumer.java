@@ -14,7 +14,7 @@
  * limitations under the License.
  * #L%
  */
-package com.workoss.boot.util.plugin.mybatis.provider;
+package com.workoss.boot.plugin.mybatis.provider;
 
 @FunctionalInterface
 public interface SqlConsumer {
