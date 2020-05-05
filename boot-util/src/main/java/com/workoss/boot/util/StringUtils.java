@@ -35,6 +35,8 @@ public class StringUtils {
 
     public static String EMPTY = "";
 
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     public static boolean isEmpty(CharSequence cs) {
         return (cs == null) || (cs.length() == 0);
     }

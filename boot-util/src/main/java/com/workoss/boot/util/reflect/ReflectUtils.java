@@ -21,6 +21,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import com.workoss.boot.util.StringUtils;
@@ -45,9 +46,22 @@ public class ReflectUtils {
 
     private static final ObjenesisStd objenesisStd = new ObjenesisStd(true);
 
+    /**
+     * 应用对应的ClassLoader
+     */
+    static final ConcurrentMap<String, ClassLoader> APPNAME_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
+
+    /**
+     * 服务对应的ClassLoader
+     */
+    static final ConcurrentMap<String, ClassLoader> SERVICE_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
+
     private static Map<String, AbstractMethodAccess> methodAccessCache = new ConcurrentHashMap<>();
 
     private static Map<String, Map<String, Object>> classMethodCache = new ConcurrentHashMap<>();
+
+    private static final ConcurrentMap<Class, String> TYPE_STR_CACHE = new ConcurrentHashMap<Class, String>();
+
 
 
     public  static <T> T newInstance(Class<T> clazz){
@@ -174,4 +188,74 @@ public class ReflectUtils {
         }
     }
 
+    /**
+     * 注册服务所在的ClassLoader
+     *
+     * @param appName     应用名
+     * @param classloader 应用级别ClassLoader
+     */
+    public static void registerAppClassLoader(String appName, ClassLoader classloader) {
+        APPNAME_CLASSLOADER_MAP.put(appName, classloader);
+    }
+
+    /**
+     * 得到服务的自定义ClassLoader
+     *
+     * @param appName 应用名
+     * @return 应用级别ClassLoader
+     */
+    public static ClassLoader getAppClassLoader(String appName) {
+        ClassLoader appClassLoader = APPNAME_CLASSLOADER_MAP.get(appName);
+        if (appClassLoader == null) {
+            return ClassLoaderUtils.getCurrentClassLoader();
+        } else {
+            return appClassLoader;
+        }
+    }
+
+    /**
+     * 注册服务所在的ClassLoader
+     *
+     * @param serviceUniqueName 服务唯一名称
+     * @param classloader       服务级别ClassLoader
+     */
+    public static void registerServiceClassLoader(String serviceUniqueName, ClassLoader classloader) {
+        SERVICE_CLASSLOADER_MAP.put(serviceUniqueName, classloader);
+    }
+
+    /**
+     * 得到服务的自定义ClassLoader
+     *
+     * @param serviceUniqueName 服务唯一名称
+     * @return 服务级别ClassLoader
+     */
+    public static ClassLoader getServiceClassLoader(String serviceUniqueName) {
+        ClassLoader appClassLoader = SERVICE_CLASSLOADER_MAP.get(serviceUniqueName);
+        if (appClassLoader == null) {
+            return ClassLoaderUtils.getCurrentClassLoader();
+        } else {
+            return appClassLoader;
+        }
+    }
+
+
+    /**
+     * 放入类描述缓存
+     *
+     * @param clazz   类
+     * @param typeStr 对象描述
+     */
+    public static void putTypeStrCache(Class clazz, String typeStr) {
+        TYPE_STR_CACHE.put(clazz, typeStr);
+    }
+
+    /**
+     * 得到类描述缓存
+     *
+     * @param clazz 类
+     * @return 类描述
+     */
+    public static String getTypeStrCache(Class clazz) {
+        return TYPE_STR_CACHE.get(clazz);
+    }
 }

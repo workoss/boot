@@ -188,7 +188,7 @@ public class BeanCopierUtil {
                 return retList;
             } else if (value instanceof Map) {
                 // TODO 暂时用不到，后续有需要再补充
-            } else if (!ClassUtil.isPrimitive(targetClazz)) {
+            } else if (!ClassUtils.isPrimitive(targetClazz)) {
                 return BeanCopierUtil.convert(value, targetClazz);
             }
             return value;

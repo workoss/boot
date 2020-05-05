@@ -226,10 +226,6 @@ public class CollectionUtils {
 
 
 
-
-
-
-
     public static String join(Collection collection, String separator, String prefix, String suffix){
         StringJoiner stringJoiner=new StringJoiner(separator,prefix,suffix);
         if (CollectionUtils.isEmpty(collection)){
@@ -239,5 +235,26 @@ public class CollectionUtils {
             stringJoiner.add(o.toString());
         }
         return stringJoiner.toString();
+    }
+
+
+    /**
+     * 判断一个Array是否为空
+     *
+     * @param array 数组
+     * @return 是否为空
+     */
+    public static boolean isEmpty(Object[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
+     * 判断一个Array是否为非空
+     *
+     * @param array 数组
+     * @return 是否为非空
+     */
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0;
     }
 }
