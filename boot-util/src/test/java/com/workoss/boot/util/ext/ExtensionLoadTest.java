@@ -12,6 +12,7 @@ public class ExtensionLoadTest {
     @Test
     public void test01(){
         ExtensionLoader<Person> personExtensionLoader = ExtensionLoaderFactory.getExtensionLoader(Person.class);
+        personExtensionLoader.getExtension("C");
         personExtensionLoader.getExtension("A").getName();
         personExtensionLoader.getExtension("B").getName();
     }
