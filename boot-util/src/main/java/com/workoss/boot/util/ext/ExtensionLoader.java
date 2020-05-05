@@ -177,8 +177,7 @@ public class ExtensionLoader<T> {
             tmp = ClassUtils.forName(className, false);
         } catch (Throwable e) {
             if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn("Extension {} of extensible {} is disabled, cause by: {}",
-                        className, interfaceName, ExceptionUtils.toShortString(e, 2));
+                LOGGER.warn("Extension {} of extensible {} is disabled, cause by: {}", className, interfaceName, ExceptionUtils.toShortString(e, 2));
             }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Extension " + className + " of extensible " + interfaceName + " is disabled.", e);
@@ -186,22 +185,19 @@ public class ExtensionLoader<T> {
             return;
         }
         if (!interfaceClass.isAssignableFrom(tmp)) {
-            throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName +
-                    " from file:" + url + ", " + className + " is not subtype of interface.");
+            throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName + " from file:" + url + ", " + className + " is not subtype of interface.");
         }
         Class<? extends T> implClass = (Class<? extends T>) tmp;
 
         // 检查是否有可扩展标识
         Extension extension = implClass.getAnnotation(Extension.class);
         if (extension == null) {
-            throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName +
-                    " from file:" + url + ", " + className + " must add annotation @Extension.");
+            throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName + " from file:" + url + ", " + className + " must add annotation @Extension.");
         } else {
             String aliasInCode = extension.value();
             if (StringUtils.isBlank(aliasInCode)) {
                 // 扩展实现类未配置@Extension 标签
-                throw new IllegalArgumentException("Error when load extension of extensible " + interfaceClass +
-                        " from file:" + url + ", " + className + "'s alias of @Extension is blank");
+                throw new IllegalArgumentException("Error when load extension of extensible " + interfaceClass + " from file:" + url + ", " + className + "'s alias of @Extension is blank");
             }
             if (alias == null) {
                 // spi文件里没配置，用代码里的
@@ -209,15 +205,12 @@ public class ExtensionLoader<T> {
             } else {
                 // spi文件里配置的和代码里的不一致
                 if (!aliasInCode.equals(alias)) {
-                    throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName +
-                            " from file:" + url + ", aliases of " + className + " are " +
-                            "not equal between " + aliasInCode + "(code) and " + alias + "(file).");
+                    throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName + " from file:" + url + ", aliases of " + className + " are " + "not equal between " + aliasInCode + "(code) and " + alias + "(file).");
                 }
             }
             // 接口需要编号，实现类没设置
             if (extensible.coded() && extension.code() < 0) {
-                throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName +
-                        " from file:" + url + ", code of @Extension must >=0 at " + className + ".");
+                throw new IllegalArgumentException("Error when load extension of extensible " + interfaceName + " from file:" + url + ", code of @Extension must >=0 at " + className + ".");
             }
         }
         // 不可以是default和*
@@ -234,80 +227,77 @@ public class ExtensionLoader<T> {
                 // 如果优先级还没有旧的高，则忽略
                 if (extension.order() < old.getOrder()) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Extension of extensible {} with alias {} override from {} to {} failure, " +
-                                        "cause by: order of old extension is higher",
+                        LOGGER.debug("Extension of extensible {} with alias {} override from {} to {} failure, cause by: order of old extension is higher",
                                 interfaceName, alias, old.getClazz(), implClass);
                     }
                 } else {
                     if (LOGGER.isInfoEnabled()) {
-                        LOGGER.info("Extension of extensible {} with alias {}: {} has been override to {}",
-                                interfaceName, alias, old.getClazz(), implClass);
+                        LOGGER.info("Extension of extensible {} with alias {}: {} has been override to {}", interfaceName, alias, old.getClazz(), implClass);
                     }
                     // 如果当前扩展可以覆盖其它同名扩展
                     extensionClass = buildClass(extension, implClass, alias);
                 }
-            }
-            // 如果旧扩展是可覆盖的
-            else {
+            } else {
+                // 如果旧扩展是可覆盖的
                 if (old.isOverride() && old.getOrder() >= extension.order()) {
                     // 如果已加载覆盖扩展，再加载到原始扩展
                     if (LOGGER.isInfoEnabled()) {
-                        LOGGER.info("Extension of extensible {} with alias {}: {} has been loaded, ignore origin {}",
-                                interfaceName, alias, old.getClazz(), implClass);
+                        LOGGER.info("Extension of extensible {} with alias {}: {} has been loaded, ignore origin {}", interfaceName, alias, old.getClazz(), implClass);
                     }
                 } else {
                     // 如果不能被覆盖，抛出已存在异常
-                    throw new IllegalStateException(
-                            "Error when load extension of extensible " + interfaceClass + " from file:" + url +
-                                    ", Duplicate class with same alias: " + alias + ", " + old.getClazz() + " and " + implClass);
+                    throw new IllegalStateException("Error when load extension of extensible " + interfaceClass + " from file:" + url +
+                            ", Duplicate class with same alias: " + alias + ", " + old.getClazz() + " and " + implClass);
                 }
             }
         } else {
             extensionClass = buildClass(extension, implClass, alias);
         }
-        if (extensionClass != null) {
-            // 检查是否有互斥的扩展点
-            for (Map.Entry<String, ExtensionClass<T>> entry : all.entrySet()) {
-                ExtensionClass existed = entry.getValue();
-                if (extensionClass.getOrder() >= existed.getOrder()) {
-                    // 新的优先级 >= 老的优先级，检查新的扩展是否排除老的扩展
-                    String[] rejection = extensionClass.getRejection();
-                    if (CollectionUtils.isNotEmpty(rejection)) {
-                        for (String rej : rejection) {
-                            existed = all.get(rej);
-                            if (existed == null || extensionClass.getOrder() < existed.getOrder()) {
-                                continue;
-                            }
-                            ExtensionClass removed = all.remove(rej);
-                            if (removed != null) {
-                                if (LOGGER.isInfoEnabled()) {
-                                    LOGGER.info(
-                                            "Extension of extensible {} with alias {}: {} has been reject by new {}",
-                                            interfaceName, removed.getAlias(), removed.getClazz(), implClass);
-                                }
-                            }
+
+        if (extensionClass == null) {
+            return;
+        }
+
+
+        // 检查是否有互斥的扩展点
+        for (Map.Entry<String, ExtensionClass<T>> entry : all.entrySet()) {
+            ExtensionClass existed = entry.getValue();
+            if (extensionClass.getOrder() >= existed.getOrder()) {
+                // 新的优先级 >= 老的优先级，检查新的扩展是否排除老的扩展
+                String[] rejection = extensionClass.getRejection();
+                if (CollectionUtils.isNotEmpty(rejection)) {
+                    for (String rej : rejection) {
+                        existed = all.get(rej);
+                        if (existed == null || extensionClass.getOrder() < existed.getOrder()) {
+                            continue;
                         }
-                    }
-                } else {
-                    String[] rejection = existed.getRejection();
-                    if (CollectionUtils.isNotEmpty(rejection)) {
-                        for (String rej : rejection) {
-                            if (rej.equals(extensionClass.getAlias())) {
-                                // 被其它扩展排掉
-                                if (LOGGER.isInfoEnabled()) {
-                                    LOGGER.info(
-                                            "Extension of extensible {} with alias {}: {} has been reject by old {}",
-                                            interfaceName, alias, implClass, existed.getClazz());
-                                    return;
-                                }
+                        ExtensionClass removed = all.remove(rej);
+                        if (removed != null) {
+                            if (LOGGER.isInfoEnabled()) {
+                                LOGGER.info("Extension of extensible {} with alias {}: {} has been reject by new {}", interfaceName, removed.getAlias(), removed.getClazz(), implClass);
                             }
                         }
                     }
                 }
+            } else {
+                String[] rejection = existed.getRejection();
+                if (CollectionUtils.isNotEmpty(rejection)) {
+                    ExtensionClass<T> finalExtensionClass = extensionClass;
+                    boolean aliasExclu = Arrays.stream(rejection).anyMatch(rej -> rej.equals(finalExtensionClass.getAlias()));
+                    if (aliasExclu) {
+                        if (LOGGER.isInfoEnabled()) {
+                            LOGGER.info("Extension of extensible {} with alias {}: {} has been reject by old {}", interfaceName, alias, implClass, existed.getClazz());
+                            return;
+                        }
+                    }
+                }
+
             }
 
-            loadSuccess(alias, extensionClass);
         }
+
+        loadSuccess(alias, extensionClass);
+
     }
 
     private ExtensionClass<T> buildClass(Extension extension, Class<? extends T> implClass, String alias) {
