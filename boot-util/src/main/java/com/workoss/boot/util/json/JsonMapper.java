@@ -78,6 +78,15 @@ public class JsonMapper {
         }
     }
 
+    public JsonNode readTree(String jsonStr) {
+        try {
+            return this.mapper.readTree(jsonStr);
+        } catch (IOException var3) {
+            logger.warn("readTree error:", var3);
+            return null;
+        }
+    }
+
     public JsonNode readTree(byte[] bytes){
         try {
             return mapper.readTree(bytes);
