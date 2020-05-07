@@ -13,6 +13,7 @@
         <module>boot-util</module>
         <module>mybatis-plugin</module>
         <module>sapjco-spring-boot-starter</module>
+        <module>boot-bom</module>
     </modules>
 
 

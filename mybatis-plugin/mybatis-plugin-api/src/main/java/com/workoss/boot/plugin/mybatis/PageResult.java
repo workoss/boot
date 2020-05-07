@@ -92,9 +92,9 @@ public class PageResult<E> extends ArrayList<E> implements Closeable {
         this.shouldCount = shouldCount;
     }
 
+
     @Override
     public void close() throws IOException {
-        SqlHelper.clearSqlParam();
-    }
 
+    }
 }

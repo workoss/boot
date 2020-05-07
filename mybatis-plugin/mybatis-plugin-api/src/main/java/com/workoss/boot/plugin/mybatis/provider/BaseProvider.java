@@ -19,19 +19,18 @@ package com.workoss.boot.plugin.mybatis.provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.workoss.boot.plugin.mybatis.CrudDao;
-import com.workoss.boot.util.StringUtils;
-import com.workoss.boot.util.collection.CollectionUtils;
+import com.workoss.boot.plugin.mybatis.annotation.Column;
+import com.workoss.boot.plugin.mybatis.annotation.Id;
+import com.workoss.boot.plugin.mybatis.annotation.Table;
+import com.workoss.boot.plugin.mybatis.annotation.Transient;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +49,7 @@ public class BaseProvider {
             return sql;
         }
         sql = sqlConsumer.sqlCommand(getTableColumnInfo(context));
-        if (StringUtils.isEmpty(sql)) {
+        if (isBlank(sql)) {
             throw new RuntimeException(key + " 获取sql失败");
         }
         SQL_MAP.put(key, sql);
@@ -67,13 +66,13 @@ public class BaseProvider {
         Stream.of(fields)
                 .filter(field -> !field.isAnnotationPresent(Transient.class))
                 .forEach(field -> {
-                    String columnName = StringUtils.underscoreName(field.getName());
+                    String columnName = underscoreName(field.getName());
                     Annotation[] annotations = field.getAnnotations();
                     for (Annotation annotation : annotations) {
                         if (annotation instanceof Column) {
                             //自定义列名称
                             Column column = (Column) annotation;
-                            if (StringUtils.isNotBlank(column.name())) {
+                            if (!isBlank(column.name())) {
                                 columnName = column.name();
                             }
                         }
@@ -104,7 +103,7 @@ public class BaseProvider {
     protected StringBuilder getWhereSelectColumn(TableColumnInfo tableColumnInfo) {
         StringBuilder sqlBuilder = new StringBuilder();
         List<String> columnNames = tableColumnInfo.getColumnNames();
-        if (CollectionUtils.isEmpty(columnNames)) {
+        if (isEmpty(columnNames)) {
             return sqlBuilder;
         }
         sqlBuilder.append(" <where> ");
@@ -128,11 +127,11 @@ public class BaseProvider {
     private String getTableName(Class clazz) {
         Table table = (Table) clazz.getAnnotation(Table.class);
         if (table != null) {
-            if (StringUtils.isNotBlank(table.name())) {
+            if (!isBlank(table.name())) {
                 return table.name();
             }
         }
-        return StringUtils.underscoreName(clazz.getSimpleName().replaceAll("Entity",""));
+        return underscoreName(clazz.getSimpleName().replaceAll("Entity",""));
     }
 
 
@@ -157,5 +156,40 @@ public class BaseProvider {
                 .orElseThrow(() -> new IllegalStateException("未找到BaseMapper的泛型类 " + context.getMapperType().getName() + "."));
     }
 
+
+    private  boolean isBlank(CharSequence cs) {
+        int strLen;
+        if ((cs == null) || ((strLen = cs.length()) == 0)) {
+            return true;
+        }
+
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isEmpty(Collection<?> collection) {
+        return (collection == null) || collection.isEmpty();
+    }
+
+    private String underscoreName(String camelCaseName) {
+        StringBuilder result = new StringBuilder();
+        if (camelCaseName != null && camelCaseName.length() > 0) {
+            result.append(camelCaseName.substring(0, 1).toLowerCase());
+            for (int i = 1; i < camelCaseName.length(); i++) {
+                char ch = camelCaseName.charAt(i);
+                if (Character.isUpperCase(ch)) {
+                    result.append("_");
+                    result.append(Character.toLowerCase(ch));
+                } else {
+                    result.append(ch);
+                }
+            }
+        }
+        return result.toString();
+    }
 
 }
