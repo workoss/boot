@@ -12,6 +12,7 @@
         <module>boot-parent</module>
         <module>boot-util</module>
         <module>mybatis-plugin</module>
+        <module>sapjco-spring-boot-starter</module>
     </modules>
 
 

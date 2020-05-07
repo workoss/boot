@@ -18,6 +18,7 @@ package com.workoss.boot.util;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
@@ -84,6 +85,17 @@ public class StringUtils {
         }
         StringJoiner stringJoiner = new StringJoiner("");
         for (String string : strings) {
+            stringJoiner.add(string);
+        }
+        return stringJoiner.toString();
+    }
+
+    public static String concat(List<String> list,String delimiter) {
+        if (list == null) {
+            return null;
+        }
+        StringJoiner stringJoiner = new StringJoiner(delimiter);
+        for (String string : list) {
             stringJoiner.add(string);
         }
         return stringJoiner.toString();

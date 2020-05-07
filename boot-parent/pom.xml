@@ -386,17 +386,37 @@
 
 	</repositories>
 
-
-	<distributionManagement>
-		<repository>
-			<id>rdc-releases</id>
-			<url>https://repo.rdc.aliyun.com/repository/16912-release-G6xvVV/</url>
-		</repository>
-		<snapshotRepository>
-			<id>rdc-snapshots</id>
-			<url>https://repo.rdc.aliyun.com/repository/16912-snapshot-FCDUrc/</url>
-		</snapshotRepository>
-	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>rds-private-repo</id>
+			<distributionManagement>
+				<repository>
+					<id>rdc-releases</id>
+					<url>https://repo.rdc.aliyun.com/repository/16912-release-G6xvVV/</url>
+				</repository>
+				<snapshotRepository>
+					<id>rdc-snapshots</id>
+					<url>https://repo.rdc.aliyun.com/repository/16912-snapshot-FCDUrc/</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>talkyun-repo</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>talkyun-snapshot</id>
+					<name>TalkYun Nexus Snapshot</name>
+					<url>http://nexus.yifengx.com/content/repositories/snapshots/</url>
+					<uniqueVersion>true</uniqueVersion>
+				</snapshotRepository>
+				<repository>
+					<id>talkyun-release</id>
+					<name>TalkYun Nexus Release</name>
+					<url>http://nexus.yifengx.com/content/repositories/releases/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 
 
 	<build>
