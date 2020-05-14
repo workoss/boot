@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class BaseProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);
 
-    private static final Map<String, String> SQL_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, String> SQL_MAP = new ConcurrentHashMap<>();
 
 
     public String executeSql(ProviderContext context, SqlConsumer sqlConsumer) {
