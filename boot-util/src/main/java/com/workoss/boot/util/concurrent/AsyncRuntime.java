@@ -50,7 +50,7 @@ public class AsyncRuntime {
                     int keepAliveTime = 60000;
 
                     BlockingQueue<Runnable> queue = ThreadPoolUtils.buildQueue(queuesize);
-                    NamedThreadFactory threadFactory = new NamedThreadFactory("BOOT-CB", true);
+                    NamedThreadFactory threadFactory = new NamedThreadFactory("EVENT-CB", true);
 
                     RejectedExecutionHandler handler = new RejectedExecutionHandler() {
                         private int i = 1;
@@ -105,7 +105,7 @@ public class AsyncRuntime {
         /**
          * 线程名第一前缀
          */
-        private final String firstPrefix = "SOFA-";
+        private final String firstPrefix = "BOOT-";
 
         /**
          * 构造函数，默认非守护线程

@@ -7,14 +7,10 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.stream.StreamFilter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.*;
+import javax.xml.stream.events.XMLEvent;
 import java.io.StringReader;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class XmlMapper {
@@ -27,33 +23,58 @@ public class XmlMapper {
 
     private static final XmlMapper xmlMapper = new XmlMapper();
 
-    public static XmlMapper build(){
+    public static XmlMapper build() {
         return xmlMapper;
     }
 
-    public  Map<String, String> toMap(String xml) throws XMLStreamException {
-        if (StringUtils.isBlank(xml)){
+    public Map<String, String> toMap(String xml) throws XMLStreamException {
+        if (StringUtils.isBlank(xml)) {
             return null;
         }
-        StringReader stringReader = new StringReader(xml);
-        XMLStreamReader reader = inputFactory.createXMLStreamReader(stringReader);
-        return xmlToMap(reader);
+        return xmlToMap(xml);
     }
 
-    private  Map<String, String> xmlToMap(XMLStreamReader reader) throws XMLStreamException {
+    private Map<String, String> xmlToMap(String xml) throws XMLStreamException {
+        StringReader stringReader = new StringReader(xml);
+        XMLEventReader reader = inputFactory.createXMLEventReader(stringReader);
         Map<String, String> context = new LinkedHashMap<>();
         String startKey = null;
         while (reader.hasNext()) {
-            if (reader.isStartElement()) {
-                startKey = reader.getName().getLocalPart();
+            XMLEvent xmlEvent = (XMLEvent) reader.next();
+            if (xmlEvent.isStartElement()) {
+                startKey = xmlEvent.asStartElement().getName().getLocalPart();
             }
-            if (reader.isCharacters()) {
-                String value = reader.getText();
+            if (xmlEvent.isCharacters()) {
+                String value = xmlEvent.asCharacters().getData();
                 if (startKey != null && value != null) {
                     context.put(startKey, value);
                 }
             }
-            if (reader.isEndElement()) {
+            if (xmlEvent.isEndElement()) {
+                startKey = null;
+            }
+        }
+        return context;
+    }
+
+    private Map<String, String> xmlToMap(String xml, List<XMLEvent> xmlEvents) throws XMLStreamException {
+        StringReader stringReader = new StringReader(xml);
+        XMLEventReader reader = inputFactory.createXMLEventReader(stringReader);
+        Map<String, String> context = new LinkedHashMap<>();
+        String startKey = null;
+        while (reader.hasNext()) {
+            XMLEvent xmlEvent = (XMLEvent) reader.next();
+            xmlEvents.add(xmlEvent);
+            if (xmlEvent.isStartElement()) {
+                startKey = xmlEvent.asStartElement().getName().getLocalPart();
+            }
+            if (xmlEvent.isCharacters()) {
+                String value = xmlEvent.asCharacters().getData();
+                if (startKey != null && value != null) {
+                    context.put(startKey, value);
+                }
+            }
+            if (xmlEvent.isEndElement()) {
                 startKey = null;
             }
         }
@@ -61,18 +82,38 @@ public class XmlMapper {
     }
 
 
-    public  <T> T unmarshal(String xml, XmlToClassFunction<T> function) {
+    public <T> T unmarshal(String xml, XmlToClassFunction<T> function) {
         if (function == null) {
             throw new RuntimeException("function 不能为空");
         }
         try {
-            StringReader stringReader = new StringReader(xml);
-            XMLStreamReader reader = inputFactory.createXMLStreamReader(stringReader);
-            Map<String, String> context = xmlToMap(reader);
-            Class<T> tClass = function.apply(context);
-            if (tClass == null){
+            List<XMLEvent> xmlEvents = new ArrayList<>();
+            Class<T> tClass = function.apply(xmlToMap(xml, xmlEvents));
+            if (tClass == null) {
                 throw new RuntimeException("没有反序列化的对象");
             }
+            Unmarshaller unmarshaller = initUnmarshaller(tClass);
+            XMLEventReader eventReader = StaxUtils.createXMLEventReader(xmlEvents);
+            if (tClass.isAnnotationPresent(XmlRootElement.class)) {
+                return (T) unmarshaller.unmarshal(eventReader);
+            } else {
+                JAXBElement<?> jaxbElement = unmarshaller.unmarshal(eventReader, tClass);
+                return (T) jaxbElement.getValue();
+            }
+        } catch (JAXBException e) {
+            throw new RuntimeException("Invalid JAXB configuration", e);
+        } catch (XMLStreamException e) {
+            throw new RuntimeException("XMLStreamException", e);
+        }
+    }
+
+    public <T> T unmarshal(String xml, Class<T> tClass) {
+        if (tClass == null) {
+            throw new RuntimeException("反序列化对象 不能为空");
+        }
+        try {
+            StringReader stringReader = new StringReader(xml);
+            XMLStreamReader reader = inputFactory.createXMLStreamReader(stringReader);
             Unmarshaller unmarshaller = initUnmarshaller(tClass);
             if (tClass.isAnnotationPresent(XmlRootElement.class)) {
                 return (T) unmarshaller.unmarshal(reader);
@@ -88,9 +129,8 @@ public class XmlMapper {
     }
 
 
-
     private Unmarshaller initUnmarshaller(Class<?> outputClass) throws JAXBException, JAXBException {
-        Unmarshaller unmarshaller =jaxbContexts.createUnmarshaller(outputClass);
+        Unmarshaller unmarshaller = jaxbContexts.createUnmarshaller(outputClass);
         return this.unmarshallerProcessor.apply(unmarshaller);
     }
 }
