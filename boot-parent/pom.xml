@@ -33,7 +33,7 @@
 
 
 		<spring.version>5.2.6.RELEASE</spring.version>
-		<spring-boot.version>2.3.0.RC1</spring-boot.version>
+		<spring-boot.version>2.3.0.RELEASE</spring-boot.version>
 		<spring-cloud.version>2020-1.M1</spring-cloud.version>
 		<spring-security.version>5.3.1.RELEASE</spring-security.version>
 		<spring-boot-admin.version>2.2.3</spring-boot-admin.version>
@@ -43,7 +43,7 @@
 		<mybatis-spring.version>2.0.4</mybatis-spring.version>
 		<mybatis-spring-boot-starter.version>2.1.2</mybatis-spring-boot-starter.version>
 
-		<HikariCP.version>3.4.3</HikariCP.version>
+		<HikariCP.version>3.4.5</HikariCP.version>
 
 		<r2dbc-bom.version>Arabba-SR3</r2dbc-bom.version>
 
@@ -93,7 +93,7 @@
 		<license.licenseResolver>${project.baseUri}/../src/license
 		</license.licenseResolver>
 		<license.organizationName>Workoss Software, Inc.</license.organizationName>
-		<license.inceptionYear>2019</license.inceptionYear>
+		<license.inceptionYear>2020</license.inceptionYear>
 		<license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
 		<license.useJavaNoReformatCommentStartTag>false
 		</license.useJavaNoReformatCommentStartTag>
