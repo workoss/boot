@@ -1,7 +1,6 @@
 package com.workoss.boot.util.xml;
 
 import com.workoss.boot.util.StringUtils;
-import org.springframework.util.xml.StaxUtils;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
