@@ -40,18 +40,7 @@ public class XmlMapper {
         String startKey = null;
         while (reader.hasNext()) {
             XMLEvent xmlEvent = (XMLEvent) reader.next();
-            if (xmlEvent.isStartElement()) {
-                startKey = xmlEvent.asStartElement().getName().getLocalPart();
-            }
-            if (xmlEvent.isCharacters()) {
-                String value = xmlEvent.asCharacters().getData();
-                if (startKey != null && value != null) {
-                    context.put(startKey, value);
-                }
-            }
-            if (xmlEvent.isEndElement()) {
-                startKey = null;
-            }
+            startKey = calcXmlEvent(context, startKey, xmlEvent);
         }
         return context;
     }
@@ -64,20 +53,25 @@ public class XmlMapper {
         while (reader.hasNext()) {
             XMLEvent xmlEvent = (XMLEvent) reader.next();
             xmlEvents.add(xmlEvent);
-            if (xmlEvent.isStartElement()) {
-                startKey = xmlEvent.asStartElement().getName().getLocalPart();
-            }
-            if (xmlEvent.isCharacters()) {
-                String value = xmlEvent.asCharacters().getData();
-                if (startKey != null && value != null) {
-                    context.put(startKey, value);
-                }
-            }
-            if (xmlEvent.isEndElement()) {
-                startKey = null;
-            }
+            startKey = calcXmlEvent(context, startKey, xmlEvent);
         }
         return context;
+    }
+
+    private String calcXmlEvent(Map<String, String> context, String startKey, XMLEvent xmlEvent) {
+        if (xmlEvent.isStartElement()) {
+            startKey = xmlEvent.asStartElement().getName().getLocalPart();
+        }
+        if (xmlEvent.isCharacters()) {
+            String value = xmlEvent.asCharacters().getData();
+            if (startKey != null && value != null) {
+                context.put(startKey, value);
+            }
+        }
+        if (xmlEvent.isEndElement()) {
+            startKey = null;
+        }
+        return startKey;
     }
 
 
