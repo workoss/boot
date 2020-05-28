@@ -1,8 +1,8 @@
 package com.workoss.boot.util.xml;
 
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
+
+import com.workoss.boot.util.Assert;
+import com.workoss.boot.util.reflect.ClassUtils;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamConstants;
@@ -18,7 +18,6 @@ public class ListBasedXMLEventReader implements XMLEventReader {
 
     private final List<XMLEvent> events;
 
-    @Nullable
     private XMLEvent currentEvent;
 
     private int cursor = 0;
@@ -53,7 +52,6 @@ public class ListBasedXMLEventReader implements XMLEventReader {
     }
 
     @Override
-    @Nullable
     public XMLEvent peek() {
         if (hasNext()) {
             return this.events.get(this.cursor);
@@ -88,7 +86,6 @@ public class ListBasedXMLEventReader implements XMLEventReader {
     }
 
     @Override
-    @Nullable
     public XMLEvent nextTag() throws XMLStreamException {
         checkIfClosed();
 

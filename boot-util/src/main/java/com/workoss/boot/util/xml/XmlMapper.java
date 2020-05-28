@@ -71,6 +71,7 @@ public class XmlMapper {
             XMLEvent xmlEvent = (XMLEvent) reader.next();
             xmlEvents.add(xmlEvent);
             startKey = calcXmlEvent(context, startKey, xmlEvent);
+            System.out.println(startKey+"-----");
         }
         return context;
     }
@@ -81,7 +82,7 @@ public class XmlMapper {
         }
         if (xmlEvent.isCharacters()) {
             String value = xmlEvent.asCharacters().getData();
-            if (startKey != null && value != null) {
+            if (startKey != null && StringUtils.isNotBlank(value)) {
                 context.put(startKey, value);
             }
         }

@@ -37,6 +37,10 @@ import org.springframework.util.Assert;
  */
 public class ClassUtils {
     private static final Logger log= LoggerFactory.getLogger(ClassUtils.class);
+    /** The package separator character: {@code '.'}. */
+    private static final char PACKAGE_SEPARATOR = '.';
+    /** The inner class separator character: {@code '$'}. */
+    private static final char INNER_CLASS_SEPARATOR = '$';
     private static final String CGLIB_CLASS_SEPARATOR = "$$";
     private static final Map<Class<?>, Class<?>> primitiveMap = new HashMap<>(9);
 
@@ -424,5 +428,20 @@ public class ClassUtils {
             return cnName;
         }
         return jvmName;
+    }
+
+    public static String getShortName(String className) {
+        Assert.hasLength(className, "Class name must not be empty");
+        int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+        int nameEndIndex = className.indexOf(CGLIB_CLASS_SEPARATOR);
+        if (nameEndIndex == -1) {
+            nameEndIndex = className.length();
+        }
+        String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+        shortName = shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
+        return shortName;
+    }
+    public static String getShortName(Class<?> clazz) {
+        return getShortName(clazz.getTypeName());
     }
 }
