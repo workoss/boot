@@ -2,7 +2,7 @@ package com.workoss.boot.util.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.type.ResolvedType;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.workoss.boot.util.ApplyClassFunc;
@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,14 +21,14 @@ import java.util.Map;
 public class JsonMapper {
 
     private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
-    public static final JsonMapper INSTANCE = new JsonMapper();
+    public static final JsonMapper INSTANCE = new JsonMapper(JsonInclude.Include.NON_NULL);
 
     private ObjectMapper mapper;
 
     private JsonFactory jsonFactory = new JsonFactory();
 
     public JsonMapper() {
-        this(null);
+        this(JsonInclude.Include.NON_NULL);
     }
 
     public JsonMapper(JsonInclude.Include include) {
@@ -44,12 +42,6 @@ public class JsonMapper {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
-    /**
-     * 创建只输出非Null的属性到Json字符串的Mapper.
-     */
-    public static JsonMapper nonNullMapper() {
-        return new JsonMapper(JsonInclude.Include.NON_NULL);
-    }
 
     /**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
@@ -63,15 +55,38 @@ public class JsonMapper {
     /**
      * 默认的全部输出的Mapper, 区别于INSTANCE，可以做进一步的配置
      */
-    public static JsonMapper defaultMapper() {
+    public static JsonMapper build() {
         return INSTANCE;
+    }
+
+
+    public static String toJSONString(Object object){
+        return build().toJson(object);
+    }
+
+    public static JsonNode parse(String json){
+        return build().readTree(json);
+    }
+    public static JsonNode parse(byte[] bytes){
+        return build().readTree(bytes);
+    }
+
+    public static <T>T parseObject(String json,Class<T> tClass){
+        return build().fromJson(json,tClass);
+    }
+
+    public static <T>T parseObject(byte[] bytes,Class<T> tClass){
+        return build().fromJson(bytes,tClass);
+    }
+
+    public static <T>T parseObject(String json,JavaType javaType){
+        return build().fromJson(json,javaType);
     }
 
     /**
      * Object可以是POJO，也可以是Collection或数组。 如果对象为Null, 返回"null". 如果集合为空集合, 返回"[]".
      */
     public String toJson(Object object) {
-
         try {
             return mapper.writeValueAsString(object);
         } catch (IOException e) {
@@ -81,12 +96,22 @@ public class JsonMapper {
     }
 
     public Map<String, String> toMap(String jsonString) {
-        try {
-            return mapper.readValue(jsonString, buildMapType(HashMap.class, String.class, String.class));
-        } catch (JsonProcessingException e) {
-            logger.warn("read json to map  {} error", jsonString, e);
-            return null;
+        return toMap(jsonString.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public Map<String, String> toMap(byte[] bytes) {
+        JsonNode jsonNode = readTree(bytes);
+        Map<String, String> context = new HashMap<>();
+        if (jsonNode.size() <= 0) {
+            return context;
         }
+        jsonNode.fieldNames().forEachRemaining(s -> {
+            JsonNode node = jsonNode.get(s);
+            if (!node.isArray() && !node.isObject()) {
+                context.put(s, node.asText());
+            }
+        });
+        return context;
     }
 
     public JsonNode readTree(String jsonStr) {
@@ -120,24 +145,22 @@ public class JsonMapper {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
-        Map<String, String> map = new HashMap<>();
-        try (JsonParser jsonParser = jsonFactory.createParser(bytes)) {
-            while (JsonToken.END_OBJECT != jsonParser.nextToken()) {
-                String fieldName = jsonParser.currentName();
-                JsonToken token = jsonParser.nextToken();
-                map.put(fieldName, token.asString());
-            }
-            Class<T> tClass = func.apply(map);
-            if (tClass == null) {
-                throw new RuntimeException("没有反序列化的对象");
-            }
-            return jsonParser.readValueAs(tClass);
-        } catch (JsonParseException e) {
-            logger.error("json parse error", e);
-        } catch (Exception e) {
-            logger.error("json parse error", e);
+        JsonNode jsonNode = readTree(bytes);
+        Map<String, String> context = new HashMap<>();
+        if (jsonNode.size() <= 0) {
+            return null;
         }
-        return null;
+        jsonNode.fieldNames().forEachRemaining(s -> {
+            JsonNode node = jsonNode.get(s);
+            if (!node.isArray() && !node.isObject()) {
+                context.put(s, node.asText());
+            }
+        });
+        Class<?> tClass = func.apply(context);
+        if (tClass == null){
+            throw new RuntimeException("没有找到目标类");
+        }
+        return (T) mapper.convertValue(jsonNode,tClass);
     }
 
     public <T> T fromJson(byte[] bytes, Class<T> clazz) {
@@ -164,13 +187,12 @@ public class JsonMapper {
         }
     }
 
-    public <T> List<T> fromJson(String jsonString, TypeReference<T> jsonTypeReference) {
+    public <T> List<T> fromJson(String jsonString, ResolvedType resolvedType) {
         if (StringUtils.isEmpty(jsonString)) {
             return null;
         }
-
-        try {
-            MappingIterator<T> mappingIterator = mapper.readValues(jsonFactory.createParser(jsonString), jsonTypeReference);
+        try(JsonParser parser = jsonFactory.createParser(jsonString)) {
+            MappingIterator<T> mappingIterator = mapper.readValues(parser, resolvedType);
             if (!mappingIterator.hasNext()) {
                 return null;
             }

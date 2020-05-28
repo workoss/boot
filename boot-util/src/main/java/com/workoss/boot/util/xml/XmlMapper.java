@@ -5,11 +5,16 @@ import com.workoss.boot.util.ApplyClassFunc;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
@@ -21,11 +26,22 @@ public class XmlMapper {
 
     private final Function<Unmarshaller, Unmarshaller> unmarshallerProcessor = Function.identity();
 
+    private final Function<Marshaller, Marshaller> marshallerProcessor = Function.identity();
+
     private static final XmlMapper xmlMapper = new XmlMapper();
 
     public static XmlMapper build() {
         return xmlMapper;
     }
+
+    public static <T> T parseObject(String xml, Class<T> tClass) {
+        return xmlMapper.unmarshal(xml, tClass);
+    }
+
+    public static String toXmlString(Object object) {
+        return xmlMapper.toXml(object, object.getClass(), StandardCharsets.UTF_8.name(), true);
+    }
+
 
     public Map<String, String> toMap(String xml) throws XMLStreamException {
         if (StringUtils.isBlank(xml)) {
@@ -120,8 +136,49 @@ public class XmlMapper {
     }
 
 
+    public String toXml(Collection<?> root, String rootName, Class clazz, String encoding, Boolean jaxbFragment) {
+        CollectionWrapper wrapper = new CollectionWrapper();
+        wrapper.collection = root;
+        JAXBElement<CollectionWrapper> wrapperElement = new JAXBElement<CollectionWrapper>(new QName(rootName),
+                CollectionWrapper.class, wrapper);
+        return toXml(wrapperElement, clazz, encoding, jaxbFragment);
+    }
+
+    public String toXml(Object root, Class clazz, String encoding, Boolean jaxbFragment) {
+        Marshaller marshaller = null;
+        try {
+            StringWriter writer = new StringWriter();
+            marshaller = initMarshaller(clazz);
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            if (StringUtils.isNotBlank(encoding)) {
+                marshaller.setProperty(Marshaller.JAXB_ENCODING, encoding);
+            }
+            if (jaxbFragment != null) {
+                marshaller.setProperty(Marshaller.JAXB_FRAGMENT, jaxbFragment);
+            }
+            marshaller.marshal(root, writer);
+            return writer.toString();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 封装Root Element 是 Collection的情况.
+     */
+    public static class CollectionWrapper {
+
+        @XmlAnyElement
+        protected Collection<?> collection;
+    }
+
     private Unmarshaller initUnmarshaller(Class<?> outputClass) throws JAXBException, JAXBException {
         Unmarshaller unmarshaller = jaxbContexts.createUnmarshaller(outputClass);
         return this.unmarshallerProcessor.apply(unmarshaller);
+    }
+
+    private Marshaller initMarshaller(Class<?> tClass) throws JAXBException {
+        Marshaller marshaller = jaxbContexts.createMarshaller(tClass);
+        return this.marshallerProcessor.apply(marshaller);
     }
 }
