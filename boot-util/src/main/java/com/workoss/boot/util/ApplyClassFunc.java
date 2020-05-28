@@ -1,9 +1,9 @@
-package com.workoss.boot.util.xml;
+package com.workoss.boot.util;
 
 import java.util.Map;
 
 @FunctionalInterface
-public interface XmlToClassFunction<T> {
+public interface ApplyClassFunc<T> {
 
     Class<T> apply(Map<String, String> stringStringMap);
 }

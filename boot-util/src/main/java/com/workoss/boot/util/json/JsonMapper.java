@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.workoss.boot.util.ApplyClassFunc;
 import com.workoss.boot.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public class JsonMapper {
         if (include != null) {
             mapper.setSerializationInclusion(include);
         }
-        mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER,true);
+        mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         // 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
@@ -51,7 +53,7 @@ public class JsonMapper {
 
     /**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
-     *
+     * <p>
      * 注意，要小心使用, 特别留意empty的情况.
      */
     public static JsonMapper nonEmptyMapper() {
@@ -73,7 +75,16 @@ public class JsonMapper {
         try {
             return mapper.writeValueAsString(object);
         } catch (IOException e) {
-            logger.warn("write to json string error:" + object, e);
+            logger.warn("write to json string error:{}", object, e);
+            return null;
+        }
+    }
+
+    public Map<String, String> toMap(String jsonString) {
+        try {
+            return mapper.readValue(jsonString, buildMapType(HashMap.class, String.class, String.class));
+        } catch (JsonProcessingException e) {
+            logger.warn("read json to map  {} error", jsonString, e);
             return null;
         }
     }
@@ -87,59 +98,83 @@ public class JsonMapper {
         }
     }
 
-    public JsonNode readTree(byte[] bytes){
+    public JsonNode readTree(byte[] bytes) {
         try {
             return mapper.readTree(bytes);
         } catch (IOException e) {
-            logger.warn("readTree error:" , e);
+            logger.warn("readTree error:", e);
             return null;
         }
     }
 
-    public JsonNode readTree(InputStream inputStream){
+    public JsonNode readTree(InputStream inputStream) {
         try {
             return mapper.readTree(inputStream);
         } catch (IOException e) {
-            logger.warn("readTree error:" , e);
+            logger.warn("readTree error:", e);
             return null;
         }
     }
 
+    public <T> T fromJson(byte[] bytes, ApplyClassFunc func) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        Map<String, String> map = new HashMap<>();
+        try (JsonParser jsonParser = jsonFactory.createParser(bytes)) {
+            while (JsonToken.END_OBJECT != jsonParser.nextToken()) {
+                String fieldName = jsonParser.currentName();
+                JsonToken token = jsonParser.nextToken();
+                map.put(fieldName, token.asString());
+            }
+            Class<T> tClass = func.apply(map);
+            if (tClass == null) {
+                throw new RuntimeException("没有反序列化的对象");
+            }
+            return jsonParser.readValueAs(tClass);
+        } catch (JsonParseException e) {
+            logger.error("json parse error", e);
+        } catch (Exception e) {
+            logger.error("json parse error", e);
+        }
+        return null;
+    }
+
     public <T> T fromJson(byte[] bytes, Class<T> clazz) {
-        if (bytes == null|| bytes.length==0) {
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
         try {
             return mapper.readValue(bytes, clazz);
         } catch (IOException e) {
-            logger.warn("parse json bytes error:" , e);
+            logger.warn("parse json bytes error:", e);
             return null;
         }
     }
 
     public <T> T fromJson(byte[] bytes, JavaType javaType) {
-        if (bytes == null|| bytes.length==0) {
+        if (bytes == null || bytes.length == 0) {
             return null;
         }
         try {
             return mapper.readValue(bytes, javaType);
         } catch (IOException e) {
-            logger.warn("parse json bytes error:" , e);
+            logger.warn("parse json bytes error:", e);
             return null;
         }
     }
 
-    public <T> List<T> fromJson(String jsonString, TypeReference<T> jsonTypeReference){
+    public <T> List<T> fromJson(String jsonString, TypeReference<T> jsonTypeReference) {
         if (StringUtils.isEmpty(jsonString)) {
             return null;
         }
 
         try {
-           MappingIterator<T> mappingIterator = mapper.readValues(jsonFactory.createParser(jsonString),jsonTypeReference);
-           if (!mappingIterator.hasNext()){
-               return null;
-           }
-           return mappingIterator.readAll();
+            MappingIterator<T> mappingIterator = mapper.readValues(jsonFactory.createParser(jsonString), jsonTypeReference);
+            if (!mappingIterator.hasNext()) {
+                return null;
+            }
+            return mappingIterator.readAll();
         } catch (IOException e) {
             logger.warn("parse json string error:" + jsonString, e);
             return null;
@@ -148,9 +183,9 @@ public class JsonMapper {
 
     /**
      * 反序列化POJO或简单Collection如List<String>.
-     *
+     * <p>
      * 如果JSON字符串为Null或"null"字符串, 返回Null. 如果JSON字符串为"[]", 返回空集合.
-     *
+     * <p>
      * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String, JavaType)
      *
      * @see #fromJson(String, JavaType)

@@ -1,6 +1,7 @@
 package com.workoss.boot.util.xml;
 
 import com.workoss.boot.util.StringUtils;
+import com.workoss.boot.util.ApplyClassFunc;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -75,10 +76,7 @@ public class XmlMapper {
     }
 
 
-    public <T> T unmarshal(String xml, XmlToClassFunction<T> function) {
-        if (function == null) {
-            throw new RuntimeException("function 不能为空");
-        }
+    public <T> T unmarshal(String xml, ApplyClassFunc<T> function) {
         try {
             List<XMLEvent> xmlEvents = new ArrayList<>();
             Class<T> tClass = function.apply(xmlToMap(xml, xmlEvents));
