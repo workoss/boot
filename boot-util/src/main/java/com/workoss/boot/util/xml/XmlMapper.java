@@ -71,7 +71,6 @@ public class XmlMapper {
             XMLEvent xmlEvent = (XMLEvent) reader.next();
             xmlEvents.add(xmlEvent);
             startKey = calcXmlEvent(context, startKey, xmlEvent);
-            System.out.println(startKey+"-----");
         }
         return context;
     }
