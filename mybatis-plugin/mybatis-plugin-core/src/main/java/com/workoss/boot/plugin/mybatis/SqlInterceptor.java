@@ -143,7 +143,7 @@ public class SqlInterceptor implements Interceptor {
                     (Map<String, Object>) additionalParamters);
         }
         List<Object> list = executor.query(mappedStatement, parameter, RowBounds.DEFAULT, resultHandler, cacheKey,
-                boundSql);
+                newBoundSql);
 
         if (sqlParam.getShouldPage()) {
             pageResult.addAll(list);
@@ -214,19 +214,24 @@ public class SqlInterceptor implements Interceptor {
                        BoundSql boundSql) throws SQLException {
         String countMsId = mappedStatement.getId() + countSuffix;
         //判断是否存在count
-        MappedStatement countMappedStatement = mappedStatement.getConfiguration()
-                .getMappedStatement(countMsId, false);
-        CacheKey countKey = executor.createCacheKey(mappedStatement, parameter, rowBounds,
-                boundSql);
+        MappedStatement countMappedStatement = null;
+        try {
+            countMappedStatement = mappedStatement.getConfiguration()
+                    .getMappedStatement(countMsId, false);
+        } catch (Exception e) {
+
+        }
         BoundSql countBoundSql;
-        //生成 count
-        if (countMappedStatement == null) {
+
+        if (countMappedStatement != null) {
+            countBoundSql = countMappedStatement.getBoundSql(parameter);
+        } else {
             countMappedStatement = COUNT_MS_MAPPEDSTATEMENT_CACHE.get(countMsId);
             if (countMappedStatement == null) {
                 countMappedStatement = newCountMappedStatement(mappedStatement, countMsId);
-                COUNT_MS_MAPPEDSTATEMENT_CACHE.put(countMsId, mappedStatement);
+                COUNT_MS_MAPPEDSTATEMENT_CACHE.put(countMsId, countMappedStatement);
             }
-
+            countBoundSql = countMappedStatement.getBoundSql(parameter);
             String countSql = PagerUtils.count(boundSql.getSql(), dbType);
             countBoundSql = new BoundSql(countMappedStatement.getConfiguration(),
                     countSql, boundSql.getParameterMappings(), parameter);
@@ -237,9 +242,10 @@ public class SqlInterceptor implements Interceptor {
                 ReflectUtils.setFieldValue(countBoundSql, MYBATIS_ADDITIONALPARAMTERS,
                         (Map<String, Object>) additionalParamters);
             }
-        } else {
-            countBoundSql = countMappedStatement.getBoundSql(parameter);
         }
+
+        CacheKey countKey = executor.createCacheKey(countMappedStatement, parameter, rowBounds,
+                countBoundSql);
         List list = executor.query(countMappedStatement, parameter, RowBounds.DEFAULT,
                 resultHandler, countKey, countBoundSql);
         if (!(list != null && list.size() > 0)) {
@@ -268,8 +274,8 @@ public class SqlInterceptor implements Interceptor {
         builder.parameterMap(ms.getParameterMap());
         //count查询返回值int
         List<ResultMap> resultMaps = new ArrayList<ResultMap>();
-        ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms
-                .getId(), Long.class, EMPTY_RESULTMAPPING).build();
+        ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class,
+                EMPTY_RESULTMAPPING).build();
         resultMaps.add(resultMap);
         builder.resultMaps(resultMaps);
         builder.resultSetType(ms.getResultSetType());
