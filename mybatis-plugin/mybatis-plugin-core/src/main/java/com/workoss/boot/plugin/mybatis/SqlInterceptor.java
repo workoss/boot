@@ -70,7 +70,7 @@ public class SqlInterceptor implements Interceptor {
     private final String PAGE_SQL_ID = "Page";
     private final String PAGE_PARAM = "page";
     private final String MYBATIS_ADDITIONALPARAMTERS = "additionalParameters";
-    private String countSuffix = "_COUNT";
+    private String countSuffix = "Count";
 
 
     @Override

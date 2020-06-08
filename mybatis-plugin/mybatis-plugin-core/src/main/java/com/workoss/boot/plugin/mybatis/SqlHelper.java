@@ -37,6 +37,13 @@ public class SqlHelper {
         LOCAL_SQL_PARAM.set(null);
     }
 
+    public static SqlParamBuild onePage(int pageNo, int limit) {
+        return onePage(pageNo,limit,true);
+    }
+
+    public static SqlParamBuild onePage(int pageNo, int limit, boolean shouldCount) {
+        return page((pageNo - 1) * limit, limit, shouldCount);
+    }
 
     public static SqlParamBuild page(int offset, int limit) {
         return new SqlParamBuild(offset, limit, null, true, true);
