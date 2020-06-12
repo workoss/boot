@@ -21,8 +21,8 @@
 		<jackson-bom.version>2.11.0</jackson-bom.version>
 		<netty.version>4.1.50.Final</netty.version>
 		<asm.version>8.0.1</asm.version>
-		<reactor-bom.version>Dysprosium-SR7</reactor-bom.version>
-		<rsocket-bom.version>1.0.0</rsocket-bom.version>
+		<reactor-bom.version>Dysprosium-SR8</reactor-bom.version>
+		<rsocket-bom.version>1.0.1</rsocket-bom.version>
 
 <!--		<jakarta.validation-api.version>3.0.0-M1</jakarta.validation-api.version>-->
 		<jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
@@ -32,12 +32,12 @@
 		<aspectj.version>1.9.5</aspectj.version>
 
 
-		<spring.version>5.2.6.RELEASE</spring.version>
-		<spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+		<spring.version>5.2.7.RELEASE</spring.version>
+		<spring-boot.version>2.3.1.RELEASE</spring-boot.version>
 		<spring-cloud.version>2020-1.M1</spring-cloud.version>
-		<spring-security.version>5.3.1.RELEASE</spring-security.version>
+		<spring-security.version>5.3.3.RELEASE</spring-security.version>
 		<spring-boot-admin.version>2.2.3</spring-boot-admin.version>
-		<spring-data-r2dbc.version>1.1.0.RELEASE</spring-data-r2dbc.version>
+		<spring-data-r2dbc.version>1.1.1.RELEASE</spring-data-r2dbc.version>
 
 		<mybatis.version>3.5.5</mybatis.version>
 		<mybatis-spring.version>2.0.5</mybatis-spring.version>
@@ -45,7 +45,7 @@
 
 		<HikariCP.version>3.4.5</HikariCP.version>
 
-		<r2dbc-bom.version>Arabba-SR4</r2dbc-bom.version>
+		<r2dbc-bom.version>Arabba-SR5</r2dbc-bom.version>
 
 		<liquibase.version>3.9.0</liquibase.version>
 
