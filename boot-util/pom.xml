@@ -5,8 +5,8 @@
     <parent>
         <artifactId>boot-parent</artifactId>
         <groupId>com.workoss.boot</groupId>
-        <version>1.0.5-SNAPSHOT</version>
-        <relativePath>../boot-parent/pom.xml</relativePath>
+        <version>1.0.6-SNAPSHOT</version>
+        <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,7 +42,6 @@
         </dependency>
 
     </dependencies>
-
 
 
 </project>
