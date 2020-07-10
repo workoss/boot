@@ -1,18 +1,24 @@
 /*
- * #%L
- * %%
- * Copyright (C) 2019 Workoss Software, Inc.
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * The MIT License
+ * Copyright © 2020-2021 workoss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.workoss.boot.util.reflect;
 
@@ -26,7 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
 
@@ -39,160 +44,158 @@ import org.springframework.cglib.core.Converter;
  * @version:
  */
 public class BeanCopierUtil {
-    private static final ConcurrentMap<String, List<Map<String, String>>> CLASS_METHOD_MAP = new ConcurrentHashMap<>();
 
-    private static final ConcurrentMap<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<String, List<Map<String, String>>> CLASS_METHOD_MAP = new ConcurrentHashMap<>();
 
-    private static final String SETTER_PREFIX = "set";
-    private static final String GETTER_PREFIX = "get";
+	private static final ConcurrentMap<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
 
+	private static final String SETTER_PREFIX = "set";
 
-    public static <T> List<T> copy(List<Object> sourceList, Class<T> target) {
-        if (CollectionUtils.isEmpty(sourceList)) {
-            return Collections.EMPTY_LIST;
-        }
-        List<T> list = new ArrayList<>(sourceList.size());
-        for (Object o : sourceList) {
-            list.add(copy(o, target));
-        }
-        return list;
-    }
+	private static final String GETTER_PREFIX = "get";
 
+	public static <T> List<T> copy(List<Object> sourceList, Class<T> target) {
+		if (CollectionUtils.isEmpty(sourceList)) {
+			return Collections.EMPTY_LIST;
+		}
+		List<T> list = new ArrayList<>(sourceList.size());
+		for (Object o : sourceList) {
+			list.add(copy(o, target));
+		}
+		return list;
+	}
 
-    public static <T> T copy(Object source, Class<T> targetClass) {
-        if (source == null) {
-            return null;
-        }
-        List<Map<String, String>> getSetList = getGetAndSetMethod(source.getClass(), targetClass);
-        if (CollectionUtils.isEmpty(getSetList)) {
-            return null;
-        }
-        T ret = ReflectUtils.newInstance(targetClass);
-        for (Map<String, String> stringStringMap : getSetList) {
-            Object param = ReflectUtils.invokeMethod(source, stringStringMap.get(GETTER_PREFIX), null);
-            if (param == null) {
-                continue;
-            }
-            ReflectUtils.invokeMethod(ret, stringStringMap.get(SETTER_PREFIX), param);
-        }
+	public static <T> T copy(Object source, Class<T> targetClass) {
+		if (source == null) {
+			return null;
+		}
+		List<Map<String, String>> getSetList = getGetAndSetMethod(source.getClass(), targetClass);
+		if (CollectionUtils.isEmpty(getSetList)) {
+			return null;
+		}
+		T ret = ReflectUtils.newInstance(targetClass);
+		for (Map<String, String> stringStringMap : getSetList) {
+			Object param = ReflectUtils.invokeMethod(source, stringStringMap.get(GETTER_PREFIX), null);
+			if (param == null) {
+				continue;
+			}
+			ReflectUtils.invokeMethod(ret, stringStringMap.get(SETTER_PREFIX), param);
+		}
 
-        return ret;
-    }
+		return ret;
+	}
 
+	private static List<Map<String, String>> getGetAndSetMethod(Class source, Class target) {
+		String cacheKey = generateBeanKey(source, target);
+		if (CLASS_METHOD_MAP.containsKey(cacheKey)) {
+			return CLASS_METHOD_MAP.get(cacheKey);
+		}
 
-    private static List<Map<String, String>> getGetAndSetMethod(Class source, Class target) {
-        String cacheKey = generateBeanKey(source, target);
-        if (CLASS_METHOD_MAP.containsKey(cacheKey)) {
-            return CLASS_METHOD_MAP.get(cacheKey);
-        }
+		AbstractMethodAccess targetMethodAccess = ReflectUtils.getMethodAccessCache(target);
+		String[] targetMethodNames = targetMethodAccess.getMethodNames();
+		if (!(targetMethodNames != null && targetMethodNames.length > 0)) {
+			return null;
+		}
+		Map<String, String> map = Arrays.stream(targetMethodNames).filter(methodName -> {
+			boolean ignore = methodName.equalsIgnoreCase("equals") || methodName.equalsIgnoreCase("toString")
+					|| methodName.equalsIgnoreCase("hashCode") || methodName.equalsIgnoreCase("canEqual");
+			return !ignore && methodName.startsWith(SETTER_PREFIX);
+		}).collect(Collectors.toMap(str -> StringUtils.uncapitalize(str.replaceAll(SETTER_PREFIX, "")), str -> str));
+		if (CollectionUtils.isEmpty(map)) {
+			return null;
+		}
 
-        AbstractMethodAccess targetMethodAccess = ReflectUtils.getMethodAccessCache(target);
-        String[] targetMethodNames = targetMethodAccess.getMethodNames();
-        if (!(targetMethodNames != null && targetMethodNames.length > 0)) {
-            return null;
-        }
-        Map<String, String> map = Arrays.stream(targetMethodNames).filter(methodName -> {
-            boolean ignore = methodName.equalsIgnoreCase("equals") || methodName.equalsIgnoreCase("toString")
-                    || methodName.equalsIgnoreCase("hashCode") || methodName.equalsIgnoreCase("canEqual");
-            return !ignore && methodName.startsWith(SETTER_PREFIX);
-        })
-                .collect(Collectors.toMap(str -> StringUtils.uncapitalize(str.replaceAll(SETTER_PREFIX, "")), str -> str));
-        if (CollectionUtils.isEmpty(map)) {
-            return null;
-        }
+		AbstractMethodAccess sourceMethodAccess = ReflectUtils.getMethodAccessCache(source);
+		String[] sourceMethods = sourceMethodAccess.getMethodNames();
+		if (!(sourceMethods != null && sourceMethods.length > 0)) {
+			return Collections.emptyList();
+		}
+		List<Map<String, String>> resultMap = Arrays.stream(sourceMethods).filter(sourceMethod -> {
+			if (!sourceMethod.startsWith(GETTER_PREFIX)) {
+				return false;
+			}
+			String setMethodName = map.get(StringUtils.uncapitalize(sourceMethod.replaceAll(GETTER_PREFIX, "")));
+			return StringUtils.isNotBlank(setMethodName);
+		}).map(sourceMethod -> {
+			return new HashMap<String, String>() {
+				{
+					put(GETTER_PREFIX, sourceMethod);
+					put(SETTER_PREFIX, map.get(StringUtils.uncapitalize(sourceMethod.replaceAll(GETTER_PREFIX, ""))));
+				}
+			};
+		}).collect(Collectors.toList());
+		if (CollectionUtils.isEmpty(resultMap)) {
+			resultMap = Collections.emptyList();
+		}
+		CLASS_METHOD_MAP.put(cacheKey, resultMap);
+		return resultMap;
+	}
 
-        AbstractMethodAccess sourceMethodAccess = ReflectUtils.getMethodAccessCache(source);
-        String[] sourceMethods = sourceMethodAccess.getMethodNames();
-        if (!(sourceMethods != null && sourceMethods.length > 0)) {
-            return Collections.emptyList();
-        }
-        List<Map<String, String>> resultMap = Arrays.stream(sourceMethods)
-                .filter(sourceMethod -> {
-                    if (!sourceMethod.startsWith(GETTER_PREFIX)) {
-                        return false;
-                    }
-                    String setMethodName = map.get(StringUtils.uncapitalize(sourceMethod.replaceAll(GETTER_PREFIX, "")));
-                    return StringUtils.isNotBlank(setMethodName);
-                })
-                .map(sourceMethod -> {
-                    return new HashMap<String, String>() {{
-                        put(GETTER_PREFIX, sourceMethod);
-                        put(SETTER_PREFIX, map.get(StringUtils.uncapitalize(sourceMethod.replaceAll(GETTER_PREFIX, ""))));
-                    }};
-                })
-                .collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(resultMap)) {
-            resultMap = Collections.emptyList();
-        }
-        CLASS_METHOD_MAP.put(cacheKey, resultMap);
-        return resultMap;
-    }
+	public static <T> T convert(Object source, Class<T> target) {
+		T ret = null;
+		if (source != null) {
+			ret = ReflectUtils.newInstance(target);
+			BeanCopier beanCopier = getBeanCopier(source.getClass(), target);
+			beanCopier.copy(source, ret, new DeepCopyConverter(target));
+		}
+		return ret;
+	}
 
-    public static <T> T convert(Object source, Class<T> target) {
-        T ret = null;
-        if (source != null) {
-            ret = ReflectUtils.newInstance(target);
-            BeanCopier beanCopier = getBeanCopier(source.getClass(), target);
-            beanCopier.copy(source, ret, new DeepCopyConverter(target));
-        }
-        return ret;
-    }
+	public static BeanCopier getBeanCopier(Class<?> source, Class<?> target) {
+		String beanCopierKey = generateBeanKey(source, target);
+		if (beanCopierMap.containsKey(beanCopierKey)) {
+			return beanCopierMap.get(beanCopierKey);
+		}
+		else {
+			BeanCopier beanCopier = BeanCopier.create(source, target, true);
+			beanCopierMap.putIfAbsent(beanCopierKey, beanCopier);
+		}
+		return beanCopierMap.get(beanCopierKey);
+	}
 
+	/**
+	 * @param source
+	 * @param target
+	 * @return String
+	 * @description 生成两个类的key
+	 */
+	public static String generateBeanKey(Class<?> source, Class<?> target) {
+		return source.getName() + "@" + target.getName();
+	}
 
-    public static BeanCopier getBeanCopier(Class<?> source, Class<?> target) {
-        String beanCopierKey = generateBeanKey(source, target);
-        if (beanCopierMap.containsKey(beanCopierKey)) {
-            return beanCopierMap.get(beanCopierKey);
-        } else {
-            BeanCopier beanCopier = BeanCopier.create(source, target, true);
-            beanCopierMap.putIfAbsent(beanCopierKey, beanCopier);
-        }
-        return beanCopierMap.get(beanCopierKey);
-    }
+	public static class DeepCopyConverter implements Converter {
 
-    /**
-     * @param source
-     * @param target
-     * @return String
-     * @description 生成两个类的key
-     */
-    public static String generateBeanKey(Class<?> source, Class<?> target) {
-        return source.getName() + "@" + target.getName();
-    }
+		/**
+		 * The Target.
+		 */
+		private Class<?> target;
 
+		/**
+		 * Instantiates a new Deep copy converter.
+		 * @param target the target
+		 */
+		public DeepCopyConverter(Class<?> target) {
+			this.target = target;
+		}
 
-    public static class DeepCopyConverter implements Converter {
+		@Override
+		public Object convert(Object value, Class targetClazz, Object methodName) {
+			if (value instanceof List) {
+				List values = (List) value;
+				List retList = new ArrayList<>(values.size());
+				for (final Object source : values) {
+					retList.add(BeanCopierUtil.convert(source, targetClazz));
+				}
+				return retList;
+			}
+			else if (value instanceof Map) {
+				// TODO 暂时用不到，后续有需要再补充
+			}
+			else if (!ClassUtils.isPrimitive(targetClazz)) {
+				return BeanCopierUtil.convert(value, targetClazz);
+			}
+			return value;
+		}
 
-        /**
-         * The Target.
-         */
-        private Class<?> target;
-
-        /**
-         * Instantiates a new Deep copy converter.
-         *
-         * @param target the target
-         */
-        public DeepCopyConverter(Class<?> target) {
-            this.target = target;
-        }
-
-        @Override
-        public Object convert(Object value, Class targetClazz, Object methodName) {
-            if (value instanceof List) {
-                List values = (List) value;
-                List retList = new ArrayList<>(values.size());
-                for (final Object source : values) {
-                    retList.add(BeanCopierUtil.convert(source, targetClazz));
-                }
-                return retList;
-            } else if (value instanceof Map) {
-                // TODO 暂时用不到，后续有需要再补充
-            } else if (!ClassUtils.isPrimitive(targetClazz)) {
-                return BeanCopierUtil.convert(value, targetClazz);
-            }
-            return value;
-        }
-    }
+	}
 
 }

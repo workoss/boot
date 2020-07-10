@@ -1,21 +1,26 @@
 /*
- * #%L
- * %%
- * Copyright (C) 2019 Workoss Software, Inc.
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * The MIT License
+ * Copyright © 2020-2021 workoss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.workoss.boot.util.reflect;
-
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,59 +33,60 @@ import org.springframework.asm.Type;
 
 import static org.springframework.asm.Opcodes.*;
 
-
 /**
  * @author admin
  */
 public abstract class AbstractFieldAccess {
 
 	protected String[] fieldNames;
+
 	protected Class[] fieldTypes;
+
 	private Field[] fields;
 
-	public int getIndex (String fieldName) {
-		for (int i = 0, n = fieldNames.length; i < n; i++){
-			if (fieldNames[i].equals(fieldName)){
+	public int getIndex(String fieldName) {
+		for (int i = 0, n = fieldNames.length; i < n; i++) {
+			if (fieldNames[i].equals(fieldName)) {
 				return i;
 			}
 		}
 		throw new IllegalArgumentException("Unable to find non-private field: " + fieldName);
 	}
 
-	public int getIndex (Field field) {
-		for (int i = 0, n = fields.length; i < n; i++){
-			if (fields[i].equals(field)){
+	public int getIndex(Field field) {
+		for (int i = 0, n = fields.length; i < n; i++) {
+			if (fields[i].equals(field)) {
 				return i;
 			}
 		}
 		throw new IllegalArgumentException("Unable to find non-private field: " + field);
 	}
 
-	public void set (Object instance, String fieldName, Object value) {
+	public void set(Object instance, String fieldName, Object value) {
 		set(instance, getIndex(fieldName), value);
 	}
 
-	public Object get (Object instance, String fieldName) {
+	public Object get(Object instance, String fieldName) {
 		return get(instance, getIndex(fieldName));
 	}
 
-	public String[] getFieldNames () {
+	public String[] getFieldNames() {
 		return fieldNames;
 	}
 
-	public Class[] getFieldTypes () {
+	public Class[] getFieldTypes() {
 		return fieldTypes;
 	}
 
-	public int getFieldCount () {
+	public int getFieldCount() {
 		return fieldTypes.length;
 	}
 
-	public Field[] getFields () {
+	public Field[] getFields() {
 		return fields;
 	}
 
-	public void setFields (Field[] fields) {
+	public void setFields(Field[] fields) {
 		this.fields = fields;
 	}
 
@@ -90,7 +96,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void set (Object instance, int fieldIndex, Object value);
+	abstract public void set(Object instance, int fieldIndex, Object value);
 
 	/**
 	 * setBoolean
@@ -98,7 +104,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setBoolean (Object instance, int fieldIndex, boolean value);
+	abstract public void setBoolean(Object instance, int fieldIndex, boolean value);
 
 	/**
 	 * setByte
@@ -106,7 +112,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setByte (Object instance, int fieldIndex, byte value);
+	abstract public void setByte(Object instance, int fieldIndex, byte value);
 
 	/**
 	 * setShort
@@ -114,7 +120,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setShort (Object instance, int fieldIndex, short value);
+	abstract public void setShort(Object instance, int fieldIndex, short value);
 
 	/**
 	 * setInt
@@ -122,7 +128,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setInt (Object instance, int fieldIndex, int value);
+	abstract public void setInt(Object instance, int fieldIndex, int value);
 
 	/**
 	 * setLong
@@ -130,7 +136,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setLong (Object instance, int fieldIndex, long value);
+	abstract public void setLong(Object instance, int fieldIndex, long value);
 
 	/**
 	 * setDouble
@@ -138,7 +144,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setDouble (Object instance, int fieldIndex, double value);
+	abstract public void setDouble(Object instance, int fieldIndex, double value);
 
 	/**
 	 * setFloat
@@ -146,7 +152,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setFloat (Object instance, int fieldIndex, float value);
+	abstract public void setFloat(Object instance, int fieldIndex, float value);
 
 	/**
 	 * setChar
@@ -154,7 +160,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @param value
 	 */
-	abstract public void setChar (Object instance, int fieldIndex, char value);
+	abstract public void setChar(Object instance, int fieldIndex, char value);
 
 	/**
 	 * get
@@ -162,7 +168,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public Object get (Object instance, int fieldIndex);
+	abstract public Object get(Object instance, int fieldIndex);
 
 	/**
 	 * getString
@@ -170,7 +176,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public String getString (Object instance, int fieldIndex);
+	abstract public String getString(Object instance, int fieldIndex);
 
 	/**
 	 * getChar
@@ -178,14 +184,15 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public char getChar (Object instance, int fieldIndex);
+	abstract public char getChar(Object instance, int fieldIndex);
+
 	/**
 	 * getBoolean
 	 * @param instance
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public boolean getBoolean (Object instance, int fieldIndex);
+	abstract public boolean getBoolean(Object instance, int fieldIndex);
 
 	/**
 	 * getByte
@@ -193,7 +200,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public byte getByte (Object instance, int fieldIndex);
+	abstract public byte getByte(Object instance, int fieldIndex);
 
 	/**
 	 * getShort
@@ -201,7 +208,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public short getShort (Object instance, int fieldIndex);
+	abstract public short getShort(Object instance, int fieldIndex);
 
 	/**
 	 * getInt
@@ -209,7 +216,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public int getInt (Object instance, int fieldIndex);
+	abstract public int getInt(Object instance, int fieldIndex);
 
 	/**
 	 * getLong
@@ -217,7 +224,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public long getLong (Object instance, int fieldIndex);
+	abstract public long getLong(Object instance, int fieldIndex);
 
 	/**
 	 * getDouble
@@ -225,7 +232,7 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public double getDouble (Object instance, int fieldIndex);
+	abstract public double getDouble(Object instance, int fieldIndex);
 
 	/**
 	 * getFloat
@@ -233,12 +240,15 @@ public abstract class AbstractFieldAccess {
 	 * @param fieldIndex
 	 * @return
 	 */
-	abstract public float getFloat (Object instance, int fieldIndex);
+	abstract public float getFloat(Object instance, int fieldIndex);
 
-	/** @param type Must not be the Object class, an interface, a primitive type, or void. */
-	static public AbstractFieldAccess get (Class type) {
-		if (type.getSuperclass() == null){
-			throw new IllegalArgumentException("The type must not be the Object class, an interface, a primitive type, or void.");
+	/**
+	 * @param type Must not be the Object class, an interface, a primitive type, or void.
+	 */
+	static public AbstractFieldAccess get(Class type) {
+		if (type.getSuperclass() == null) {
+			throw new IllegalArgumentException(
+					"The type must not be the Object class, an interface, a primitive type, or void.");
 		}
 
 		ArrayList<Field> fields = new ArrayList<Field>();
@@ -248,10 +258,10 @@ public abstract class AbstractFieldAccess {
 			for (int i = 0, n = declaredFields.length; i < n; i++) {
 				Field field = declaredFields[i];
 				int modifiers = field.getModifiers();
-				if (Modifier.isStatic(modifiers)){
+				if (Modifier.isStatic(modifiers)) {
 					continue;
 				}
-				if (Modifier.isPrivate(modifiers)){
+				if (Modifier.isPrivate(modifiers)) {
 					continue;
 				}
 				fields.add(field);
@@ -268,7 +278,7 @@ public abstract class AbstractFieldAccess {
 
 		String className = type.getName();
 		String accessClassName = className + "AbstractFieldAccess";
-		if (accessClassName.startsWith(AccessClassLoader.JAVA_PREFIX)){
+		if (accessClassName.startsWith(AccessClassLoader.JAVA_PREFIX)) {
 			accessClassName = "reflectasm." + accessClassName;
 		}
 		Class accessClass = null;
@@ -276,11 +286,13 @@ public abstract class AbstractFieldAccess {
 		AccessClassLoader loader = AccessClassLoader.get(type);
 		try {
 			accessClass = loader.loadClass(accessClassName);
-		} catch (ClassNotFoundException ignored) {
+		}
+		catch (ClassNotFoundException ignored) {
 			synchronized (loader) {
 				try {
 					accessClass = loader.loadClass(accessClassName);
-				} catch (ClassNotFoundException ignored2) {
+				}
+				catch (ClassNotFoundException ignored2) {
 					String accessClassNameInternal = accessClassName.replace('.', '/');
 					String classNameInternal = className.replace('.', '/');
 
@@ -313,27 +325,28 @@ public abstract class AbstractFieldAccess {
 			}
 		}
 		try {
-			AbstractFieldAccess access = (AbstractFieldAccess)accessClass.newInstance();
+			AbstractFieldAccess access = (AbstractFieldAccess) accessClass.newInstance();
 			access.fieldNames = fieldNames;
 			access.fieldTypes = fieldTypes;
 			access.fields = fields.toArray(new Field[fields.size()]);
 			return access;
-		} catch (Throwable t) {
+		}
+		catch (Throwable t) {
 			throw new RuntimeException("Error constructing field access class: " + accessClassName, t);
 		}
 	}
 
-	static private void insertConstructor (ClassWriter cw) {
+	static private void insertConstructor(ClassWriter cw) {
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 		mv.visitCode();
 		mv.visitVarInsn(ALOAD, 0);
-		mv.visitMethodInsn(INVOKESPECIAL, "com/workoss/boot/util/reflect/AbstractFieldAccess", "<init>", "()V",false);
+		mv.visitMethodInsn(INVOKESPECIAL, "com/workoss/boot/util/reflect/AbstractFieldAccess", "<init>", "()V", false);
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(1, 1);
 		mv.visitEnd();
 	}
 
-	static private void insertSetObject (ClassWriter cw, String classNameInternal, ArrayList<Field> fields) {
+	static private void insertSetObject(ClassWriter cw, String classNameInternal, ArrayList<Field> fields) {
 		int maxStack = 6;
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "set", "(Ljava/lang/Object;ILjava/lang/Object;)V", null, null);
 		mv.visitCode();
@@ -342,7 +355,7 @@ public abstract class AbstractFieldAccess {
 		if (!fields.isEmpty()) {
 			maxStack--;
 			Label[] labels = new Label[fields.size()];
-			for (int i = 0, n = labels.length; i < n; i++){
+			for (int i = 0, n = labels.length; i < n; i++) {
 				labels[i] = new Label();
 			}
 			Label defaultLabel = new Label();
@@ -361,35 +374,35 @@ public abstract class AbstractFieldAccess {
 				switch (fieldType.getSort()) {
 				case Type.BOOLEAN:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
 					break;
 				case Type.BYTE:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
 					break;
 				case Type.CHAR:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
 					break;
 				case Type.SHORT:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S", false);
 					break;
 				case Type.INT:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
 					break;
 				case Type.FLOAT:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F", false);
 					break;
 				case Type.LONG:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
 					break;
 				case Type.DOUBLE:
 					mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D",false);
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D", false);
 					break;
 				case Type.ARRAY:
 					mv.visitTypeInsn(CHECKCAST, fieldType.getDescriptor());
@@ -402,7 +415,7 @@ public abstract class AbstractFieldAccess {
 				}
 
 				mv.visitFieldInsn(PUTFIELD, field.getDeclaringClass().getName().replace('.', '/'), field.getName(),
-					fieldType.getDescriptor());
+						fieldType.getDescriptor());
 				mv.visitInsn(RETURN);
 			}
 
@@ -414,7 +427,7 @@ public abstract class AbstractFieldAccess {
 		mv.visitEnd();
 	}
 
-	static private void insertGetObject (ClassWriter cw, String classNameInternal, ArrayList<Field> fields) {
+	static private void insertGetObject(ClassWriter cw, String classNameInternal, ArrayList<Field> fields) {
 		int maxStack = 6;
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "get", "(Ljava/lang/Object;I)Ljava/lang/Object;", null, null);
 		mv.visitCode();
@@ -423,7 +436,7 @@ public abstract class AbstractFieldAccess {
 		if (!fields.isEmpty()) {
 			maxStack--;
 			Label[] labels = new Label[fields.size()];
-			for (int i = 0, n = labels.length; i < n; i++){
+			for (int i = 0, n = labels.length; i < n; i++) {
 				labels[i] = new Label();
 			}
 
@@ -438,36 +451,37 @@ public abstract class AbstractFieldAccess {
 				mv.visitVarInsn(ALOAD, 1);
 				mv.visitTypeInsn(CHECKCAST, classNameInternal);
 				mv.visitFieldInsn(GETFIELD, field.getDeclaringClass().getName().replace('.', '/'), field.getName(),
-					Type.getDescriptor(field.getType()));
+						Type.getDescriptor(field.getType()));
 
 				Type fieldType = Type.getType(field.getType());
 				switch (fieldType.getSort()) {
 				case Type.BOOLEAN:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", false);
 					break;
 				case Type.BYTE:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false);
 					break;
 				case Type.CHAR:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;",
+							false);
 					break;
 				case Type.SHORT:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false);
 					break;
 				case Type.INT:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
 					break;
 				case Type.FLOAT:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false);
 					break;
 				case Type.LONG:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false);
 					break;
 				case Type.DOUBLE:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;",false);
+					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false);
 					break;
 				default:
-						break;
+					break;
 				}
 
 				mv.visitInsn(ARETURN);
@@ -481,9 +495,10 @@ public abstract class AbstractFieldAccess {
 		mv.visitEnd();
 	}
 
-	static private void insertGetString (ClassWriter cw, String classNameInternal, ArrayList<Field> fields) {
+	static private void insertGetString(ClassWriter cw, String classNameInternal, ArrayList<Field> fields) {
 		int maxStack = 6;
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "getString", "(Ljava/lang/Object;I)Ljava/lang/String;", null, null);
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "getString", "(Ljava/lang/Object;I)Ljava/lang/String;", null,
+				null);
 		mv.visitCode();
 		mv.visitVarInsn(ILOAD, 2);
 
@@ -493,9 +508,10 @@ public abstract class AbstractFieldAccess {
 			Label labelForInvalidTypes = new Label();
 			boolean hasAnyBadTypeLabel = false;
 			for (int i = 0, n = labels.length; i < n; i++) {
-				if (fields.get(i).getType().equals(String.class)){
+				if (fields.get(i).getType().equals(String.class)) {
 					labels[i] = new Label();
-				} else {
+				}
+				else {
 					labels[i] = labelForInvalidTypes;
 					hasAnyBadTypeLabel = true;
 				}
@@ -511,7 +527,7 @@ public abstract class AbstractFieldAccess {
 					mv.visitVarInsn(ALOAD, 1);
 					mv.visitTypeInsn(CHECKCAST, classNameInternal);
 					mv.visitFieldInsn(GETFIELD, field.getDeclaringClass().getName().replace('.', '/'), field.getName(),
-						"Ljava/lang/String;");
+							"Ljava/lang/String;");
 					mv.visitInsn(ARETURN);
 				}
 			}
@@ -530,8 +546,8 @@ public abstract class AbstractFieldAccess {
 		mv.visitEnd();
 	}
 
-	static private void insertSetPrimitive (ClassWriter cw, String classNameInternal, ArrayList<Field> fields,
-                                            Type primitiveType) {
+	static private void insertSetPrimitive(ClassWriter cw, String classNameInternal, ArrayList<Field> fields,
+			Type primitiveType) {
 		int maxStack = 6;
 		// See correction below for LLOAD and DLOAD
 		int maxLocals = 4;
@@ -578,8 +594,8 @@ public abstract class AbstractFieldAccess {
 			loadValueInstruction = ALOAD;
 			break;
 		}
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, setterMethodName, "(Ljava/lang/Object;I" + typeNameInternal + ")V", null,
-			null);
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, setterMethodName,
+				"(Ljava/lang/Object;I" + typeNameInternal + ")V", null, null);
 		mv.visitCode();
 		mv.visitVarInsn(ILOAD, 2);
 
@@ -589,9 +605,10 @@ public abstract class AbstractFieldAccess {
 			Label labelForInvalidTypes = new Label();
 			boolean hasAnyBadTypeLabel = false;
 			for (int i = 0, n = labels.length; i < n; i++) {
-				if (Type.getType(fields.get(i).getType()).equals(primitiveType)){
+				if (Type.getType(fields.get(i).getType()).equals(primitiveType)) {
 					labels[i] = new Label();
-				} else {
+				}
+				else {
 					labels[i] = labelForInvalidTypes;
 					hasAnyBadTypeLabel = true;
 				}
@@ -608,7 +625,7 @@ public abstract class AbstractFieldAccess {
 					mv.visitTypeInsn(CHECKCAST, classNameInternal);
 					mv.visitVarInsn(loadValueInstruction, 3);
 					mv.visitFieldInsn(PUTFIELD, field.getDeclaringClass().getName().replace('.', '/'), field.getName(),
-						typeNameInternal);
+							typeNameInternal);
 					mv.visitInsn(RETURN);
 				}
 			}
@@ -627,8 +644,8 @@ public abstract class AbstractFieldAccess {
 		mv.visitEnd();
 	}
 
-	static private void insertGetPrimitive (ClassWriter cw, String classNameInternal, ArrayList<Field> fields,
-                                            Type primitiveType) {
+	static private void insertGetPrimitive(ClassWriter cw, String classNameInternal, ArrayList<Field> fields,
+			Type primitiveType) {
 		int maxStack = 6;
 		final String getterMethodName;
 		final String typeNameInternal = primitiveType.getDescriptor();
@@ -671,7 +688,8 @@ public abstract class AbstractFieldAccess {
 			returnValueInstruction = ARETURN;
 			break;
 		}
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, getterMethodName, "(Ljava/lang/Object;I)" + typeNameInternal, null, null);
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, getterMethodName, "(Ljava/lang/Object;I)" + typeNameInternal,
+				null, null);
 		mv.visitCode();
 		mv.visitVarInsn(ILOAD, 2);
 
@@ -681,9 +699,10 @@ public abstract class AbstractFieldAccess {
 			Label labelForInvalidTypes = new Label();
 			boolean hasAnyBadTypeLabel = false;
 			for (int i = 0, n = labels.length; i < n; i++) {
-				if (Type.getType(fields.get(i).getType()).equals(primitiveType)){
+				if (Type.getType(fields.get(i).getType()).equals(primitiveType)) {
 					labels[i] = new Label();
-				} else {
+				}
+				else {
 					labels[i] = labelForInvalidTypes;
 					hasAnyBadTypeLabel = true;
 				}
@@ -699,7 +718,7 @@ public abstract class AbstractFieldAccess {
 					mv.visitVarInsn(ALOAD, 1);
 					mv.visitTypeInsn(CHECKCAST, classNameInternal);
 					mv.visitFieldInsn(GETFIELD, field.getDeclaringClass().getName().replace('.', '/'), field.getName(),
-						typeNameInternal);
+							typeNameInternal);
 					mv.visitInsn(returnValueInstruction);
 				}
 			}
@@ -718,35 +737,36 @@ public abstract class AbstractFieldAccess {
 		mv.visitEnd();
 	}
 
-	static private MethodVisitor insertThrowExceptionForFieldNotFound (MethodVisitor mv) {
+	static private MethodVisitor insertThrowExceptionForFieldNotFound(MethodVisitor mv) {
 		mv.visitTypeInsn(NEW, "java/lang/IllegalArgumentException");
 		mv.visitInsn(DUP);
 		mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
 		mv.visitInsn(DUP);
 		mv.visitLdcInsn("Field not found: ");
-		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(Ljava/lang/String;)V",false);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(Ljava/lang/String;)V", false);
 		mv.visitVarInsn(ILOAD, 2);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(I)Ljava/lang/StringBuilder;",false);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;",false);
-		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V",false);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(I)Ljava/lang/StringBuilder;", false);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V",
+				false);
 		mv.visitInsn(ATHROW);
 		return mv;
 	}
 
-	static private MethodVisitor insertThrowExceptionForFieldType (MethodVisitor mv, String fieldType) {
+	static private MethodVisitor insertThrowExceptionForFieldType(MethodVisitor mv, String fieldType) {
 		mv.visitTypeInsn(NEW, "java/lang/IllegalArgumentException");
 		mv.visitInsn(DUP);
 		mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
 		mv.visitInsn(DUP);
 		mv.visitLdcInsn("Field not declared as " + fieldType + ": ");
-		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(Ljava/lang/String;)V",false);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(Ljava/lang/String;)V", false);
 		mv.visitVarInsn(ILOAD, 2);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(I)Ljava/lang/StringBuilder;",false);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;",false);
-		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V",false);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(I)Ljava/lang/StringBuilder;", false);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/IllegalArgumentException", "<init>", "(Ljava/lang/String;)V",
+				false);
 		mv.visitInsn(ATHROW);
 		return mv;
 	}
-
 
 }

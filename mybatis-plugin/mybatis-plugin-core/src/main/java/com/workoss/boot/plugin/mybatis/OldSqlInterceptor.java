@@ -1,21 +1,26 @@
 /*
- * #%L
- * %%
- * Copyright (C) 2019 Workoss Software, Inc.
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * The MIT License
+ * Copyright © 2020-2021 workoss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.workoss.boot.plugin.mybatis;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,42 +58,48 @@ import org.slf4j.LoggerFactory;
  * @date: 2017/8/11 8:10
  * @version: 1.0.0
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Intercepts({
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
-		        RowBounds.class, ResultHandler.class}),
-		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
-                RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
-})
+		@Signature(type = Executor.class, method = "query",
+				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
+		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
+				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class }), })
 public class OldSqlInterceptor implements Interceptor {
+
 	public static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
+
 	private static DbType dbType;
+
 	private static String pageSqlId;
 
 	private final String ORDER_QUERY_MAIN = "order";
+
 	private final String ORDER_QUERY_BY = "by";
+
 	private final String ORDER_BY_SEPERATE = ",";
+
 	private final String PAGE_SQL_ID = "Page";
+
 	private final String PAGE_PARAM = "page";
+
 	private final String MYBATIS_METAPARAMETERS = "metaParameters";
 
 	private final String MYBATIS_ADDITIONALPARAMTERS = "additionalParameters";
 
-
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		Executor executor = (Executor) invocation.getTarget();
-        Object[] args = invocation.getArgs();
+		Object[] args = invocation.getArgs();
 		MappedStatement mappedStatement = (MappedStatement) args[0];
 		Object param = args[1];
 		BoundSql boundSql;
 
-		if (args.length==4){
-            boundSql = mappedStatement.getBoundSql(param);
-        }else{
-            boundSql = (BoundSql) args[5];
-        }
-
+		if (args.length == 4) {
+			boundSql = mappedStatement.getBoundSql(param);
+		}
+		else {
+			boundSql = (BoundSql) args[5];
+		}
 
 		SqlParam sqlParam = SqlHelper.getLocalSqlParam();
 		if (sqlParam == null) {
@@ -103,10 +114,10 @@ public class OldSqlInterceptor implements Interceptor {
 		// 排序查询
 		String sql = boundSql.getSql();
 		boolean changeSql = false;
-		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN)
-                && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
+		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN) && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
 			log.debug("sql have order by ，ignore page.orderBy");
-		}else {
+		}
+		else {
 			String orderBy = sqlParam.getSortBy();
 			if (!(orderBy == null || orderBy.length() == 0)) {
 				SQLSelectBuilder builder = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType);
@@ -126,8 +137,7 @@ public class OldSqlInterceptor implements Interceptor {
 				initDbType(connection);
 				Log statementLog = mappedStatement.getStatementLog();
 				if (statementLog.isDebugEnabled()) {
-					connection = ConnectionLogger
-							.newInstance(connection, statementLog, 0);
+					connection = ConnectionLogger.newInstance(connection, statementLog, 0);
 				}
 
 				String countSql = PagerUtils.count(boundSql.getSql(), dbType);
@@ -141,30 +151,25 @@ public class OldSqlInterceptor implements Interceptor {
 			changeSql = true;
 		}
 
-
 		if (!changeSql) {
 			return invocation.proceed();
 		}
 
-		BoundSql newBoundSql = new BoundSql(mappedStatement.getConfiguration(), sql,
-				boundSql.getParameterMappings(), boundSql.getParameterObject());
+		BoundSql newBoundSql = new BoundSql(mappedStatement.getConfiguration(), sql, boundSql.getParameterMappings(),
+				boundSql.getParameterObject());
 		// 解决MyBatis 分页foreach 参数失效 start
 		Object metaObject = ReflectUtils.getFieldValue(boundSql, MYBATIS_METAPARAMETERS);
 		if (metaObject != null) {
-			ReflectUtils.setFieldValue(newBoundSql, MYBATIS_METAPARAMETERS,
-					(MetaObject) metaObject);
+			ReflectUtils.setFieldValue(newBoundSql, MYBATIS_METAPARAMETERS, (MetaObject) metaObject);
 		}
-		//解决MyBatis 分页foreach 参数失效 end
-		Object additionalParamters = ReflectUtils
-				.getFieldValue(boundSql, MYBATIS_ADDITIONALPARAMTERS);
+		// 解决MyBatis 分页foreach 参数失效 end
+		Object additionalParamters = ReflectUtils.getFieldValue(boundSql, MYBATIS_ADDITIONALPARAMTERS);
 		if (additionalParamters != null) {
 			ReflectUtils.setFieldValue(newBoundSql, MYBATIS_ADDITIONALPARAMTERS,
-                    (Map<String, Object>) additionalParamters);
+					(Map<String, Object>) additionalParamters);
 		}
-		MappedStatement newMs = copyFromMappedStatement(mappedStatement,
-                new BoundSqlSqlSource(newBoundSql));
+		MappedStatement newMs = copyFromMappedStatement(mappedStatement, new BoundSqlSqlSource(newBoundSql));
 		invocation.getArgs()[0] = newMs;
-
 
 		if (sqlParam.getShouldPage()) {
 			invocation.getArgs()[2] = new RowBounds(RowBounds.NO_ROW_OFFSET, RowBounds.NO_ROW_LIMIT);
@@ -179,7 +184,6 @@ public class OldSqlInterceptor implements Interceptor {
 
 	/**
 	 * 只拦截Execuate
-	 *
 	 * @param target 插件对象
 	 * @return object
 	 */
@@ -243,12 +247,11 @@ public class OldSqlInterceptor implements Interceptor {
 		return page;
 	}
 
-	private int getPageTotal(MappedStatement mappedStatement, Connection connection, String countSql,
-			BoundSql boundSql) throws SQLException {
+	private int getPageTotal(MappedStatement mappedStatement, Connection connection, String countSql, BoundSql boundSql)
+			throws SQLException {
 		int count = 0;
 		PreparedStatement preparedStatement = connection.prepareStatement(countSql);
-		DefaultParameterHandler handler = new DefaultParameterHandler(mappedStatement, boundSql
-				.getParameterObject(),
+		DefaultParameterHandler handler = new DefaultParameterHandler(mappedStatement, boundSql.getParameterObject(),
 				boundSql);
 		handler.setParameters(preparedStatement);
 		ResultSet rs = preparedStatement.executeQuery();
@@ -264,8 +267,7 @@ public class OldSqlInterceptor implements Interceptor {
 	 * 复制MappedStatement对象
 	 */
 	private MappedStatement copyFromMappedStatement(MappedStatement ms, SqlSource newSqlSource) {
-		Builder builder = new Builder(ms.getConfiguration(), ms.getId(), newSqlSource, ms
-				.getSqlCommandType());
+		Builder builder = new Builder(ms.getConfiguration(), ms.getId(), newSqlSource, ms.getSqlCommandType());
 		builder.resource(ms.getResource());
 		builder.fetchSize(ms.getFetchSize());
 		builder.statementType(ms.getStatementType());
@@ -287,6 +289,7 @@ public class OldSqlInterceptor implements Interceptor {
 	}
 
 	public static class BoundSqlSqlSource implements SqlSource {
+
 		BoundSql boundSql;
 
 		BoundSqlSqlSource(BoundSql boundSql) {
@@ -297,6 +300,7 @@ public class OldSqlInterceptor implements Interceptor {
 		public BoundSql getBoundSql(Object parameterObject) {
 			return boundSql;
 		}
+
 	}
 
 }

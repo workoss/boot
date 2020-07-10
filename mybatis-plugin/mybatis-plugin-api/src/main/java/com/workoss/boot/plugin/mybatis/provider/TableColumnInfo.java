@@ -1,18 +1,24 @@
 /*
- * #%L
- * %%
- * Copyright (C) 2019 Workoss Software, Inc.
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * The MIT License
+ * Copyright © 2020-2021 workoss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.workoss.boot.plugin.mybatis.provider;
 
@@ -21,88 +27,88 @@ import java.util.List;
 
 public class TableColumnInfo {
 
-    private String tableName;
+	private String tableName;
 
-    private String idPropertyName = "id";
+	private String idPropertyName = "id";
 
-    private String idColumnName = "id";
+	private String idColumnName = "id";
 
-    private List<Class> propertyTypes;
+	private List<Class> propertyTypes;
 
-    private List<String> propertyNames;
+	private List<String> propertyNames;
 
-    private List<String> columnNames;
+	private List<String> columnNames;
 
-    public TableColumnInfo addPropertyName(String propertyName) {
-        if (propertyNames == null) {
-            this.propertyNames = new ArrayList<>();
-        }
-        this.propertyNames.add(propertyName);
-        return this;
-    }
+	public TableColumnInfo addPropertyName(String propertyName) {
+		if (propertyNames == null) {
+			this.propertyNames = new ArrayList<>();
+		}
+		this.propertyNames.add(propertyName);
+		return this;
+	}
 
-    public TableColumnInfo addPropertyType(Class propertyType) {
-        if (propertyTypes == null) {
-            this.propertyTypes = new ArrayList<>();
-        }
-        this.propertyTypes.add(propertyType);
-        return this;
-    }
+	public TableColumnInfo addPropertyType(Class propertyType) {
+		if (propertyTypes == null) {
+			this.propertyTypes = new ArrayList<>();
+		}
+		this.propertyTypes.add(propertyType);
+		return this;
+	}
 
-    public TableColumnInfo addColumnName(String columnName) {
-        if (columnNames == null) {
-            this.columnNames = new ArrayList<>();
-        }
-        this.columnNames.add(columnName);
-        return this;
-    }
+	public TableColumnInfo addColumnName(String columnName) {
+		if (columnNames == null) {
+			this.columnNames = new ArrayList<>();
+		}
+		this.columnNames.add(columnName);
+		return this;
+	}
 
+	String getTableName() {
+		return tableName;
+	}
 
-    String getTableName() {
-        return tableName;
-    }
+	void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 
-    void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
+	String getIdPropertyName() {
+		return idPropertyName;
+	}
 
-    String getIdPropertyName() {
-        return idPropertyName;
-    }
+	void setIdPropertyName(String idPropertyName) {
+		this.idPropertyName = idPropertyName;
+	}
 
-    void setIdPropertyName(String idPropertyName) {
-        this.idPropertyName = idPropertyName;
-    }
+	String getIdColumnName() {
+		return idColumnName;
+	}
 
-    String getIdColumnName() {
-        return idColumnName;
-    }
+	void setIdColumnName(String idColumnName) {
+		this.idColumnName = idColumnName;
+	}
 
-    void setIdColumnName(String idColumnName) {
-        this.idColumnName = idColumnName;
-    }
+	List<Class> getPropertyTypes() {
+		return propertyTypes;
+	}
 
-    List<Class> getPropertyTypes() {
-        return propertyTypes;
-    }
+	void setPropertyTypes(List<Class> propertyTypes) {
+		this.propertyTypes = propertyTypes;
+	}
 
-    void setPropertyTypes(List<Class> propertyTypes) {
-        this.propertyTypes = propertyTypes;
-    }
+	List<String> getPropertyNames() {
+		return propertyNames;
+	}
 
-    List<String> getPropertyNames() {
-        return propertyNames;
-    }
+	void setPropertyNames(List<String> propertyNames) {
+		this.propertyNames = propertyNames;
+	}
 
-    void setPropertyNames(List<String> propertyNames) {
-        this.propertyNames = propertyNames;
-    }
+	List<String> getColumnNames() {
+		return columnNames;
+	}
 
-    List<String> getColumnNames() {
-        return columnNames;
-    }
+	void setColumnNames(List<String> columnNames) {
+		this.columnNames = columnNames;
+	}
 
-    void setColumnNames(List<String> columnNames) {
-        this.columnNames = columnNames;
-    }
 }

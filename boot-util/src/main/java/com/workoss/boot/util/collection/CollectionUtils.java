@@ -1,21 +1,26 @@
 /*
- * #%L
- * %%
- * Copyright (C) 2019 Workoss Software, Inc.
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * The MIT License
+ * Copyright © 2020-2021 workoss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.workoss.boot.util.collection;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,8 +33,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
-
-
 /**
  * @Description: 集合工具类
  * @author: luanfeng
@@ -38,223 +41,217 @@ import java.util.StringJoiner;
  */
 public class CollectionUtils {
 
-    public static final List EMPTY_ARRAY_LIST = new ArrayList();
-    /**
-     * 判断是否为空.
-     */
-    public static boolean isEmpty(Collection<?> collection) {
-        return (collection == null) || collection.isEmpty();
-    }
+	public static final List EMPTY_ARRAY_LIST = new ArrayList();
 
-    public static boolean isEmpty(Map map){
-        return (map==null) || (map.isEmpty());
-    }
+	/**
+	 * 判断是否为空.
+	 */
+	public static boolean isEmpty(Collection<?> collection) {
+		return (collection == null) || collection.isEmpty();
+	}
 
-    /**
-     * 判断是否不为空.
-     */
-    public static boolean isNotEmpty(Collection<?> collection) {
-        return (collection != null) && !(collection.isEmpty());
-    }
+	public static boolean isEmpty(Map map) {
+		return (map == null) || (map.isEmpty());
+	}
 
-    public static boolean isNotEmpty(Map map) {
-        return (map != null) && !(map.isEmpty());
-    }
+	/**
+	 * 判断是否不为空.
+	 */
+	public static boolean isNotEmpty(Collection<?> collection) {
+		return (collection != null) && !(collection.isEmpty());
+	}
 
-    /**
-     * 取得Collection的第一个元素，如果collection为空返回null.
-     */
-    public static <T> T getFirst(Collection<T> collection) {
-        if (isEmpty(collection)) {
-            return null;
-        }
-        if (collection instanceof List) {
-            return ((List<T>) collection).get(0);
-        }
-        return collection.iterator().next();
-    }
+	public static boolean isNotEmpty(Map map) {
+		return (map != null) && !(map.isEmpty());
+	}
 
-    /**
-     * 获取Collection的最后一个元素，如果collection为空返回null.
-     */
+	/**
+	 * 取得Collection的第一个元素，如果collection为空返回null.
+	 */
+	public static <T> T getFirst(Collection<T> collection) {
+		if (isEmpty(collection)) {
+			return null;
+		}
+		if (collection instanceof List) {
+			return ((List<T>) collection).get(0);
+		}
+		return collection.iterator().next();
+	}
 
+	/**
+	 * 获取Collection的最后一个元素，如果collection为空返回null.
+	 */
 
+	public static Set<String> toSetString(Collection collection) {
+		if (isEmpty(collection)) {
+			return null;
+		}
+		Set<String> set = new LinkedHashSet<>();
+		for (Object element : collection) {
+			set.add(String.valueOf(element));
+		}
+		return set;
+	}
 
+	public static Set<Integer> toSetInteger(Collection collection) {
+		if (isEmpty(collection)) {
+			return null;
+		}
+		Set<Integer> set = new LinkedHashSet<>();
+		for (Object element : collection) {
+			set.add(Integer.parseInt(String.valueOf(element)));
+		}
+		return set;
+	}
 
-    public static Set<String> toSetString(Collection collection){
-        if (isEmpty(collection)){
-            return null;
-        }
-        Set<String> set = new LinkedHashSet<>();
-        for (Object element : collection) {
-            set.add(String.valueOf(element));
-        }
-        return set;
-    }
+	/**
+	 * 返回a+b的新List.
+	 */
+	public static <T> List<T> union(final Collection<T> a, final Collection<T> b) {
+		List<T> result = new ArrayList<T>(a);
+		result.addAll(b);
+		return result;
+	}
 
-    public static Set<Integer> toSetInteger(Collection collection){
-        if (isEmpty(collection)){
-            return null;
-        }
-        Set<Integer> set = new LinkedHashSet<>();
-        for (Object element : collection) {
-            set.add(Integer.parseInt(String.valueOf(element)));
-        }
-        return set;
-    }
+	/**
+	 * 返回a-b的新List.
+	 */
+	public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
+		List<T> list = new ArrayList<T>(a);
+		if (isEmpty(b)) {
+			return list;
+		}
+		for (T element : b) {
+			list.remove(element);
+		}
 
-    /**
-     * 返回a+b的新List.
-     */
-    public static <T> List<T> union(final Collection<T> a, final Collection<T> b) {
-        List<T> result = new ArrayList<T>(a);
-        result.addAll(b);
-        return result;
-    }
+		return list;
+	}
 
-    /**
-     * 返回a-b的新List.
-     */
-    public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
-        List<T> list = new ArrayList<T>(a);
-        if (isEmpty(b)){
-            return list;
-        }
-        for (T element : b) {
-            list.remove(element);
-        }
+	/**
+	 * 返回a-b的新List.
+	 */
+	public static <T> Set<T> subtractToSet(final Collection<T> a, final Collection<T> b) {
+		Set<T> set = new LinkedHashSet<>(a);
+		for (T element : b) {
+			set.remove(element);
+		}
 
-        return list;
-    }
+		return set;
+	}
 
-    /**
-     * 返回a-b的新List.
-     */
-    public static <T> Set<T> subtractToSet(final Collection<T> a, final Collection<T> b) {
-        Set<T> set = new LinkedHashSet<>(a);
-        for (T element : b) {
-            set.remove(element);
-        }
+	/**
+	 * 返回a与b的交集的新List.
+	 */
+	public static <T> List<T> intersection(Collection<T> a, Collection<T> b) {
+		List<T> list = new ArrayList<T>();
 
-        return set;
-    }
+		for (T element : a) {
+			if (b.contains(element)) {
+				list.add(element);
+			}
+		}
+		return list;
+	}
 
-    /**
-     * 返回a与b的交集的新List.
-     */
-    public static <T> List<T> intersection(Collection<T> a, Collection<T> b) {
-        List<T> list = new ArrayList<T>();
+	///////////// 求最大最小值，及Top N, Low N//////////
+	/**
+	 * 返回无序集合中的最小值，使用元素默认排序
+	 */
+	public static <T extends Object & Comparable<? super T>> T min(Collection<? extends T> coll) {
+		return Collections.min(coll);
+	}
 
-        for (T element : a) {
-            if (b.contains(element)) {
-                list.add(element);
-            }
-        }
-        return list;
-    }
+	/**
+	 * 返回无序集合中的最小值
+	 */
+	public static <T> T min(Collection<? extends T> coll, Comparator<? super T> comp) {
+		return Collections.min(coll, comp);
+	}
 
-    ///////////// 求最大最小值，及Top N, Low N//////////
-    /**
-     * 返回无序集合中的最小值，使用元素默认排序
-     */
-    public static <T extends Object & Comparable<? super T>> T min(Collection<? extends T> coll) {
-        return Collections.min(coll);
-    }
+	/**
+	 * 返回无序集合中的最大值，使用元素默认排序
+	 */
+	public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll) {
+		return Collections.max(coll);
+	}
 
-    /**
-     * 返回无序集合中的最小值
-     */
-    public static <T> T min(Collection<? extends T> coll, Comparator<? super T> comp) {
-        return Collections.min(coll, comp);
-    }
+	/**
+	 * 返回无序集合中的最大值
+	 */
+	public static <T> T max(Collection<? extends T> coll, Comparator<? super T> comp) {
+		return Collections.max(coll, comp);
+	}
 
-    /**
-     * 返回无序集合中的最大值，使用元素默认排序
-     */
-    public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll) {
-        return Collections.max(coll);
-    }
+	/**
+	 * 返回无序集合中的最小值和最大值，使用元素默认排序
+	 */
+	public static <T extends Object & Comparable<? super T>> Pair<T, T> minAndMax(Collection<? extends T> coll) {
+		Iterator<? extends T> i = coll.iterator();
+		T minCandidate = i.next();
+		T maxCandidate = minCandidate;
 
-    /**
-     * 返回无序集合中的最大值
-     */
-    public static <T> T max(Collection<? extends T> coll, Comparator<? super T> comp) {
-        return Collections.max(coll, comp);
-    }
+		while (i.hasNext()) {
+			T next = i.next();
+			if (next.compareTo(minCandidate) < 0) {
+				minCandidate = next;
+			}
+			else if (next.compareTo(maxCandidate) > 0) {
+				maxCandidate = next;
+			}
+		}
+		return Pair.of(minCandidate, maxCandidate);
+	}
 
-    /**
-     * 返回无序集合中的最小值和最大值，使用元素默认排序
-     */
-    public static <T extends Object & Comparable<? super T>> Pair<T, T> minAndMax(Collection<? extends T> coll) {
-        Iterator<? extends T> i = coll.iterator();
-        T minCandidate = i.next();
-        T maxCandidate = minCandidate;
+	/**
+	 * 返回无序集合中的最小值和最大值
+	 */
+	public static <T> Pair<T, T> minAndMax(Collection<? extends T> coll, Comparator<? super T> comp) {
 
-        while (i.hasNext()) {
-            T next = i.next();
-            if (next.compareTo(minCandidate) < 0) {
-                minCandidate = next;
-            } else if (next.compareTo(maxCandidate) > 0) {
-                maxCandidate = next;
-            }
-        }
-        return Pair.of(minCandidate, maxCandidate);
-    }
+		Iterator<? extends T> i = coll.iterator();
+		T minCandidate = i.next();
+		T maxCandidate = minCandidate;
 
-    /**
-     * 返回无序集合中的最小值和最大值
-     */
-    public static <T> Pair<T, T> minAndMax(Collection<? extends T> coll, Comparator<? super T> comp) {
+		while (i.hasNext()) {
+			T next = i.next();
+			if (comp.compare(next, minCandidate) < 0) {
+				minCandidate = next;
+			}
+			else if (comp.compare(next, maxCandidate) > 0) {
+				maxCandidate = next;
+			}
+		}
 
-        Iterator<? extends T> i = coll.iterator();
-        T minCandidate = i.next();
-        T maxCandidate = minCandidate;
+		return Pair.of(minCandidate, maxCandidate);
+	}
 
-        while (i.hasNext()) {
-            T next = i.next();
-            if (comp.compare(next, minCandidate) < 0) {
-                minCandidate = next;
-            } else if (comp.compare(next, maxCandidate) > 0) {
-                maxCandidate = next;
-            }
-        }
+	public static String join(Collection collection, String separator, String prefix, String suffix) {
+		StringJoiner stringJoiner = new StringJoiner(separator, prefix, suffix);
+		if (CollectionUtils.isEmpty(collection)) {
+			return stringJoiner.toString();
+		}
+		for (Object o : collection) {
+			stringJoiner.add(o.toString());
+		}
+		return stringJoiner.toString();
+	}
 
-        return Pair.of(minCandidate, maxCandidate);
-    }
+	/**
+	 * 判断一个Array是否为空
+	 * @param array 数组
+	 * @return 是否为空
+	 */
+	public static boolean isEmpty(Object[] array) {
+		return array == null || array.length == 0;
+	}
 
+	/**
+	 * 判断一个Array是否为非空
+	 * @param array 数组
+	 * @return 是否为非空
+	 */
+	public static boolean isNotEmpty(Object[] array) {
+		return array != null && array.length > 0;
+	}
 
-
-
-
-    public static String join(Collection collection, String separator, String prefix, String suffix){
-        StringJoiner stringJoiner=new StringJoiner(separator,prefix,suffix);
-        if (CollectionUtils.isEmpty(collection)){
-            return stringJoiner.toString();
-        }
-        for (Object o : collection) {
-            stringJoiner.add(o.toString());
-        }
-        return stringJoiner.toString();
-    }
-
-
-    /**
-     * 判断一个Array是否为空
-     *
-     * @param array 数组
-     * @return 是否为空
-     */
-    public static boolean isEmpty(Object[] array) {
-        return array == null || array.length == 0;
-    }
-
-    /**
-     * 判断一个Array是否为非空
-     *
-     * @param array 数组
-     * @return 是否为非空
-     */
-    public static boolean isNotEmpty(Object[] array) {
-        return array != null && array.length > 0;
-    }
 }

@@ -1,18 +1,24 @@
 /*
- * #%L
- * %%
- * Copyright (C) 2019 Workoss Software, Inc.
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *      http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
+ * The MIT License
+ * Copyright © 2020-2021 workoss
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.workoss.boot.util.reflect;
 
@@ -24,165 +30,183 @@ import org.springframework.asm.MethodVisitor;
 
 import static org.springframework.asm.Opcodes.*;
 
-
 /**
  * @author admin
  */
 public abstract class AbstractConstructorAccess<T> {
-    boolean isNonStaticMemberClass;
 
-    public boolean isNonStaticMemberClass() {
-        return isNonStaticMemberClass;
-    }
+	boolean isNonStaticMemberClass;
 
-    /**
-     * Constructor for top-level classes and static nested classes.
-     * <p>
-     * If the underlying class is a inner (non-static nested) class, a new instance will be created using <code>null</code> as the
-     * this$0 synthetic reference. The instantiated object will work as long as it actually don't use any member variable or method
-     * fron the enclosing instance.
-     * @return
-     */
-    abstract public T newInstance();
+	public boolean isNonStaticMemberClass() {
+		return isNonStaticMemberClass;
+	}
 
-    /**
-     * Constructor for inner classes (non-static nested classes).
-     *
-     * @param enclosingInstance The instance of the enclosing type to which this inner instance is related to (assigned to its
-     *                          synthetic this$0 field).
-     * @return
-     */
-    abstract public T newInstance(Object enclosingInstance);
+	/**
+	 * Constructor for top-level classes and static nested classes.
+	 * <p>
+	 * If the underlying class is a inner (non-static nested) class, a new instance will
+	 * be created using <code>null</code> as the this$0 synthetic reference. The
+	 * instantiated object will work as long as it actually don't use any member variable
+	 * or method fron the enclosing instance.
+	 * @return
+	 */
+	abstract public T newInstance();
 
-    static public <T> AbstractConstructorAccess<T> get(Class<T> type) {
-        Class enclosingType = type.getEnclosingClass();
-        boolean isNonStaticMemberClass = enclosingType != null && type.isMemberClass() && !Modifier
-				.isStatic(type.getModifiers());
+	/**
+	 * Constructor for inner classes (non-static nested classes).
+	 * @param enclosingInstance The instance of the enclosing type to which this inner
+	 * instance is related to (assigned to its synthetic this$0 field).
+	 * @return
+	 */
+	abstract public T newInstance(Object enclosingInstance);
 
-        String className = type.getName();
-        String accessClassName = className + "AbstractConstructorAccess";
-        if (accessClassName.startsWith(AccessClassLoader.JAVA_PREFIX)){
-            accessClassName = "reflectasm." + accessClassName;
-        }
-        Class accessClass;
+	static public <T> AbstractConstructorAccess<T> get(Class<T> type) {
+		Class enclosingType = type.getEnclosingClass();
+		boolean isNonStaticMemberClass = enclosingType != null && type.isMemberClass()
+				&& !Modifier.isStatic(type.getModifiers());
 
-        AccessClassLoader loader = AccessClassLoader.get(type);
-        try {
-            accessClass = loader.loadClass(accessClassName);
-        } catch (ClassNotFoundException ignored) {
-            synchronized (loader) {
-                try {
-                    accessClass = loader.loadClass(accessClassName);
-                } catch (ClassNotFoundException ignored2) {
-                    String accessClassNameInternal = accessClassName.replace('.', '/');
-                    String classNameInternal = className.replace('.', '/');
-                    String enclosingClassNameInternal;
-                    Constructor<T> constructor = null;
-                    int modifiers = 0;
-                    if (!isNonStaticMemberClass) {
-                        enclosingClassNameInternal = null;
-                        try {
-                            constructor = type.getDeclaredConstructor((Class[]) null);
-                            modifiers = constructor.getModifiers();
-                        } catch (Exception ex) {
-                            throw new RuntimeException("Class cannot be created (missing no-arg constructor): " + type.getName(), ex);
-                        }
-                        if (Modifier.isPrivate(modifiers)) {
-                            throw new RuntimeException("Class cannot be created (the no-arg constructor is private): " + type.getName());
-                        }
-                    } else {
-                        enclosingClassNameInternal = enclosingType.getName().replace('.', '/');
-                        try {
-                            // Inner classes should have this.
-                            constructor = type.getDeclaredConstructor(enclosingType);
-                            modifiers = constructor.getModifiers();
-                        } catch (Exception ex) {
-                            throw new RuntimeException("Non-static member class cannot be created (missing enclosing class constructor): "
-                                    + type.getName(), ex);
-                        }
-                        if (Modifier.isPrivate(modifiers)) {
-                            throw new RuntimeException(
-                                    "Non-static member class cannot be created (the enclosing class constructor is private): " + type.getName());
-                        }
-                    }
-                    String superclassNameInternal = Modifier.isPublic(modifiers) ?
-                            "com/workoss/boot/util/reflect/AbstractPublicConstructorAccess" :
-                            "com/workoss/boot/util/reflect/AbstractConstructorAccess";
+		String className = type.getName();
+		String accessClassName = className + "AbstractConstructorAccess";
+		if (accessClassName.startsWith(AccessClassLoader.JAVA_PREFIX)) {
+			accessClassName = "reflectasm." + accessClassName;
+		}
+		Class accessClass;
 
-                    ClassWriter cw = new ClassWriter(0);
-                    cw.visit(V1_8, ACC_PUBLIC + ACC_SUPER, accessClassNameInternal, null, superclassNameInternal, null);
+		AccessClassLoader loader = AccessClassLoader.get(type);
+		try {
+			accessClass = loader.loadClass(accessClassName);
+		}
+		catch (ClassNotFoundException ignored) {
+			synchronized (loader) {
+				try {
+					accessClass = loader.loadClass(accessClassName);
+				}
+				catch (ClassNotFoundException ignored2) {
+					String accessClassNameInternal = accessClassName.replace('.', '/');
+					String classNameInternal = className.replace('.', '/');
+					String enclosingClassNameInternal;
+					Constructor<T> constructor = null;
+					int modifiers = 0;
+					if (!isNonStaticMemberClass) {
+						enclosingClassNameInternal = null;
+						try {
+							constructor = type.getDeclaredConstructor((Class[]) null);
+							modifiers = constructor.getModifiers();
+						}
+						catch (Exception ex) {
+							throw new RuntimeException(
+									"Class cannot be created (missing no-arg constructor): " + type.getName(), ex);
+						}
+						if (Modifier.isPrivate(modifiers)) {
+							throw new RuntimeException(
+									"Class cannot be created (the no-arg constructor is private): " + type.getName());
+						}
+					}
+					else {
+						enclosingClassNameInternal = enclosingType.getName().replace('.', '/');
+						try {
+							// Inner classes should have this.
+							constructor = type.getDeclaredConstructor(enclosingType);
+							modifiers = constructor.getModifiers();
+						}
+						catch (Exception ex) {
+							throw new RuntimeException(
+									"Non-static member class cannot be created (missing enclosing class constructor): "
+											+ type.getName(),
+									ex);
+						}
+						if (Modifier.isPrivate(modifiers)) {
+							throw new RuntimeException(
+									"Non-static member class cannot be created (the enclosing class constructor is private): "
+											+ type.getName());
+						}
+					}
+					String superclassNameInternal = Modifier.isPublic(modifiers)
+							? "com/workoss/boot/util/reflect/AbstractPublicConstructorAccess"
+							: "com/workoss/boot/util/reflect/AbstractConstructorAccess";
 
-                    insertConstructor(cw, superclassNameInternal);
-                    insertNewInstance(cw, classNameInternal);
-                    insertNewInstanceInner(cw, classNameInternal, enclosingClassNameInternal);
+					ClassWriter cw = new ClassWriter(0);
+					cw.visit(V1_8, ACC_PUBLIC + ACC_SUPER, accessClassNameInternal, null, superclassNameInternal, null);
 
-                    cw.visitEnd();
-                    accessClass = loader.defineClass(accessClassName, cw.toByteArray());
-                }
-            }
-        }
-        AbstractConstructorAccess<T> access;
-        try {
-            access = (AbstractConstructorAccess<T>) accessClass.newInstance();
-        } catch (Throwable t) {
-            throw new RuntimeException("Exception constructing constructor access class: " + accessClassName, t);
-        }
-        if (!(access instanceof AbstractPublicConstructorAccess) && !AccessClassLoader.areInSameRuntimeClassLoader(type, accessClass)) {
-            // Must test this after the try-catch block, whether the class has been loaded as if has been defined.
-            // Throw a Runtime exception here instead of an IllegalAccessError when invoking newInstance()
-            throw new RuntimeException(
-                    (!isNonStaticMemberClass ?
-                            "Class cannot be created (the no-arg constructor is protected or package-protected, and its ConstructorAccess could not be defined in the same class loader): " :
-                            "Non-static member class cannot be created (the enclosing class constructor is protected or package-protected, and its ConstructorAccess could not be defined in the same class loader): ")
-                            + type.getName());
-        }
-        access.isNonStaticMemberClass = isNonStaticMemberClass;
-        return access;
-    }
+					insertConstructor(cw, superclassNameInternal);
+					insertNewInstance(cw, classNameInternal);
+					insertNewInstanceInner(cw, classNameInternal, enclosingClassNameInternal);
 
-    static private void insertConstructor(ClassWriter cw, String superclassNameInternal) {
-        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
-        mv.visitCode();
-        mv.visitVarInsn(ALOAD, 0);
-        mv.visitMethodInsn(INVOKESPECIAL, superclassNameInternal, "<init>", "()V", false);
-        mv.visitInsn(RETURN);
-        mv.visitMaxs(1, 1);
-        mv.visitEnd();
-    }
+					cw.visitEnd();
+					accessClass = loader.defineClass(accessClassName, cw.toByteArray());
+				}
+			}
+		}
+		AbstractConstructorAccess<T> access;
+		try {
+			access = (AbstractConstructorAccess<T>) accessClass.newInstance();
+		}
+		catch (Throwable t) {
+			throw new RuntimeException("Exception constructing constructor access class: " + accessClassName, t);
+		}
+		if (!(access instanceof AbstractPublicConstructorAccess)
+				&& !AccessClassLoader.areInSameRuntimeClassLoader(type, accessClass)) {
+			// Must test this after the try-catch block, whether the class has been loaded
+			// as if has been defined.
+			// Throw a Runtime exception here instead of an IllegalAccessError when
+			// invoking newInstance()
+			throw new RuntimeException((!isNonStaticMemberClass
+					? "Class cannot be created (the no-arg constructor is protected or package-protected, and its ConstructorAccess could not be defined in the same class loader): "
+					: "Non-static member class cannot be created (the enclosing class constructor is protected or package-protected, and its ConstructorAccess could not be defined in the same class loader): ")
+					+ type.getName());
+		}
+		access.isNonStaticMemberClass = isNonStaticMemberClass;
+		return access;
+	}
 
-    static void insertNewInstance(ClassWriter cw, String classNameInternal) {
-        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "newInstance", "()Ljava/lang/Object;", null, null);
-        mv.visitCode();
-        mv.visitTypeInsn(NEW, classNameInternal);
-        mv.visitInsn(DUP);
-        mv.visitMethodInsn(INVOKESPECIAL, classNameInternal, "<init>", "()V", false);
-        mv.visitInsn(ARETURN);
-        mv.visitMaxs(2, 1);
-        mv.visitEnd();
-    }
+	static private void insertConstructor(ClassWriter cw, String superclassNameInternal) {
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+		mv.visitCode();
+		mv.visitVarInsn(ALOAD, 0);
+		mv.visitMethodInsn(INVOKESPECIAL, superclassNameInternal, "<init>", "()V", false);
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(1, 1);
+		mv.visitEnd();
+	}
 
-    static void insertNewInstanceInner(ClassWriter cw, String classNameInternal, String enclosingClassNameInternal) {
-        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "newInstance", "(Ljava/lang/Object;)Ljava/lang/Object;", null, null);
-        mv.visitCode();
-        if (enclosingClassNameInternal != null) {
-            mv.visitTypeInsn(NEW, classNameInternal);
-            mv.visitInsn(DUP);
-            mv.visitVarInsn(ALOAD, 1);
-            mv.visitTypeInsn(CHECKCAST, enclosingClassNameInternal);
-            mv.visitInsn(DUP);
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;", false);
-            mv.visitInsn(POP);
-            mv.visitMethodInsn(INVOKESPECIAL, classNameInternal, "<init>", "(L" + enclosingClassNameInternal + ";)V", false);
-            mv.visitInsn(ARETURN);
-            mv.visitMaxs(4, 2);
-        } else {
-            mv.visitTypeInsn(NEW, "java/lang/UnsupportedOperationException");
-            mv.visitInsn(DUP);
-            mv.visitLdcInsn("Not an inner class.");
-            mv.visitMethodInsn(INVOKESPECIAL, "java/lang/UnsupportedOperationException", "<init>", "(Ljava/lang/String;)V", false);
-            mv.visitInsn(ATHROW);
-            mv.visitMaxs(3, 2);
-        }
-        mv.visitEnd();
-    }
+	static void insertNewInstance(ClassWriter cw, String classNameInternal) {
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "newInstance", "()Ljava/lang/Object;", null, null);
+		mv.visitCode();
+		mv.visitTypeInsn(NEW, classNameInternal);
+		mv.visitInsn(DUP);
+		mv.visitMethodInsn(INVOKESPECIAL, classNameInternal, "<init>", "()V", false);
+		mv.visitInsn(ARETURN);
+		mv.visitMaxs(2, 1);
+		mv.visitEnd();
+	}
+
+	static void insertNewInstanceInner(ClassWriter cw, String classNameInternal, String enclosingClassNameInternal) {
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "newInstance", "(Ljava/lang/Object;)Ljava/lang/Object;", null,
+				null);
+		mv.visitCode();
+		if (enclosingClassNameInternal != null) {
+			mv.visitTypeInsn(NEW, classNameInternal);
+			mv.visitInsn(DUP);
+			mv.visitVarInsn(ALOAD, 1);
+			mv.visitTypeInsn(CHECKCAST, enclosingClassNameInternal);
+			mv.visitInsn(DUP);
+			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "getClass", "()Ljava/lang/Class;", false);
+			mv.visitInsn(POP);
+			mv.visitMethodInsn(INVOKESPECIAL, classNameInternal, "<init>", "(L" + enclosingClassNameInternal + ";)V",
+					false);
+			mv.visitInsn(ARETURN);
+			mv.visitMaxs(4, 2);
+		}
+		else {
+			mv.visitTypeInsn(NEW, "java/lang/UnsupportedOperationException");
+			mv.visitInsn(DUP);
+			mv.visitLdcInsn("Not an inner class.");
+			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/UnsupportedOperationException", "<init>",
+					"(Ljava/lang/String;)V", false);
+			mv.visitInsn(ATHROW);
+			mv.visitMaxs(3, 2);
+		}
+		mv.visitEnd();
+	}
+
 }

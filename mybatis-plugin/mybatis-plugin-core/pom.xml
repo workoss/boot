@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>mybatis-plugin</artifactId>
-        <groupId>com.workoss.boot</groupId>
-        <version>1.0.6-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.workoss.boot</groupId>
+		<artifactId>boot-parent</artifactId>
+		<version>1.0.6-SNAPSHOT</version>
+		<relativePath/>
+	</parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mybatis-plugin-core</artifactId>
@@ -25,6 +26,7 @@
         <dependency>
             <groupId>com.alibaba.fastsql</groupId>
             <artifactId>fastsql</artifactId>
+			<optional>true</optional>
         </dependency>
 
         <dependency>
@@ -39,5 +41,50 @@
         </dependency>
 
     </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+							<artifactSet>
+								<includes>
+									<include>com.alibaba.fastsql:fastsql</include>
+								</includes>
+							</artifactSet>
+							<filters>
+								<filter>
+									<artifact>com.alibaba.fastsql:fastsql</artifact>
+									<excludes>
+										<exclude>tpcds/**</exclude>
+										<exclude>tpch/**</exclude>
+										<exclude>com/alibaba/fastsql/benchmark</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<relocations>
+								<relocation>
+									<pattern>com.alibaba.fastsql</pattern>
+									<shadedPattern>com.workoss.boot.fastsql</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
