@@ -20,7 +20,7 @@
 
 		<jackson-bom.version>2.11.1</jackson-bom.version>
 		<netty.version>4.1.51.Final</netty.version>
-		<asm.version>8.0.1</asm.version>
+		<asm.version>9.0-beta</asm.version>
 		<reactor-bom.version>2020.0.0-M1</reactor-bom.version>
 		<rsocket-bom.version>1.0.1</rsocket-bom.version>
 
