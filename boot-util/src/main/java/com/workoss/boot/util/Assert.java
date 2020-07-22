@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public abstract class Assert {
 
 	/**
