@@ -22,6 +22,9 @@
  */
 package com.workoss.boot.util;
 
+/**
+ * @author workoss
+ */
 public class MathUtil {
 
 	/**

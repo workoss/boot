@@ -28,6 +28,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * @author workoss
+ */
 @SuppressWarnings("ALL")
 public abstract class Assert {
 

@@ -40,28 +40,31 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * @author workoss
+ */
 public class XmlMapper {
 
 	private final JaxbContextContainer jaxbContexts = new JaxbContextContainer();
 
-	private static final XMLInputFactory inputFactory = StaxUtils.createDefensiveInputFactory();
+	private static final XMLInputFactory INPUT_FACTORY = StaxUtils.createDefensiveInputFactory();
 
 	private final Function<Unmarshaller, Unmarshaller> unmarshallerProcessor = Function.identity();
 
 	private final Function<Marshaller, Marshaller> marshallerProcessor = Function.identity();
 
-	private static final XmlMapper xmlMapper = new XmlMapper();
+	private static final XmlMapper XML_MAPPER = new XmlMapper();
 
 	public static XmlMapper build() {
-		return xmlMapper;
+		return XML_MAPPER;
 	}
 
 	public static <T> T parseObject(String xml, Class<T> tClass) {
-		return xmlMapper.unmarshal(xml, tClass);
+		return XML_MAPPER.unmarshal(xml, tClass);
 	}
 
 	public static String toXmlString(Object object) {
-		return xmlMapper.toXml(object, object.getClass(), StandardCharsets.UTF_8.name(), true);
+		return XML_MAPPER.toXml(object, object.getClass(), StandardCharsets.UTF_8.name(), true);
 	}
 
 	public Map<String, String> toMap(String xml) throws XMLStreamException {
@@ -73,7 +76,7 @@ public class XmlMapper {
 
 	private Map<String, String> xmlToMap(String xml) throws XMLStreamException {
 		StringReader stringReader = new StringReader(xml);
-		XMLEventReader reader = inputFactory.createXMLEventReader(stringReader);
+		XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(stringReader);
 		Map<String, String> context = new LinkedHashMap<>();
 		String startKey = null;
 		while (reader.hasNext()) {
@@ -85,7 +88,7 @@ public class XmlMapper {
 
 	private Map<String, String> xmlToMap(String xml, List<XMLEvent> xmlEvents) throws XMLStreamException {
 		StringReader stringReader = new StringReader(xml);
-		XMLEventReader reader = inputFactory.createXMLEventReader(stringReader);
+		XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(stringReader);
 		Map<String, String> context = new LinkedHashMap<>();
 		String startKey = null;
 		while (reader.hasNext()) {
@@ -143,7 +146,7 @@ public class XmlMapper {
 		}
 		try {
 			StringReader stringReader = new StringReader(xml);
-			XMLStreamReader reader = inputFactory.createXMLStreamReader(stringReader);
+			XMLStreamReader reader = INPUT_FACTORY.createXMLStreamReader(stringReader);
 			Unmarshaller unmarshaller = initUnmarshaller(tClass);
 			if (tClass.isAnnotationPresent(XmlRootElement.class)) {
 				return (T) unmarshaller.unmarshal(reader);

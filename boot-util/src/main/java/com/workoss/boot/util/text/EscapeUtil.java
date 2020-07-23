@@ -187,7 +187,7 @@ public class EscapeUtil {
 		return xml(ifNull, false, content);
 	}
 
-	public static String xml(String ifNull, boolean escapeCRLF, String content) {
+	public static String xml(String ifNull, boolean escapeCrlf, String content) {
 		if (content == null) {
 			return ifNull;
 		}
@@ -211,10 +211,10 @@ public class EscapeUtil {
 				else if (c == '"') {
 					sb.append("&quot;");
 				}
-				else if (escapeCRLF && c == '\r') {
+				else if (escapeCrlf && c == '\r') {
 					sb.append("&#13;");
 				}
-				else if (escapeCRLF && c == '\n') {
+				else if (escapeCrlf && c == '\n') {
 					sb.append("&#10;");
 				}
 				else {

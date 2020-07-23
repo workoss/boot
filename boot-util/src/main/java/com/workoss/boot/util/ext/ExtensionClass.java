@@ -100,7 +100,8 @@ public class ExtensionClass<T> implements Sortable {
 	public T getExtInstance(Class[] argTypes, Object[] args) {
 		if (clazz != null) {
 			try {
-				if (singleton) { // 如果是单例
+				// 如果是单例
+				if (singleton) {
 					if (instance == null) {
 						synchronized (this) {
 							if (instance == null) {
@@ -108,7 +109,8 @@ public class ExtensionClass<T> implements Sortable {
 							}
 						}
 					}
-					return instance; // 保留单例
+					// 保留单例
+					return instance;
 				}
 				else {
 					return ClassUtils.newInstanceWithArgs(clazz, argTypes, args);

@@ -39,8 +39,10 @@ import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
  * 同步问题： （1）假设线程A进行get，线程B也进行get，无锁（二者各自从自己的stack或者从各自的weakOrderQueue中进行获取）
  * （2）假设线程A进行get对象X，线程B进行recycle对象X，无锁（假设A无法直接从其Stack获取，从WeakOrderQueue进行获取，由于stack.head是volatile的，线程Brecycle的对象X可以被线程A立即获取）
  * （3）假设线程C和线程Brecycle线程A的对象X，此时需要加锁（具体见Stack.setHead()）
+ *
+ * @author workoss
  */
-@SuppressWarnings("All")
+@SuppressWarnings("ALL")
 public abstract class Recycler<T> {
 
 	/**
@@ -147,6 +149,8 @@ public abstract class Recycler<T> {
 
 	/**
 	 * 创建一个对象 1、由子类进行复写，所以使用protected修饰 2、传入Handle对象，对创建出来的对象进行回收操作
+	 * @param handle
+	 * @return
 	 */
 	protected abstract T newObject(Handle<T> handle);
 
@@ -497,6 +501,10 @@ public abstract class Recycler<T> {
 	 */
 	public interface Handle<T> {
 
+		/**
+		 * recycle
+		 * @param object
+		 */
 		void recycle(T object);
 
 	}

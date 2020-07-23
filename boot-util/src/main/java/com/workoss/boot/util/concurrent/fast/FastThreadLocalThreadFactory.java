@@ -25,6 +25,9 @@ package com.workoss.boot.util.concurrent.fast;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author workoss
+ */
 public class FastThreadLocalThreadFactory implements ThreadFactory {
 
 	/**

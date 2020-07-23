@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * 基于ConcurrentHashMap实现的支持并发的Set（实际上就是使用map的set，原理类比：HashSet和HashMap），所以在mina中该类被称为ConcurrentHashSet
  *
- * @param <E>
+ * @author workoss
  */
 public class ConcurrentSet<E> extends AbstractSet<E> implements Serializable {
 

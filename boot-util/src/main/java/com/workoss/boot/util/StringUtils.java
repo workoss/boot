@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
  * @Date: 2017/8/11 8:10
  * @Version: 1.0.0
  */
+@SuppressWarnings("ALL")
 public class StringUtils {
 
 	public static String EMPTY = "";

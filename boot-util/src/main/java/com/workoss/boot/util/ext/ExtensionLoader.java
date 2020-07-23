@@ -46,6 +46,7 @@ import java.util.concurrent.ConcurrentMap;
  * @date: 2018-12-13 17:10
  * @version:
  */
+@SuppressWarnings("ALL")
 public class ExtensionLoader<T> {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ExtensionLoader.class);

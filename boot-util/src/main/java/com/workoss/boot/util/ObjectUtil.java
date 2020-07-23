@@ -22,6 +22,9 @@
  */
 package com.workoss.boot.util;
 
+/**
+ * @author workoss
+ */
 public class ObjectUtil {
 
 	public static <T> T checkNotNull(T arg, String text) {

@@ -53,7 +53,7 @@ public class ReflectUtils {
 
 	private static final String CACHE_PREFIX = "reflect_";
 
-	private static final ObjenesisStd objenesisStd = new ObjenesisStd(true);
+	private static final ObjenesisStd OBJENESIS_STD = new ObjenesisStd(true);
 
 	/**
 	 * 应用对应的ClassLoader
@@ -72,7 +72,7 @@ public class ReflectUtils {
 	private static final ConcurrentMap<Class, String> TYPE_STR_CACHE = new ConcurrentHashMap<Class, String>();
 
 	public static <T> T newInstance(Class<T> clazz) {
-		ObjectInstantiator objectInstantiator = objenesisStd.getInstantiatorOf(clazz);
+		ObjectInstantiator objectInstantiator = OBJENESIS_STD.getInstantiatorOf(clazz);
 		return (T) objectInstantiator.newInstance();
 	}
 

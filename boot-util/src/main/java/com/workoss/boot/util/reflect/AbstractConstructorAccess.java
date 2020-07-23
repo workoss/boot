@@ -33,6 +33,7 @@ import static org.springframework.asm.Opcodes.*;
 /**
  * @author admin
  */
+@SuppressWarnings("ALL")
 public abstract class AbstractConstructorAccess<T> {
 
 	boolean isNonStaticMemberClass;

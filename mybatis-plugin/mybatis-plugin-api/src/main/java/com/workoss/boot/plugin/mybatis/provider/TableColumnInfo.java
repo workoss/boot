@@ -25,6 +25,9 @@ package com.workoss.boot.plugin.mybatis.provider;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author workoss
+ */
 public class TableColumnInfo {
 
 	private String tableName;

@@ -24,16 +24,22 @@ package com.workoss.boot.util.concurrent.promise;
 
 import java.util.List;
 
+/**
+ * @author workoss
+ */
 public interface Promise<V> extends Future<V> {
 
 	/**
 	 * Marks this future as a success and notifies all listeners. If it is success or
 	 * failed already it will throw an {@link IllegalStateException}.
+	 * @param result
+	 * @return
 	 */
 	Promise<V> setSuccess(V result);
 
 	/**
 	 * Marks this future as a success and notifies all listeners.
+	 * @param result
 	 * @return {@code true} if and only if successfully marked this future as a success.
 	 * Otherwise {@code false} because this future is already marked as either a success
 	 * or a failure.
@@ -43,11 +49,14 @@ public interface Promise<V> extends Future<V> {
 	/**
 	 * Marks this future as a failure and notifies all listeners. If it is success or
 	 * failed already it will throw an {@link IllegalStateException}.
+	 * @param cause
+	 * @return
 	 */
 	Promise<V> setFailure(Throwable cause);
 
 	/**
 	 * Marks this future as a failure and notifies all listeners.
+	 * @param cause
 	 * @return {@code true} if and only if successfully marked this future as a failure.
 	 * {@code false} because this future is already marked as either a success or a
 	 * failure.
@@ -62,27 +71,65 @@ public interface Promise<V> extends Future<V> {
 	 */
 	boolean setUncancellable();
 
+	/**
+	 * addListener
+	 * @param listener
+	 * @return
+	 */
 	@Override
 	Promise<V> addListener(FutureListener<V> listener);
 
+	/**
+	 * addListeners
+	 * @param listeners
+	 * @return
+	 */
 	@Override
 	Promise<V> addListeners(List<FutureListener<V>> listeners);
 
+	/**
+	 * removeListener
+	 * @param listener
+	 * @return
+	 */
 	@Override
 	Promise<V> removeListener(FutureListener<V> listener);
 
+	/**
+	 * removeListeners
+	 * @param listeners
+	 * @return
+	 */
 	@Override
 	Promise<V> removeListeners(List<FutureListener<V>> listeners);
 
+	/**
+	 * sync
+	 * @return
+	 * @throws InterruptedException
+	 */
 	@Override
 	Promise<V> sync() throws InterruptedException;
 
+	/**
+	 * syncUninterruptibly
+	 * @return
+	 */
 	@Override
 	Promise<V> syncUninterruptibly();
 
+	/**
+	 * await
+	 * @return
+	 * @throws InterruptedException
+	 */
 	@Override
 	Promise<V> await() throws InterruptedException;
 
+	/**
+	 * awaitUninterruptibly
+	 * @return
+	 */
 	@Override
 	Promise<V> awaitUninterruptibly();
 

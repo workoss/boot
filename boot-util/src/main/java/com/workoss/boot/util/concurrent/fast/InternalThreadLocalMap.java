@@ -26,6 +26,9 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author workoss
+ */
 public class InternalThreadLocalMap {
 
 	/**

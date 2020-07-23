@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  * @date: 2017/8/11 8:10
  * @version: 1.0.0
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings("ALL")
 @Intercepts({
 		@Signature(type = Executor.class, method = "query",
 				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),

@@ -41,6 +41,7 @@ import org.springframework.util.Assert;
  * @Date: 2017/8/11 8:10
  * @Version: 1.0.0
  */
+@SuppressWarnings("ALL")
 public class ClassUtils {
 
 	private static final Logger log = LoggerFactory.getLogger(ClassUtils.class);
@@ -53,19 +54,19 @@ public class ClassUtils {
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
-	private static final Map<Class<?>, Class<?>> primitiveMap = new HashMap<>(9);
+	private static final Map<Class<?>, Class<?>> PRIMITIVE_MAP = new HashMap<>(9);
 
 	static {
-		primitiveMap.put(String.class, String.class);
-		primitiveMap.put(Boolean.class, boolean.class);
-		primitiveMap.put(Byte.class, byte.class);
-		primitiveMap.put(Character.class, char.class);
-		primitiveMap.put(Double.class, double.class);
-		primitiveMap.put(Float.class, float.class);
-		primitiveMap.put(Integer.class, int.class);
-		primitiveMap.put(Long.class, long.class);
-		primitiveMap.put(Short.class, short.class);
-		primitiveMap.put(Date.class, Date.class);
+		PRIMITIVE_MAP.put(String.class, String.class);
+		PRIMITIVE_MAP.put(Boolean.class, boolean.class);
+		PRIMITIVE_MAP.put(Byte.class, byte.class);
+		PRIMITIVE_MAP.put(Character.class, char.class);
+		PRIMITIVE_MAP.put(Double.class, double.class);
+		PRIMITIVE_MAP.put(Float.class, float.class);
+		PRIMITIVE_MAP.put(Integer.class, int.class);
+		PRIMITIVE_MAP.put(Long.class, long.class);
+		PRIMITIVE_MAP.put(Short.class, short.class);
+		PRIMITIVE_MAP.put(Date.class, Date.class);
 	}
 
 	public static Class unwrapCglib(Object root) {
@@ -149,7 +150,7 @@ public class ClassUtils {
 	}
 
 	public static boolean isPrimitive(Class<?> clazz) {
-		if (primitiveMap.containsKey(clazz)) {
+		if (PRIMITIVE_MAP.containsKey(clazz)) {
 			return true;
 		}
 		return clazz.isPrimitive();
@@ -261,9 +262,11 @@ public class ClassUtils {
 				Constructor<T> constructor = null;
 				for (Constructor<T> c : constructors) {
 					Class[] ps = c.getParameterTypes();
-					if (ps.length == argTypes.length + 1) { // 长度多一
+					// 长度多一
+					if (ps.length == argTypes.length + 1) {
 						boolean allMath = true;
-						for (int i = 1; i < ps.length; i++) { // 而且第二个开始的参数类型匹配
+						// 而且第二个开始的参数类型匹配
+						for (int i = 1; i < ps.length; i++) {
 							if (ps[i] != argTypes[i - 1]) {
 								allMath = false;
 								break;
@@ -406,8 +409,10 @@ public class ClassUtils {
 		String typeStr = ReflectUtils.getTypeStrCache(clazz);
 		if (typeStr == null) {
 			if (clazz.isArray()) {
-				String name = clazz.getName(); // 原始名字：[Ljava.lang.String;
-				typeStr = jvmNameToCanonicalName(name); // java.lang.String[]
+				// 原始名字：[Ljava.lang.String;
+				String name = clazz.getName();
+				// java.lang.String[]
+				typeStr = jvmNameToCanonicalName(name);
 			}
 			else {
 				typeStr = clazz.getName();
@@ -425,7 +430,8 @@ public class ClassUtils {
 	public static String jvmNameToCanonicalName(String jvmName) {
 		boolean isArray = jvmName.charAt(0) == '[';
 		if (isArray) {
-			String cnName = StringUtils.EMPTY; // 计数，看上几维数组
+			// 计数，看上几维数组
+			String cnName = StringUtils.EMPTY;
 			int i = 0;
 			for (; i < jvmName.length(); i++) {
 				if (jvmName.charAt(i) != '[') {
@@ -459,8 +465,9 @@ public class ClassUtils {
 				cnName = "short" + cnName;
 			}
 			else {
-				cnName = componentType.substring(1, componentType.length() - 1) + cnName; // 对象的
-																							// 去掉L
+				// 对象的// 去掉L
+				cnName = componentType.substring(1, componentType.length() - 1) + cnName;
+
 			}
 			return cnName;
 		}

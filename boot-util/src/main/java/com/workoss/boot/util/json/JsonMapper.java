@@ -40,6 +40,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class JsonMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);

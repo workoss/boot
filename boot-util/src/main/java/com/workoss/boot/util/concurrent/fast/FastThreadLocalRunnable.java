@@ -24,6 +24,9 @@ package com.workoss.boot.util.concurrent.fast;
 
 import com.workoss.boot.util.ObjectUtil;
 
+/**
+ * @author workoss
+ */
 public class FastThreadLocalRunnable implements Runnable {
 
 	private Runnable runnable;

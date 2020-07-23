@@ -30,6 +30,9 @@ import com.workoss.boot.plugin.mybatis.provider.CrudSelectProvider;
 import com.workoss.boot.plugin.mybatis.provider.CrudUpdateProvider;
 import org.apache.ibatis.annotations.*;
 
+/**
+ * @author workoss
+ */
 public interface CrudDao<T, ID> {
 
 	/**

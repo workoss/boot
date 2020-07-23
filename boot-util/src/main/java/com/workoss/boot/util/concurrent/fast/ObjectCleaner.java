@@ -27,7 +27,10 @@ import java.lang.ref.WeakReference;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SuppressWarnings({ "ALL", "MapOrSetKeyShouldOverrideHashCodeEquals" })
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class ObjectCleaner {
 
 	/**

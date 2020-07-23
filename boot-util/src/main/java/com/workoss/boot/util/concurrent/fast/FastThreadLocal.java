@@ -26,7 +26,10 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
 
-@SuppressWarnings({ "ALL", "MapOrSetKeyShouldOverrideHashCodeEquals" })
+/**
+ * @author workoss
+ */
+@SuppressWarnings({ "ALL" })
 public class FastThreadLocal<V> {
 
 	/**

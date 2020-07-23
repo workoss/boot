@@ -24,6 +24,10 @@ package com.workoss.boot.util.algorithm;
 
 import java.util.Random;
 
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class BMUtil {
 
 	public static int badCharacter(String moduleString, char badChar, int badCharSuffix) {
@@ -63,32 +67,32 @@ public class BMUtil {
 		}
 
 		int moduleSuffix = moduleString.length() - 1;
-		int module_index = moduleSuffix;
-		int origin_index = moduleSuffix;
+		int moduleIndex = moduleSuffix;
+		int originIndex = moduleSuffix;
 
-		for (int ot = origin_index; origin_index < originString.length() && module_index >= 0;) {
-			char oc = originString.charAt(origin_index);
-			char mc = moduleString.charAt(module_index);
+		for (int ot = originIndex; originIndex < originString.length() && moduleIndex >= 0;) {
+			char oc = originString.charAt(originIndex);
+			char mc = moduleString.charAt(moduleIndex);
 			if (oc == mc) {
-				origin_index--;
-				module_index--;
+				originIndex--;
+				moduleIndex--;
 			}
 			else {
 				// 坏字符规则
-				int badMove = badCharacter(moduleString, oc, module_index);
+				int badMove = badCharacter(moduleString, oc, moduleIndex);
 				// 好字符规则
-				int goodMove = goodCharacter(moduleString, module_index);
+				int goodMove = goodCharacter(moduleString, moduleIndex);
 				// 下面两句代码可以这样理解，主串位置不动，模式串向右移动
-				origin_index = ot + Math.max(badMove, goodMove);
-				module_index = moduleSuffix;
+				originIndex = ot + Math.max(badMove, goodMove);
+				moduleIndex = moduleSuffix;
 				// ot就是中间变量
-				ot = origin_index;
+				ot = originIndex;
 			}
 		}
 
-		if (module_index < 0) {
+		if (moduleIndex < 0) {
 			// 多减了一次
-			return origin_index + 1;
+			return originIndex + 1;
 		}
 
 		return -1;

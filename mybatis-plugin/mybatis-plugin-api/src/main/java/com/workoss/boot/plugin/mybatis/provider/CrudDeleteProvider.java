@@ -26,6 +26,9 @@ import java.util.Map;
 
 import org.apache.ibatis.builder.annotation.ProviderContext;
 
+/**
+ * @author workoss
+ */
 public class CrudDeleteProvider extends BaseProvider {
 
 	public CharSequence deleteById(Map<String, Object> params, ProviderContext context) {

@@ -44,6 +44,7 @@ import java.util.Random;
  * @date: 2018-11-20 12:31
  * @version:
  */
+@SuppressWarnings("ALL")
 public class CryptoUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(CryptoUtil.class);
@@ -60,7 +61,7 @@ public class CryptoUtil {
 
 	private static final String HMACSHA1_ALG = "HmacSHA1";
 
-	private static final int DEFAULT_HMACSHA1_KEYSIZE = 160; // RFC2401
+	private static final int DEFAULT_HMACSHA1_KEYSIZE = 160;
 
 	private static final int DEFAULT_AES_KEYSIZE = 128;
 
@@ -283,7 +284,7 @@ public class CryptoUtil {
 	/**
 	 * 生成随机向量,默认大小为cipher.getBlockSize(), 16字节.
 	 */
-	public static byte[] generateIV() {
+	public static byte[] generateIv() {
 		byte[] bytes = new byte[DEFAULT_IVSIZE];
 		random.nextBytes(bytes);
 		return bytes;

@@ -25,6 +25,9 @@ package com.workoss.boot.util;
 import java.io.*;
 import java.nio.charset.Charset;
 
+/**
+ * @author workoss
+ */
 public class StreamUtils {
 
 	/**

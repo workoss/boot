@@ -26,6 +26,10 @@ import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
 import com.workoss.boot.util.reflect.ReflectUtils;
 
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class SqlHelper {
 
 	protected static final FastThreadLocal<SqlParam> LOCAL_SQL_PARAM = new FastThreadLocal<>();

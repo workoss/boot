@@ -33,13 +33,17 @@ import java.util.List;
 
 import java.util.function.Supplier;
 
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class StaxUtils {
 
 	public static InputStream emptyInput() {
 		return new ByteArrayInputStream(StreamUtils.EMPTY_CONTENT);
 	}
 
-	private static final XMLInputFactory inputFactory = createDefensiveInputFactory();
+	private static final XMLInputFactory INPUT_FACTORY = createDefensiveInputFactory();
 
 	private static final XMLResolver NO_OP_XML_RESOLVER = (publicID, systemID, base, ns) -> StreamUtils.emptyInput();
 

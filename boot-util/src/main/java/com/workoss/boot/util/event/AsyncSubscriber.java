@@ -22,6 +22,9 @@
  */
 package com.workoss.boot.util.event;
 
+/**
+ * @author workoss
+ */
 public interface AsyncSubscriber<E extends Event> extends Subscriber<E> {
 
 }

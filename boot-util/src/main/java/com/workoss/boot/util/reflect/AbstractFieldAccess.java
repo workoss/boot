@@ -36,6 +36,7 @@ import static org.springframework.asm.Opcodes.*;
 /**
  * @author admin
  */
+@SuppressWarnings("ALL")
 public abstract class AbstractFieldAccess {
 
 	protected String[] fieldNames;

@@ -22,6 +22,9 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
+/**
+ * @author workoss
+ */
 public class SqlParam {
 
 	private int offset = 0;

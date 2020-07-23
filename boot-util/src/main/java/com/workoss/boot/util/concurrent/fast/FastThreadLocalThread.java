@@ -22,6 +22,9 @@
  */
 package com.workoss.boot.util.concurrent.fast;
 
+/**
+ * @author workoss
+ */
 public class FastThreadLocalThread extends Thread {
 
 	/**

@@ -27,6 +27,9 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * @author workoss
+ */
 @Target({})
 @Retention(RUNTIME)
 public @interface UniqueConstraint {

@@ -27,7 +27,9 @@ import java.util.concurrent.*;
 /**
  * 线程池工具类
  *
+ * @author workoss
  */
+@SuppressWarnings("ALL")
 public class ThreadPoolUtils {
 
 	/**
@@ -176,7 +178,7 @@ public class ThreadPoolUtils {
 	 */
 	public static BlockingQueue<Runnable> buildQueue(int size, boolean isPriority) {
 		BlockingQueue<Runnable> queue;
-		if (size == 0) { // 默认无队列
+		if (size == 0) {
 			queue = new SynchronousQueue<Runnable>();
 		}
 		else { // 有限队列或无限队列

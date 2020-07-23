@@ -27,6 +27,9 @@ import java.util.Map;
 
 import org.apache.ibatis.builder.annotation.ProviderContext;
 
+/**
+ * @author workoss
+ */
 public class CrudInsertProvider extends BaseProvider {
 
 	public CharSequence insert(Map<String, Object> params, ProviderContext context) {

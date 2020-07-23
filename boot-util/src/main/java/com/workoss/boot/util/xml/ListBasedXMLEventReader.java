@@ -34,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class ListBasedXMLEventReader implements XMLEventReader {
 
 	private boolean closed;

@@ -43,11 +43,12 @@ import org.springframework.cglib.core.Converter;
  * @date: 2018-11-26 12:58
  * @version:
  */
+@SuppressWarnings("ALL")
 public class BeanCopierUtil {
 
 	private static final ConcurrentMap<String, List<Map<String, String>>> CLASS_METHOD_MAP = new ConcurrentHashMap<>();
 
-	private static final ConcurrentMap<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<String, BeanCopier> BEAN_COPIER_MAP = new ConcurrentHashMap<>();
 
 	private static final String SETTER_PREFIX = "set";
 
@@ -96,8 +97,8 @@ public class BeanCopierUtil {
 			return null;
 		}
 		Map<String, String> map = Arrays.stream(targetMethodNames).filter(methodName -> {
-			boolean ignore = methodName.equalsIgnoreCase("equals") || methodName.equalsIgnoreCase("toString")
-					|| methodName.equalsIgnoreCase("hashCode") || methodName.equalsIgnoreCase("canEqual");
+			boolean ignore = "equals".equalsIgnoreCase(methodName) || "toString".equalsIgnoreCase(methodName)
+					|| "hashCode".equalsIgnoreCase(methodName) || "canEqual".equalsIgnoreCase(methodName);
 			return !ignore && methodName.startsWith(SETTER_PREFIX);
 		}).collect(Collectors.toMap(str -> StringUtils.uncapitalize(str.replaceAll(SETTER_PREFIX, "")), str -> str));
 		if (CollectionUtils.isEmpty(map)) {
@@ -142,14 +143,14 @@ public class BeanCopierUtil {
 
 	public static BeanCopier getBeanCopier(Class<?> source, Class<?> target) {
 		String beanCopierKey = generateBeanKey(source, target);
-		if (beanCopierMap.containsKey(beanCopierKey)) {
-			return beanCopierMap.get(beanCopierKey);
+		if (BEAN_COPIER_MAP.containsKey(beanCopierKey)) {
+			return BEAN_COPIER_MAP.get(beanCopierKey);
 		}
 		else {
 			BeanCopier beanCopier = BeanCopier.create(source, target, true);
-			beanCopierMap.putIfAbsent(beanCopierKey, beanCopier);
+			BEAN_COPIER_MAP.putIfAbsent(beanCopierKey, beanCopier);
 		}
-		return beanCopierMap.get(beanCopierKey);
+		return BEAN_COPIER_MAP.get(beanCopierKey);
 	}
 
 	/**

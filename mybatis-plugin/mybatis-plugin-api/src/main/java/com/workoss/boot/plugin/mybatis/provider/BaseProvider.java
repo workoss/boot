@@ -40,6 +40,9 @@ import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author workoss
+ */
 public class BaseProvider {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);

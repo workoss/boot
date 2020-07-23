@@ -24,9 +24,17 @@ package com.workoss.boot.util;
 
 import java.util.Map;
 
+/**
+ * @author workoss
+ */
 @FunctionalInterface
 public interface ApplyClassFunc<T> {
 
+	/**
+	 * apply
+	 * @param stringStringMap
+	 * @return
+	 */
 	Class<T> apply(Map<String, String> stringStringMap);
 
 }

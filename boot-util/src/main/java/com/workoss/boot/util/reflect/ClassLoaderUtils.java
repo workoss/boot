@@ -22,6 +22,9 @@
  */
 package com.workoss.boot.util.reflect;
 
+/**
+ * @author workoss
+ */
 public class ClassLoaderUtils {
 
 	/**

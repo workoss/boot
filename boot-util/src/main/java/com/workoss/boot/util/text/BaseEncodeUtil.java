@@ -25,7 +25,10 @@ package com.workoss.boot.util.text;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-@SuppressWarnings({ "ALL", "AlibabaUndefineMagicConstant" })
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class BaseEncodeUtil {
 
 	private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',

@@ -27,6 +27,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * @author workoss
+ */
 public abstract class AbstractFuture<V> implements Future<V> {
 
 	@Override

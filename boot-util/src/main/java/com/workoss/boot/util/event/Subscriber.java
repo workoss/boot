@@ -22,10 +22,21 @@
  */
 package com.workoss.boot.util.event;
 
+/**
+ * @author workoss
+ */
 public interface Subscriber<E extends Event> {
 
+	/**
+	 * onEvent
+	 * @param event
+	 */
 	void onEvent(E event);
 
+	/**
+	 * onError
+	 * @param throwable
+	 */
 	void onError(Throwable throwable);
 
 }
