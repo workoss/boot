@@ -368,12 +368,6 @@
 
 	<repositories>
 		<repository>
-			<id>central</id>
-			<name>central</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</repository>
-
-		<repository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>
 			<url>https://repo.spring.io/snapshot</url>
@@ -397,16 +391,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>rdc-releases</id>
-			<url>https://repo.rdc.aliyun.com/repository/16912-release-G6xvVV/</url>
-			<releases><enabled>true</enabled></releases>
-		</repository>
-		<repository>
-			<id>rdc-snapshots</id>
-			<url>https://repo.rdc.aliyun.com/repository/16912-snapshot-FCDUrc/</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
 		<!--<repository>
 			<id>github</id>
 			<name>GitHub workoss Apache Maven Packages</name>
@@ -416,15 +400,28 @@
 
 	<profiles>
 		<profile>
-			<id>rds-private-repo</id>
+			<id>rdc-private-repo</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>rdc-releases</id>
+					<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
+				</repository>
+				<repository>
+					<id>rdc-snapshots</id>
+					<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
+				</repository>
+			</repositories>
 			<distributionManagement>
 				<repository>
 					<id>rdc-releases</id>
-					<url>https://repo.rdc.aliyun.com/repository/16912-release-G6xvVV/</url>
+					<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
 				</repository>
 				<snapshotRepository>
 					<id>rdc-snapshots</id>
-					<url>https://repo.rdc.aliyun.com/repository/16912-snapshot-FCDUrc/</url>
+					<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>

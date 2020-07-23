@@ -1,53 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.workoss.boot</groupId>
-    <artifactId>boot</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0.6-SNAPSHOT</version>
-    <modules>
-        <module>boot-parent</module>
-        <module>boot-util</module>
-        <module>mybatis-plugin</module>
-        <module>boot-bom</module>
-    </modules>
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.workoss.boot</groupId>
+	<artifactId>boot</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.6-SNAPSHOT</version>
+	<modules>
+		<module>boot-parent</module>
+		<module>boot-util</module>
+		<module>mybatis-plugin</module>
+		<module>boot-bom</module>
+	</modules>
 
 	<properties>
 		<spring-javaformat-maven-plugin.version>0.0.23</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc1</license-maven-plugin.version>
+		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
-    <scm>
-        <url>https://github.com/workoss/boot</url>
-        <connection>
-            scm:git:git://github.com/workoss/boot.git
-        </connection>
-        <developerConnection>
-            scm:git:ssh://git@github.com/workoss/boot.git
-        </developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+	<scm>
+		<url>https://github.com/workoss/boot</url>
+		<connection>
+			scm:git:git://github.com/workoss/boot.git
+		</connection>
+		<developerConnection>
+			scm:git:ssh://git@github.com/workoss/boot.git
+		</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
-    <organization>
-        <name>Workoss Software, Inc.</name>
-        <url>https://www.workoss.com</url>
-    </organization>
+	<organization>
+		<name>Workoss Software, Inc.</name>
+		<url>https://www.workoss.com</url>
+	</organization>
 
 
-    <developers>
-        <developer>
-            <id>workoss</id>
-            <name>workoss</name>
-            <email>workoss@icloud.com</email>
-           <!-- <organization>Pivotal Software, Inc.</organization>
-            <organizationUrl>https://www.spring.io</organizationUrl>-->
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<id>workoss</id>
+			<name>workoss</name>
+			<email>workoss@icloud.com</email>
+			<!-- <organization>Pivotal Software, Inc.</organization>
+			 <organizationUrl>https://www.spring.io</organizationUrl>-->
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<build>
 		<plugins>
@@ -98,7 +99,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 
 </project>
