@@ -36,8 +36,8 @@
 		<spring-boot.version>2.3.1.RELEASE</spring-boot.version>
 		<spring-cloud.version>2020.0.0-M2</spring-cloud.version>
 		<spring-security.version>5.3.3.RELEASE</spring-security.version>
-		<spring-boot-admin.version>2.2.3</spring-boot-admin.version>
-		<spring-data-r2dbc.version>1.1.1.RELEASE</spring-data-r2dbc.version>
+		<spring-boot-admin.version>2.2.4</spring-boot-admin.version>
+		<spring-data-r2dbc.version>1.1.2.RELEASE</spring-data-r2dbc.version>
 
 		<mybatis.version>3.5.5</mybatis.version>
 		<mybatis-spring.version>2.0.5</mybatis-spring.version>
@@ -48,17 +48,17 @@
 		<r2dbc-bom.version>Arabba-SR5</r2dbc-bom.version>
 
 		<protobuf.version>3.12.2</protobuf.version>
-		<liquibase.version>3.10.1</liquibase.version>
+		<liquibase.version>4.0.0</liquibase.version>
 
 
 		<fastsql.version>2.0.0_preview_973</fastsql.version>
 		<jakarta.persistence-api.version>2.2.3</jakarta.persistence-api.version>
 
 		<lombok.version>1.18.12</lombok.version>
-		<mapstruct.version>1.4.0.Beta1</mapstruct.version>
+		<mapstruct.version>1.4.0.Beta3</mapstruct.version>
 
 		<junit-jupiter.version>5.6.2</junit-jupiter.version>
-		<mockito-core.version>3.3.3</mockito-core.version>
+		<mockito-core.version>3.4.4</mockito-core.version>
 
 		<byte-buddy.version>1.10.13</byte-buddy.version>
 		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
@@ -707,7 +707,7 @@
 						<properties>
 							<owner>workoss</owner>
 							<email>workoss@icloud.com</email>
-							<project.inceptionYear>2020-2021</project.inceptionYear>
+							<project.inceptionYear>${license.git.copyrightYears}-${license.git.copyrightLastYear}</project.inceptionYear>
 						</properties>
 						<mapping>
 							<java>SLASHSTAR_STYLE</java>
@@ -723,6 +723,14 @@
 						</execution>
 					</executions>
 				</plugin>
+
+					<plugin>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin-git</artifactId>
+						<!-- make sure you use the same version as license-maven-plugin -->
+						<version>${license-maven-plugin.version}</version>
+					</plugin>
+
 
 				<plugin>
 					<groupId>net.bytebuddy</groupId>

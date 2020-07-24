@@ -81,7 +81,7 @@
 					<properties>
 						<owner>workoss</owner>
 						<email>workoss@icloud.com</email>
-						<project.inceptionYear>2020-2021</project.inceptionYear>
+						<project.inceptionYear>${license.git.copyrightYears}-${license.git.copyrightLastYear}</project.inceptionYear>
 					</properties>
 					<mapping>
 						<java>SLASHSTAR_STYLE</java>
@@ -96,6 +96,12 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin-git</artifactId>
+				<!-- make sure you use the same version as license-maven-plugin -->
+				<version>${license-maven-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
