@@ -6,7 +6,7 @@
 
     <groupId>com.workoss.boot</groupId>
     <artifactId>boot-bom</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <dependencyManagement>

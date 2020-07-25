@@ -6,7 +6,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.6-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-util</module>
@@ -17,6 +17,7 @@
 	<properties>
 		<spring-javaformat-maven-plugin.version>0.0.23</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc1</license-maven-plugin.version>
+		<versions-maven-plugin.version>2.7</versions-maven-plugin.version>
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
@@ -102,6 +103,14 @@
 				<artifactId>license-maven-plugin-git</artifactId>
 				<!-- make sure you use the same version as license-maven-plugin -->
 				<version>${license-maven-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${versions-maven-plugin.version}</version>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
