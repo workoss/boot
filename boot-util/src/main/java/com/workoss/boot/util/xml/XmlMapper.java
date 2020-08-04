@@ -23,7 +23,6 @@
 package com.workoss.boot.util.xml;
 
 import com.workoss.boot.util.StringUtils;
-import com.workoss.boot.util.ApplyClassFunc;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -115,7 +114,7 @@ public class XmlMapper {
 		return startKey;
 	}
 
-	public <T> T unmarshal(String xml, ApplyClassFunc<T> function) {
+	public <T> T unmarshal(String xml, Function<Map<String,String>,Class<T>> function) {
 		try {
 			List<XMLEvent> xmlEvents = new ArrayList<>();
 			Class<T> tClass = function.apply(xmlToMap(xml, xmlEvents));

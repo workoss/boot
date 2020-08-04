@@ -27,7 +27,6 @@ import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.ResolvedType;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.workoss.boot.util.ApplyClassFunc;
 import com.workoss.boot.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author workoss
@@ -171,7 +171,7 @@ public class JsonMapper {
 		}
 	}
 
-	public <T> T fromJson(byte[] bytes, ApplyClassFunc func) {
+	public <T> T fromJson(byte[] bytes, Function<Map<String,String>,Class<T>> func) {
 		if (bytes == null || bytes.length == 0) {
 			return null;
 		}
@@ -301,9 +301,6 @@ public class JsonMapper {
 			mapper.readerForUpdating(object).readValue(jsonString);
 		}
 		catch (JsonProcessingException e) {
-			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
-		}
-		catch (IOException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		}
 	}
