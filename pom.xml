@@ -51,6 +51,17 @@
 		</developer>
 	</developers>
 
+	<repositories>
+		<repository>
+			<id>alimaven</id>
+			<name>aliyun maven</name>
+			<url>https://maven.aliyun.com/repository/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -82,6 +93,7 @@
 					<properties>
 						<owner>workoss</owner>
 						<email>workoss@icloud.com</email>
+						<!--suppress UnresolvedMavenProperty -->
 						<project.inceptionYear>${license.git.copyrightYears}-${license.git.copyrightLastYear}</project.inceptionYear>
 					</properties>
 					<mapping>
