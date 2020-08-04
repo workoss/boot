@@ -368,6 +368,19 @@
 
 	<repositories>
 		<repository>
+			<id>spring</id>
+			<name>spring lib-milestone</name>
+			<url>https://maven.aliyun.com/repository/spring</url>
+		</repository>
+		<repository>
+			<id>alimaven</id>
+			<name>aliyun maven</name>
+			<url>https://maven.aliyun.com/repository/public</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>
 			<url>https://repo.spring.io/snapshot</url>
@@ -383,19 +396,6 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>alimaven</id>
-			<name>aliyun maven</name>
-			<url>https://maven.aliyun.com/repository/public</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<!--<repository>
-			<id>github</id>
-			<name>GitHub workoss Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/workoss/</url>
-		</repository>-->
 	</repositories>
 
 	<profiles>
