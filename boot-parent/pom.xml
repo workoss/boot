@@ -21,8 +21,8 @@
 		<jackson-bom.version>2.11.2</jackson-bom.version>
 		<netty.version>4.1.51.Final</netty.version>
 		<asm.version>9.0-beta</asm.version>
-		<reactor-bom.version>2020.0.0-M1</reactor-bom.version>
-		<rsocket-bom.version>1.0.1</rsocket-bom.version>
+		<reactor-bom.version>2020.0.0-M2</reactor-bom.version>
+		<rsocket-bom.version>1.1.0-M1</rsocket-bom.version>
 
 		<!--		<jakarta.validation-api.version>3.0.0-M1</jakarta.validation-api.version>-->
 		<jakarta.validation-api.version>2.0.2</jakarta.validation-api.version>
@@ -36,7 +36,7 @@
 		<spring-boot.version>2.3.2.RELEASE</spring-boot.version>
 		<spring-cloud.version>2020.0.0-M3</spring-cloud.version>
 		<spring-security.version>5.3.3.RELEASE</spring-security.version>
-		<spring-boot-admin.version>2.2.4</spring-boot-admin.version>
+		<spring-boot-admin.version>2.3.0</spring-boot-admin.version>
 		<spring-data-r2dbc.version>1.1.2.RELEASE</spring-data-r2dbc.version>
 
 		<mybatis.version>3.5.5</mybatis.version>
@@ -73,7 +73,7 @@
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+		<maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
@@ -622,8 +622,8 @@
 					<artifactId>maven-war-plugin</artifactId>
 					<version>${maven-war-plugin.version}</version>
 					<configuration>                 <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
-						<failOnMissingWebXml>false
-						</failOnMissingWebXml>                 <!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+						<!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
 					</configuration>
 				</plugin>
 
@@ -660,6 +660,8 @@
 						</execution>
 					</executions>
 					<configuration>
+						<!--fork:如果没有该项配置,整个devtools不会起作用-->
+						<fork>true</fork>
 						<layers>
 							<enabled>true</enabled>
 						</layers>
@@ -723,7 +725,8 @@
 							<owner>workoss</owner>
 							<email>workoss@icloud.com</email>
 							<!--suppress UnresolvedMavenProperty -->
-							<project.inceptionYear>${license.git.copyrightYears}-${license.git.copyrightLastYear}</project.inceptionYear>
+							<project.inceptionYear>${license.git.copyrightYears}-${license.git.copyrightLastYear}
+							</project.inceptionYear>
 						</properties>
 						<mapping>
 							<java>SLASHSTAR_STYLE</java>
@@ -740,12 +743,12 @@
 					</executions>
 				</plugin>
 
-					<plugin>
-						<groupId>com.mycila</groupId>
-						<artifactId>license-maven-plugin-git</artifactId>
-						<!-- make sure you use the same version as license-maven-plugin -->
-						<version>${license-maven-plugin.version}</version>
-					</plugin>
+				<plugin>
+					<groupId>com.mycila</groupId>
+					<artifactId>license-maven-plugin-git</artifactId>
+					<!-- make sure you use the same version as license-maven-plugin -->
+					<version>${license-maven-plugin.version}</version>
+				</plugin>
 
 
 				<plugin>
