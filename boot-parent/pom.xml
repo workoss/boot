@@ -48,6 +48,7 @@
 		<r2dbc-bom.version>Arabba-SR6</r2dbc-bom.version>
 
 		<protobuf.version>3.12.4</protobuf.version>
+		<protostuff.version>1.7.2</protostuff.version>
 		<liquibase.version>4.0.0</liquibase.version>
 
 
@@ -64,6 +65,7 @@
 		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
 		<cloudevents.version>2.0.0-milestone1</cloudevents.version>
 		<picocli.version>4.5.0</picocli.version>
+		<feign-bom.version>10.11</feign-bom.version>
 
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -184,6 +186,14 @@
 			</dependency>
 
 			<dependency>
+				<groupId>io.github.openfeign</groupId>
+				<artifactId>feign-bom</artifactId>
+				<version>${feign-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
@@ -220,10 +230,20 @@
 				<scope>import</scope>
 			</dependency>
 
+
+
 			<dependency>
 				<groupId>com.google.protobuf</groupId>
 				<artifactId>protobuf-bom</artifactId>
 				<version>${protobuf.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-bom</artifactId>
+				<version>${protostuff.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
