@@ -15,6 +15,7 @@
 	</modules>
 
 	<properties>
+		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.23</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc1</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.7</versions-maven-plugin.version>
@@ -64,6 +65,11 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+			</plugin>
 			<plugin>
 				<groupId>io.spring.javaformat</groupId>
 				<artifactId>spring-javaformat-maven-plugin</artifactId>
