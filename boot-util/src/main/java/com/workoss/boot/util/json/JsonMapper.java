@@ -171,7 +171,7 @@ public class JsonMapper {
 		}
 	}
 
-	public <T> T fromJson(byte[] bytes, Function<Map<String,String>,Class<T>> func) {
+	public <T> T fromJson(byte[] bytes, Function<Map<String, String>, Class<T>> func) {
 		if (bytes == null || bytes.length == 0) {
 			return null;
 		}

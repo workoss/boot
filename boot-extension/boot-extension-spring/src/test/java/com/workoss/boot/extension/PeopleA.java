@@ -20,20 +20,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.workoss.boot.util.ext;
+package com.workoss.boot.extension;
 
 /**
  * @author: workoss
- * @date: 2018-12-13 17:12
+ * @date: 2018-12-13 17:05
  * @version:
  */
-@FunctionalInterface
-public interface ExtensionLoaderListener<T> {
+@Extension("A")
+public class PeopleA implements Person {
 
-	/**
-	 * 当扩展点加载时，触发的事件
-	 * @param extensionClass 扩展点类对象
-	 */
-	void onLoad(ExtensionClass<T> extensionClass);
+	@Override
+	public void getName() {
+		System.out.println("li wei");
+	}
 
 }

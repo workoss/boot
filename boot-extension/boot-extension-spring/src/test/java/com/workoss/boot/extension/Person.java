@@ -20,19 +20,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.workoss.boot.util.ext;
+package com.workoss.boot.extension;
 
 /**
  * @author: workoss
- * @date: 2018-12-13 19:16
+ * @date: 2018-12-13 17:04
  * @version:
  */
-@Extension("B")
-public class PersonB implements Person {
+@Extensible
+public interface Person {
 
-	@Override
-	public void getName() {
-		System.out.println("personB");
-	}
+	void getName();
 
 }

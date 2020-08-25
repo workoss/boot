@@ -10,13 +10,14 @@
 		<module>boot-util</module>
 		<module>mybatis-plugin</module>
 		<module>boot-bom</module>
+		<module>boot-extension</module>
 	</modules>
-
 	<properties>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
-		<spring-javaformat-maven-plugin.version>0.0.23</spring-javaformat-maven-plugin.version>
-		<license-maven-plugin.version>4.0.rc1</license-maven-plugin.version>
+		<spring-javaformat-maven-plugin.version>0.0.25</spring-javaformat-maven-plugin.version>
+		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+		<git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
@@ -83,6 +84,15 @@
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${license-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>remove</goal>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<licenseSets>
 						<licenseSet>
@@ -103,28 +113,24 @@
 					<properties>
 						<owner>workoss</owner>
 						<email>workoss@icloud.com</email>
+						<project.inceptionYear>2020-2021</project.inceptionYear>
 						<!--suppress UnresolvedMavenProperty -->
-						<project.inceptionYear>${license.git.copyrightYears}-${license.git.copyrightLastYear}</project.inceptionYear>
+<!--						<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
+<!--						<year>${project.inceptionYear}</year>-->
 					</properties>
 					<mapping>
 						<java>SLASHSTAR_STYLE</java>
 					</mapping>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>remove</goal>
-							<goal>format</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin-git</artifactId>
-				<!-- make sure you use the same version as license-maven-plugin -->
-				<version>${license-maven-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin-git</artifactId>
+						<!-- make sure you use the same version as license-maven-plugin -->
+						<version>${license-maven-plugin.version}</version>
+					</dependency>
+				</dependencies>
+
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>

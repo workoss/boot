@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.workoss.boot.util.ext;
+package com.workoss.boot.extension;
 
 import com.workoss.boot.util.reflect.ClassUtils;
 
