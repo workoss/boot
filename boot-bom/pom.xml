@@ -23,6 +23,16 @@
                 <artifactId>boot-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-extension-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-extension-spring</artifactId>
+				<version>${project.version}</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
