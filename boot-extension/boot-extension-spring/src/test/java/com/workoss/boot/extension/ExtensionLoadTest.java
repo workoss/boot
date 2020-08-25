@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
  */
 public class ExtensionLoadTest {
 
-
 	@Test
 	public void test01() {
 		Person person = ExtensionLoaderFactory.getMixExtension(Person.class, "A", null);
@@ -43,7 +42,7 @@ public class ExtensionLoadTest {
 		Person person2 = ExtensionLoaderFactory.getSpiExtension(Person.class, "A", null);
 		System.out.println(person2);
 
-		Person person3 = ExtensionLoaderFactory.getExtension("spi",Person.class, "A", null);
+		Person person3 = ExtensionLoaderFactory.getExtension("spi", Person.class, "A", null);
 		System.out.println(person3);
 
 		// ExtensionLoader<Person> personExtensionLoader =

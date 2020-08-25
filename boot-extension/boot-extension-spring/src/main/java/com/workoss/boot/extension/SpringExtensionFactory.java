@@ -10,6 +10,8 @@ import java.util.Set;
 
 /**
  * spring 扩展
+ *
+ * @author workoss
  */
 @Extension(value = "spring", order = 1, override = true)
 public class SpringExtensionFactory implements ExtensionFactory {
@@ -25,8 +27,8 @@ public class SpringExtensionFactory implements ExtensionFactory {
 
 	@Override
 	public <T> T getExtension(Class<T> tClass, String alias, ExtensionLoaderListener<T> listener) {
-		if (!tClass.isInterface()){
-			throw new ExtensionException("class "+tClass+" must be interface");
+		if (!tClass.isInterface()) {
+			throw new ExtensionException("class " + tClass + " must be interface");
 		}
 		for (ApplicationContext context : CONTEXTS) {
 			T bean = context.getBean(alias, tClass);
@@ -60,7 +62,9 @@ public class SpringExtensionFactory implements ExtensionFactory {
 		return CONTEXTS;
 	}
 
-	// currently for test purpose
+	/**
+	 * currently for test purpose
+	 */
 	public static void clearContexts() {
 		CONTEXTS.clear();
 	}
