@@ -22,6 +22,7 @@
  */
 package com.workoss.boot.extension;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -34,16 +35,16 @@ public class ExtensionLoadTest {
 	@Test
 	public void test01() {
 		Person person = ExtensionLoaderFactory.getMixExtension(Person.class, "A", null);
-		System.out.println(person);
+		Assertions.assertNotNull(person);
 
 		Person person1 = ExtensionLoaderFactory.getFirstExtension(Person.class, "A", null);
-		System.out.println(person1);
+		Assertions.assertNull(person1);
 
 		Person person2 = ExtensionLoaderFactory.getSpiExtension(Person.class, "A", null);
-		System.out.println(person2);
+		Assertions.assertNotNull(person2);
 
 		Person person3 = ExtensionLoaderFactory.getExtension("spi", Person.class, "A", null);
-		System.out.println(person3);
+		Assertions.assertNotNull(person3);
 
 		// ExtensionLoader<Person> personExtensionLoader =
 		// ExtensionLoaderUtil.getExtensionLoader(Person.class, null);
