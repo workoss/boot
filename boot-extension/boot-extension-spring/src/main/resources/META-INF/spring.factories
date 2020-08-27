@@ -1,0 +1,4 @@
+#org.springframework.context.ApplicationContextInitializer=\
+#  com.workoss.boot.extension.ExtensionApplicationContextInitializer
+org.springframework.context.ApplicationListener=\
+  com.workoss.boot.extension.ExtendsionApplicationContextListener

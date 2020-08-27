@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * ConcurrentHashSet
+ *
  * @author workoss
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E>, java.io.Serializable {

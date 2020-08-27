@@ -22,31 +22,29 @@
  */
 package com.workoss.boot.extension;
 
-/**
- * 支持SPI spring
- *
- * @author workoss
- */
-@Extensible
-public interface ExtensionFactory {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
 
-	/**
-	 * getExtension
-	 * @param tClass
-	 * @param alias
-	 * @param <T>
-	 * @return
-	 */
-	<T> T getExtension(Class<T> tClass, String alias);
+public class ExtensionApplicationContextInitializer implements ApplicationContextInitializer, Ordered {
 
-	/**
-	 * getExtension
-	 * @param tClass
-	 * @param alias
-	 * @param listener
-	 * @param <T>
-	 * @return
-	 */
-	<T> T getExtension(Class<T> tClass, String alias, ExtensionLoaderListener<T> listener);
+	private static final Logger log = LoggerFactory.getLogger(ExtensionApplicationContextInitializer.class);
+
+	@Override
+	public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+		log.info("ExtensionApplicationContextInitializer add context, {}", configurableApplicationContext);
+		if (configurableApplicationContext.getParent() != null) {
+			SpringExtensionFactory.clearContexts();
+			SpringExtensionFactory.addApplicationContext(configurableApplicationContext);
+		}
+
+	}
+
+	@Override
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
+	}
 
 }
