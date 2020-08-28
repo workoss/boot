@@ -28,6 +28,11 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
 
+/**
+ * ExtensionApplicationContextInitializer
+ *
+ * @author workoss
+ */
 public class ExtensionApplicationContextInitializer implements ApplicationContextInitializer, Ordered {
 
 	private static final Logger log = LoggerFactory.getLogger(ExtensionApplicationContextInitializer.class);

@@ -22,11 +22,15 @@
  */
 package com.workoss.boot.extension;
 
+import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.concurrent.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Set;
 
@@ -40,7 +44,7 @@ public class SpringExtensionFactory implements ExtensionFactory {
 
 	private static final Logger log = LoggerFactory.getLogger(SpringExtensionFactory.class);
 
-	private static final Set<ApplicationContext> CONTEXTS = new ConcurrentHashSet<ApplicationContext>();
+	private static final Set<ApplicationContext> CONTEXTS = new ConcurrentHashSet();
 
 	@Override
 	public <T> T getExtension(Class<T> tClass, String alias) {
@@ -53,24 +57,30 @@ public class SpringExtensionFactory implements ExtensionFactory {
 			throw new ExtensionException("class " + tClass + " must be interface");
 		}
 		for (ApplicationContext context : CONTEXTS) {
-			T bean = context.getBean(alias, tClass);
-			if (bean != null) {
-				return bean;
+			T tBean = getBean(context, tClass, alias);
+			if (tBean == null) {
+				continue;
 			}
-			bean = (T) context.getBean(alias);
-			if (bean != null) {
-				return bean;
-			}
-			bean = (T) context.getBean(tClass);
-			if (bean != null) {
-				return bean;
-			}
+			return tBean;
+		}
+		return null;
+	}
+
+	protected <T> T getBean(ListableBeanFactory beanFactory, Class<T> beanType, String beanName) {
+		if (StringUtils.isBlank(beanName)){
+			return beanFactory.getBean(beanType);
+		}
+		String[] allBeanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(beanFactory, beanType, true, false);
+		if (ObjectUtils.containsElement(allBeanNames, beanName)) {
+			return beanFactory.getBean(beanName, beanType);
 		}
 		return null;
 	}
 
 	public static void addApplicationContext(ApplicationContext context) {
-		CONTEXTS.add(context);
+		if (!CONTEXTS.contains(context)) {
+			CONTEXTS.add(context);
+		}
 		if (context instanceof ConfigurableApplicationContext) {
 			((ConfigurableApplicationContext) context).registerShutdownHook();
 		}

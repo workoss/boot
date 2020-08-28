@@ -31,6 +31,11 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
+/**
+ * ExtendsionApplicationContextListener
+ *
+ * @author workoss
+ */
 public class ExtendsionApplicationContextListener implements ApplicationListener<ApplicationContextEvent>, Ordered {
 
 	private static final Logger log = LoggerFactory.getLogger(ExtendsionApplicationContextListener.class);
@@ -40,12 +45,12 @@ public class ExtendsionApplicationContextListener implements ApplicationListener
 		ApplicationContext applicationContext = applicationContextEvent.getApplicationContext();
 		if (applicationContextEvent instanceof ContextRefreshedEvent && applicationContext.getParent() != null) {
 			log.info("ExtendsionApplicationContextListener add context, {}", applicationContextEvent);
-			SpringExtensionFactory.removeApplicationContext(applicationContext);
 			SpringExtensionFactory.addApplicationContext(applicationContext);
 		}
 		if (applicationContextEvent instanceof ContextClosedEvent) {
 			SpringExtensionFactory.clearContexts();
 		}
+
 	}
 
 	@Override
