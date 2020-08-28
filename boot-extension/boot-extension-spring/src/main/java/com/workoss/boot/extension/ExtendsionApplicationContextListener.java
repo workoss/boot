@@ -32,7 +32,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.Ordered;
 
 /**
- * ExtendsionApplicationContextListener
+ * ExtendsionApplicationContextListener order 效果不大
  *
  * @author workoss
  */
@@ -43,6 +43,9 @@ public class ExtendsionApplicationContextListener implements ApplicationListener
 	@Override
 	public void onApplicationEvent(ApplicationContextEvent applicationContextEvent) {
 		ApplicationContext applicationContext = applicationContextEvent.getApplicationContext();
+		if (applicationContext.getParent() == null){
+			SpringExtensionFactory.clearContexts();
+		}
 		if (applicationContextEvent instanceof ContextRefreshedEvent && applicationContext.getParent() != null) {
 			log.info("ExtendsionApplicationContextListener add context, {}", applicationContextEvent);
 			SpringExtensionFactory.addApplicationContext(applicationContext);
