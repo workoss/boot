@@ -70,7 +70,7 @@
 
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-		<maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
+		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -452,54 +452,48 @@
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>alimaven</id>
-			<name>aliyun maven</name>
-			<url>https://maven.aliyun.com/repository/public</url>
+			<id>central</id>
+			<url>https://maven.aliyun.com/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
-			<id>spring-plugin</id>
-			<name>spring-plugin</name>
-			<url>https://maven.aliyun.com/repository/spring-plugin</url>
+			<id>snapshots</id>
+			<url>https://maven.aliyun.com/nexus/content/groups/public</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
+			<id>rdc-releases</id>
+			<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
+			<id>rdc-snapshots</id>
+			<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
 
 	<profiles>
-		<profile>
-			<id>rdc-private-repo</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<repositories>
-				<repository>
-					<id>rdc-releases</id>
-					<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
-				</repository>
-				<repository>
-					<id>rdc-snapshots</id>
-					<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
-				</repository>
-			</repositories>
-			<distributionManagement>
-				<repository>
-					<id>rdc-releases</id>
-					<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
-				</repository>
-				<snapshotRepository>
-					<id>rdc-snapshots</id>
-					<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
 		<profile>
 			<id>talkyun-repo</id>
 			<distributionManagement>

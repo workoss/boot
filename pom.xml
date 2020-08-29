@@ -9,7 +9,7 @@
 		<module>boot-parent</module>
 		<module>boot-util</module>
 		<module>mybatis-plugin</module>
-		<module>boot-bom</module>
+		<module>boot-dependencies</module>
 		<module>boot-extension</module>
 	</modules>
 	<properties>

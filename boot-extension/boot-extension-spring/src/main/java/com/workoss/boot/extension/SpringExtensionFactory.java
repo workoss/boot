@@ -67,7 +67,7 @@ public class SpringExtensionFactory implements ExtensionFactory {
 	}
 
 	protected <T> T getBean(ListableBeanFactory beanFactory, Class<T> beanType, String beanName) {
-		if (StringUtils.isBlank(beanName)){
+		if (StringUtils.isBlank(beanName)) {
 			return beanFactory.getBean(beanType);
 		}
 		String[] allBeanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(beanFactory, beanType, true, false);

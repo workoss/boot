@@ -43,7 +43,7 @@ public class ExtendsionApplicationContextListener implements ApplicationListener
 	@Override
 	public void onApplicationEvent(ApplicationContextEvent applicationContextEvent) {
 		ApplicationContext applicationContext = applicationContextEvent.getApplicationContext();
-		if (applicationContext.getParent() == null){
+		if (applicationContext.getParent() == null) {
 			SpringExtensionFactory.clearContexts();
 		}
 		if (applicationContextEvent instanceof ContextRefreshedEvent && applicationContext.getParent() != null) {
