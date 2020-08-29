@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.workoss.boot</groupId>
@@ -44,7 +45,7 @@
 
 		<r2dbc-bom.version>Arabba-SR6</r2dbc-bom.version>
 
-		<protobuf.version>3.12.4</protobuf.version>
+		<protobuf.version>3.13.0</protobuf.version>
 		<protostuff.version>1.7.2</protostuff.version>
 		<liquibase.version>4.0.0</liquibase.version>
 
@@ -57,16 +58,16 @@
 		<mapstruct.version>1.4.0.Beta3</mapstruct.version>
 
 		<junit-jupiter.version>5.6.2</junit-jupiter.version>
-		<mockito-core.version>3.5.6</mockito-core.version>
+		<mockito-core.version>3.5.7</mockito-core.version>
 
-		<debezium.version>1.3.0.Alpha1</debezium.version>
+		<debezium.version>1.3.0.Beta1</debezium.version>
 		<byte-buddy.version>1.10.14</byte-buddy.version>
 		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
 		<cloudevents.version>2.0.0-milestone1</cloudevents.version>
-		<picocli.version>4.5.0</picocli.version>
+		<picocli.version>4.5.1</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
 
-		<springdoc-openapi.version>1.4.4</springdoc-openapi.version>
+		<springdoc-openapi.version>1.4.5</springdoc-openapi.version>
 
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -224,7 +225,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
 
 
 			<dependency>
@@ -423,7 +423,7 @@
 		<repository>
 			<id>spring</id>
 			<name>spring lib-milestone</name>
-			<url>https://maven.aliyun.com/repository/spring</url>
+			<url>https://repo.spring.io/libs-milestone</url>
 		</repository>
 		<repository>
 			<id>alimaven</id>
@@ -449,23 +449,38 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>rdc-releases</id>
+			<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>rdc-snapshots</id>
+			<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<pluginRepositories>
+		<pluginRepository>
+			<id>spring</id>
+			<name>spring lib-milestone</name>
+			<url>https://repo.spring.io/libs-milestone</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
 		<pluginRepository>
 			<id>central</id>
 			<url>https://maven.aliyun.com/nexus/content/groups/public</url>
 			<releases>
 				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>snapshots</id>
-			<url>https://maven.aliyun.com/nexus/content/groups/public</url>
-			<releases>
-				<enabled>false</enabled>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
@@ -793,20 +808,20 @@
 							<email>workoss@icloud.com</email>
 							<project.inceptionYear>2020-2021</project.inceptionYear>
 							<!--suppress UnresolvedMavenProperty -->
-<!--							<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
+							<!--							<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
 						</properties>
 						<mapping>
 							<java>SLASHSTAR_STYLE</java>
 						</mapping>
 					</configuration>
-<!--					<dependencies>-->
-<!--						<dependency>-->
-<!--							<groupId>com.mycila</groupId>-->
-<!--							<artifactId>license-maven-plugin-git</artifactId>-->
-<!--							&lt;!&ndash; make sure you use the same version as license-maven-plugin &ndash;&gt;-->
-<!--							<version>${license-maven-plugin.version}</version>-->
-<!--						</dependency>-->
-<!--					</dependencies>-->
+					<!--					<dependencies>-->
+					<!--						<dependency>-->
+					<!--							<groupId>com.mycila</groupId>-->
+					<!--							<artifactId>license-maven-plugin-git</artifactId>-->
+					<!--							&lt;!&ndash; make sure you use the same version as license-maven-plugin &ndash;&gt;-->
+					<!--							<version>${license-maven-plugin.version}</version>-->
+					<!--						</dependency>-->
+					<!--					</dependencies>-->
 				</plugin>
 
 				<plugin>
