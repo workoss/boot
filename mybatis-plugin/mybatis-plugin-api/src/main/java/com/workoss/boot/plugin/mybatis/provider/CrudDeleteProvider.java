@@ -27,6 +27,8 @@ import java.util.Map;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 
 /**
+ * CrudDeleteProvider
+ *
  * @author workoss
  */
 public class CrudDeleteProvider extends BaseProvider {

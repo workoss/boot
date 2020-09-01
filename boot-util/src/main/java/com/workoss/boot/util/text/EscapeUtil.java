@@ -40,6 +40,9 @@ public class EscapeUtil {
 	 * URL 编码, Encode默认为UTF-8.
 	 * <p>
 	 * 转义后的URL可作为URL中的参数
+	 *
+	 * @param part part
+	 * @return urlencode
 	 */
 	public static String urlEncode(String part) {
 		try {
@@ -50,9 +53,7 @@ public class EscapeUtil {
 		}
 	}
 
-	/**
-	 * URL 解码, Encode默认为UTF-8. 转义后的URL可作为URL中的参数
-	 */
+
 	public static String urlDecode(String part) {
 		try {
 			return URLDecoder.decode(part, StandardCharsets.UTF_8.name());

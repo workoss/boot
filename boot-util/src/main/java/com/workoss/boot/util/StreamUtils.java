@@ -241,7 +241,7 @@ public class StreamUtils {
 	 */
 	public static InputStream nonClosing(InputStream in) {
 		Assert.notNull(in, "No InputStream specified");
-		return new StreamUtils.NonClosingInputStream(in);
+		return new NonClosingInputStream(in);
 	}
 
 	/**

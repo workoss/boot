@@ -27,6 +27,8 @@ import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
 import com.workoss.boot.util.reflect.ReflectUtils;
 
 /**
+ * SqlHelper
+ *
  * @author workoss
  */
 @SuppressWarnings("ALL")
@@ -89,11 +91,9 @@ public class SqlHelper {
 		public SqlParamBuild(Object sqlParam) {
 			if (sqlParam instanceof SqlParam) {
 				this.sqlParam = (SqlParam) sqlParam;
-			}
-			else if (sqlParam instanceof Integer) {
+			} else if (sqlParam instanceof Integer) {
 
-			}
-			else {
+			} else {
 				instanceSqlParam();
 				// 反射获取是否有属性 offset limit shouldCount sortBy 字段
 				Object offset = ReflectUtils.getPropertyByInvokeMethod(sqlParam, "offset");
@@ -114,8 +114,7 @@ public class SqlHelper {
 			this.sqlParam.setShouldCount(shouldCount);
 			if (shouldCount) {
 				this.sqlParam.setShouldPage(true);
-			}
-			else {
+			} else {
 				this.sqlParam.setShouldPage(shouldPage);
 			}
 		}
@@ -128,8 +127,7 @@ public class SqlHelper {
 			this.sqlParam.setShouldCount(shouldCount);
 			if (shouldCount) {
 				this.sqlParam.setShouldPage(true);
-			}
-			else {
+			} else {
 				this.sqlParam.setShouldPage(shouldPage);
 			}
 		}

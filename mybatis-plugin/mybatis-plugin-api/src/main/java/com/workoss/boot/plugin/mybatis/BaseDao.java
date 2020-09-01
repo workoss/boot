@@ -26,16 +26,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * baseDao
+ *
  * @author: workoss
- * @date: 2018-05-26 16:33
- * @version:
  */
 public interface BaseDao<T, ID> {
 
 	/**
 	 * 执行sql
-	 * @param sql
-	 * @return
+	 *
+	 * @param sql sql
+	 * @return 执行结果
 	 */
 	List<Map<String, Object>> executeNativeSql(String sql);
 

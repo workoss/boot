@@ -58,7 +58,7 @@ public class InternalThreadLocalMap {
 	 * 当BitSet.set(1)的时候，表示将long[0]的第二位设置为true，即0000 0000 ... 0010（64bit）,则long[0]==2
 	 * 当BitSet.get(1)的时候，第二位为1，则表示true；如果是0，则表示false
 	 * 当BitSet.set(64)的时候，表示设置第65位，此时long[0]已经不够用了，扩容处long[1]来，进行存储
-	 *
+	 * <p>
 	 * 存储类似 {index:boolean} 键值对，用于防止一个FastThreadLocal多次启动清理线程
 	 * 将index位置的bit设为true，表示该InternalThreadLocalMap中对该FastThreadLocal已经启动了清理线程
 	 */
@@ -74,6 +74,8 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 获取FastThreadLocal的唯一索引
+	 *
+	 * @return 唯一索引
 	 */
 	public static Integer nextVariableIndex() {
 		Integer index = NEXT_INDEX.getAndIncrement();
@@ -86,6 +88,8 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 获取InternalThreadLocalMap实例
+	 *
+	 * @return InternalThreadLocalMap
 	 */
 	public static InternalThreadLocalMap get() {
 		Thread current = Thread.currentThread();
@@ -97,13 +101,14 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 获取InternalThreadLocalMap实例，如果为null，则直接返回，不会创建；如果不为null，也直接返回
+	 *
+	 * @return InternalThreadLocalMap
 	 */
 	public static InternalThreadLocalMap getIfSet() {
 		Thread current = Thread.currentThread();
 		if (current instanceof FastThreadLocalThread) {
 			return ((FastThreadLocalThread) current).threadLocalMap();
-		}
-		else {
+		} else {
 			return SHOW_THREAD_LOCAL_MAP.get();
 		}
 	}
@@ -126,17 +131,14 @@ public class InternalThreadLocalMap {
 		return threadLocalMap;
 	}
 
-	/**
-	 * 设置值
-	 */
+
 	public boolean setIndexedVariables(int index, Object value) {
 		Object[] lookup = indexedVariables;
 		if (index < lookup.length) {
 			Object oldValue = lookup[index];
 			lookup[index] = value;
 			return oldValue == UNSET;
-		}
-		else {
+		} else {
 			expandIndexedVariables(index, value);
 			return true;
 		}
@@ -144,6 +146,9 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 获取指定位置的元素
+	 *
+	 * @param index index
+	 * @return 对象
 	 */
 	public Object indexedVariable(int index) {
 		Object[] lookup = indexedVariables;
@@ -152,6 +157,9 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 删除指定位置的对象
+	 *
+	 * @param index index
+	 * @return 对象
 	 */
 	public Object removeIndexedVariable(int index) {
 		Object[] lookup = indexedVariables;
@@ -162,8 +170,7 @@ public class InternalThreadLocalMap {
 			lookup[index] = UNSET;
 			// 3、返回旧值
 			return v;
-		}
-		else {
+		} else {
 			return UNSET;
 		}
 	}
@@ -175,8 +182,7 @@ public class InternalThreadLocalMap {
 		Thread current = Thread.currentThread();
 		if (current instanceof FastThreadLocalThread) {
 			((FastThreadLocalThread) current).setThreadLocalMap(null);
-		}
-		else {
+		} else {
 			SHOW_THREAD_LOCAL_MAP.remove();
 		}
 	}
@@ -227,6 +233,8 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 设置当前索引位置index（FastThreadLocal）的bit为1
+	 *
+	 * @param index index
 	 */
 	public void setCleanerFlags(int index) {
 		if (cleanerFlags == null) {
@@ -237,6 +245,9 @@ public class InternalThreadLocalMap {
 
 	/**
 	 * 获取 当前index的bit值，1表示true，0表示false（默认值）
+	 *
+	 * @param index index
+	 * @return true/false
 	 */
 	public boolean isCleanerFlags(int index) {
 		return cleanerFlags != null && cleanerFlags.get(index);

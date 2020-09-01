@@ -54,16 +54,14 @@ import org.slf4j.LoggerFactory;
 /**
  * mybatis 拦截器
  *
- * @author : luanfeng
- * @date: 2017/8/11 8:10
- * @version: 1.0.0
+ * @author workoss
  */
 @SuppressWarnings("ALL")
 @Intercepts({
 		@Signature(type = Executor.class, method = "query",
-				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
-		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class }), })
+				args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),})
 public class OldSqlInterceptor implements Interceptor {
 
 	public static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
@@ -96,8 +94,7 @@ public class OldSqlInterceptor implements Interceptor {
 
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(param);
-		}
-		else {
+		} else {
 			boundSql = (BoundSql) args[5];
 		}
 
@@ -116,8 +113,7 @@ public class OldSqlInterceptor implements Interceptor {
 		boolean changeSql = false;
 		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN) && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
 			log.debug("sql have order by ，ignore page.orderBy");
-		}
-		else {
+		} else {
 			String orderBy = sqlParam.getSortBy();
 			if (!(orderBy == null || orderBy.length() == 0)) {
 				SQLSelectBuilder builder = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType);
@@ -184,6 +180,7 @@ public class OldSqlInterceptor implements Interceptor {
 
 	/**
 	 * 只拦截Execuate
+	 *
 	 * @param target 插件对象
 	 * @return object
 	 */
@@ -191,8 +188,7 @@ public class OldSqlInterceptor implements Interceptor {
 	public Object plugin(Object target) {
 		if (target instanceof Executor) {
 			return Plugin.wrap(target, this);
-		}
-		else {
+		} else {
 			return target;
 		}
 	}
@@ -214,8 +210,7 @@ public class OldSqlInterceptor implements Interceptor {
 				url = connection.getMetaData().getURL();
 				dbType = JdbcUtil.getDbType(url);
 
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 ", e);
 			}
 		}
@@ -225,23 +220,20 @@ public class OldSqlInterceptor implements Interceptor {
 		SqlParam page = null;
 		if (parameterObject instanceof SqlParam) {
 			page = (SqlParam) parameterObject;
-		}
-		else if (parameterObject instanceof Map) {
+		} else if (parameterObject instanceof Map) {
 			Map<String, Object> paraMap = (Map<String, Object>) parameterObject;
 			for (String key : paraMap.keySet()) {
 				if (PAGE_PARAM.equals(key)) {
 					page = (SqlParam) paraMap.get(key);
 					break;
-				}
-				else {
+				} else {
 					if (paraMap.get(key) instanceof SqlParam) {
 						page = (SqlParam) paraMap.get(key);
 						break;
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			log.error("入参没有分页相关数据");
 		}
 		return page;

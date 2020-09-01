@@ -23,6 +23,8 @@
 package com.workoss.boot.plugin.mybatis.provider;
 
 /**
+ * sql consumer
+ *
  * @author workoss
  */
 @FunctionalInterface
@@ -30,8 +32,9 @@ public interface SqlConsumer {
 
 	/**
 	 * 获取sql
-	 * @param info
-	 * @return
+	 *
+	 * @param info 表信息
+	 * @return sql
 	 */
 	String sqlCommand(TableColumnInfo info);
 

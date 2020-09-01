@@ -32,7 +32,7 @@ public interface FutureListener<V> {
 	/**
 	 * Invoked when the operation associated with the {@link Future} has been completed.
 	 * @param future the source {@link Future} which called this callback
-	 * @throws Exception
+	 * @throws Exception 异常
 	 */
 	void operationComplete(Future<V> future) throws Exception;
 

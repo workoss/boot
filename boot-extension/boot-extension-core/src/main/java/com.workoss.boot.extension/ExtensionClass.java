@@ -27,9 +27,9 @@ import com.workoss.boot.util.reflect.ClassUtils;
 import java.util.Arrays;
 
 /**
+ * 扩展类
+ *
  * @author: workoss
- * @date: 2018-12-13 17:07
- * @version:
  */
 public class ExtensionClass<T> implements Sortable {
 

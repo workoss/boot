@@ -31,10 +31,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 字符串工具类
- * @Author: workoss
- * @Date: 2017/8/11 8:10
- * @Version: 1.0.0
+ * 字符串工具类
+ *
+ * @author workoss
  */
 @SuppressWarnings("ALL")
 public class StringUtils {
@@ -77,8 +76,7 @@ public class StringUtils {
 		for (CharSequence c : cs) {
 			if (isBlank(c)) {
 				continue;
-			}
-			else {
+			} else {
 				return false;
 			}
 		}
@@ -126,8 +124,7 @@ public class StringUtils {
 	public static boolean hasText(CharSequence str) {
 		if (!hasLength(str)) {
 			return false;
-		}
-		else {
+		} else {
 			int strLen = str.length();
 
 			for (int i = 0; i < strLen; ++i) {
@@ -151,15 +148,13 @@ public class StringUtils {
 			char newChar = Character.toLowerCase(firstChar);
 			if (firstChar == newChar) {
 				return str;
-			}
-			else {
+			} else {
 				char[] newChars = new char[strLen];
 				newChars[0] = newChar;
 				str.getChars(1, strLen, newChars, 1);
 				return String.valueOf(newChars);
 			}
-		}
-		else {
+		} else {
 			return str;
 		}
 	}
@@ -171,23 +166,22 @@ public class StringUtils {
 			char newChar = Character.toUpperCase(firstChar);
 			if (firstChar == newChar) {
 				return str;
-			}
-			else {
+			} else {
 				char[] newChars = new char[strLen];
 				newChars[0] = newChar;
 				str.getChars(1, strLen, newChars, 1);
 				return String.valueOf(newChars);
 			}
-		}
-		else {
+		} else {
 			return str;
 		}
 	}
 
 	/**
 	 * 转换为下划线
-	 * @param camelCaseName
-	 * @return
+	 *
+	 * @param camelCaseName camel值
+	 * @return 下划线值
 	 */
 	public static String underscoreName(String camelCaseName) {
 		StringBuilder result = new StringBuilder();
@@ -198,8 +192,7 @@ public class StringUtils {
 				if (Character.isUpperCase(ch)) {
 					result.append("_");
 					result.append(Character.toLowerCase(ch));
-				}
-				else {
+				} else {
 					result.append(ch);
 				}
 			}
@@ -209,8 +202,9 @@ public class StringUtils {
 
 	/**
 	 * 转换为驼峰
-	 * @param underscoreName
-	 * @return
+	 *
+	 * @param underscoreName 下划线值
+	 * @return camelCase值
 	 */
 	public static String camelCaseName(String underscoreName) {
 		StringBuilder result = new StringBuilder();
@@ -220,13 +214,11 @@ public class StringUtils {
 				char ch = underscoreName.charAt(i);
 				if ("_".charAt(0) == ch) {
 					flag = true;
-				}
-				else {
+				} else {
 					if (flag) {
 						result.append(Character.toUpperCase(ch));
 						flag = false;
-					}
-					else {
+					} else {
 						result.append(ch);
 					}
 				}
@@ -247,7 +239,7 @@ public class StringUtils {
 	private static ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>();
 
 	public static String renderString(String content, String prefixPattern, String suffixPattern,
-			Map<String, String> map, String nullValue) {
+									  Map<String, String> map, String nullValue) {
 		if (StringUtils.isBlank(content)) {
 			return content;
 		}
@@ -274,8 +266,7 @@ public class StringUtils {
 			}
 			matcher.appendTail(stringBuffer);
 			return stringBuffer.toString();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

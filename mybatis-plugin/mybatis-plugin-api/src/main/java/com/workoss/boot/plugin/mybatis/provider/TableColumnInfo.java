@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TableColumnInfo
+ *
  * @author workoss
  */
 public class TableColumnInfo {

@@ -25,15 +25,21 @@ package com.workoss.boot.extension;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * ExtensionLoaderUtil
+ *
+ * @author workoss
+ */
 class ExtensionLoaderUtil {
 
 	private static final ConcurrentMap<Class, ExtensionLoader> LOADER_MAP = new ConcurrentHashMap<Class, ExtensionLoader>();
 
 	/**
 	 * Get extension loader by extensible class with listener
-	 * @param clazz Extensible class
+	 *
+	 * @param clazz    Extensible class
 	 * @param listener Listener of ExtensionLoader
-	 * @param <T> Class
+	 * @param <T>      Class
 	 * @return ExtensionLoader of this class
 	 */
 	public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> clazz, ExtensionLoaderListener<T> listener) {

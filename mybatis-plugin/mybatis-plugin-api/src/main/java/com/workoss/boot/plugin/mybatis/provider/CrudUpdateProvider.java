@@ -28,6 +28,8 @@ import java.util.Map;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 
 /**
+ * CrudUpdateProvider
+ *
  * @author workoss
  */
 public class CrudUpdateProvider extends BaseProvider {

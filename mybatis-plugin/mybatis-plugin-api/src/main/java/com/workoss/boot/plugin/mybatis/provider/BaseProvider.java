@@ -41,6 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * BaseProvider
+ *
  * @author workoss
  */
 public class BaseProvider {
@@ -143,8 +145,9 @@ public class BaseProvider {
 
 	/**
 	 * 获取BaseMapper接口中的泛型类型
-	 * @param context
-	 * @return
+	 *
+	 * @param context 上下文
+	 * @return 对象
 	 */
 	protected Class<?> entityType(ProviderContext context) {
 		return Stream.of(context.getMapperType().getGenericInterfaces()).filter(ParameterizedType.class::isInstance)
@@ -181,8 +184,7 @@ public class BaseProvider {
 				if (Character.isUpperCase(ch)) {
 					result.append("_");
 					result.append(Character.toLowerCase(ch));
-				}
-				else {
+				} else {
 					result.append(ch);
 				}
 			}

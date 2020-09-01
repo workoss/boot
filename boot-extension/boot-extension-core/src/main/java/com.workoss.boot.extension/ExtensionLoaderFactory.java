@@ -31,22 +31,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * ExtensionLoaderFactory
+ *
  * @author: workoss
- * @date: 2018-12-13 17:15
- * @version:
  */
-
 public class ExtensionLoaderFactory {
 
 	private static final Logger log = LoggerFactory.getLogger(ExtensionLoaderFactory.class);
 
 	/**
 	 * 获取SPI的扩展
-	 * @param clazz
-	 * @param alias
-	 * @param listener
-	 * @param <T>
-	 * @return
+	 *
+	 * @param clazz    类
+	 * @param alias    alias
+	 * @param listener listener
+	 * @param <T>      泛型
 	 */
 	public static <T> T getSpiExtension(Class<T> clazz, String alias, ExtensionLoaderListener<T> listener) {
 		ExtensionLoader<ExtensionFactory> factoryExtensionLoader = getExtensionFactory();
@@ -55,11 +54,12 @@ public class ExtensionLoaderFactory {
 
 	/**
 	 * order排序，获取order最小的
-	 * @param clazz
-	 * @param alias
-	 * @param listener
-	 * @param <T>
-	 * @return
+	 *
+	 * @param clazz    类
+	 * @param alias    alias
+	 * @param listener listener
+	 * @param <T>      泛型
+	 * @return 实例
 	 */
 	public static <T> T getFirstExtension(Class<T> clazz, String alias, ExtensionLoaderListener<T> listener) {
 		ExtensionLoader<ExtensionFactory> factoryExtensionLoader = getExtensionFactory();
@@ -70,11 +70,12 @@ public class ExtensionLoaderFactory {
 
 	/**
 	 * 直到获取到为止 按照顺序
-	 * @param clazz
-	 * @param alias
-	 * @param listener
-	 * @param <T>
-	 * @return
+	 *
+	 * @param clazz    类
+	 * @param alias    alias
+	 * @param listener listener
+	 * @param <T>      泛型
+	 * @return 实例
 	 */
 	public static <T> T getMixExtension(Class<T> clazz, String alias, ExtensionLoaderListener<T> listener) {
 		ExtensionLoader<ExtensionFactory> factoryExtensionLoader = getExtensionFactory();
@@ -87,8 +88,7 @@ public class ExtensionLoaderFactory {
 				if (t != null) {
 					return t;
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.debug("extension mix :{}", e.getMessage());
 			}
 			continue;
@@ -97,13 +97,13 @@ public class ExtensionLoaderFactory {
 	}
 
 	public static <T> T getExtension(String factoryAlias, Class<T> clazz, String alias,
-			ExtensionLoaderListener<T> listener) {
+									 ExtensionLoaderListener<T> listener) {
 		ExtensionLoader<ExtensionFactory> factoryExtensionLoader = getExtensionFactory();
 		return getExtension(factoryExtensionLoader.getExtension(factoryAlias), clazz, alias, listener);
 	}
 
 	protected static <T> T getExtension(ExtensionFactory extensionFactory, Class<T> clazz, String alias,
-			ExtensionLoaderListener<T> listener) {
+										ExtensionLoaderListener<T> listener) {
 		if (ExtensionFactory.class == clazz) {
 			return (T) extensionFactory;
 		}

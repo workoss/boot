@@ -47,33 +47,20 @@ public abstract class AbstractMethodAccess {
 
 	private Class[] returnTypes;
 
-	/**
-	 * invoke
-	 * @param object
-	 * @param methodIndex
-	 * @param args
-	 * @return
-	 */
+
 	abstract public Object invoke(Object object, int methodIndex, Object... args);
 
-	/**
-	 * Invokes the method with the specified name and the specified param types.
-	 */
+
 	public Object invoke(Object object, String methodName, Class[] paramTypes, Object... args) {
 		return invoke(object, getIndex(methodName, paramTypes), args);
 	}
 
-	/**
-	 * Invokes the first method with the specified name and the specified number of
-	 * arguments.
-	 */
+
 	public Object invoke(Object object, String methodName, Object... args) {
 		return invoke(object, getIndex(methodName, args == null ? 0 : args.length), args);
 	}
 
-	/**
-	 * Returns the index of the first method with the specified name.
-	 */
+
 	public int getIndex(String methodName) {
 		for (int i = 0, n = methodNames.length; i < n; i++) {
 			if (methodNames[i].equals(methodName)) {
@@ -83,9 +70,7 @@ public abstract class AbstractMethodAccess {
 		throw new IllegalArgumentException("Unable to find non-private method: " + methodName);
 	}
 
-	/**
-	 * Returns the index of the first method with the specified name and param types.
-	 */
+
 	public int getIndex(String methodName, Class... paramTypes) {
 		for (int i = 0, n = methodNames.length; i < n; i++) {
 			if (methodNames[i].equals(methodName) && Arrays.equals(paramTypes, parameterTypes[i])) {
@@ -96,10 +81,7 @@ public abstract class AbstractMethodAccess {
 				"Unable to find non-private method: " + methodName + " " + Arrays.toString(paramTypes));
 	}
 
-	/**
-	 * Returns the index of the first method with the specified name and the specified
-	 * number of arguments.
-	 */
+
 	public int getIndex(String methodName, int paramsCount) {
 		for (int i = 0, n = methodNames.length; i < n; i++) {
 			if (methodNames[i].equals(methodName) && parameterTypes[i].length == paramsCount) {
@@ -123,9 +105,7 @@ public abstract class AbstractMethodAccess {
 		return returnTypes;
 	}
 
-	/**
-	 * @param type Must not be the Object class, an interface, a primitive type, or void.
-	 */
+
 	static public AbstractMethodAccess get(Class type) {
 		if (type.getSuperclass() == null) {
 			throw new IllegalArgumentException(
@@ -139,8 +119,7 @@ public abstract class AbstractMethodAccess {
 				addDeclaredMethodsToList(nextClass, methods);
 				nextClass = nextClass.getSuperclass();
 			}
-		}
-		else {
+		} else {
 			recursiveAddInterfaceMethodsToList(type, methods);
 		}
 
@@ -165,13 +144,11 @@ public abstract class AbstractMethodAccess {
 		AccessClassLoader loader = AccessClassLoader.get(type);
 		try {
 			accessClass = loader.loadClass(accessClassName);
-		}
-		catch (ClassNotFoundException ignored) {
+		} catch (ClassNotFoundException ignored) {
 			synchronized (loader) {
 				try {
 					accessClass = loader.loadClass(accessClassName);
-				}
-				catch (ClassNotFoundException ignored2) {
+				} catch (ClassNotFoundException ignored2) {
 					String accessClassNameInternal = accessClassName.replace('.', '/');
 					String classNameInternal = className.replace('.', '/');
 
@@ -211,9 +188,8 @@ public abstract class AbstractMethodAccess {
 							for (int i = 0; i < n; i++) {
 								mv.visitLabel(labels[i]);
 								if (i == 0) {
-									mv.visitFrame(Opcodes.F_APPEND, 1, new Object[] { classNameInternal }, 0, null);
-								}
-								else {
+									mv.visitFrame(Opcodes.F_APPEND, 1, new Object[]{classNameInternal}, 0, null);
+								} else {
 									mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 								}
 
@@ -230,52 +206,52 @@ public abstract class AbstractMethodAccess {
 									mv.visitInsn(AALOAD);
 									Type paramType = Type.getType(paramTypes[paramIndex]);
 									switch (paramType.getSort()) {
-									case Type.BOOLEAN:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z",
-												false);
-										break;
-									case Type.BYTE:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
-										break;
-									case Type.CHAR:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C",
-												false);
-										break;
-									case Type.SHORT:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S",
-												false);
-										break;
-									case Type.INT:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I",
-												false);
-										break;
-									case Type.FLOAT:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F",
-												false);
-										break;
-									case Type.LONG:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
-										break;
-									case Type.DOUBLE:
-										mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
-										mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D",
-												false);
-										break;
-									case Type.ARRAY:
-										mv.visitTypeInsn(CHECKCAST, paramType.getDescriptor());
-										break;
-									case Type.OBJECT:
-										mv.visitTypeInsn(CHECKCAST, paramType.getInternalName());
-										break;
-									default:
-										break;
+										case Type.BOOLEAN:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z",
+													false);
+											break;
+										case Type.BYTE:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
+											break;
+										case Type.CHAR:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C",
+													false);
+											break;
+										case Type.SHORT:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S",
+													false);
+											break;
+										case Type.INT:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I",
+													false);
+											break;
+										case Type.FLOAT:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F",
+													false);
+											break;
+										case Type.LONG:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+											break;
+										case Type.DOUBLE:
+											mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
+											mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D",
+													false);
+											break;
+										case Type.ARRAY:
+											mv.visitTypeInsn(CHECKCAST, paramType.getDescriptor());
+											break;
+										case Type.OBJECT:
+											mv.visitTypeInsn(CHECKCAST, paramType.getInternalName());
+											break;
+										default:
+											break;
 									}
 									buffer.append(paramType.getDescriptor());
 								}
@@ -285,54 +261,52 @@ public abstract class AbstractMethodAccess {
 								int invoke;
 								if (isInterface) {
 									invoke = INVOKEINTERFACE;
-								}
-								else if (Modifier.isStatic(methods.get(i).getModifiers())) {
+								} else if (Modifier.isStatic(methods.get(i).getModifiers())) {
 									invoke = INVOKESTATIC;
-								}
-								else {
+								} else {
 									invoke = INVOKEVIRTUAL;
 								}
 
 								mv.visitMethodInsn(invoke, classNameInternal, methodNames[i], buffer.toString(), false);
 
 								switch (Type.getType(returnType).getSort()) {
-								case Type.VOID:
-									mv.visitInsn(ACONST_NULL);
-									break;
-								case Type.BOOLEAN:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
-											"(Z)Ljava/lang/Boolean;", false);
-									break;
-								case Type.BYTE:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;",
-											false);
-									break;
-								case Type.CHAR:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf",
-											"(C)Ljava/lang/Character;", false);
-									break;
-								case Type.SHORT:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf",
-											"(S)Ljava/lang/Short;", false);
-									break;
-								case Type.INT:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf",
-											"(I)Ljava/lang/Integer;", false);
-									break;
-								case Type.FLOAT:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf",
-											"(F)Ljava/lang/Float;", false);
-									break;
-								case Type.LONG:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;",
-											false);
-									break;
-								case Type.DOUBLE:
-									mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf",
-											"(D)Ljava/lang/Double;", false);
-									break;
-								default:
-									break;
+									case Type.VOID:
+										mv.visitInsn(ACONST_NULL);
+										break;
+									case Type.BOOLEAN:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf",
+												"(Z)Ljava/lang/Boolean;", false);
+										break;
+									case Type.BYTE:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;",
+												false);
+										break;
+									case Type.CHAR:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf",
+												"(C)Ljava/lang/Character;", false);
+										break;
+									case Type.SHORT:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf",
+												"(S)Ljava/lang/Short;", false);
+										break;
+									case Type.INT:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf",
+												"(I)Ljava/lang/Integer;", false);
+										break;
+									case Type.FLOAT:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf",
+												"(F)Ljava/lang/Float;", false);
+										break;
+									case Type.LONG:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;",
+												false);
+										break;
+									case Type.DOUBLE:
+										mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf",
+												"(D)Ljava/lang/Double;", false);
+										break;
+									default:
+										break;
 								}
 
 								mv.visitInsn(ARETURN);
@@ -371,8 +345,7 @@ public abstract class AbstractMethodAccess {
 			access.parameterTypes = parameterTypes;
 			access.returnTypes = returnTypes;
 			return access;
-		}
-		catch (Throwable t) {
+		} catch (Throwable t) {
 			throw new RuntimeException("Error constructing method access class: " + accessClassName, t);
 		}
 	}

@@ -34,18 +34,15 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 /**
- * @Description: 集合工具类
+ * 集合工具类
+ *
  * @author: luanfeng
- * @Date: 2017/8/11 8:10
- * @version: 1.0.0
  */
 public class CollectionUtils {
 
 	public static final List EMPTY_ARRAY_LIST = new ArrayList();
 
-	/**
-	 * 判断是否为空.
-	 */
+
 	public static boolean isEmpty(Collection<?> collection) {
 		return (collection == null) || collection.isEmpty();
 	}
@@ -54,9 +51,7 @@ public class CollectionUtils {
 		return (map == null) || (map.isEmpty());
 	}
 
-	/**
-	 * 判断是否不为空.
-	 */
+
 	public static boolean isNotEmpty(Collection<?> collection) {
 		return (collection != null) && !(collection.isEmpty());
 	}
@@ -65,9 +60,7 @@ public class CollectionUtils {
 		return (map != null) && !(map.isEmpty());
 	}
 
-	/**
-	 * 取得Collection的第一个元素，如果collection为空返回null.
-	 */
+
 	public static <T> T getFirst(Collection<T> collection) {
 		if (isEmpty(collection)) {
 			return null;
@@ -78,9 +71,6 @@ public class CollectionUtils {
 		return collection.iterator().next();
 	}
 
-	/**
-	 * 获取Collection的最后一个元素，如果collection为空返回null.
-	 */
 
 	public static Set<String> toSetString(Collection collection) {
 		if (isEmpty(collection)) {
@@ -105,7 +95,12 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * 返回a+b的新List.
+	 * a+b
+	 *
+	 * @param a   集合
+	 * @param b   集合
+	 * @param <T> 泛型
+	 * @return a+b
 	 */
 	public static <T> List<T> union(final Collection<T> a, final Collection<T> b) {
 		List<T> result = new ArrayList<T>(a);
@@ -115,6 +110,11 @@ public class CollectionUtils {
 
 	/**
 	 * 返回a-b的新List.
+	 *
+	 * @param a   集合
+	 * @param b   集合
+	 * @param <T> 泛型
+	 * @return a-b
 	 */
 	public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
 		List<T> list = new ArrayList<T>(a);
@@ -129,7 +129,12 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * 返回a-b的新List.
+	 * 返回a-b的新Set.
+	 *
+	 * @param a   集合
+	 * @param b   集合
+	 * @param <T> 泛型
+	 * @return a-b
 	 */
 	public static <T> Set<T> subtractToSet(final Collection<T> a, final Collection<T> b) {
 		Set<T> set = new LinkedHashSet<>(a);
@@ -142,6 +147,11 @@ public class CollectionUtils {
 
 	/**
 	 * 返回a与b的交集的新List.
+	 *
+	 * @param a   集合
+	 * @param b   集合
+	 * @param <T> 泛型
+	 * @return a b 交集
 	 */
 	public static <T> List<T> intersection(Collection<T> a, Collection<T> b) {
 		List<T> list = new ArrayList<T>();
@@ -155,22 +165,29 @@ public class CollectionUtils {
 	}
 
 	///////////// 求最大最小值，及Top N, Low N//////////
+
 	/**
 	 * 返回无序集合中的最小值，使用元素默认排序
+	 *
+	 * @param coll 集合
+	 * @param <T>  泛型
+	 * @return 最小值
 	 */
 	public static <T extends Object & Comparable<? super T>> T min(Collection<? extends T> coll) {
 		return Collections.min(coll);
 	}
 
-	/**
-	 * 返回无序集合中的最小值
-	 */
+
 	public static <T> T min(Collection<? extends T> coll, Comparator<? super T> comp) {
 		return Collections.min(coll, comp);
 	}
 
 	/**
 	 * 返回无序集合中的最大值，使用元素默认排序
+	 *
+	 * @param coll 集合
+	 * @param <T>  泛型
+	 * @return 最大值
 	 */
 	public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll) {
 		return Collections.max(coll);
@@ -178,6 +195,11 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最大值
+	 *
+	 * @param coll 集合
+	 * @param comp 集合
+	 * @param <T>  泛型
+	 * @return 最大值
 	 */
 	public static <T> T max(Collection<? extends T> coll, Comparator<? super T> comp) {
 		return Collections.max(coll, comp);
@@ -185,6 +207,10 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最小值和最大值，使用元素默认排序
+	 *
+	 * @param coll 集合
+	 * @param <T>  泛型
+	 * @return 最大值
 	 */
 	public static <T extends Object & Comparable<? super T>> Pair<T, T> minAndMax(Collection<? extends T> coll) {
 		Iterator<? extends T> i = coll.iterator();
@@ -195,8 +221,7 @@ public class CollectionUtils {
 			T next = i.next();
 			if (next.compareTo(minCandidate) < 0) {
 				minCandidate = next;
-			}
-			else if (next.compareTo(maxCandidate) > 0) {
+			} else if (next.compareTo(maxCandidate) > 0) {
 				maxCandidate = next;
 			}
 		}
@@ -205,6 +230,11 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最小值和最大值
+	 *
+	 * @param coll 集合
+	 * @param comp 集合
+	 * @param <T>  泛型
+	 * @return pair
 	 */
 	public static <T> Pair<T, T> minAndMax(Collection<? extends T> coll, Comparator<? super T> comp) {
 
@@ -216,8 +246,7 @@ public class CollectionUtils {
 			T next = i.next();
 			if (comp.compare(next, minCandidate) < 0) {
 				minCandidate = next;
-			}
-			else if (comp.compare(next, maxCandidate) > 0) {
+			} else if (comp.compare(next, maxCandidate) > 0) {
 				maxCandidate = next;
 			}
 		}
@@ -238,6 +267,7 @@ public class CollectionUtils {
 
 	/**
 	 * 判断一个Array是否为空
+	 *
 	 * @param array 数组
 	 * @return 是否为空
 	 */
@@ -247,6 +277,7 @@ public class CollectionUtils {
 
 	/**
 	 * 判断一个Array是否为非空
+	 *
 	 * @param array 数组
 	 * @return 是否为非空
 	 */

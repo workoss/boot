@@ -149,13 +149,14 @@ public abstract class Recycler<T> {
 
 	/**
 	 * 创建一个对象 1、由子类进行复写，所以使用protected修饰 2、传入Handle对象，对创建出来的对象进行回收操作
-	 * @param handle
-	 * @return
+	 * @param handle 处理器
+	 * @return 对象
 	 */
 	protected abstract T newObject(Handle<T> handle);
 
 	/**
 	 * 获取对象
+	 * @return 对象
 	 */
 	public final T get() {
 		/**
@@ -503,7 +504,7 @@ public abstract class Recycler<T> {
 
 		/**
 		 * recycle
-		 * @param object
+		 * @param object 对象
 		 */
 		void recycle(T object);
 

@@ -31,103 +31,117 @@ import com.workoss.boot.plugin.mybatis.provider.CrudUpdateProvider;
 import org.apache.ibatis.annotations.*;
 
 /**
+ * crudDao
+ *
  * @author workoss
  */
 public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据id查询
-	 * @param id
-	 * @return
+	 *
+	 * @param id 主键
+	 * @return 对象
 	 */
 	@SelectProvider(type = CrudSelectProvider.class, method = "selectById")
 	T selectById(@Param("id") ID id);
 
 	/**
 	 * 根据id批量查询
-	 * @param ids
-	 * @return
+	 *
+	 * @param ids 主键
+	 * @return 对象列表
 	 */
 	@SelectProvider(type = CrudSelectProvider.class, method = "selectByIds")
 	List<T> selectByIds(@Param("ids") List<ID> ids);
 
 	/**
 	 * 多条件查询
-	 * @param record
-	 * @return
+	 *
+	 * @param record 对象
+	 * @return 对象列表
 	 */
 	@SelectProvider(type = CrudSelectProvider.class, method = "selectSelective")
 	List<T> selectSelective(@Param("record") T record);
 
 	/**
 	 * 分页查询
-	 * @param record
-	 * @return
+	 *
+	 * @param record 对象
+	 * @return page
 	 */
 	@SelectProvider(type = CrudSelectProvider.class, method = "selectSelective")
 	PageResult<T> selectPageSelective(@Param("record") T record);
 
 	/**
 	 * 多条件count
-	 * @param record
-	 * @return
+	 *
+	 * @param record 对象
+	 * @return count
 	 */
 	@SelectProvider(type = CrudSelectProvider.class, method = "selectCountSelective")
 	int selectCountSelective(@Param("record") T record);
 
 	/**
 	 * 插入
-	 * @param record
-	 * @return
+	 *
+	 * @param record 对象
+	 * @return 数目
 	 */
 	@InsertProvider(type = CrudInsertProvider.class, method = "insert")
 	int insert(@Param("record") T record);
 
 	/**
 	 * 可选插入
-	 * @param record
-	 * @return
+	 *
+	 * @param record 对象
+	 * @return 插入数目
 	 */
 	@InsertProvider(type = CrudInsertProvider.class, method = "insertSelective")
 	int insertSelective(@Param("record") T record);
 
 	/**
 	 * 批量插入
-	 * @param list
-	 * @return
+	 *
+	 * @param list 列表
+	 * @return 插入数量
 	 */
 	@InsertProvider(type = CrudInsertProvider.class, method = "insertBatch")
 	int insertBatch(@Param("list") List<T> list);
 
 	/**
 	 * 根据id 修改
-	 * @param record
-	 * @param id
-	 * @return
+	 *
+	 * @param record 对象
+	 * @param id     主键
+	 * @return 修改数量
 	 */
 	@UpdateProvider(type = CrudUpdateProvider.class, method = "updateById")
 	int updateById(@Param("record") T record, @Param("id") ID id);
 
 	/**
 	 * 根据id删除
-	 * @param id
-	 * @return
+	 *
+	 * @param id 主键
+	 * @return 删除数目
 	 */
 	@DeleteProvider(type = CrudDeleteProvider.class, method = "deleteById")
 	int deleteById(@Param("id") ID id);
 
 	/**
 	 * 根据ids 批量删除
-	 * @param ids
-	 * @return
+	 *
+	 * @param ids 主键
+	 * @return 删除数目
 	 */
 	@DeleteProvider(type = CrudDeleteProvider.class, method = "deleteByIds")
 	int deleteByIds(@Param("ids") List<ID> ids);
 
 	/**
 	 * 条件删除
-	 * @param t
-	 * @return
+	 *
+	 * @param t 对象
+	 * @return 删除数目
 	 */
 	@DeleteProvider(type = CrudDeleteProvider.class, method = "deleteSelective")
 	int deleteSelective(@Param("record") T t);

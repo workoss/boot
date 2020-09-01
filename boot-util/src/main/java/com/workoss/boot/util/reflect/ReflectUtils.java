@@ -38,10 +38,9 @@ import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.objenesis.instantiator.ObjectInstantiator;
 
 /**
- * @Description: 反射工具类
- * @Author: luanfeng
- * @Date: 2017/8/11 8:10
- * @Version: 1.0.0
+ * 反射工具类
+ *
+ * @author workoss
  */
 public class ReflectUtils {
 
@@ -119,6 +118,10 @@ public class ReflectUtils {
 
 	/**
 	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
+	 *
+	 * @param obj       对象
+	 * @param fieldName 属性名
+	 * @return obj对象
 	 */
 	public static Object getFieldValue(final Object obj, final String fieldName) {
 		Field field = getAccessibleField(obj, fieldName);
@@ -130,8 +133,7 @@ public class ReflectUtils {
 		Object result = null;
 		try {
 			result = field.get(obj);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			log.error("不可能抛出的异常{}", e.getMessage());
 		}
 		return result;
@@ -139,6 +141,10 @@ public class ReflectUtils {
 
 	/**
 	 * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
+	 *
+	 * @param obj       对象
+	 * @param fieldName 属性名
+	 * @param value     属性值
 	 */
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
 		Field field = getAccessibleField(obj, fieldName);
@@ -149,8 +155,7 @@ public class ReflectUtils {
 
 		try {
 			field.set(obj, value);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			log.error("不可能抛出的异常:{}", e.getMessage());
 		}
 	}
@@ -168,7 +173,10 @@ public class ReflectUtils {
 	/**
 	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访问.
 	 * <p>
-	 * 如向上转型到Object仍无法找到, 返回null.
+	 *
+	 * @param obj       对象
+	 * @param fieldName 属性名
+	 * @return field
 	 */
 	public static Field getAccessibleField(final Object obj, final String fieldName) {
 		if (obj == null || fieldName == null) {
@@ -180,8 +188,7 @@ public class ReflectUtils {
 				Field field = superClass.getDeclaredField(fieldName);
 				makeAccessible(field);
 				return field;
-			}
-			catch (NoSuchFieldException e) {// NOSONAR
+			} catch (NoSuchFieldException e) {// NOSONAR
 				// Field不在当前类定义,继续向上转型
 			}
 		}
@@ -199,7 +206,8 @@ public class ReflectUtils {
 
 	/**
 	 * 注册服务所在的ClassLoader
-	 * @param appName 应用名
+	 *
+	 * @param appName     应用名
 	 * @param classloader 应用级别ClassLoader
 	 */
 	public static void registerAppClassLoader(String appName, ClassLoader classloader) {
@@ -208,6 +216,7 @@ public class ReflectUtils {
 
 	/**
 	 * 得到服务的自定义ClassLoader
+	 *
 	 * @param appName 应用名
 	 * @return 应用级别ClassLoader
 	 */
@@ -215,16 +224,16 @@ public class ReflectUtils {
 		ClassLoader appClassLoader = APPNAME_CLASSLOADER_MAP.get(appName);
 		if (appClassLoader == null) {
 			return ClassLoaderUtils.getCurrentClassLoader();
-		}
-		else {
+		} else {
 			return appClassLoader;
 		}
 	}
 
 	/**
 	 * 注册服务所在的ClassLoader
+	 *
 	 * @param serviceUniqueName 服务唯一名称
-	 * @param classloader 服务级别ClassLoader
+	 * @param classloader       服务级别ClassLoader
 	 */
 	public static void registerServiceClassLoader(String serviceUniqueName, ClassLoader classloader) {
 		SERVICE_CLASSLOADER_MAP.put(serviceUniqueName, classloader);
@@ -232,6 +241,7 @@ public class ReflectUtils {
 
 	/**
 	 * 得到服务的自定义ClassLoader
+	 *
 	 * @param serviceUniqueName 服务唯一名称
 	 * @return 服务级别ClassLoader
 	 */
@@ -239,15 +249,15 @@ public class ReflectUtils {
 		ClassLoader appClassLoader = SERVICE_CLASSLOADER_MAP.get(serviceUniqueName);
 		if (appClassLoader == null) {
 			return ClassLoaderUtils.getCurrentClassLoader();
-		}
-		else {
+		} else {
 			return appClassLoader;
 		}
 	}
 
 	/**
 	 * 放入类描述缓存
-	 * @param clazz 类
+	 *
+	 * @param clazz   类
 	 * @param typeStr 对象描述
 	 */
 	public static void putTypeStrCache(Class clazz, String typeStr) {
@@ -256,6 +266,7 @@ public class ReflectUtils {
 
 	/**
 	 * 得到类描述缓存
+	 *
 	 * @param clazz 类
 	 * @return 类描述
 	 */

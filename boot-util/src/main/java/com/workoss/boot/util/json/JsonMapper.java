@@ -73,6 +73,8 @@ public class JsonMapper {
 	 * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
 	 * <p>
 	 * 注意，要小心使用, 特别留意empty的情况.
+	 *
+	 * @return jsonmapper
 	 */
 	public static JsonMapper nonEmptyMapper() {
 		return new JsonMapper(JsonInclude.Include.NON_EMPTY);
@@ -80,6 +82,8 @@ public class JsonMapper {
 
 	/**
 	 * 默认的全部输出的Mapper, 区别于INSTANCE，可以做进一步的配置
+	 *
+	 * @return jsonmapper
 	 */
 	public static JsonMapper build() {
 		return INSTANCE;
@@ -109,14 +113,11 @@ public class JsonMapper {
 		return build().fromJson(json, javaType);
 	}
 
-	/**
-	 * Object可以是POJO，也可以是Collection或数组。 如果对象为Null, 返回"null". 如果集合为空集合, 返回"[]".
-	 */
+
 	public String toJson(Object object) {
 		try {
 			return mapper.writeValueAsString(object);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("write to json string error:{}", object, e);
 			return null;
 		}
@@ -144,8 +145,7 @@ public class JsonMapper {
 	public JsonNode readTree(String jsonStr) {
 		try {
 			return this.mapper.readTree(jsonStr);
-		}
-		catch (IOException var3) {
+		} catch (IOException var3) {
 			logger.warn("readTree error:", var3);
 			return null;
 		}
@@ -154,8 +154,7 @@ public class JsonMapper {
 	public JsonNode readTree(byte[] bytes) {
 		try {
 			return mapper.readTree(bytes);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("readTree error:", e);
 			return null;
 		}
@@ -164,8 +163,7 @@ public class JsonMapper {
 	public JsonNode readTree(InputStream inputStream) {
 		try {
 			return mapper.readTree(inputStream);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("readTree error:", e);
 			return null;
 		}
@@ -199,8 +197,7 @@ public class JsonMapper {
 		}
 		try {
 			return mapper.readValue(bytes, clazz);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("parse json bytes error:", e);
 			return null;
 		}
@@ -212,8 +209,7 @@ public class JsonMapper {
 		}
 		try {
 			return mapper.readValue(bytes, javaType);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("parse json bytes error:", e);
 			return null;
 		}
@@ -229,21 +225,23 @@ public class JsonMapper {
 				return null;
 			}
 			return mappingIterator.readAll();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("parse json string error:" + jsonString, e);
 			return null;
 		}
 	}
 
 	/**
-	 * 反序列化POJO或简单Collection如List<String>.
+	 * 反序列化POJO或简单Collection如List.
 	 * <p>
 	 * 如果JSON字符串为Null或"null"字符串, 返回Null. 如果JSON字符串为"[]", 返回空集合.
 	 * <p>
-	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String, JavaType)
+	 * 如需反序列化复杂Collection如List, 请使用fromJson(String, JavaType)
 	 *
-	 * @see #fromJson(String, JavaType)
+	 * @param jsonString json字符串
+	 * @param clazz      类
+	 * @param <T>        泛型
+	 * @return 实例
 	 */
 	public <T> T fromJson(String jsonString, Class<T> clazz) {
 		if (StringUtils.isEmpty(jsonString)) {
@@ -252,18 +250,20 @@ public class JsonMapper {
 
 		try {
 			return mapper.readValue(jsonString, clazz);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("parse json string error:" + jsonString, e);
 			return null;
 		}
 	}
 
 	/**
-	 * 反序列化复杂Collection如List<Bean>, contructCollectionType()或contructMapType()构造类型,
+	 * 反序列化复杂Collection如List, contructCollectionType()或contructMapType()构造类型,
 	 * 然后调用本函数.
 	 *
-	 * @see #(Class, Class...)
+	 * @param jsonString json字符串
+	 * @param javaType   javaType
+	 * @param <T> 泛型
+	 * @return 实例
 	 */
 	public <T> T fromJson(String jsonString, JavaType javaType) {
 		if (StringUtils.isEmpty(jsonString)) {
@@ -272,8 +272,7 @@ public class JsonMapper {
 
 		try {
 			return (T) mapper.readValue(jsonString, javaType);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			logger.warn("parse json string error:" + jsonString, e);
 			return null;
 		}
@@ -281,33 +280,34 @@ public class JsonMapper {
 
 	/**
 	 * 构造Collection类型.
+	 *
+	 * @param collectionClass 集合类型
+	 * @param elementClass    集合元素类型
+	 * @return javaType
 	 */
 	public JavaType buildCollectionType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
 		return mapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
 	}
 
-	/**
-	 * 构造Map类型.
-	 */
 	public JavaType buildMapType(Class<? extends Map> mapClass, Class<?> keyClass, Class<?> valueClass) {
 		return mapper.getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
 	}
 
 	/**
 	 * 当JSON里只含有Bean的部分属性時，更新一個已存在Bean，只覆盖該部分的属性.
+	 *
+	 * @param jsonString json字符串
+	 * @param object     obj
 	 */
 	public void update(String jsonString, Object object) {
 		try {
 			mapper.readerForUpdating(object).readValue(jsonString);
-		}
-		catch (JsonProcessingException e) {
+		} catch (JsonProcessingException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		}
 	}
 
-	/**
-	 * 輸出JSONP格式數據.
-	 */
+
 	public String toJsonP(String functionName, Object object) {
 		return toJson(new JSONPObject(functionName, object));
 	}
@@ -323,6 +323,8 @@ public class JsonMapper {
 
 	/**
 	 * 取出Mapper做进一步的设置或使用其他序列化API.
+	 *
+	 * @return objectMapper
 	 */
 	public ObjectMapper getMapper() {
 		return mapper;

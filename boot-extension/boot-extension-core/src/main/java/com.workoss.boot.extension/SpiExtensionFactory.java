@@ -23,6 +23,8 @@
 package com.workoss.boot.extension;
 
 /**
+ * SpiExtensionFactory
+ *
  * @author workoss
  */
 @Extension(value = "spi", order = 99, override = true)

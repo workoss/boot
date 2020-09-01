@@ -33,22 +33,23 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Returns {@code true} if and only if the I/O operation was completed successfully.
-	 * @return
+	 *
+	 * @return true/false
 	 */
 	boolean isSuccess();
 
 	/**
 	 * returns {@code true} if and only if the operation can be cancelled via
 	 * {@link #cancel(boolean)}.
-	 * @return
+	 *
+	 * @return true/false
 	 */
 	boolean isCancellable();
 
 	/**
 	 * Returns the cause of the failed I/O operation if the I/O operation has failed.
-	 * @return the cause of the failure. {@code null} if succeeded or this future is not
-	 * completed yet.
-	 * @return
+	 *
+	 * @return 异常
 	 */
 	Throwable cause();
 
@@ -56,8 +57,9 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * Adds the specified listener to this future. The specified listener is notified when
 	 * this future is {@linkplain #isDone() done}. If this future is already completed,
 	 * the specified listener is notified immediately.
-	 * @param listener
-	 * @return
+	 *
+	 * @param listener listener
+	 * @return future
 	 */
 	Future<V> addListener(FutureListener<V> listener);
 
@@ -65,8 +67,9 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * Adds the specified listeners to this future. The specified listeners is notified
 	 * when this future is {@linkplain #isDone() done}. If this future is already
 	 * completed, the specified listeners is notified immediately.
-	 * @param listeners
-	 * @return
+	 *
+	 * @param listeners listener
+	 * @return future
 	 */
 	Future<V> addListeners(List<FutureListener<V>> listeners);
 
@@ -75,8 +78,9 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * specified listener is no longer notified when this future is {@linkplain #isDone()
 	 * done}. If the specified listener is not associated with this future, this method
 	 * does nothing and returns silently.
-	 * @param listener
-	 * @return
+	 *
+	 * @param listener listener
+	 * @return future
 	 */
 	Future<V> removeListener(FutureListener<V> listener);
 
@@ -85,15 +89,17 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * specified listeners is no longer notified when this future is {@linkplain #isDone()
 	 * done}. If the specified listeners is not associated with this future, this method
 	 * does nothing and returns silently.
-	 * @param listeners
-	 * @return
+	 *
+	 * @param listeners listener
+	 * @return future
 	 */
 	Future<V> removeListeners(List<FutureListener<V>> listeners);
 
 	/**
 	 * Waits for this future until it is done, and rethrows the cause of the failure if
 	 * this future failed.
-	 * @return
+	 *
+	 * @return future
 	 * @throws InterruptedException if the current thread was interrupted
 	 */
 	Future<V> sync() throws InterruptedException;
@@ -102,13 +108,15 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * Waits for this future until it is done, and rethrows the cause of the failure if
 	 * this future failed. This method catches an {@link InterruptedException} and
 	 * discards it silently.
-	 * @return
+	 *
+	 * @return future
 	 */
 	Future<V> syncUninterruptibly();
 
 	/**
 	 * Waits for this future to be completed.
-	 * @return
+	 *
+	 * @return future
 	 * @throws InterruptedException if the current thread was interrupted
 	 */
 	Future<V> await() throws InterruptedException;
@@ -116,14 +124,16 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	/**
 	 * Waits for this future to be completed without interruption. This method catches an
 	 * {@link InterruptedException} and discards it silently.
-	 * @return
+	 *
+	 * @return future
 	 */
 	Future<V> awaitUninterruptibly();
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 * @param timeout
-	 * @param timeUnit
+	 *
+	 * @param timeout 超时时间
+	 * @param timeUnit 单位
 	 * @return {@code true} if and only if the future was completed within the specified
 	 * time limit
 	 * @throws InterruptedException if the current thread was interrupted
@@ -132,8 +142,9 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 * @param timeout
-	 * @param timeUnit
+	 *
+	 * @param timeout 超时时间
+	 * @param timeUnit 单位
 	 * @return {@code true} if and only if the future was completed within the specified
 	 * time limit without interruption. This method catches an
 	 * {@link InterruptedException} and discards it silently.
@@ -142,7 +153,8 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 * @param timeoutMillis
+	 *
+	 * @param timeoutMillis 超时毫秒
 	 * @return {@code true} if and only if the future was completed within the specified
 	 * time limit
 	 * @throws InterruptedException if the current thread was interrupted
@@ -151,32 +163,32 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 * @param timeoutMillis
-	 * @return {@code true} if and only if the future was completed within the specified
-	 * time limit without interruption. This method catches an
-	 * {@link InterruptedException} and discards it silently.
-	 * @return
+	 *
+	 * @param timeoutMillis 超时毫秒
+	 * @return true/false
 	 */
 	boolean awaitUninterruptibly(long timeoutMillis);
 
 	/**
 	 * Return the result without blocking. If the future is not done yet this will return
 	 * {@code null}.
-	 *
+	 * <p>
 	 * As it is possible that a {@code null} value is used to mark the future as
 	 * successful you also need to check if the future is really done with
 	 * {@link #isDone()} and not relay on the returned {@code null} value.
-	 * @return
+	 *
+	 * @return 对象
 	 */
 	V getNow();
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * <p>
 	 * If the cancellation was successful it will fail the future with an
 	 * {@link java.util.concurrent.CancellationException}.
-	 * @param mayInterruptIfRunning
-	 * @return
+	 *
+	 * @param mayInterruptIfRunning mayInterruptIfRunning
+	 * @return true/false
 	 */
 	@Override
 	boolean cancel(boolean mayInterruptIfRunning);

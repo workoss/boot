@@ -23,14 +23,15 @@
 package com.workoss.boot.extension;
 
 /**
+ * 排序
+ *
  * @author: workoss
- * @date: 2018-12-13 17:08
- * @version:
  */
 public interface Sortable {
 
 	/**
 	 * 得到顺序
+	 *
 	 * @return 顺序
 	 */
 	int getOrder();

@@ -28,6 +28,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 唯一约束
+ *
  * @author workoss
  */
 @Target({})
@@ -38,11 +40,15 @@ public @interface UniqueConstraint {
 	 * (Optional) Constraint name. A provider-chosen name will be chosen if a name is not
 	 * specified.
 	 *
-	 * @since 2.0
+	 * @return 姓名
 	 */
 	String name() default "";
 
-	/** (Required) An array of the column names that make up the constraint. */
+	/**
+	 * (Required) An array of the column names that make up the constraint.
+	 *
+	 * @return 列名称
+	 */
 	String[] columnNames();
 
 }

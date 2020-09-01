@@ -42,9 +42,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * 扩展loader
+ *
  * @author: workoss
- * @date: 2018-12-13 17:10
- * @version:
  */
 @SuppressWarnings("ALL")
 public class ExtensionLoader<T> {

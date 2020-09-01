@@ -23,6 +23,8 @@
 package com.workoss.boot.extension;
 
 /**
+ * ExtensionException
+ *
  * @author workoss
  */
 public class ExtensionException extends RuntimeException {

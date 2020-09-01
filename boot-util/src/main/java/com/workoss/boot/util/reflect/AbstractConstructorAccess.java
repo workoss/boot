@@ -49,15 +49,17 @@ public abstract class AbstractConstructorAccess<T> {
 	 * be created using <code>null</code> as the this$0 synthetic reference. The
 	 * instantiated object will work as long as it actually don't use any member variable
 	 * or method fron the enclosing instance.
-	 * @return
+	 *
+	 * @return 实例
 	 */
 	abstract public T newInstance();
 
 	/**
 	 * Constructor for inner classes (non-static nested classes).
+	 *
 	 * @param enclosingInstance The instance of the enclosing type to which this inner
-	 * instance is related to (assigned to its synthetic this$0 field).
-	 * @return
+	 *                          instance is related to (assigned to its synthetic this$0 field).
+	 * @return 实例
 	 */
 	abstract public T newInstance(Object enclosingInstance);
 
@@ -76,13 +78,11 @@ public abstract class AbstractConstructorAccess<T> {
 		AccessClassLoader loader = AccessClassLoader.get(type);
 		try {
 			accessClass = loader.loadClass(accessClassName);
-		}
-		catch (ClassNotFoundException ignored) {
+		} catch (ClassNotFoundException ignored) {
 			synchronized (loader) {
 				try {
 					accessClass = loader.loadClass(accessClassName);
-				}
-				catch (ClassNotFoundException ignored2) {
+				} catch (ClassNotFoundException ignored2) {
 					String accessClassNameInternal = accessClassName.replace('.', '/');
 					String classNameInternal = className.replace('.', '/');
 					String enclosingClassNameInternal;
@@ -93,8 +93,7 @@ public abstract class AbstractConstructorAccess<T> {
 						try {
 							constructor = type.getDeclaredConstructor((Class[]) null);
 							modifiers = constructor.getModifiers();
-						}
-						catch (Exception ex) {
+						} catch (Exception ex) {
 							throw new RuntimeException(
 									"Class cannot be created (missing no-arg constructor): " + type.getName(), ex);
 						}
@@ -102,15 +101,13 @@ public abstract class AbstractConstructorAccess<T> {
 							throw new RuntimeException(
 									"Class cannot be created (the no-arg constructor is private): " + type.getName());
 						}
-					}
-					else {
+					} else {
 						enclosingClassNameInternal = enclosingType.getName().replace('.', '/');
 						try {
 							// Inner classes should have this.
 							constructor = type.getDeclaredConstructor(enclosingType);
 							modifiers = constructor.getModifiers();
-						}
-						catch (Exception ex) {
+						} catch (Exception ex) {
 							throw new RuntimeException(
 									"Non-static member class cannot be created (missing enclosing class constructor): "
 											+ type.getName(),
@@ -141,8 +138,7 @@ public abstract class AbstractConstructorAccess<T> {
 		AbstractConstructorAccess<T> access;
 		try {
 			access = (AbstractConstructorAccess<T>) accessClass.newInstance();
-		}
-		catch (Throwable t) {
+		} catch (Throwable t) {
 			throw new RuntimeException("Exception constructing constructor access class: " + accessClassName, t);
 		}
 		if (!(access instanceof AbstractPublicConstructorAccess)
@@ -197,8 +193,7 @@ public abstract class AbstractConstructorAccess<T> {
 					false);
 			mv.visitInsn(ARETURN);
 			mv.visitMaxs(4, 2);
-		}
-		else {
+		} else {
 			mv.visitTypeInsn(NEW, "java/lang/UnsupportedOperationException");
 			mv.visitInsn(DUP);
 			mv.visitLdcInsn("Not an inner class.");

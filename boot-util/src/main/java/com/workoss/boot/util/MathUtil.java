@@ -38,8 +38,8 @@ public class MathUtil {
 	 * <p>
 	 * Special cases for return values are as follows:
 	 * <ul>
-	 * <li>{@code <= 0} -> 1</li>
-	 * <li>{@code >= 2^30} -> 2^30</li>
+	 * <li>{@code <= 0} - 1</li>
+	 * <li>{@code >= 2^30} - 2^30</li>
 	 * </ul>
 	 */
 	public static final int safeFindNextPositivePowerOfTwo(int value) {

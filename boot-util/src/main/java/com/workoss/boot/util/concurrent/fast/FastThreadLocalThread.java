@@ -70,6 +70,8 @@ public class FastThreadLocalThread extends Thread {
 
 	/**
 	 * 是否会自动清理当前线程的"InternalThreadLocalMap和其内的FastThreadLocal信息"
+	 *
+	 * @return true/false
 	 */
 	public boolean willCleanupFastThreadLocals() {
 		return this.cleanupFastThreadLocals;
@@ -79,6 +81,9 @@ public class FastThreadLocalThread extends Thread {
 	 * 只有FastThreadLocalThread会作自动清理操作，其他类型的线程不会，
 	 * 因为只有FastThreadLocalThread有InternalThreadLocalMap
 	 * threadLocalMap属性，而我们的自动清理操作也是针对该属性做的
+	 *
+	 * @param current current
+	 * @return true/false
 	 */
 	public static boolean willCleanupFastThreadLocals(Thread current) {
 		return current instanceof FastThreadLocalThread

@@ -45,27 +45,27 @@ import org.slf4j.LoggerFactory;
  *                                      +---------------------------+
  *                                      | Completed successfully    |
  *                                      +---------------------------+
- *                                 +---->      isDone() = true      |
+ *                                 +----     isDone() = true      |
  * +--------------------------+    |    |   isSuccess() = true      |
  * |        Uncompleted       |    |    +===========================+
  * +--------------------------+    |    | Completed with failure    |
  * |      isDone() = false    |    |    +---------------------------+
- * |   isSuccess() = false    |----+---->      isDone() = true      |
+ * |   isSuccess() = false    |----+----      isDone() = true      |
  * | isCancelled() = false    |    |    |       cause() = non-null  |
  * |       cause() = null     |    |    +===========================+
  * +--------------------------+    |    | Completed by cancellation |
  *                                 |    +---------------------------+
- *                                 +---->      isDone() = true      |
+ *                                 +----      isDone() = true      |
  *                                      | isCancelled() = true      |
  *                                      +---------------------------+
  * </pre>
- * <p>
- * <p>
  * 二、DefaultPromise实现了两种执行机制：
  * 1、future：wait/notify实现，可能要阻塞，使用方最终调用到DefaultPromise父类AbstractFuture#get或者DefaultPromise#syncXxx
  * 2、listener：其实就是callback实现，不需要阻塞，当setSuccess/trySuccess/setFailure/tryFailure/cancel会直接调用listener（回调函数）当然如果有等待条件的其他线程，也会notifyAll
  * <p>
  * 推荐使用第二种，完全异步的。
+ *
+ * @author workoss
  */
 public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 
@@ -117,8 +117,9 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	private boolean notifyingListeners;
 
 	/**
-	 * future返回是否成功
-	 * @return {@code true} 结果不为空 && 结果不是Throwable（失败）&& 结果不是UNCANCELLABLE（不能取消）
+	 * future返回是否成功 结果不为空  结果不是Throwable失败 结果不是UNCANCELLABLE（不能取消）
+	 *
+	 * @return true/false
 	 */
 	@Override
 	public boolean isSuccess() {
@@ -149,8 +150,9 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	}
 
 	/**
-	 * 等待线程是否可取消
-	 * @return {@code true} 如果返回结果result为null，表示没有返回成功，也没有返回失败，也没有设置不可取消，此时可以取消
+	 * 等待线程是否可取消如果返回结果result为null，表示没有返回成功，也没有返回失败，也没有设置不可取消，此时可以取消
+	 *
+	 * @return true/false
 	 */
 	@Override
 	public boolean isCancellable() {
@@ -159,7 +161,8 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 
 	/**
 	 * 查询cause：如果result instanceof Throwable，那么表示返回结果出错了，否则 cause = null，表示一定没有错误
-	 * @return
+	 *
+	 * @return 异常
 	 */
 	@Override
 	public Throwable cause() {
@@ -346,8 +349,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 				incWaiters();
 				try {
 					wait();
-				}
-				finally {
+				} finally {
 					/**
 					 * wait()结束之后，waiters减1
 					 */
@@ -370,12 +372,10 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 				incWaiters();
 				try {
 					wait();
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 					// Interrupted while waiting.
 					interrupted = true;
-				}
-				finally {
+				} finally {
 					decWaiters();
 				}
 			}
@@ -400,8 +400,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	public boolean awaitUninterruptibly(long timeout, TimeUnit timeUnit) {
 		try {
 			return await0(timeUnit.toNanos(timeout), false);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			throw new InternalError();
 		}
 	}
@@ -415,8 +414,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	public boolean awaitUninterruptibly(long timeoutMillis) {
 		try {
 			return await0(TimeUnit.MILLISECONDS.toNanos(timeoutMillis), false);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			throw new InternalError();
 		}
 	}
@@ -434,8 +432,9 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	 * 查看java.util.concurrent.Future#cancel()的注释， This attempt will fail if the task has
 	 * already completed（成功 || 失败 || 已被取消）, has already been cancelled, or could not be
 	 * cancelled for some other reason
+	 *
 	 * @param mayInterruptIfRunning this value has no effect in this implementation.
-	 * @return
+	 * @return true/false
 	 */
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
@@ -496,8 +495,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 		for (FutureListener<V> listener : listeners) {
 			try {
 				listener.operationComplete(this);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -573,7 +571,8 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	 * BLOCKED：interrupt()中断位isInterrupted=true，不会使当前线程跳出锁等待队列，也就是说依然在等待锁
 	 * WAITING/TIMED_WAITING:
 	 * interrupt()抛出InterruptedException，设置isInterrupted=false，所以根据需要，需要自己去设置中断位
-	 * @param timeoutNanos 纳秒级别的超时时间
+	 *
+	 * @param timeoutNanos  纳秒级别的超时时间
 	 * @param interruptable 是否可中断
 	 * @return
 	 * @throws InterruptedException
@@ -611,12 +610,10 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 					incWaiters();
 					try {
 						wait(timeoutNanos / 1000000, (int) timeoutNanos % 1000000);
-					}
-					catch (InterruptedException e) {
+					} catch (InterruptedException e) {
 						if (interruptable) {
 							throw e;
-						}
-						else {
+						} else {
 							/**
 							 * 对于中断来讲，抛出了中断异常时，Thread.currentThread().isInterrupted() ==
 							 * false，即不会设置中断标志位。
@@ -626,8 +623,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 							 */
 							interrupted = true;
 						}
-					}
-					finally {
+					} finally {
 						decWaiters();
 					}
 				}
@@ -643,8 +639,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 					return isDone();
 				}
 			}
-		}
-		finally {
+		} finally {
 			if (interrupted) {
 				/**
 				 * 此时线程处于RUNNABLE状态，执行interrupt()设置中断标志位
@@ -662,17 +657,13 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 		Object result = this.result;
 		if (result == SUCCESS) {
 			builder.append("success");
-		}
-		else if (result == UNCANCELLABLE) {
+		} else if (result == UNCANCELLABLE) {
 			builder.append("uncancellable");
-		}
-		else if (result instanceof Throwable) {
+		} else if (result instanceof Throwable) {
 			builder.append(result);
-		}
-		else if (result != null) {
+		} else if (result != null) {
 			builder.append("success " + result);
-		}
-		else {
+		} else {
 			builder.append("incompleted");
 		}
 

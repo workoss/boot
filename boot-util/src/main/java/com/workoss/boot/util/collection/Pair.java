@@ -23,8 +23,9 @@
 package com.workoss.boot.util.collection;
 
 /**
- * @author admin
- * @date 2017/2/28
+ * Collection pair
+ *
+ * @author workoss
  */
 public class Pair<A, B> {
 
@@ -34,6 +35,7 @@ public class Pair<A, B> {
 
 	/**
 	 * Creates a new pair.
+	 *
 	 * @param first The first value.
 	 * @param second The second value.
 	 */
@@ -95,9 +97,7 @@ public class Pair<A, B> {
 		return "Pair [first=" + first + ", second=" + second + "]";
 	}
 
-	/**
-	 * 根据等号左边的泛型，自动构造合适的Pair
-	 */
+
 	public static <A, B> Pair<A, B> of(A a, B b) {
 		return new Pair<A, B>(a, b);
 	}

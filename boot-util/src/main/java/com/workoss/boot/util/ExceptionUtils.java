@@ -23,9 +23,9 @@
 package com.workoss.boot.util;
 
 /**
+ * 异常
+ *
  * @author: workoss
- * @date: 2018-12-13 17:25
- * @version:
  */
 public class ExceptionUtils {
 

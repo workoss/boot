@@ -23,9 +23,9 @@
 package com.workoss.boot.extension;
 
 /**
+ * extension listener
+ *
  * @author: workoss
- * @date: 2018-12-13 17:12
- * @version:
  */
 @FunctionalInterface
 public interface ExtensionLoaderListener<T> {

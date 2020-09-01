@@ -23,6 +23,8 @@
 package com.workoss.boot.plugin.mybatis;
 
 /**
+ * SqlParam
+ *
  * @author workoss
  */
 public class SqlParam {

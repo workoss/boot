@@ -31,11 +31,14 @@ import java.util.Base64;
 @SuppressWarnings("ALL")
 public class BaseEncodeUtil {
 
-	private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
-			'f' };
+	private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
+			'f'};
 
 	/**
 	 * Hex编码, 将byte[]编码为String，默认为ABCDEF为大写字母.
+	 *
+	 * @param bytes source
+	 * @return 字符串
 	 */
 	public static String encodeHex(byte[] bytes) {
 		return String.valueOf(encodeHex(bytes, HEX_CHARS));
@@ -54,10 +57,12 @@ public class BaseEncodeUtil {
 
 	/**
 	 * Hex解码, 将String解码为byte[].
-	 *
+	 * <p>
 	 * 字符串有异常时抛出IllegalArgumentException.
+	 *
+	 * @param str 字符串
+	 * @return byte数组
 	 */
-
 	public static byte[] decodeHex(final String str) {
 		char[] data = str.toCharArray();
 		final int len = data.length;
@@ -76,9 +81,7 @@ public class BaseEncodeUtil {
 		return out;
 	}
 
-	/**
-	 * Base64编码.
-	 */
+
 	public static String encodeBase64(byte[] input) {
 		return new String(Base64.getEncoder().encode(input), StandardCharsets.UTF_8);
 	}
@@ -90,7 +93,8 @@ public class BaseEncodeUtil {
 	/**
 	 * Base64解码.
 	 *
-	 * 如果字符不合法，抛出IllegalArgumentException
+	 * @param input 输入值
+	 * @return byte数组
 	 */
 	public static byte[] decodeBase64(byte[] input) {
 		return Base64.getDecoder().decode(input);
@@ -98,6 +102,9 @@ public class BaseEncodeUtil {
 
 	/**
 	 * Base64编码, URL安全.(将Base64中的URL非法字符'+'和'/'转为'-'和'_', RFC4648_URLSAFE).
+	 *
+	 * @param input 输入值
+	 * @return 字符串
 	 */
 	public static String encodeBase64UrlSafe(byte[] input) {
 		return new String(Base64.getUrlEncoder().encode(input), StandardCharsets.UTF_8);
@@ -105,8 +112,10 @@ public class BaseEncodeUtil {
 
 	/**
 	 * Base64解码, URL安全(将Base64中的URL非法字符'+'和'/'转为'-'和'_', RFC4648_URLSAFE).
-	 *
 	 * 如果字符不合法，抛出IllegalArgumentException
+	 *
+	 * @param input 输入
+	 * @return 结果
 	 */
 	public static byte[] decodeBase64UrlSafe(byte[] input) {
 		return Base64.getUrlDecoder().decode(input);

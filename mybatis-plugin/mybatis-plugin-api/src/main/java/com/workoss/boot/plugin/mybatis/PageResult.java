@@ -27,10 +27,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @Description: 分页工具类page对象
- * @Author: luanfeng
- * @Date: 2017/8/11 8:10
- * @Version: 1.0.0
+ * 分页工具类page对象
+ *
+ * @author workoss
  */
 public class PageResult<E> extends ArrayList<E> implements Closeable {
 

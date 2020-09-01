@@ -39,9 +39,9 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.core.Converter;
 
 /**
+ * 对象复制
+ *
  * @author: workoss
- * @date: 2018-11-26 12:58
- * @version:
  */
 @SuppressWarnings("ALL")
 public class BeanCopierUtil {
@@ -145,8 +145,7 @@ public class BeanCopierUtil {
 		String beanCopierKey = generateBeanKey(source, target);
 		if (BEAN_COPIER_MAP.containsKey(beanCopierKey)) {
 			return BEAN_COPIER_MAP.get(beanCopierKey);
-		}
-		else {
+		} else {
 			BeanCopier beanCopier = BeanCopier.create(source, target, true);
 			BEAN_COPIER_MAP.putIfAbsent(beanCopierKey, beanCopier);
 		}
@@ -154,10 +153,11 @@ public class BeanCopierUtil {
 	}
 
 	/**
-	 * @param source
-	 * @param target
-	 * @return String
-	 * @description 生成两个类的key
+	 * 生成 source+target key
+	 *
+	 * @param source 源对象
+	 * @param target 目标对象
+	 * @return String cache key
 	 */
 	public static String generateBeanKey(Class<?> source, Class<?> target) {
 		return source.getName() + "@" + target.getName();
@@ -172,6 +172,7 @@ public class BeanCopierUtil {
 
 		/**
 		 * Instantiates a new Deep copy converter.
+		 *
 		 * @param target the target
 		 */
 		public DeepCopyConverter(Class<?> target) {
@@ -187,11 +188,9 @@ public class BeanCopierUtil {
 					retList.add(BeanCopierUtil.convert(source, targetClazz));
 				}
 				return retList;
-			}
-			else if (value instanceof Map) {
+			} else if (value instanceof Map) {
 				// TODO 暂时用不到，后续有需要再补充
-			}
-			else if (!ClassUtils.isPrimitive(targetClazz)) {
+			} else if (!ClassUtils.isPrimitive(targetClazz)) {
 				return BeanCopierUtil.convert(value, targetClazz);
 			}
 			return value;

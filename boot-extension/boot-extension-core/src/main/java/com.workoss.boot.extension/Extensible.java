@@ -25,9 +25,9 @@ package com.workoss.boot.extension;
 import java.lang.annotation.*;
 
 /**
+ * 可扩展注解
+ *
  * @author: workoss
- * @date: 2018-11-09 09:39
- * @version:
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

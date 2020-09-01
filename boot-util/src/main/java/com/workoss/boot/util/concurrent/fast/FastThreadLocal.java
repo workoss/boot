@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * @author workoss
  */
-@SuppressWarnings({ "ALL" })
+@SuppressWarnings({"ALL"})
 public class FastThreadLocal<V> {
 
 	/**
@@ -49,9 +49,7 @@ public class FastThreadLocal<V> {
 		index = InternalThreadLocalMap.nextVariableIndex();
 	}
 
-	/**
-	 * 设置一个value
-	 */
+
 	public void set(V value) {
 		// 1、如果value是UNSET，表示删除当前的ThreadLocal对应的value；
 		// 如果不是UNSET，则可能是修改，也可能是新增；
@@ -62,8 +60,7 @@ public class FastThreadLocal<V> {
 			if (setKnownNotUnset(threadLocalMap, value)) {
 				registerCleaner(threadLocalMap);
 			}
-		}
-		else {
+		} else {
 			// 如果设置的值是UNSET，表示清除该FastThreadLocal的value
 			remove();
 		}
@@ -71,6 +68,8 @@ public class FastThreadLocal<V> {
 
 	/**
 	 * 获取当前线程的InternalThreadLocalMap中的当前ftl的value
+	 *
+	 * @return 获取thread
 	 */
 	public V get() {
 		// 1、获取InternalThreadLocalMap
@@ -106,8 +105,7 @@ public class FastThreadLocal<V> {
 		if (v != InternalThreadLocalMap.UNSET) {
 			try {
 				onRemoved((V) v);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -155,8 +153,7 @@ public class FastThreadLocal<V> {
 					threadLocal.remove();
 				}
 			}
-		}
-		finally {
+		} finally {
 			// 3、删除当前线程的InternalThreadLocalMap
 			threadLocalMap.remove();
 		}
@@ -198,8 +195,7 @@ public class FastThreadLocal<V> {
 		try {
 			// 1、获取初始值
 			v = initialValue();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		// 2、设置value到InternalThreadLocalMap中
@@ -222,8 +218,7 @@ public class FastThreadLocal<V> {
 		if (v == InternalThreadLocalMap.UNSET) {
 			variablesToRemove = Collections.newSetFromMap(new IdentityHashMap<FastThreadLocal<?>, Boolean>());
 			threadLocalMap.setIndexedVariables(VARIABLES_TO_REMOVE_INDEX, variablesToRemove);
-		}
-		else {
+		} else {
 			variablesToRemove = (Set<FastThreadLocal<?>>) v;
 		}
 		variablesToRemove.add(threadLocal);
@@ -248,6 +243,9 @@ public class FastThreadLocal<V> {
 
 	/**
 	 * 初始化参数：由子类复写
+	 *
+	 * @return 对象
+	 * @throws Exception 异常
 	 */
 	protected V initialValue() throws Exception {
 		return null;
@@ -255,6 +253,9 @@ public class FastThreadLocal<V> {
 
 	/**
 	 * 当前的threadLocal被删除后的回调：由子类复写
+	 *
+	 * @param value 对象
+	 * @throws Exception 异常
 	 */
 	protected void onRemoved(V value) throws Exception {
 

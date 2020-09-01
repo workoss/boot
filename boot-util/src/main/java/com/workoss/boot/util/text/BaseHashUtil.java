@@ -43,6 +43,7 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * createThreadLocalMessageDigest
+	 *
 	 * @param digest
 	 * @return
 	 */
@@ -52,8 +53,7 @@ public abstract class BaseHashUtil {
 			protected MessageDigest initialValue() {
 				try {
 					return MessageDigest.getInstance(digest);
-				}
-				catch (NoSuchAlgorithmException e) {
+				} catch (NoSuchAlgorithmException e) {
 					throw new RuntimeException(
 							"unexpected exception creating MessageDigest instance for [" + digest + "]", e);
 				}
@@ -72,30 +72,22 @@ public abstract class BaseHashUtil {
 	}
 
 	////////////////// SHA1 ///////////////////
-	/**
-	 * 对输入字符串进行sha1散列.
-	 */
+
 	public static byte[] sha1(byte[] input) {
 		return digest(input, get(SHA_1_DIGEST), null, 1);
 	}
 
-	/**
-	 * 对输入字符串进行sha1散列, 编码默认为UTF8.
-	 */
+
 	public static byte[] sha1(String input) {
 		return digest(input.getBytes(UTF_8), get(SHA_1_DIGEST), null, 1);
 	}
 
-	/**
-	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
-	 */
+
 	public static byte[] sha1(byte[] input, byte[] salt) {
 		return digest(input, get(SHA_1_DIGEST), salt, 1);
 	}
 
-	/**
-	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
-	 */
+
 	public static byte[] sha1(String input, byte[] salt) {
 		return digest(input.getBytes(UTF_8), get(SHA_1_DIGEST), salt, 1);
 	}
@@ -103,7 +95,10 @@ public abstract class BaseHashUtil {
 	/**
 	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
 	 *
-	 * @see #generateSalt(int)
+	 * @param input      输入值
+	 * @param salt       盐
+	 * @param iterations 迭代次数
+	 * @return 加密后
 	 */
 	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
 		return digest(input, get(SHA_1_DIGEST), salt, iterations);
@@ -112,7 +107,10 @@ public abstract class BaseHashUtil {
 	/**
 	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
 	 *
-	 * @see #generateSalt(int)
+	 * @param input      输入值
+	 * @param salt       盐
+	 * @param iterations 迭代次数
+	 * @return 加密后
 	 */
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
 		return digest(input.getBytes(UTF_8), get(SHA_1_DIGEST), salt, iterations);
@@ -126,6 +124,12 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对字符串进行散列, 支持md5与sha1算法.
+	 *
+	 * @param input      输入值
+	 * @param digest     messageDigest
+	 * @param salt       盐
+	 * @param iterations 迭代次数
+	 * @return 加密
 	 */
 	private static byte[] digest(byte[] input, MessageDigest digest, byte[] salt, int iterations) {
 		// 带盐
@@ -147,7 +151,9 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 用SecureRandom生成随机的byte[]作为salt.
+	 *
 	 * @param numBytes salt数组的大小
+	 * @return 生成
 	 */
 	public static byte[] generateSalt(int numBytes) {
 		if (numBytes < 1) {
@@ -158,16 +164,12 @@ public abstract class BaseHashUtil {
 		return bytes;
 	}
 
-	/**
-	 * 对文件进行sha1散列.
-	 */
+
 	public static byte[] sha1File(InputStream input) throws IOException {
 		return digestFile(input, get(SHA_1_DIGEST));
 	}
 
-	/**
-	 * 对文件进行md5散列，被破解后MD5已较少人用.
-	 */
+
 	public static byte[] md5File(InputStream input) throws IOException {
 		return digestFile(input, get(MD5_DIGEST));
 	}
@@ -189,8 +191,11 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对输入字符串进行crc32散列返回int, 返回值有可能是负数.
-	 *
+	 * <p>
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
+	 *
+	 * @param input 输入值
+	 * @return crc32
 	 */
 	public static int crc32AsInt(String input) {
 		return crc32AsInt(input.getBytes(UTF_8));
@@ -198,8 +203,10 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对输入字符串进行crc32散列返回int, 返回值有可能是负数.
-	 *
+	 * <p>
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
+	 * @param input 输入值
+	 * @return crc32
 	 */
 	public static int crc32AsInt(byte[] input) {
 		CRC32 crc32 = new CRC32();
@@ -210,8 +217,10 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
-	 *
+	 * <p>
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
+	 * @param input 输入值
+	 * @return crc32
 	 */
 	public static long crc32AsLong(String input) {
 		return crc32AsLong(input.getBytes(UTF_8));
@@ -219,8 +228,10 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
-	 *
+	 * <p>
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
+	 * @param input 输入值
+	 * @return crc32
 	 */
 	public static long crc32AsLong(byte[] input) {
 		CRC32 crc32 = new CRC32();
@@ -230,34 +241,35 @@ public abstract class BaseHashUtil {
 
 	////////////////// 基于Guava的MurMurHash ///////////////////
 	/* *//**
-			 * 对输入字符串进行murmur32散列, 返回值可能是负数
-			 */
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数
+	 */
 	/*
 	 * public static int murmur32AsInt(byte[] input) { return
 	 * Hashing.murmur3_32(MURMUR_SEED).hashBytes(input).asInt(); }
 	 *
 	 *//**
-		 * 对输入字符串进行murmur32散列, 返回值可能是负数
-		 */
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数
+	 */
 	/*
 	 * public static int murmur32AsInt(String input) { return
 	 * Hashing.murmur3_32(MURMUR_SEED).hashString(input, UTF_8).asInt(); }
 	 *
 	 *//**
-		 * 对输入字符串进行murmur128散列, 返回值可能是负数
-		 */
+	 * 对输入字符串进行murmur128散列, 返回值可能是负数
+	 */
 
 	/*
 	 * public static long murmur128AsLong(byte[] input) { return
 	 * Hashing.murmur3_128(MURMUR_SEED).hashBytes(input).asLong(); }
 	 *
-	 *//**
-		 * 对输入字符串进行murmur128散列, 返回值可能是负数
-		 *//*
-			 * public static long murmur128AsLong(String input) { return
-			 * Hashing.murmur3_128(MURMUR_SEED).hashString(input, UTF_8).asLong(); }
-			 */
+	 */
 
+	/**
+	 * 对输入字符串进行murmur128散列, 返回值可能是负数
+	 *//*
+	 * public static long murmur128AsLong(String input) { return
+	 * Hashing.murmur3_128(MURMUR_SEED).hashString(input, UTF_8).asLong(); }
+	 */
 	public static void removeMd5Digest() {
 		MD5_DIGEST.remove();
 	}

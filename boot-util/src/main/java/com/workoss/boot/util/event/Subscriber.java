@@ -29,13 +29,13 @@ public interface Subscriber<E extends Event> {
 
 	/**
 	 * onEvent
-	 * @param event
+	 * @param event 事件
 	 */
 	void onEvent(E event);
 
 	/**
 	 * onError
-	 * @param throwable
+	 * @param throwable 异常
 	 */
 	void onError(Throwable throwable);
 

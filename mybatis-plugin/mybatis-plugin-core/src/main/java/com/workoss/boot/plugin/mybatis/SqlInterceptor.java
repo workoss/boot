@@ -52,16 +52,14 @@ import org.slf4j.LoggerFactory;
 /**
  * mybatis 拦截器
  *
- * @author : luanfeng
- * @date: 2017/8/11 8:10
- * @version: 1.0.0
+ * @author workoss
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Intercepts({
 		@Signature(type = Executor.class, method = "query",
-				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
-		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class }), })
+				args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),})
 public class SqlInterceptor implements Interceptor {
 
 	public static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
@@ -101,8 +99,7 @@ public class SqlInterceptor implements Interceptor {
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(parameter);
 			cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
-		}
-		else {
+		} else {
 			cacheKey = (CacheKey) args[4];
 			boundSql = (BoundSql) args[5];
 		}
@@ -121,8 +118,7 @@ public class SqlInterceptor implements Interceptor {
 		boolean changeSql = false;
 		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN) && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
 			log.debug("sql have order by ，ignore page.orderBy");
-		}
-		else {
+		} else {
 			String orderBy = sqlParam.getSortBy();
 			if (StringUtils.isNotBlank(orderBy)) {
 				SQLSelectBuilder builder = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType);
@@ -171,6 +167,7 @@ public class SqlInterceptor implements Interceptor {
 
 	/**
 	 * 只拦截Execuate
+	 *
 	 * @param target 插件对象
 	 * @return object
 	 */
@@ -178,8 +175,7 @@ public class SqlInterceptor implements Interceptor {
 	public Object plugin(Object target) {
 		if (target instanceof Executor) {
 			return Plugin.wrap(target, this);
-		}
-		else {
+		} else {
 			return target;
 		}
 	}
@@ -199,8 +195,7 @@ public class SqlInterceptor implements Interceptor {
 			try {
 				String url = connection.getMetaData().getURL();
 				dbType = JdbcUtil.getDbType(url);
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 ", e);
 			}
 		}
@@ -210,42 +205,37 @@ public class SqlInterceptor implements Interceptor {
 		SqlParam page = null;
 		if (parameterObject instanceof SqlParam) {
 			page = (SqlParam) parameterObject;
-		}
-		else if (parameterObject instanceof Map) {
+		} else if (parameterObject instanceof Map) {
 			Map<String, Object> paraMap = (Map<String, Object>) parameterObject;
 			if (paraMap.containsKey(PAGE_PARAM)) {
 				page = (SqlParam) paraMap.get(PAGE_PARAM);
-			}
-			else {
+			} else {
 				Optional<SqlParam> optional = paraMap.entrySet().stream()
 						.filter(entry -> entry.getValue() instanceof SqlParam).map(entry -> (SqlParam) entry.getValue())
 						.findFirst();
 				page = optional.isPresent() ? optional.get() : null;
 			}
-		}
-		else {
+		} else {
 			log.warn("入参没有分页相关数据");
 		}
 		return page;
 	}
 
 	private Long count(Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds,
-			ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+					   ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
 		String countMsId = mappedStatement.getId() + countSuffix;
 		// 判断是否存在count
 		MappedStatement countMappedStatement = null;
 		try {
 			countMappedStatement = mappedStatement.getConfiguration().getMappedStatement(countMsId, false);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 
 		}
 		BoundSql countBoundSql;
 
 		if (countMappedStatement != null) {
 			countBoundSql = countMappedStatement.getBoundSql(parameter);
-		}
-		else {
+		} else {
 			countMappedStatement = COUNT_MS_MAPPEDSTATEMENT_CACHE.get(countMsId);
 			if (countMappedStatement == null) {
 				countMappedStatement = newCountMappedStatement(mappedStatement, countMsId);

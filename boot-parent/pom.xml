@@ -8,6 +8,43 @@
 	<version>1.0.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+
+	<name>boot-parent</name>
+	<description>workoss boot extends</description>
+	<url>https://github.com/workoss/boot</url>
+
+	<scm>
+		<url>https://github.com/workoss/boot</url>
+		<connection>
+			scm:git:git://github.com/workoss/boot.git
+		</connection>
+		<developerConnection>
+			scm:git:ssh://git@github.com/workoss/boot.git
+		</developerConnection>
+		<tag>v1.0.7</tag>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License,Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>workoss</id>
+			<name>workoss</name>
+			<email>workoss@icloud.com</email>
+			<!-- <organization>Pivotal Software, Inc.</organization>
+			 <organizationUrl>https://www.spring.io</organizationUrl>-->
+			<roles>
+				<role>developer</role>
+				<role>admin</role>
+			</roles>
+		</developer>
+	</developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -421,6 +458,17 @@
 
 	<repositories>
 		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
 			<id>spring</id>
 			<name>spring lib-milestone</name>
 			<url>https://repo.spring.io/libs-milestone</url>
@@ -509,6 +557,52 @@
 	</pluginRepositories>
 
 	<profiles>
+		<profile>
+			<id>sonatype-nexus</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Sonatype Nexus Snapshots</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<name>Nexus Release Repository</name>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<version>${maven-release-plugin.version}</version>
+						<configuration>
+							<mavenExecutorId>forked-path</mavenExecutorId>
+							<useReleaseProfile>false</useReleaseProfile>
+							<arguments>-Psonatype-oss-release</arguments>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>talkyun-repo</id>
 			<distributionManagement>
