@@ -583,7 +583,7 @@
 						<configuration>
 							<mavenExecutorId>forked-path</mavenExecutorId>
 							<useReleaseProfile>false</useReleaseProfile>
-							<arguments>-Psonatype-oss-release</arguments>
+							<arguments>-Psonatype-nexus-staging</arguments>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -597,8 +597,27 @@
 								<goals>
 									<goal>sign</goal>
 								</goals>
+								<configuration>
+									<gpgArguments>
+										<arg>--pinentry-mode</arg>
+										<arg>loopback</arg>
+									</gpgArguments>
+								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+					<!--staging puglin,用于自动执行发布阶段(免手动)-->
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.8</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>sonatype-nexus-staging</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+<!--							<stagingRepositoryId></stagingRepositoryId>-->
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
