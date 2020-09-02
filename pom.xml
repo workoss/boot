@@ -4,7 +4,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.8-SNAPSHOT</version>
+	<version>1.0.8-RC1</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-util</module>
@@ -29,7 +29,7 @@
 		<developerConnection>
 			scm:git:ssh://git@github.com/workoss/boot.git
 		</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v1.0.8-RC1</tag>
 	</scm>
 
 	<organization>
