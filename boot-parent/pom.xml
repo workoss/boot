@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.workoss.boot</groupId>
@@ -21,7 +20,7 @@
 		<developerConnection>
 			scm:git:ssh://git@github.com/workoss/boot.git
 		</developerConnection>
-		<tag>v1.0.7</tag>
+		<tag>v1.0.8-RC1</tag>
 	</scm>
 
 	<licenses>
@@ -558,18 +557,15 @@
 
 	<profiles>
 		<profile>
-			<id>sonatype-nexus</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			<id>release</id>
 			<distributionManagement>
 				<snapshotRepository>
-					<id>sonatype-nexus-snapshots</id>
+					<id>ossrh</id>
 					<name>Sonatype Nexus Snapshots</name>
 					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 				</snapshotRepository>
 				<repository>
-					<id>sonatype-nexus-staging</id>
+					<id>ossrh</id>
 					<name>Nexus Release Repository</name>
 					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 				</repository>
@@ -581,9 +577,13 @@
 						<artifactId>maven-release-plugin</artifactId>
 						<version>${maven-release-plugin.version}</version>
 						<configuration>
+							<tagNameFormat>v@{project.version}</tagNameFormat>
 							<mavenExecutorId>forked-path</mavenExecutorId>
 							<useReleaseProfile>false</useReleaseProfile>
-							<arguments>-Psonatype-nexus-staging</arguments>
+							<generateReleasePoms>false</generateReleasePoms>
+							<autoVersionSubmodules>true</autoVersionSubmodules>
+							<arguments>-Prelease</arguments>
+							<arguments>-DskipTests</arguments>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -597,12 +597,6 @@
 								<goals>
 									<goal>sign</goal>
 								</goals>
-								<configuration>
-									<gpgArguments>
-										<arg>--pinentry-mode</arg>
-										<arg>loopback</arg>
-									</gpgArguments>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -613,10 +607,9 @@
 						<version>1.6.8</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>sonatype-nexus-staging</serverId>
+							<serverId>ossrh</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 							<autoReleaseAfterClose>true</autoReleaseAfterClose>
-<!--							<stagingRepositoryId></stagingRepositoryId>-->
 						</configuration>
 					</plugin>
 				</plugins>
