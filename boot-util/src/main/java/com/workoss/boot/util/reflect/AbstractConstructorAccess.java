@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.reflect;
 
@@ -49,16 +42,14 @@ public abstract class AbstractConstructorAccess<T> {
 	 * be created using <code>null</code> as the this$0 synthetic reference. The
 	 * instantiated object will work as long as it actually don't use any member variable
 	 * or method fron the enclosing instance.
-	 *
 	 * @return 实例
 	 */
 	abstract public T newInstance();
 
 	/**
 	 * Constructor for inner classes (non-static nested classes).
-	 *
 	 * @param enclosingInstance The instance of the enclosing type to which this inner
-	 *                          instance is related to (assigned to its synthetic this$0 field).
+	 * instance is related to (assigned to its synthetic this$0 field).
 	 * @return 实例
 	 */
 	abstract public T newInstance(Object enclosingInstance);
@@ -78,11 +69,13 @@ public abstract class AbstractConstructorAccess<T> {
 		AccessClassLoader loader = AccessClassLoader.get(type);
 		try {
 			accessClass = loader.loadClass(accessClassName);
-		} catch (ClassNotFoundException ignored) {
+		}
+		catch (ClassNotFoundException ignored) {
 			synchronized (loader) {
 				try {
 					accessClass = loader.loadClass(accessClassName);
-				} catch (ClassNotFoundException ignored2) {
+				}
+				catch (ClassNotFoundException ignored2) {
 					String accessClassNameInternal = accessClassName.replace('.', '/');
 					String classNameInternal = className.replace('.', '/');
 					String enclosingClassNameInternal;
@@ -93,7 +86,8 @@ public abstract class AbstractConstructorAccess<T> {
 						try {
 							constructor = type.getDeclaredConstructor((Class[]) null);
 							modifiers = constructor.getModifiers();
-						} catch (Exception ex) {
+						}
+						catch (Exception ex) {
 							throw new RuntimeException(
 									"Class cannot be created (missing no-arg constructor): " + type.getName(), ex);
 						}
@@ -101,13 +95,15 @@ public abstract class AbstractConstructorAccess<T> {
 							throw new RuntimeException(
 									"Class cannot be created (the no-arg constructor is private): " + type.getName());
 						}
-					} else {
+					}
+					else {
 						enclosingClassNameInternal = enclosingType.getName().replace('.', '/');
 						try {
 							// Inner classes should have this.
 							constructor = type.getDeclaredConstructor(enclosingType);
 							modifiers = constructor.getModifiers();
-						} catch (Exception ex) {
+						}
+						catch (Exception ex) {
 							throw new RuntimeException(
 									"Non-static member class cannot be created (missing enclosing class constructor): "
 											+ type.getName(),
@@ -138,7 +134,8 @@ public abstract class AbstractConstructorAccess<T> {
 		AbstractConstructorAccess<T> access;
 		try {
 			access = (AbstractConstructorAccess<T>) accessClass.newInstance();
-		} catch (Throwable t) {
+		}
+		catch (Throwable t) {
 			throw new RuntimeException("Exception constructing constructor access class: " + accessClassName, t);
 		}
 		if (!(access instanceof AbstractPublicConstructorAccess)
@@ -193,7 +190,8 @@ public abstract class AbstractConstructorAccess<T> {
 					false);
 			mv.visitInsn(ARETURN);
 			mv.visitMaxs(4, 2);
-		} else {
+		}
+		else {
 			mv.visitTypeInsn(NEW, "java/lang/UnsupportedOperationException");
 			mv.visitInsn(DUP);
 			mv.visitLdcInsn("Not an inner class.");

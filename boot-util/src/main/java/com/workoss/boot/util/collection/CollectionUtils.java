@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.collection;
 
@@ -42,7 +35,6 @@ public class CollectionUtils {
 
 	public static final List EMPTY_ARRAY_LIST = new ArrayList();
 
-
 	public static boolean isEmpty(Collection<?> collection) {
 		return (collection == null) || collection.isEmpty();
 	}
@@ -51,7 +43,6 @@ public class CollectionUtils {
 		return (map == null) || (map.isEmpty());
 	}
 
-
 	public static boolean isNotEmpty(Collection<?> collection) {
 		return (collection != null) && !(collection.isEmpty());
 	}
@@ -59,7 +50,6 @@ public class CollectionUtils {
 	public static boolean isNotEmpty(Map map) {
 		return (map != null) && !(map.isEmpty());
 	}
-
 
 	public static <T> T getFirst(Collection<T> collection) {
 		if (isEmpty(collection)) {
@@ -70,7 +60,6 @@ public class CollectionUtils {
 		}
 		return collection.iterator().next();
 	}
-
 
 	public static Set<String> toSetString(Collection collection) {
 		if (isEmpty(collection)) {
@@ -96,9 +85,8 @@ public class CollectionUtils {
 
 	/**
 	 * a+b
-	 *
-	 * @param a   集合
-	 * @param b   集合
+	 * @param a 集合
+	 * @param b 集合
 	 * @param <T> 泛型
 	 * @return a+b
 	 */
@@ -110,9 +98,8 @@ public class CollectionUtils {
 
 	/**
 	 * 返回a-b的新List.
-	 *
-	 * @param a   集合
-	 * @param b   集合
+	 * @param a 集合
+	 * @param b 集合
 	 * @param <T> 泛型
 	 * @return a-b
 	 */
@@ -130,9 +117,8 @@ public class CollectionUtils {
 
 	/**
 	 * 返回a-b的新Set.
-	 *
-	 * @param a   集合
-	 * @param b   集合
+	 * @param a 集合
+	 * @param b 集合
 	 * @param <T> 泛型
 	 * @return a-b
 	 */
@@ -147,9 +133,8 @@ public class CollectionUtils {
 
 	/**
 	 * 返回a与b的交集的新List.
-	 *
-	 * @param a   集合
-	 * @param b   集合
+	 * @param a 集合
+	 * @param b 集合
 	 * @param <T> 泛型
 	 * @return a b 交集
 	 */
@@ -168,15 +153,13 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最小值，使用元素默认排序
-	 *
 	 * @param coll 集合
-	 * @param <T>  泛型
+	 * @param <T> 泛型
 	 * @return 最小值
 	 */
 	public static <T extends Object & Comparable<? super T>> T min(Collection<? extends T> coll) {
 		return Collections.min(coll);
 	}
-
 
 	public static <T> T min(Collection<? extends T> coll, Comparator<? super T> comp) {
 		return Collections.min(coll, comp);
@@ -184,9 +167,8 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最大值，使用元素默认排序
-	 *
 	 * @param coll 集合
-	 * @param <T>  泛型
+	 * @param <T> 泛型
 	 * @return 最大值
 	 */
 	public static <T extends Object & Comparable<? super T>> T max(Collection<? extends T> coll) {
@@ -195,10 +177,9 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最大值
-	 *
 	 * @param coll 集合
 	 * @param comp 集合
-	 * @param <T>  泛型
+	 * @param <T> 泛型
 	 * @return 最大值
 	 */
 	public static <T> T max(Collection<? extends T> coll, Comparator<? super T> comp) {
@@ -207,9 +188,8 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最小值和最大值，使用元素默认排序
-	 *
 	 * @param coll 集合
-	 * @param <T>  泛型
+	 * @param <T> 泛型
 	 * @return 最大值
 	 */
 	public static <T extends Object & Comparable<? super T>> Pair<T, T> minAndMax(Collection<? extends T> coll) {
@@ -221,7 +201,8 @@ public class CollectionUtils {
 			T next = i.next();
 			if (next.compareTo(minCandidate) < 0) {
 				minCandidate = next;
-			} else if (next.compareTo(maxCandidate) > 0) {
+			}
+			else if (next.compareTo(maxCandidate) > 0) {
 				maxCandidate = next;
 			}
 		}
@@ -230,10 +211,9 @@ public class CollectionUtils {
 
 	/**
 	 * 返回无序集合中的最小值和最大值
-	 *
 	 * @param coll 集合
 	 * @param comp 集合
-	 * @param <T>  泛型
+	 * @param <T> 泛型
 	 * @return pair
 	 */
 	public static <T> Pair<T, T> minAndMax(Collection<? extends T> coll, Comparator<? super T> comp) {
@@ -246,7 +226,8 @@ public class CollectionUtils {
 			T next = i.next();
 			if (comp.compare(next, minCandidate) < 0) {
 				minCandidate = next;
-			} else if (comp.compare(next, maxCandidate) > 0) {
+			}
+			else if (comp.compare(next, maxCandidate) > 0) {
 				maxCandidate = next;
 			}
 		}
@@ -267,7 +248,6 @@ public class CollectionUtils {
 
 	/**
 	 * 判断一个Array是否为空
-	 *
 	 * @param array 数组
 	 * @return 是否为空
 	 */
@@ -277,7 +257,6 @@ public class CollectionUtils {
 
 	/**
 	 * 判断一个Array是否为非空
-	 *
 	 * @param array 数组
 	 * @return 是否为非空
 	 */

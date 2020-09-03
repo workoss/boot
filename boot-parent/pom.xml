@@ -130,7 +130,8 @@
 		<git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
 		<versions-maven-plugin.version>2.7</versions-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
-
+		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -589,7 +590,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
+						<version>${maven-gpg-plugin.version}</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -827,7 +828,7 @@
 				<plugin>
 					<groupId>org.sonatype.plugins</groupId>
 					<artifactId>nexus-staging-maven-plugin</artifactId>
-					<version>1.6.8</version>
+					<version>${nexus-staging-maven-plugin.version}</version>
 				</plugin>
 
 				<plugin>
@@ -914,7 +915,7 @@
 					<configuration>
 						<licenseSets>
 							<licenseSet>
-								<header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
+								<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
 								<excludes>
 									<exclude>*.txt</exclude>
 									<exclude>*.sh</exclude>

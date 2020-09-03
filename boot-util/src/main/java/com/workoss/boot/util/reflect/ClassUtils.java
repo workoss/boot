@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.reflect;
 
@@ -107,17 +100,20 @@ public class ClassUtils {
 		Annotation ann = method.getAnnotation(annotation);
 		if (ann != null) {
 			return (T) ann;
-		} else {
+		}
+		else {
 			Class clazz = method.getDeclaringClass();
 			Class superClass = clazz.getSuperclass();
 			if (superClass != Object.class) {
 				try {
 					Method e = superClass.getMethod(method.getName(), method.getParameterTypes());
 					return getAnnotation(e, annotation);
-				} catch (NoSuchMethodException var6) {
+				}
+				catch (NoSuchMethodException var6) {
 					return null;
 				}
-			} else {
+			}
+			else {
 				return (T) ann;
 			}
 		}
@@ -127,7 +123,8 @@ public class ClassUtils {
 		ClassLoader cl = null;
 		try {
 			cl = Thread.currentThread().getContextClassLoader();
-		} catch (Throwable ex) {
+		}
+		catch (Throwable ex) {
 			// Cannot access thread context ClassLoader - falling back...
 		}
 		if (cl == null) {
@@ -138,7 +135,8 @@ public class ClassUtils {
 				// ClassLoader
 				try {
 					cl = ClassLoader.getSystemClassLoader();
-				} catch (Throwable ex) {
+				}
+				catch (Throwable ex) {
 					// Cannot access message ClassLoader - oh well, maybe the
 					// caller can live with null...
 				}
@@ -156,24 +154,23 @@ public class ClassUtils {
 
 	/**
 	 * 根据类名加载Class
-	 *
-	 * @param className  类名
+	 * @param className 类名
 	 * @param initialize 是否初始化
 	 * @return Class
 	 */
 	public static Class forName(String className, boolean initialize) {
 		try {
 			return Class.forName(className, initialize, ClassLoaderUtils.getCurrentClassLoader());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * 实例化一个对象(只检测默认构造函数，其它不管）
-	 *
 	 * @param clazz 对象类
-	 * @param <T>   对象具体类
+	 * @param <T> 对象具体类
 	 * @return 对象实例
 	 * @throws RuntimeException 没有找到方法，或者无法处理，或者初始化方法异常等
 	 */
@@ -195,7 +192,8 @@ public class ClassUtils {
 					Constructor<T> constructor = clazz.getDeclaredConstructor();
 					constructor.setAccessible(true);
 					return constructor.newInstance();
-				} catch (Exception ignore) { // NOPMD
+				}
+				catch (Exception ignore) { // NOPMD
 				}
 			}
 			// 不行的话，找一个最少参数的构造函数
@@ -222,20 +220,21 @@ public class ClassUtils {
 				args[i] = getDefaultPrimitiveValue(argTypes[i]);
 			}
 			return constructor.newInstance(args);
-		} catch (RuntimeException e) {
+		}
+		catch (RuntimeException e) {
 			throw e;
-		} catch (Throwable e) {
+		}
+		catch (Throwable e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
 	/**
 	 * 实例化一个对象(根据参数自动检测构造方法）
-	 *
-	 * @param clazz    对象类
+	 * @param clazz 对象类
 	 * @param argTypes 构造函数需要的参数
-	 * @param args     构造函数需要的参数
-	 * @param <T>      对象具体类
+	 * @param args 构造函数需要的参数
+	 * @param <T> 对象具体类
 	 * @return 对象实例
 	 * @throws RuntimeException 没有找到方法，或者无法处理，或者初始化方法异常等
 	 */
@@ -249,7 +248,8 @@ public class ClassUtils {
 				Constructor<T> constructor = clazz.getDeclaredConstructor(argTypes);
 				constructor.setAccessible(true);
 				return constructor.newInstance(args);
-			} else {
+			}
+			else {
 				Constructor<T>[] constructors = (Constructor<T>[]) clazz.getDeclaredConstructors();
 				if (constructors == null || constructors.length == 0) {
 					throw new RuntimeException("The " + clazz.getCanonicalName() + " has no constructor with argTypes :"
@@ -277,51 +277,60 @@ public class ClassUtils {
 				if (constructor == null) {
 					throw new RuntimeException("The " + clazz.getCanonicalName() + " has no constructor with argTypes :"
 							+ Arrays.toString(argTypes));
-				} else {
+				}
+				else {
 					constructor.setAccessible(true);
 					Object[] newArgs = new Object[args.length + 1];
 					System.arraycopy(args, 0, newArgs, 1, args.length);
 					return constructor.newInstance(newArgs);
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
-		} catch (Throwable e) {
+		}
+		catch (Throwable e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
 	/**
 	 * 得到基本类型的默认值
-	 *
 	 * @param clazz Class类
 	 * @return 默认值
 	 */
 	public static Object getDefaultPrimitiveValue(Class clazz) {
 		if (clazz == int.class) {
 			return 0;
-		} else if (clazz == boolean.class) {
+		}
+		else if (clazz == boolean.class) {
 			return false;
-		} else if (clazz == long.class) {
+		}
+		else if (clazz == long.class) {
 			return 0L;
-		} else if (clazz == byte.class) {
+		}
+		else if (clazz == byte.class) {
 			return (byte) 0;
-		} else if (clazz == double.class) {
+		}
+		else if (clazz == double.class) {
 			return 0d;
-		} else if (clazz == short.class) {
+		}
+		else if (clazz == short.class) {
 			return (short) 0;
-		} else if (clazz == float.class) {
+		}
+		else if (clazz == float.class) {
 			return 0f;
-		} else if (clazz == char.class) {
+		}
+		else if (clazz == char.class) {
 			return (char) 0;
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
 
 	/**
 	 * 得到包装类的默认值
-	 *
 	 * @param clazz Class类
 	 * @param <T> 泛型
 	 * @return 默认值
@@ -329,19 +338,26 @@ public class ClassUtils {
 	public static <T> T getDefaultWrapperValue(Class<T> clazz) {
 		if (clazz == Short.class) {
 			return (T) Short.valueOf((short) 0);
-		} else if (clazz == Integer.class) {
+		}
+		else if (clazz == Integer.class) {
 			return (T) Integer.valueOf(0);
-		} else if (clazz == Long.class) {
+		}
+		else if (clazz == Long.class) {
 			return (T) Long.valueOf(0L);
-		} else if (clazz == Double.class) {
+		}
+		else if (clazz == Double.class) {
 			return (T) Double.valueOf(0d);
-		} else if (clazz == Float.class) {
+		}
+		else if (clazz == Float.class) {
 			return (T) Float.valueOf(0f);
-		} else if (clazz == Byte.class) {
+		}
+		else if (clazz == Byte.class) {
 			return (T) Byte.valueOf((byte) 0);
-		} else if (clazz == Character.class) {
+		}
+		else if (clazz == Character.class) {
 			return (T) Character.valueOf((char) 0);
-		} else if (clazz == Boolean.class) {
+		}
+		else if (clazz == Boolean.class) {
 			return (T) Boolean.FALSE;
 		}
 		return null;
@@ -350,7 +366,6 @@ public class ClassUtils {
 	/**
 	 * Class[]转String[] <br>
 	 * 注意，得到的String可能不能直接用于Class.forName，请使用getClasses(String[])反向获取
-	 *
 	 * @param types Class[]
 	 * @return 对象描述
 	 */
@@ -361,15 +376,15 @@ public class ClassUtils {
 	/**
 	 * Class[]转String[] <br>
 	 * 注意，得到的String可能不能直接用于Class.forName，请使用getClasses(String[])反向获取
-	 *
-	 * @param types     Class[]
+	 * @param types Class[]
 	 * @param javaStyle JDK自带格式，例如 int[], true的话返回 [I; false的话返回int[]
 	 * @return 对象描述
 	 */
 	public static String[] getTypeStrs(Class[] types, boolean javaStyle) {
 		if (types == null || types.length == 0) {
 			return StringUtils.EMPTY_STRING_ARRAY;
-		} else {
+		}
+		else {
 			String[] strings = new String[types.length];
 			for (int i = 0; i < types.length; i++) {
 				strings[i] = javaStyle ? types[i].getName() : getTypeStr(types[i]);
@@ -381,7 +396,6 @@ public class ClassUtils {
 	/**
 	 * Class转String<br>
 	 * 注意，得到的String可能不能直接用于Class.forName，请使用getClass(String)反向获取
-	 *
 	 * @param clazz Class
 	 * @return 对象
 	 */
@@ -393,7 +407,8 @@ public class ClassUtils {
 				String name = clazz.getName();
 				// java.lang.String[]
 				typeStr = jvmNameToCanonicalName(name);
-			} else {
+			}
+			else {
 				typeStr = clazz.getName();
 			}
 			ReflectUtils.putTypeStrCache(clazz, typeStr);
@@ -403,7 +418,6 @@ public class ClassUtils {
 
 	/**
 	 * JVM描述转通用描述
-	 *
 	 * @param jvmName 例如 [I;
 	 * @return 通用描述 例如 int[]
 	 */
@@ -422,21 +436,29 @@ public class ClassUtils {
 			String componentType = jvmName.substring(i, jvmName.length());
 			if ("Z".equals(componentType)) {
 				cnName = "boolean" + cnName;
-			} else if ("B".equals(componentType)) {
+			}
+			else if ("B".equals(componentType)) {
 				cnName = "byte" + cnName;
-			} else if ("C".equals(componentType)) {
+			}
+			else if ("C".equals(componentType)) {
 				cnName = "char" + cnName;
-			} else if ("D".equals(componentType)) {
+			}
+			else if ("D".equals(componentType)) {
 				cnName = "double" + cnName;
-			} else if ("F".equals(componentType)) {
+			}
+			else if ("F".equals(componentType)) {
 				cnName = "float" + cnName;
-			} else if ("I".equals(componentType)) {
+			}
+			else if ("I".equals(componentType)) {
 				cnName = "int" + cnName;
-			} else if ("J".equals(componentType)) {
+			}
+			else if ("J".equals(componentType)) {
 				cnName = "long" + cnName;
-			} else if ("S".equals(componentType)) {
+			}
+			else if ("S".equals(componentType)) {
 				cnName = "short" + cnName;
-			} else {
+			}
+			else {
 				// 对象的// 去掉L
 				cnName = componentType.substring(1, componentType.length() - 1) + cnName;
 

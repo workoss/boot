@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.plugin.mybatis;
 
@@ -39,7 +32,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据id查询
-	 *
 	 * @param id 主键
 	 * @return 对象
 	 */
@@ -48,7 +40,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据id批量查询
-	 *
 	 * @param ids 主键
 	 * @return 对象列表
 	 */
@@ -57,7 +48,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 多条件查询
-	 *
 	 * @param record 对象
 	 * @return 对象列表
 	 */
@@ -66,7 +56,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 分页查询
-	 *
 	 * @param record 对象
 	 * @return page
 	 */
@@ -75,7 +64,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 多条件count
-	 *
 	 * @param record 对象
 	 * @return count
 	 */
@@ -84,7 +72,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 插入
-	 *
 	 * @param record 对象
 	 * @return 数目
 	 */
@@ -93,7 +80,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 可选插入
-	 *
 	 * @param record 对象
 	 * @return 插入数目
 	 */
@@ -102,7 +88,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 批量插入
-	 *
 	 * @param list 列表
 	 * @return 插入数量
 	 */
@@ -111,9 +96,8 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据id 修改
-	 *
 	 * @param record 对象
-	 * @param id     主键
+	 * @param id 主键
 	 * @return 修改数量
 	 */
 	@UpdateProvider(type = CrudUpdateProvider.class, method = "updateById")
@@ -121,7 +105,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据id删除
-	 *
 	 * @param id 主键
 	 * @return 删除数目
 	 */
@@ -130,7 +113,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据ids 批量删除
-	 *
 	 * @param ids 主键
 	 * @return 删除数目
 	 */
@@ -139,7 +121,6 @@ public interface CrudDao<T, ID> {
 
 	/**
 	 * 条件删除
-	 *
 	 * @param t 对象
 	 * @return 删除数目
 	 */

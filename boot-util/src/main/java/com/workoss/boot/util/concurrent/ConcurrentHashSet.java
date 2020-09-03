@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.concurrent;
 
@@ -78,9 +71,9 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E>, java
 	}
 
 	/**
-	 * Returns true if this set contains the specified element. More formally,
-	 * returns true if and only if this set contains an element e such
-	 * that (o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e)).
+	 * Returns true if this set contains the specified element. More formally, returns
+	 * true if and only if this set contains an element e such that
+	 * (o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e)).
 	 * @param o element whose presence in this set is to be tested
 	 * @return true if this set contains the specified element
 	 */
@@ -91,11 +84,9 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E>, java
 
 	/**
 	 * Adds the specified element to this set if it is not already present. More formally,
-	 * adds the specified element e to this set if this set contains no element
-	 * e2 such that
-	 * (e==null&nbsp;?&nbsp;e2==null&nbsp;:&nbsp;e.equals(e2)). If this set
-	 * already contains the element, the call leaves the set unchanged and returns
-	 * false.
+	 * adds the specified element e to this set if this set contains no element e2 such
+	 * that (e==null&nbsp;?&nbsp;e2==null&nbsp;:&nbsp;e.equals(e2)). If this set already
+	 * contains the element, the call leaves the set unchanged and returns false.
 	 * @param e element to be added to this set
 	 * @return true if this set did not already contain the specified element
 	 */
@@ -107,10 +98,10 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E>, java
 	/**
 	 * Removes the specified element from this set if it is present. More formally,
 	 * removes an element e such that
-	 * (o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e)), if this set
-	 * contains such an element. Returns true if this set contained the element
-	 * (or equivalently, if this set changed as a result of the call). (This set will not
-	 * contain the element once the call returns.)
+	 * (o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e)), if this set contains such an
+	 * element. Returns true if this set contained the element (or equivalently, if this
+	 * set changed as a result of the call). (This set will not contain the element once
+	 * the call returns.)
 	 * @param o object to be removed from this set, if present
 	 * @return true if the set contained the specified element
 	 */

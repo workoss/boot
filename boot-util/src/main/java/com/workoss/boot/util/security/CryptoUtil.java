@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.security;
 
@@ -71,9 +64,8 @@ public class CryptoUtil {
 
 	/**
 	 * 使用HMAC-SHA256进行消息签名, 返回字节数组,长度为20字节.
-	 *
 	 * @param input 原始输入字符数组
-	 * @param key   HMAC-SHA1密钥
+	 * @param key HMAC-SHA1密钥
 	 * @return 加密后
 	 */
 	public static byte[] hmacSha256(byte[] input, byte[] key) {
@@ -82,7 +74,8 @@ public class CryptoUtil {
 			Mac mac = Mac.getInstance("HmacSHA256");
 			mac.init(secretKey);
 			return mac.doFinal(input);
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -91,9 +84,8 @@ public class CryptoUtil {
 
 	/**
 	 * 使用HMAC-SHA1进行消息签名, 返回字节数组,长度为20字节.
-	 *
 	 * @param input 原始输入字符数组
-	 * @param key   HMAC-SHA1密钥
+	 * @param key HMAC-SHA1密钥
 	 * @return 加密
 	 */
 	public static byte[] hmacSha1(byte[] input, byte[] key) {
@@ -102,7 +94,8 @@ public class CryptoUtil {
 			Mac mac = Mac.getInstance(HMACSHA1_ALG);
 			mac.init(secretKey);
 			return mac.doFinal(input);
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -110,17 +103,17 @@ public class CryptoUtil {
 	public static SecureRandom secureRandom() {
 		try {
 			return SecureRandom.getInstance("SHA1PRNG");
-		} catch (NoSuchAlgorithmException e) {// NOSONAR
+		}
+		catch (NoSuchAlgorithmException e) {// NOSONAR
 			return new SecureRandom();
 		}
 	}
 
 	/**
 	 * 校验HMAC-SHA1签名是否正确.
-	 *
 	 * @param expected 已存在的签名
-	 * @param input    原始输入字符串
-	 * @param key      密钥
+	 * @param input 原始输入字符串
+	 * @param key 密钥
 	 * @return true/false
 	 */
 	public static boolean isMacValid(byte[] expected, byte[] input, byte[] key) {
@@ -135,7 +128,6 @@ public class CryptoUtil {
 
 	/**
 	 * 生成HMAC-SHA1密钥,返回字节数组,长度为160位(20字节). HMAC-SHA1算法对密钥无特殊要求, RFC2401建议最少长度为160位(20字节).
-	 *
 	 * @return hmacsha1key
 	 */
 	public static byte[] generateHmacSha1Key() {
@@ -144,13 +136,13 @@ public class CryptoUtil {
 			keyGenerator.init(DEFAULT_HMACSHA1_KEYSIZE);
 			SecretKey secretKey = keyGenerator.generateKey();
 			return secretKey.getEncoded();
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	///////////// -- AES funciton --//////////
-
 
 	public static byte[] aesEncrypt(byte[] input, byte[] key) {
 		return aes(input, key, Cipher.ENCRYPT_MODE);
@@ -163,10 +155,9 @@ public class CryptoUtil {
 
 	/**
 	 * 使用AES加密原始字符串.
-	 *
 	 * @param input 原始输入字符数组
-	 * @param key   符合AES要求的密钥
-	 * @param iv    初始向量
+	 * @param key 符合AES要求的密钥
+	 * @param iv 初始向量
 	 * @return 加密
 	 */
 	public static byte[] aesEncrypt(byte[] input, byte[] key, byte[] iv) {
@@ -175,9 +166,8 @@ public class CryptoUtil {
 
 	/**
 	 * 使用AES解密字符串, 返回原始字符串.
-	 *
 	 * @param input Hex编码的加密字符串
-	 * @param key   符合AES要求的密钥
+	 * @param key 符合AES要求的密钥
 	 * @return 加密
 	 */
 	public static String aesDecrypt(byte[] input, byte[] key) {
@@ -187,10 +177,9 @@ public class CryptoUtil {
 
 	/**
 	 * 使用AES解密字符串, 返回原始字符串.
-	 *
 	 * @param input Hex编码的加密字符串
-	 * @param key   符合AES要求的密钥
-	 * @param iv    初始向量
+	 * @param key 符合AES要求的密钥
+	 * @param iv 初始向量
 	 * @return 加密
 	 */
 	public static String aesDecrypt(byte[] input, byte[] key, byte[] iv) {
@@ -210,10 +199,9 @@ public class CryptoUtil {
 
 	/**
 	 * 使用AES加密或解密无编码的原始字节数组, 返回无编码的字节数组结果.
-	 *
 	 * @param input 原始字节数组
-	 * @param key   符合AES要求的密钥
-	 * @param mode  Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
+	 * @param key 符合AES要求的密钥
+	 * @param mode Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
 	 * @return 加密
 	 */
 	private static byte[] aes(byte[] input, byte[] key, int mode) {
@@ -222,18 +210,18 @@ public class CryptoUtil {
 			Cipher cipher = Cipher.getInstance(AES_ALG);
 			cipher.init(mode, secretKey);
 			return cipher.doFinal(input);
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * 使用AES加密或解密无编码的原始字节数组, 返回无编码的字节数组结果.
-	 *
 	 * @param input 原始字节数组
-	 * @param key   符合AES要求的密钥
-	 * @param iv    初始向量
-	 * @param mode  Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
+	 * @param key 符合AES要求的密钥
+	 * @param iv 初始向量
+	 * @param mode Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
 	 * @return 加密
 	 */
 	private static byte[] aes(byte[] input, byte[] key, byte[] iv, int mode) {
@@ -262,14 +250,14 @@ public class CryptoUtil {
 			param.init(new IvParameterSpec(iv));
 			cipher.init(mode, secretKey, param);
 			return cipher.doFinal(input);
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * 生成AES密钥,返回字节数组, 默认长度为128位(16字节).
-	 *
 	 * @return 加密
 	 */
 	public static byte[] generateAesKey() {
@@ -278,7 +266,6 @@ public class CryptoUtil {
 
 	/**
 	 * 生成AES密钥,可选长度为128,192,256位.
-	 *
 	 * @param keysize key大小
 	 * @return 加密
 	 */
@@ -288,14 +275,14 @@ public class CryptoUtil {
 			keyGenerator.init(keysize);
 			SecretKey secretKey = keyGenerator.generateKey();
 			return secretKey.getEncoded();
-		} catch (GeneralSecurityException e) {
+		}
+		catch (GeneralSecurityException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * 生成随机向量,默认大小为cipher.getBlockSize(), 16字节.
-	 *
 	 * @return 加密
 	 */
 	public static byte[] generateIv() {
@@ -321,7 +308,8 @@ public class CryptoUtil {
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
 			KeyFactory keyFactory = KeyFactory.getInstance(ASA_ALG);
 			return keyFactory.generatePublic(keySpec);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log.error("获取PublicKey实例失败:", e);
 		}
 		return null;
@@ -333,7 +321,8 @@ public class CryptoUtil {
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
 			KeyFactory keyFactory = KeyFactory.getInstance(ASA_ALG);
 			return keyFactory.generatePrivate(keySpec);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log.error("获取PrivateKey实例:", e);
 		}
 		return null;
@@ -346,7 +335,8 @@ public class CryptoUtil {
 			KeyPair keyPair = keyPairGenerator.generateKeyPair();
 			RSAKeys rsaKeys = new RSAKeys(keyPair.getPublic(), keyPair.getPrivate());
 			return rsaKeys;
-		} catch (NoSuchAlgorithmException e) {
+		}
+		catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("generate rsakeys error:" + e.getMessage());
 		}
 

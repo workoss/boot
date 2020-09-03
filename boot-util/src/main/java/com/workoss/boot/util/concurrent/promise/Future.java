@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.concurrent.promise;
 
@@ -33,7 +26,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Returns {@code true} if and only if the I/O operation was completed successfully.
-	 *
 	 * @return true/false
 	 */
 	boolean isSuccess();
@@ -41,14 +33,12 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	/**
 	 * returns {@code true} if and only if the operation can be cancelled via
 	 * {@link #cancel(boolean)}.
-	 *
 	 * @return true/false
 	 */
 	boolean isCancellable();
 
 	/**
 	 * Returns the cause of the failed I/O operation if the I/O operation has failed.
-	 *
 	 * @return 异常
 	 */
 	Throwable cause();
@@ -57,7 +47,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * Adds the specified listener to this future. The specified listener is notified when
 	 * this future is {@linkplain #isDone() done}. If this future is already completed,
 	 * the specified listener is notified immediately.
-	 *
 	 * @param listener listener
 	 * @return future
 	 */
@@ -67,7 +56,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * Adds the specified listeners to this future. The specified listeners is notified
 	 * when this future is {@linkplain #isDone() done}. If this future is already
 	 * completed, the specified listeners is notified immediately.
-	 *
 	 * @param listeners listener
 	 * @return future
 	 */
@@ -78,7 +66,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * specified listener is no longer notified when this future is {@linkplain #isDone()
 	 * done}. If the specified listener is not associated with this future, this method
 	 * does nothing and returns silently.
-	 *
 	 * @param listener listener
 	 * @return future
 	 */
@@ -89,7 +76,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * specified listeners is no longer notified when this future is {@linkplain #isDone()
 	 * done}. If the specified listeners is not associated with this future, this method
 	 * does nothing and returns silently.
-	 *
 	 * @param listeners listener
 	 * @return future
 	 */
@@ -98,7 +84,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	/**
 	 * Waits for this future until it is done, and rethrows the cause of the failure if
 	 * this future failed.
-	 *
 	 * @return future
 	 * @throws InterruptedException if the current thread was interrupted
 	 */
@@ -108,14 +93,12 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * Waits for this future until it is done, and rethrows the cause of the failure if
 	 * this future failed. This method catches an {@link InterruptedException} and
 	 * discards it silently.
-	 *
 	 * @return future
 	 */
 	Future<V> syncUninterruptibly();
 
 	/**
 	 * Waits for this future to be completed.
-	 *
 	 * @return future
 	 * @throws InterruptedException if the current thread was interrupted
 	 */
@@ -124,14 +107,12 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	/**
 	 * Waits for this future to be completed without interruption. This method catches an
 	 * {@link InterruptedException} and discards it silently.
-	 *
 	 * @return future
 	 */
 	Future<V> awaitUninterruptibly();
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 *
 	 * @param timeout 超时时间
 	 * @param timeUnit 单位
 	 * @return {@code true} if and only if the future was completed within the specified
@@ -142,7 +123,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 *
 	 * @param timeout 超时时间
 	 * @param timeUnit 单位
 	 * @return {@code true} if and only if the future was completed within the specified
@@ -153,7 +133,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 *
 	 * @param timeoutMillis 超时毫秒
 	 * @return {@code true} if and only if the future was completed within the specified
 	 * time limit
@@ -163,7 +142,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
 	/**
 	 * Waits for this future to be completed within the specified time limit.
-	 *
 	 * @param timeoutMillis 超时毫秒
 	 * @return true/false
 	 */
@@ -176,7 +154,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * As it is possible that a {@code null} value is used to mark the future as
 	 * successful you also need to check if the future is really done with
 	 * {@link #isDone()} and not relay on the returned {@code null} value.
-	 *
 	 * @return 对象
 	 */
 	V getNow();
@@ -186,7 +163,6 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 	 * <p>
 	 * If the cancellation was successful it will fail the future with an
 	 * {@link java.util.concurrent.CancellationException}.
-	 *
 	 * @param mayInterruptIfRunning mayInterruptIfRunning
 	 * @return true/false
 	 */

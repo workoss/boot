@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.text;
 
@@ -43,7 +36,6 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * createThreadLocalMessageDigest
-	 *
 	 * @param digest
 	 * @return
 	 */
@@ -53,7 +45,8 @@ public abstract class BaseHashUtil {
 			protected MessageDigest initialValue() {
 				try {
 					return MessageDigest.getInstance(digest);
-				} catch (NoSuchAlgorithmException e) {
+				}
+				catch (NoSuchAlgorithmException e) {
 					throw new RuntimeException(
 							"unexpected exception creating MessageDigest instance for [" + digest + "]", e);
 				}
@@ -77,16 +70,13 @@ public abstract class BaseHashUtil {
 		return digest(input, get(SHA_1_DIGEST), null, 1);
 	}
 
-
 	public static byte[] sha1(String input) {
 		return digest(input.getBytes(UTF_8), get(SHA_1_DIGEST), null, 1);
 	}
 
-
 	public static byte[] sha1(byte[] input, byte[] salt) {
 		return digest(input, get(SHA_1_DIGEST), salt, 1);
 	}
-
 
 	public static byte[] sha1(String input, byte[] salt) {
 		return digest(input.getBytes(UTF_8), get(SHA_1_DIGEST), salt, 1);
@@ -94,9 +84,8 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
-	 *
-	 * @param input      输入值
-	 * @param salt       盐
+	 * @param input 输入值
+	 * @param salt 盐
 	 * @param iterations 迭代次数
 	 * @return 加密后
 	 */
@@ -106,9 +95,8 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
-	 *
-	 * @param input      输入值
-	 * @param salt       盐
+	 * @param input 输入值
+	 * @param salt 盐
 	 * @param iterations 迭代次数
 	 * @return 加密后
 	 */
@@ -124,10 +112,9 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 对字符串进行散列, 支持md5与sha1算法.
-	 *
-	 * @param input      输入值
-	 * @param digest     messageDigest
-	 * @param salt       盐
+	 * @param input 输入值
+	 * @param digest messageDigest
+	 * @param salt 盐
 	 * @param iterations 迭代次数
 	 * @return 加密
 	 */
@@ -151,7 +138,6 @@ public abstract class BaseHashUtil {
 
 	/**
 	 * 用SecureRandom生成随机的byte[]作为salt.
-	 *
 	 * @param numBytes salt数组的大小
 	 * @return 生成
 	 */
@@ -164,11 +150,9 @@ public abstract class BaseHashUtil {
 		return bytes;
 	}
 
-
 	public static byte[] sha1File(InputStream input) throws IOException {
 		return digestFile(input, get(SHA_1_DIGEST));
 	}
-
 
 	public static byte[] md5File(InputStream input) throws IOException {
 		return digestFile(input, get(MD5_DIGEST));
@@ -193,7 +177,6 @@ public abstract class BaseHashUtil {
 	 * 对输入字符串进行crc32散列返回int, 返回值有可能是负数.
 	 * <p>
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
-	 *
 	 * @param input 输入值
 	 * @return crc32
 	 */
@@ -241,22 +224,22 @@ public abstract class BaseHashUtil {
 
 	////////////////// 基于Guava的MurMurHash ///////////////////
 	/* *//**
-	 * 对输入字符串进行murmur32散列, 返回值可能是负数
-	 */
+			 * 对输入字符串进行murmur32散列, 返回值可能是负数
+			 */
 	/*
 	 * public static int murmur32AsInt(byte[] input) { return
 	 * Hashing.murmur3_32(MURMUR_SEED).hashBytes(input).asInt(); }
 	 *
 	 *//**
-	 * 对输入字符串进行murmur32散列, 返回值可能是负数
-	 */
+		 * 对输入字符串进行murmur32散列, 返回值可能是负数
+		 */
 	/*
 	 * public static int murmur32AsInt(String input) { return
 	 * Hashing.murmur3_32(MURMUR_SEED).hashString(input, UTF_8).asInt(); }
 	 *
 	 *//**
-	 * 对输入字符串进行murmur128散列, 返回值可能是负数
-	 */
+		 * 对输入字符串进行murmur128散列, 返回值可能是负数
+		 */
 
 	/*
 	 * public static long murmur128AsLong(byte[] input) { return
@@ -267,9 +250,9 @@ public abstract class BaseHashUtil {
 	/**
 	 * 对输入字符串进行murmur128散列, 返回值可能是负数
 	 *//*
-	 * public static long murmur128AsLong(String input) { return
-	 * Hashing.murmur3_128(MURMUR_SEED).hashString(input, UTF_8).asLong(); }
-	 */
+		 * public static long murmur128AsLong(String input) { return
+		 * Hashing.murmur3_128(MURMUR_SEED).hashString(input, UTF_8).asLong(); }
+		 */
 	public static void removeMd5Digest() {
 		MD5_DIGEST.remove();
 	}

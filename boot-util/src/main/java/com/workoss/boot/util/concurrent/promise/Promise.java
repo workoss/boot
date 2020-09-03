@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.concurrent.promise;
 
@@ -32,7 +25,6 @@ public interface Promise<V> extends Future<V> {
 	/**
 	 * Marks this future as a success and notifies all listeners. If it is success or
 	 * failed already it will throw an {@link IllegalStateException}.
-	 *
 	 * @param result 对象
 	 * @return promise
 	 */
@@ -40,7 +32,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * Marks this future as a success and notifies all listeners.
-	 *
 	 * @param result 对象
 	 * @return {@code true} if and only if successfully marked this future as a success.
 	 * Otherwise {@code false} because this future is already marked as either a success
@@ -51,7 +42,6 @@ public interface Promise<V> extends Future<V> {
 	/**
 	 * Marks this future as a failure and notifies all listeners. If it is success or
 	 * failed already it will throw an {@link IllegalStateException}.
-	 *
 	 * @param cause 异常
 	 * @return promise
 	 */
@@ -59,7 +49,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * Marks this future as a failure and notifies all listeners.
-	 *
 	 * @param cause 异常
 	 * @return {@code true} if and only if successfully marked this future as a failure.
 	 * {@code false} because this future is already marked as either a success or a
@@ -69,7 +58,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * Make this future impossible to cancel.
-	 *
 	 * @return {@code true} if and only if successfully marked this future as
 	 * uncancellable or it is already done without being cancelled. {@code false} if this
 	 * future has been cancelled already.
@@ -78,7 +66,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * addListener
-	 *
 	 * @param listener lis
 	 * @return promise
 	 */
@@ -87,7 +74,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * addListeners
-	 *
 	 * @param listeners lis
 	 * @return promise
 	 */
@@ -96,7 +82,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * removeListener
-	 *
 	 * @param listener lis
 	 * @return promise
 	 */
@@ -105,7 +90,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * removeListeners
-	 *
 	 * @param listeners lis
 	 * @return promise
 	 */
@@ -114,7 +98,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * sync
-	 *
 	 * @return promise
 	 * @throws InterruptedException 异常
 	 */
@@ -123,7 +106,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * syncUninterruptibly
-	 *
 	 * @return promise
 	 */
 	@Override
@@ -131,7 +113,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * await
-	 *
 	 * @return promise
 	 * @throws InterruptedException 异常
 	 */
@@ -140,7 +121,6 @@ public interface Promise<V> extends Future<V> {
 
 	/**
 	 * awaitUninterruptibly
-	 *
 	 * @return promise
 	 */
 	@Override

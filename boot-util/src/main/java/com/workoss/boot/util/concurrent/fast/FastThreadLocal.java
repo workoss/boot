@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.concurrent.fast;
 
@@ -29,7 +22,7 @@ import java.util.Set;
 /**
  * @author workoss
  */
-@SuppressWarnings({"ALL"})
+@SuppressWarnings({ "ALL" })
 public class FastThreadLocal<V> {
 
 	/**
@@ -49,7 +42,6 @@ public class FastThreadLocal<V> {
 		index = InternalThreadLocalMap.nextVariableIndex();
 	}
 
-
 	public void set(V value) {
 		// 1、如果value是UNSET，表示删除当前的ThreadLocal对应的value；
 		// 如果不是UNSET，则可能是修改，也可能是新增；
@@ -60,7 +52,8 @@ public class FastThreadLocal<V> {
 			if (setKnownNotUnset(threadLocalMap, value)) {
 				registerCleaner(threadLocalMap);
 			}
-		} else {
+		}
+		else {
 			// 如果设置的值是UNSET，表示清除该FastThreadLocal的value
 			remove();
 		}
@@ -68,7 +61,6 @@ public class FastThreadLocal<V> {
 
 	/**
 	 * 获取当前线程的InternalThreadLocalMap中的当前ftl的value
-	 *
 	 * @return 获取thread
 	 */
 	public V get() {
@@ -105,7 +97,8 @@ public class FastThreadLocal<V> {
 		if (v != InternalThreadLocalMap.UNSET) {
 			try {
 				onRemoved((V) v);
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -153,7 +146,8 @@ public class FastThreadLocal<V> {
 					threadLocal.remove();
 				}
 			}
-		} finally {
+		}
+		finally {
 			// 3、删除当前线程的InternalThreadLocalMap
 			threadLocalMap.remove();
 		}
@@ -195,7 +189,8 @@ public class FastThreadLocal<V> {
 		try {
 			// 1、获取初始值
 			v = initialValue();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		// 2、设置value到InternalThreadLocalMap中
@@ -218,7 +213,8 @@ public class FastThreadLocal<V> {
 		if (v == InternalThreadLocalMap.UNSET) {
 			variablesToRemove = Collections.newSetFromMap(new IdentityHashMap<FastThreadLocal<?>, Boolean>());
 			threadLocalMap.setIndexedVariables(VARIABLES_TO_REMOVE_INDEX, variablesToRemove);
-		} else {
+		}
+		else {
 			variablesToRemove = (Set<FastThreadLocal<?>>) v;
 		}
 		variablesToRemove.add(threadLocal);
@@ -243,7 +239,6 @@ public class FastThreadLocal<V> {
 
 	/**
 	 * 初始化参数：由子类复写
-	 *
 	 * @return 对象
 	 * @throws Exception 异常
 	 */
@@ -253,7 +248,6 @@ public class FastThreadLocal<V> {
 
 	/**
 	 * 当前的threadLocal被删除后的回调：由子类复写
-	 *
 	 * @param value 对象
 	 * @throws Exception 异常
 	 */

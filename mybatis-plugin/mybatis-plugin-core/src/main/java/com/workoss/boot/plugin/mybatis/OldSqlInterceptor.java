@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.plugin.mybatis;
 
@@ -59,9 +52,9 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("ALL")
 @Intercepts({
 		@Signature(type = Executor.class, method = "query",
-				args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
-		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),})
+				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
+		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
+				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class }), })
 public class OldSqlInterceptor implements Interceptor {
 
 	public static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
@@ -94,7 +87,8 @@ public class OldSqlInterceptor implements Interceptor {
 
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(param);
-		} else {
+		}
+		else {
 			boundSql = (BoundSql) args[5];
 		}
 
@@ -113,7 +107,8 @@ public class OldSqlInterceptor implements Interceptor {
 		boolean changeSql = false;
 		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN) && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
 			log.debug("sql have order by ，ignore page.orderBy");
-		} else {
+		}
+		else {
 			String orderBy = sqlParam.getSortBy();
 			if (!(orderBy == null || orderBy.length() == 0)) {
 				SQLSelectBuilder builder = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType);
@@ -180,7 +175,6 @@ public class OldSqlInterceptor implements Interceptor {
 
 	/**
 	 * 只拦截Execuate
-	 *
 	 * @param target 插件对象
 	 * @return object
 	 */
@@ -188,7 +182,8 @@ public class OldSqlInterceptor implements Interceptor {
 	public Object plugin(Object target) {
 		if (target instanceof Executor) {
 			return Plugin.wrap(target, this);
-		} else {
+		}
+		else {
 			return target;
 		}
 	}
@@ -210,7 +205,8 @@ public class OldSqlInterceptor implements Interceptor {
 				url = connection.getMetaData().getURL();
 				dbType = JdbcUtil.getDbType(url);
 
-			} catch (SQLException e) {
+			}
+			catch (SQLException e) {
 				log.error("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 ", e);
 			}
 		}
@@ -220,20 +216,23 @@ public class OldSqlInterceptor implements Interceptor {
 		SqlParam page = null;
 		if (parameterObject instanceof SqlParam) {
 			page = (SqlParam) parameterObject;
-		} else if (parameterObject instanceof Map) {
+		}
+		else if (parameterObject instanceof Map) {
 			Map<String, Object> paraMap = (Map<String, Object>) parameterObject;
 			for (String key : paraMap.keySet()) {
 				if (PAGE_PARAM.equals(key)) {
 					page = (SqlParam) paraMap.get(key);
 					break;
-				} else {
+				}
+				else {
 					if (paraMap.get(key) instanceof SqlParam) {
 						page = (SqlParam) paraMap.get(key);
 						break;
 					}
 				}
 			}
-		} else {
+		}
+		else {
 			log.error("入参没有分页相关数据");
 		}
 		return page;

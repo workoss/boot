@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.text;
 
@@ -31,12 +24,11 @@ import java.util.Base64;
 @SuppressWarnings("ALL")
 public class BaseEncodeUtil {
 
-	private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
-			'f'};
+	private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
+			'f' };
 
 	/**
 	 * Hex编码, 将byte[]编码为String，默认为ABCDEF为大写字母.
-	 *
 	 * @param bytes source
 	 * @return 字符串
 	 */
@@ -59,7 +51,6 @@ public class BaseEncodeUtil {
 	 * Hex解码, 将String解码为byte[].
 	 * <p>
 	 * 字符串有异常时抛出IllegalArgumentException.
-	 *
 	 * @param str 字符串
 	 * @return byte数组
 	 */
@@ -81,7 +72,6 @@ public class BaseEncodeUtil {
 		return out;
 	}
 
-
 	public static String encodeBase64(byte[] input) {
 		return new String(Base64.getEncoder().encode(input), StandardCharsets.UTF_8);
 	}
@@ -92,7 +82,6 @@ public class BaseEncodeUtil {
 
 	/**
 	 * Base64解码.
-	 *
 	 * @param input 输入值
 	 * @return byte数组
 	 */
@@ -102,7 +91,6 @@ public class BaseEncodeUtil {
 
 	/**
 	 * Base64编码, URL安全.(将Base64中的URL非法字符'+'和'/'转为'-'和'_', RFC4648_URLSAFE).
-	 *
 	 * @param input 输入值
 	 * @return 字符串
 	 */
@@ -113,7 +101,6 @@ public class BaseEncodeUtil {
 	/**
 	 * Base64解码, URL安全(将Base64中的URL非法字符'+'和'/'转为'-'和'_', RFC4648_URLSAFE).
 	 * 如果字符不合法，抛出IllegalArgumentException
-	 *
 	 * @param input 输入
 	 * @return 结果
 	 */

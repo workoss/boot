@@ -1,24 +1,17 @@
 /*
- * The MIT License
- * Copyright © 2020-2021 workoss
+ * Copyright © 2020-2021 workoss (workoss@icloud.com)
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.workoss.boot.util.reflect;
 
@@ -118,8 +111,7 @@ public class ReflectUtils {
 
 	/**
 	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
-	 *
-	 * @param obj       对象
+	 * @param obj 对象
 	 * @param fieldName 属性名
 	 * @return obj对象
 	 */
@@ -133,7 +125,8 @@ public class ReflectUtils {
 		Object result = null;
 		try {
 			result = field.get(obj);
-		} catch (IllegalAccessException e) {
+		}
+		catch (IllegalAccessException e) {
 			log.error("不可能抛出的异常{}", e.getMessage());
 		}
 		return result;
@@ -141,10 +134,9 @@ public class ReflectUtils {
 
 	/**
 	 * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
-	 *
-	 * @param obj       对象
+	 * @param obj 对象
 	 * @param fieldName 属性名
-	 * @param value     属性值
+	 * @param value 属性值
 	 */
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
 		Field field = getAccessibleField(obj, fieldName);
@@ -155,7 +147,8 @@ public class ReflectUtils {
 
 		try {
 			field.set(obj, value);
-		} catch (IllegalAccessException e) {
+		}
+		catch (IllegalAccessException e) {
 			log.error("不可能抛出的异常:{}", e.getMessage());
 		}
 	}
@@ -173,8 +166,7 @@ public class ReflectUtils {
 	/**
 	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访问.
 	 * <p>
-	 *
-	 * @param obj       对象
+	 * @param obj 对象
 	 * @param fieldName 属性名
 	 * @return field
 	 */
@@ -188,7 +180,8 @@ public class ReflectUtils {
 				Field field = superClass.getDeclaredField(fieldName);
 				makeAccessible(field);
 				return field;
-			} catch (NoSuchFieldException e) {// NOSONAR
+			}
+			catch (NoSuchFieldException e) {// NOSONAR
 				// Field不在当前类定义,继续向上转型
 			}
 		}
@@ -206,8 +199,7 @@ public class ReflectUtils {
 
 	/**
 	 * 注册服务所在的ClassLoader
-	 *
-	 * @param appName     应用名
+	 * @param appName 应用名
 	 * @param classloader 应用级别ClassLoader
 	 */
 	public static void registerAppClassLoader(String appName, ClassLoader classloader) {
@@ -216,7 +208,6 @@ public class ReflectUtils {
 
 	/**
 	 * 得到服务的自定义ClassLoader
-	 *
 	 * @param appName 应用名
 	 * @return 应用级别ClassLoader
 	 */
@@ -224,16 +215,16 @@ public class ReflectUtils {
 		ClassLoader appClassLoader = APPNAME_CLASSLOADER_MAP.get(appName);
 		if (appClassLoader == null) {
 			return ClassLoaderUtils.getCurrentClassLoader();
-		} else {
+		}
+		else {
 			return appClassLoader;
 		}
 	}
 
 	/**
 	 * 注册服务所在的ClassLoader
-	 *
 	 * @param serviceUniqueName 服务唯一名称
-	 * @param classloader       服务级别ClassLoader
+	 * @param classloader 服务级别ClassLoader
 	 */
 	public static void registerServiceClassLoader(String serviceUniqueName, ClassLoader classloader) {
 		SERVICE_CLASSLOADER_MAP.put(serviceUniqueName, classloader);
@@ -241,7 +232,6 @@ public class ReflectUtils {
 
 	/**
 	 * 得到服务的自定义ClassLoader
-	 *
 	 * @param serviceUniqueName 服务唯一名称
 	 * @return 服务级别ClassLoader
 	 */
@@ -249,15 +239,15 @@ public class ReflectUtils {
 		ClassLoader appClassLoader = SERVICE_CLASSLOADER_MAP.get(serviceUniqueName);
 		if (appClassLoader == null) {
 			return ClassLoaderUtils.getCurrentClassLoader();
-		} else {
+		}
+		else {
 			return appClassLoader;
 		}
 	}
 
 	/**
 	 * 放入类描述缓存
-	 *
-	 * @param clazz   类
+	 * @param clazz 类
 	 * @param typeStr 对象描述
 	 */
 	public static void putTypeStrCache(Class clazz, String typeStr) {
@@ -266,7 +256,6 @@ public class ReflectUtils {
 
 	/**
 	 * 得到类描述缓存
-	 *
 	 * @param clazz 类
 	 * @return 类描述
 	 */
