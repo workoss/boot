@@ -5,7 +5,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.8-RC1</version>
+	<version>1.0.8-SNAPSHOT</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-util</module>
