@@ -600,6 +600,14 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
 					<!--staging puglin,用于自动执行发布阶段(免手动)-->
 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
@@ -744,6 +752,14 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${maven-javadoc-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -770,9 +786,7 @@
 					<version>${maven-source-plugin.version}</version>
 					<executions>
 						<execution>
-							<!-- 绑定source插件到Maven的生命周期 -->
-							<phase>compile</phase>
-							<!--在生命周期后执行绑定的source插件的goals -->
+							<id>attach-sources</id>
 							<goals>
 								<goal>jar-no-fork</goal>
 							</goals>

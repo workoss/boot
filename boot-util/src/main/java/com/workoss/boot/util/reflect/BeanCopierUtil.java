@@ -41,7 +41,7 @@ import org.springframework.cglib.core.Converter;
 /**
  * 对象复制
  *
- * @author: workoss
+ * @author workoss
  */
 @SuppressWarnings("ALL")
 public class BeanCopierUtil {

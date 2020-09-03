@@ -23,7 +23,7 @@
 package com.workoss.boot.extension;
 
 /**
- * SpiExtensionFactory
+ * spiExtensionFactory
  *
  * @author workoss
  */

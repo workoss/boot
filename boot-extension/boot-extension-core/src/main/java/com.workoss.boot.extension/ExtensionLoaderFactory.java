@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * ExtensionLoaderFactory
  *
- * @author: workoss
+ * @author workoss
  */
 public class ExtensionLoaderFactory {
 

@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
 /**
  * class 工具类
  *
- * @author: luanfeng
+ * @author workoss
  */
 @SuppressWarnings("ALL")
 public class ClassUtils {

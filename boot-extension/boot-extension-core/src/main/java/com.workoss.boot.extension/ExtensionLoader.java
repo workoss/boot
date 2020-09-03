@@ -44,7 +44,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * 扩展loader
  *
- * @author: workoss
+ * @author workoss
  */
 @SuppressWarnings("ALL")
 public class ExtensionLoader<T> {
@@ -82,7 +82,7 @@ public class ExtensionLoader<T> {
 	protected final ExtensionLoaderListener<T> listener;
 
 	/**
-	 * 构造函数（自动加载）
+	 * <p>构造函数（自动加载)</p>
 	 * @param interfaceClass 接口类
 	 * @param listener 加载后的监听器
 	 */

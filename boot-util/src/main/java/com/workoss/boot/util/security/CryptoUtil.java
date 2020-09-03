@@ -42,7 +42,7 @@ import java.util.Random;
 /**
  * 加密
  *
- * @author: workoss
+ * @author workoss
  */
 @SuppressWarnings("ALL")
 public class CryptoUtil {

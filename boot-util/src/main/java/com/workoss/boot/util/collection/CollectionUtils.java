@@ -36,7 +36,7 @@ import java.util.StringJoiner;
 /**
  * 集合工具类
  *
- * @author: luanfeng
+ * @author workoss
  */
 public class CollectionUtils {
 

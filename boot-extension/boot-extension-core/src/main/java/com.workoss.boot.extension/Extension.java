@@ -27,7 +27,7 @@ import java.lang.annotation.*;
 /**
  * 扩展
  *
- * @author: workoss
+ * @author workoss
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

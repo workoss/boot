@@ -29,7 +29,7 @@ import java.util.Arrays;
 /**
  * 扩展类
  *
- * @author: workoss
+ * @author workoss
  */
 public class ExtensionClass<T> implements Sortable {
 

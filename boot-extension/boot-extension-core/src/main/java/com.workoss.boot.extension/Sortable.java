@@ -25,7 +25,7 @@ package com.workoss.boot.extension;
 /**
  * 排序
  *
- * @author: workoss
+ * @author workoss
  */
 public interface Sortable {
 
