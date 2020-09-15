@@ -27,10 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -102,6 +99,10 @@ public class JsonMapper {
 
 	public static <T> T parseObject(String json, JavaType javaType) {
 		return build().fromJson(json, javaType);
+	}
+
+	public static <T> List<T> parseArray(String json, Class<T> tClass) {
+		return parseObject(json, build().buildCollectionType(ArrayList.class, tClass));
 	}
 
 	public String toJson(Object object) {
