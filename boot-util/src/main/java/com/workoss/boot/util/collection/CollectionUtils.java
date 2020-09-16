@@ -31,6 +31,7 @@ import java.util.StringJoiner;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class CollectionUtils {
 
 	public static final List EMPTY_ARRAY_LIST = new ArrayList();

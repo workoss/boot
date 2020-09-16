@@ -69,7 +69,7 @@ public class XmlMapper {
 	private Map<String, String> xmlToMap(String xml) throws XMLStreamException {
 		StringReader stringReader = new StringReader(xml);
 		XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(stringReader);
-		Map<String, String> context = new LinkedHashMap<>();
+		Map<String, String> context = new LinkedHashMap<>(16);
 		String startKey = null;
 		while (reader.hasNext()) {
 			XMLEvent xmlEvent = (XMLEvent) reader.next();
@@ -81,7 +81,7 @@ public class XmlMapper {
 	private Map<String, String> xmlToMap(String xml, List<XMLEvent> xmlEvents) throws XMLStreamException {
 		StringReader stringReader = new StringReader(xml);
 		XMLEventReader reader = INPUT_FACTORY.createXMLEventReader(stringReader);
-		Map<String, String> context = new LinkedHashMap<>();
+		Map<String, String> context = new LinkedHashMap<>(8);
 		String startKey = null;
 		while (reader.hasNext()) {
 			XMLEvent xmlEvent = (XMLEvent) reader.next();

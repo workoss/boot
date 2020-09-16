@@ -236,7 +236,7 @@ public class StringUtils {
 		return renderString(content, "\\$\\{", "\\}", map, nullValue);
 	}
 
-	private static ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>(16);
 
 	public static String renderString(String content, String prefixPattern, String suffixPattern,
 			Map<String, String> map, String nullValue) {
@@ -244,7 +244,7 @@ public class StringUtils {
 			return content;
 		}
 		if (map == null) {
-			map = new HashMap<>();
+			map = new HashMap<>(16);
 		}
 		try {
 			String patternKey = prefixPattern + "-" + suffixPattern;
