@@ -9,12 +9,13 @@
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-util</module>
-		<module>mybatis-plugin/mybatis-plugin-api</module>
-		<module>mybatis-plugin/mybatis-plugin-core</module>
+		<module>boot-mybatis/mybatis-plugin-api</module>
+		<module>boot-mybatis/mybatis-plugin-core</module>
 		<module>boot-dependencies</module>
 		<module>boot-extension/boot-extension-core</module>
 		<module>boot-extension/boot-extension-spring</module>
-	</modules>
+        <module>boot-storage/storage-core</module>
+    </modules>
 	<properties>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.25</spring-javaformat-maven-plugin.version>
