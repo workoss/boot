@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+	<Properties>
+		<Property name="LOG_HOME">${sys:catalina.home:-.}</Property>
+		<Property name="PATTERN">
+			%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{traceId}] [%t] %marker %c:%L : %msg%n}
+		</Property>
+	</Properties>
+	<ThresholdFilter level="debug"/>
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<!-- 输出日志格式 -->
+			<!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+			<!--<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n"/>-->
+			<!--<HTMLLayout charset="utf-8" contentType="text/html" locationinfo="true" title="日志" />-->
+			<!--<PatternLayout pattern="%highlight{%d{HH:mm:ss.SSS} %-5level [%t]  %c{1.}  (%F:%L):  %msg%n}"/>-->
+			<PatternLayout pattern="${PATTERN}"/>
+			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+			<!--  <filters>
+			   <MarkerFilter marker="Console" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+			   <MarkerFilter marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
+			 </filters> -->
+		</Console>
+
+		<RollingFile name="RollingFile"
+					 fileName="${LOG_HOME}/logs/project.log"
+					 filePattern="${LOG_HOME}/logs/project_%d{yyyy-MM-dd}_%i.log.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %marker %c{1.}:%L : %msg%n"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+				<SizeBasedTriggeringPolicy size="100 M"/>
+			</Policies>
+			<!-- 备份数目 -->
+			<DefaultRolloverStrategy max="90"/>
+			<Filters>
+				<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingFile>
+		<RollingFile name="RollingFileError"
+					 fileName="${LOG_HOME}/logs/error.log"
+					 filePattern="${LOG_HOME}/logs/error_%d{yyyy-MM-dd}_%i.log.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %marker %c{1.}:%L : %msg%n"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+				<SizeBasedTriggeringPolicy size="100 MB"/>
+			</Policies>
+			<!-- 备份数目 -->
+			<DefaultRolloverStrategy max="90"/>
+			<Filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+
+		<logger name="org.springframework" level="info"></logger>
+		<logger name="org.apache.http" level="info"></logger>
+		<logger name="org.apache.ibatis" level="info"></logger>
+		<logger name="org.mybatis.spring" level="info"></logger>
+		<logger name="com.talkyun.openx.interceptor" level="debug"></logger>
+		<logger name="com.aliyun.openservices.aliyun.log" level="info"></logger>
+		<logger name="druid.sql.Statement" level="debug" additivity="false">
+			<AppenderRef ref="STDOUT"/>
+		</logger>
+		<logger name="druid.sql.ResultSet" level="debug" additivity="false">
+			<AppenderRef ref="STDOUT"/>
+		</logger>
+		<logger name="MYBATIS-" level="debug"></logger>
+		<logger name="io.netty.util" level="info"></logger>
+		<logger name="io.lettuce.core" level="info"></logger>
+		<logger name="com.zaxxer.hikari" level="warn"></logger>
+		<logger name="io.swagger.v3.core" level="warn"></logger>
+		<logger name="com.yifengx" level="debug"></logger>
+
+		<Root level="debug" includeLocation="true">
+			<AppenderRef ref="STDOUT"/>
+		</Root>
+	</Loggers>
+</Configuration>

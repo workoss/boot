@@ -14,8 +14,9 @@
 		<module>boot-dependencies</module>
 		<module>boot-extension/boot-extension-core</module>
 		<module>boot-extension/boot-extension-spring</module>
-        <module>boot-storage/storage-core</module>
-    </modules>
+		<module>boot-storage/storage-core</module>
+		<module>boot-http</module>
+	</modules>
 	<properties>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.25</spring-javaformat-maven-plugin.version>
