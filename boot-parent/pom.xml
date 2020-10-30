@@ -68,11 +68,11 @@
 
 
 		<spring.version>5.3.0</spring.version>
-		<spring-boot.version>2.4.0-M4</spring-boot.version>
+		<spring-boot.version>2.4.0-RC1</spring-boot.version>
 		<spring-cloud.version>2020.0.0-M4</spring-cloud.version>
 		<spring-security.version>5.4.0</spring-security.version>
 		<spring-boot-admin.version>2.3.0</spring-boot-admin.version>
-		<spring-data-r2dbc.version>1.2.0-RC1</spring-data-r2dbc.version>
+		<spring-data-bom.version>2020.0.0</spring-data-bom.version>
 
 		<mybatis.version>3.5.6</mybatis.version>
 		<mybatis-spring.version>2.0.5</mybatis-spring.version>
@@ -226,6 +226,14 @@
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-bom</artifactId>
 				<version>${spring-security.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-bom</artifactId>
+				<version>${spring-data-bom.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

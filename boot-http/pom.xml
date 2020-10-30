@@ -15,7 +15,8 @@
 
 	<modules>
 		<module>http-core</module>
-	</modules>
+        <module>http-netty</module>
+    </modules>
 
 
 
