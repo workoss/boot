@@ -12,6 +12,11 @@
 
     <dependencyManagement>
         <dependencies>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-annotation</artifactId>
+				<version>${project.version}</version>
+			</dependency>
             <dependency>
                 <groupId>com.workoss.boot</groupId>
                 <artifactId>mybatis-plugin-api</artifactId>

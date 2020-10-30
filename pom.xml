@@ -8,10 +8,11 @@
 	<version>1.0.8-SNAPSHOT</version>
 	<modules>
 		<module>boot-parent</module>
+		<module>boot-dependencies</module>
+		<module>boot-annotation</module>
 		<module>boot-util</module>
 		<module>boot-mybatis/mybatis-plugin-api</module>
 		<module>boot-mybatis/mybatis-plugin-core</module>
-		<module>boot-dependencies</module>
 		<module>boot-extension/boot-extension-core</module>
 		<module>boot-extension/boot-extension-spring</module>
 		<module>boot-storage/storage-core</module>

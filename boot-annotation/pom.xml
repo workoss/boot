@@ -3,20 +3,22 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<groupId>com.workoss.boot</groupId>
 		<artifactId>boot-parent</artifactId>
+		<groupId>com.workoss.boot</groupId>
 		<version>1.0.8-SNAPSHOT</version>
 		<relativePath>../boot-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>boot-http</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>boot-annotation</artifactId>
+	<packaging>jar</packaging>
 
-	<modules>
-		<module>http-core</module>
-	</modules>
-
-
+	<dependencies>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 
 </project>

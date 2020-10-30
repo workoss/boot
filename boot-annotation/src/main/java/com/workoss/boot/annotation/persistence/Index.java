@@ -13,42 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.plugin.mybatis.annotation;
+package com.workoss.boot.annotation.persistence;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 列注解
+ * index
  *
  * @author workoss
  */
-@Target({ METHOD, FIELD })
+@Target({})
 @Retention(RUNTIME)
-public @interface Column {
+public @interface Index {
 
 	String name() default "";
 
+	String columnList();
+
 	boolean unique() default false;
-
-	boolean nullable() default true;
-
-	boolean insertable() default true;
-
-	boolean updatable() default true;
-
-	String columnDefinition() default "";
-
-	String table() default "";
-
-	int length() default 255;
-
-	int precision() default 0;
-
-	int scale() default 0;
 
 }

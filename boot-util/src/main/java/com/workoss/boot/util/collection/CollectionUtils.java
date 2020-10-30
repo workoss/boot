@@ -15,6 +15,8 @@
  */
 package com.workoss.boot.util.collection;
 
+import org.springframework.lang.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -245,6 +247,21 @@ public class CollectionUtils {
 			stringJoiner.add(o.toString());
 		}
 		return stringJoiner.toString();
+	}
+
+	public static String collectionToCommaDelimitedString(@Nullable Collection<?> coll, String delim, String prefix, String suffix){
+		if (isEmpty(coll)) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		Iterator<?> it = coll.iterator();
+		while (it.hasNext()) {
+			sb.append(prefix).append(it.next()).append(suffix);
+			if (it.hasNext()) {
+				sb.append(delim);
+			}
+		}
+		return sb.toString();
 	}
 
 	/**

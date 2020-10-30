@@ -15,10 +15,10 @@
  */
 package com.workoss.boot.util;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import org.springframework.lang.Nullable;
+import org.springframework.util.CollectionUtils;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,8 +69,7 @@ public class StringUtils {
 		for (CharSequence c : cs) {
 			if (isBlank(c)) {
 				continue;
-			}
-			else {
+			} else {
 				return false;
 			}
 		}
@@ -118,8 +117,7 @@ public class StringUtils {
 	public static boolean hasText(CharSequence str) {
 		if (!hasLength(str)) {
 			return false;
-		}
-		else {
+		} else {
 			int strLen = str.length();
 
 			for (int i = 0; i < strLen; ++i) {
@@ -143,15 +141,13 @@ public class StringUtils {
 			char newChar = Character.toLowerCase(firstChar);
 			if (firstChar == newChar) {
 				return str;
-			}
-			else {
+			} else {
 				char[] newChars = new char[strLen];
 				newChars[0] = newChar;
 				str.getChars(1, strLen, newChars, 1);
 				return String.valueOf(newChars);
 			}
-		}
-		else {
+		} else {
 			return str;
 		}
 	}
@@ -163,21 +159,20 @@ public class StringUtils {
 			char newChar = Character.toUpperCase(firstChar);
 			if (firstChar == newChar) {
 				return str;
-			}
-			else {
+			} else {
 				char[] newChars = new char[strLen];
 				newChars[0] = newChar;
 				str.getChars(1, strLen, newChars, 1);
 				return String.valueOf(newChars);
 			}
-		}
-		else {
+		} else {
 			return str;
 		}
 	}
 
 	/**
 	 * 转换为下划线
+	 *
 	 * @param camelCaseName camel值
 	 * @return 下划线值
 	 */
@@ -190,8 +185,7 @@ public class StringUtils {
 				if (Character.isUpperCase(ch)) {
 					result.append("_");
 					result.append(Character.toLowerCase(ch));
-				}
-				else {
+				} else {
 					result.append(ch);
 				}
 			}
@@ -201,6 +195,7 @@ public class StringUtils {
 
 	/**
 	 * 转换为驼峰
+	 *
 	 * @param underscoreName 下划线值
 	 * @return camelCase值
 	 */
@@ -212,20 +207,36 @@ public class StringUtils {
 				char ch = underscoreName.charAt(i);
 				if ("_".charAt(0) == ch) {
 					flag = true;
-				}
-				else {
+				} else {
 					if (flag) {
 						result.append(Character.toUpperCase(ch));
 						flag = false;
-					}
-					else {
+					} else {
 						result.append(ch);
 					}
 				}
 			}
 		}
 		return result.toString();
+	}
 
+	public static String[] tokenizeToStringArray(@Nullable String str, String delimiters, boolean trimTokens, boolean ignoreEmptyTokens) {
+		if (str == null) {
+			return EMPTY_STRING_ARRAY;
+		}
+
+		StringTokenizer st = new StringTokenizer(str, delimiters);
+		List<String> tokens = new ArrayList<>();
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			if (trimTokens) {
+				token = token.trim();
+			}
+			if (!ignoreEmptyTokens || token.length() > 0) {
+				tokens.add(token);
+			}
+		}
+		return (!CollectionUtils.isEmpty(tokens) ? tokens.toArray(EMPTY_STRING_ARRAY) : EMPTY_STRING_ARRAY);
 	}
 
 	public static String renderString(String content, Map<String, String> map) {
@@ -239,7 +250,7 @@ public class StringUtils {
 	private static ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>(16);
 
 	public static String renderString(String content, String prefixPattern, String suffixPattern,
-			Map<String, String> map, String nullValue) {
+									  Map<String, String> map, String nullValue) {
 		if (StringUtils.isBlank(content)) {
 			return content;
 		}
@@ -266,8 +277,7 @@ public class StringUtils {
 			}
 			matcher.appendTail(stringBuffer);
 			return stringBuffer.toString();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

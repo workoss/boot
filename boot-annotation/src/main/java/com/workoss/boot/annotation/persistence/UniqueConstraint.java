@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.plugin.mybatis.annotation;
+package com.workoss.boot.annotation.persistence;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

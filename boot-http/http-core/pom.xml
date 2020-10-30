@@ -3,29 +3,17 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<groupId>com.workoss.boot</groupId>
 		<artifactId>boot-parent</artifactId>
+		<groupId>com.workoss.boot</groupId>
 		<version>1.0.8-SNAPSHOT</version>
 		<relativePath>../../boot-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>storage-core</artifactId>
+	<artifactId>http-core</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -36,25 +24,22 @@
 		</dependency>
 		<dependency>
 			<groupId>com.workoss.boot</groupId>
+			<artifactId>boot-annotation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.workoss.boot</groupId>
 			<artifactId>boot-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.projectreactor.netty</groupId>
-			<artifactId>reactor-netty-http</artifactId>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.projectreactor.netty</groupId>
-			<artifactId>reactor-netty-http</artifactId>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
