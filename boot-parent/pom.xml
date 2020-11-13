@@ -51,12 +51,12 @@
 		<java.version>1.8</java.version>
 
 		<slf4j.version>1.7.30</slf4j.version>
-		<log4j2.version>2.13.3</log4j2.version>
+		<log4j2.version>2.14.0</log4j2.version>
 
 		<jackson-bom.version>2.11.3</jackson-bom.version>
-		<netty.version>4.1.53.Final</netty.version>
+		<netty.version>4.1.54.Final</netty.version>
 		<asm.version>9.0</asm.version>
-		<reactor-bom.version>2020.0.0</reactor-bom.version>
+		<reactor-bom.version>2020.0.1</reactor-bom.version>
 		<rsocket-bom.version>1.1.0</rsocket-bom.version>
 
 		<!--		<jakarta.validation-api.version>3.0.0-M1</jakarta.validation-api.version>-->
@@ -67,12 +67,12 @@
 		<aspectj.version>1.9.6</aspectj.version>
 
 
-		<spring.version>5.3.0</spring.version>
-		<spring-boot.version>2.4.0-RC1</spring-boot.version>
+		<spring.version>5.3.1</spring.version>
+		<spring-boot.version>2.4.0</spring-boot.version>
 		<spring-cloud.version>2020.0.0-M4</spring-cloud.version>
-		<spring-security.version>5.4.0</spring-security.version>
-		<spring-boot-admin.version>2.3.0</spring-boot-admin.version>
-		<spring-data-bom.version>2020.0.0</spring-data-bom.version>
+		<spring-security.version>5.4.1</spring-security.version>
+		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
+		<spring-data-bom.version>2020.0.1</spring-data-bom.version>
 
 		<mybatis.version>3.5.6</mybatis.version>
 		<mybatis-spring.version>2.0.5</mybatis-spring.version>
@@ -98,9 +98,9 @@
 		<mockito-core.version>3.6.0</mockito-core.version>
 
 		<debezium.version>1.4.0.Alpha1</debezium.version>
-		<byte-buddy.version>1.10.17</byte-buddy.version>
+		<byte-buddy.version>1.10.18</byte-buddy.version>
 		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
-		<cloudevents.version>2.0.0-milestone3</cloudevents.version>
+		<cloudevents.version>2.0.0-milestone4</cloudevents.version>
 		<picocli.version>4.5.2</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
 
@@ -133,7 +133,7 @@
 		<maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.9.1</maven-site-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.25</spring-javaformat-maven-plugin.version>
-		<git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
+		<git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
 		<versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>

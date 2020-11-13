@@ -19,11 +19,11 @@ public final class HttpClientProviders {
 	private HttpClientProviders() {
 	}
 
-	public static HttpClient createInstance() {
+	public static HttpClient create() {
 		if (defaultProvider == null) {
 			throw new IllegalStateException("have no SPI on the classpath");
 		}
-		return defaultProvider.createInstance();
+		return defaultProvider.create();
 	}
 
 }

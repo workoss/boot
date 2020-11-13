@@ -10,8 +10,6 @@ import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 import reactor.netty.Connection;
 import reactor.netty.http.client.HttpClientResponse;
-
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
