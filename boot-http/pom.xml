@@ -15,7 +15,7 @@
 
 	<modules>
 		<module>http-core</module>
-        <module>http-netty</module>
+        <module>http-reactor-netty</module>
     </modules>
 
 
