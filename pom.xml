@@ -23,7 +23,7 @@
 		<spring-javaformat-maven-plugin.version>0.0.25</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.7</versions-maven-plugin.version>
-		<git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
+		<git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
@@ -49,8 +49,6 @@
 			<id>workoss</id>
 			<name>workoss</name>
 			<email>workoss@icloud.com</email>
-			<!-- <organization>Pivotal Software, Inc.</organization>
-			 <organizationUrl>https://www.spring.io</organizationUrl>-->
 			<roles>
 				<role>developer</role>
 			</roles>

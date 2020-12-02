@@ -53,7 +53,7 @@
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.14.0</log4j2.version>
 
-		<jackson-bom.version>2.11.3</jackson-bom.version>
+		<jackson-bom.version>2.12.0</jackson-bom.version>
 		<netty.version>4.1.54.Final</netty.version>
 		<asm.version>9.0</asm.version>
 		<reactor-bom.version>2020.0.1</reactor-bom.version>
@@ -69,22 +69,22 @@
 
 		<spring.version>5.3.1</spring.version>
 		<spring-boot.version>2.4.0</spring-boot.version>
-		<spring-cloud.version>2020.0.0-M4</spring-cloud.version>
+		<spring-cloud.version>2020.0.0-M6</spring-cloud.version>
 		<spring-security.version>5.4.1</spring-security.version>
 		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
 		<spring-data-bom.version>2020.0.1</spring-data-bom.version>
 
 		<mybatis.version>3.5.6</mybatis.version>
-		<mybatis-spring.version>2.0.5</mybatis-spring.version>
-		<mybatis-spring-boot-starter.version>2.1.3</mybatis-spring-boot-starter.version>
+		<mybatis-spring.version>2.0.6</mybatis-spring.version>
+		<mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
 
 		<HikariCP.version>3.4.5</HikariCP.version>
 
 		<r2dbc-bom.version>Arabba-SR8</r2dbc-bom.version>
 
-		<protobuf.version>3.13.0</protobuf.version>
+		<protobuf.version>3.14.0</protobuf.version>
 		<protostuff.version>1.7.2</protostuff.version>
-		<liquibase.version>4.1.1</liquibase.version>
+		<liquibase.version>4.2.0</liquibase.version>
 
 		<caffeine.version>2.8.6</caffeine.version>
 
@@ -95,16 +95,16 @@
 		<mapstruct.version>1.4.1.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.7.0</junit-jupiter.version>
-		<mockito-core.version>3.6.0</mockito-core.version>
+		<mockito-core.version>3.6.28</mockito-core.version>
 
-		<debezium.version>1.4.0.Alpha1</debezium.version>
+		<debezium.version>1.4.0.Alpha2</debezium.version>
 		<byte-buddy.version>1.10.18</byte-buddy.version>
 		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
-		<cloudevents.version>2.0.0-milestone4</cloudevents.version>
+		<cloudevents.version>2.0.0-RC1</cloudevents.version>
 		<picocli.version>4.5.2</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
 
-		<springdoc-openapi.version>1.4.8</springdoc-openapi.version>
+		<springdoc-openapi.version>1.5.0</springdoc-openapi.version>
 
 		<h2.version>1.4.200</h2.version>
 		<rocksdbjni.version>6.13.3</rocksdbjni.version>
@@ -726,14 +726,14 @@
 						<parameters>true</parameters>
 						<annotationProcessorPaths>
 							<path>
-								<groupId>org.mapstruct</groupId>
-								<artifactId>mapstruct-processor</artifactId>
-								<version>${mapstruct.version}</version>
-							</path>
-							<path>
 								<groupId>org.projectlombok</groupId>
 								<artifactId>lombok</artifactId>
 								<version>${lombok.version}</version>
+							</path>
+							<path>
+								<groupId>org.mapstruct</groupId>
+								<artifactId>mapstruct-processor</artifactId>
+								<version>${mapstruct.version}</version>
 							</path>
 						</annotationProcessorPaths>
 						<compilerArgs>
