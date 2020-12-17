@@ -91,6 +91,7 @@ public interface CrudDao<T, ID> {
 	 * @param list 列表
 	 * @return 插入数量
 	 */
+	@InsertProvider(type = CrudInsertProvider.class, method = "insertOracleBatch",databaseId = "oracle")
 	@InsertProvider(type = CrudInsertProvider.class, method = "insertBatch")
 	int insertBatch(@Param("list") List<T> list);
 

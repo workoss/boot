@@ -71,25 +71,24 @@ public class CrudInsertProvider extends BaseProvider {
 				valueBuilder.append(",");
 				valueBuilder.append(" </if> ");
 			}
-			sqlBuilder.append(" <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
-			sqlBuilder.append(columnBuilder);
-			sqlBuilder.append(" </trim> ");
-			sqlBuilder.append(" <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">");
-			sqlBuilder.append(valueBuilder);
-			sqlBuilder.append(" </trim></script>");
-			return sqlBuilder.toString();
+			return sqlBuilder.append(" <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">")
+					.append(columnBuilder)
+					.append(" </trim> ")
+					.append(" <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">")
+					.append(valueBuilder)
+					.append(" </trim></script>")
+					.toString();
 		}));
 	}
 
 	public CharSequence insertBatch(Map<String, Object> params, ProviderContext context) {
 		return executeSql(context, (tableColumnInfo -> {
-			StringBuilder sqlBuilder = new StringBuilder("<script> insert into ");
-			sqlBuilder.append(tableColumnInfo.getTableName());
+			StringBuilder sqlBuilder = new StringBuilder("<script> insert into ")
+					.append(tableColumnInfo.getTableName())
+					.append(" ( ");
 			List<String> columns = tableColumnInfo.getColumnNames();
 			List<String> propertys = tableColumnInfo.getPropertyNames();
-
 			StringBuilder valueBuilder = new StringBuilder();
-			sqlBuilder.append("(");
 			valueBuilder.append("(");
 			for (int i = 0, j = columns.size(); i < j; i++) {
 				sqlBuilder.append(columns.get(i));
@@ -100,16 +99,40 @@ public class CrudInsertProvider extends BaseProvider {
 				}
 			}
 			valueBuilder.append(")");
-			sqlBuilder.append(")");
+			return sqlBuilder.append(" ) values ")
+					.append(
+							"<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">")
+					.append(valueBuilder)
+					.append("</foreach> </script>")
+					.toString();
+		}));
+	}
 
-			sqlBuilder.append(" values ");
-			sqlBuilder.append(
-					"<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">");
-			sqlBuilder.append(valueBuilder);
-			sqlBuilder.append("</foreach>");
+	public CharSequence insertOracleBatch(Map<String, Object> params, ProviderContext context) {
+		return executeSql(context, (tableColumnInfo -> {
+			StringBuilder singleSqlBuilder = new StringBuilder(" insert into ")
+					.append(tableColumnInfo.getTableName())
+					.append(" ( ");
+			List<String> columns = tableColumnInfo.getColumnNames();
+			List<String> propertys = tableColumnInfo.getPropertyNames();
+			StringBuilder valueBuilder = new StringBuilder();
+			for (int i = 0, j = columns.size(); i < j; i++) {
+				singleSqlBuilder.append(columns.get(i));
+				valueBuilder.append(bindParameter("item." + propertys.get(i)));
+				if (i != columns.size() - 1) {
+					singleSqlBuilder.append(",");
+					valueBuilder.append(",");
+				}
+			}
+			singleSqlBuilder.append(" ) values ( ")
+					.append(valueBuilder)
+					.append(" ) ");
 
-			sqlBuilder.append(" </script>");
-			return sqlBuilder.toString();
+			return new StringBuilder("<script> begin; ")
+					.append("<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">")
+					.append(singleSqlBuilder)
+					.append("</foreach>; end </script>")
+					.toString();
 		}));
 	}
 

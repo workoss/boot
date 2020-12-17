@@ -72,7 +72,7 @@
 
 		<spring.version>5.3.2</spring.version>
 		<spring-boot.version>2.4.1</spring-boot.version>
-		<spring-cloud.version>2020.0.0-M6</spring-cloud.version>
+		<spring-cloud.version>2020.0.0-RC1</spring-cloud.version>
 		<spring-security.version>5.4.2</spring-security.version>
 		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
 		<spring-data-bom.version>2020.0.2</spring-data-bom.version>
@@ -102,12 +102,12 @@
 		<debezium.version>1.4.0.Beta1</debezium.version>
 		<byte-buddy.version>1.10.18</byte-buddy.version>
 		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
-		<cloudevents.version>2.0.0-RC1</cloudevents.version>
+		<cloudevents.version>2.0.0-RC2</cloudevents.version>
 		<picocli.version>4.5.2</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
 
 		<springdoc-openapi.version>1.5.1</springdoc-openapi.version>
-
+		<druid.version>1.2.4</druid.version>
 		<h2.version>1.4.200</h2.version>
 		<rocksdbjni.version>6.13.3</rocksdbjni.version>
 
@@ -357,6 +357,11 @@
 				<groupId>com.zaxxer</groupId>
 				<artifactId>HikariCP</artifactId>
 				<version>${HikariCP.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${druid.version}</version>
 			</dependency>
 
 
@@ -940,6 +945,16 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>snapshot</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Sonatype Nexus Snapshots</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
 		<profile>
 			<id>release</id>
 			<distributionManagement>

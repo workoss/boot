@@ -24,10 +24,11 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.alibaba.fastsql.DbType;
-import com.alibaba.fastsql.sql.PagerUtils;
-import com.alibaba.fastsql.sql.builder.SQLBuilderFactory;
-import com.alibaba.fastsql.sql.builder.SQLSelectBuilder;
+import com.alibaba.druid.DbType;
+import com.alibaba.druid.sql.PagerUtils;
+import com.alibaba.druid.sql.builder.SQLBuilderFactory;
+import com.alibaba.druid.sql.builder.SQLSelectBuilder;
+import com.alibaba.druid.util.JdbcUtils;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.reflect.ReflectUtils;
 import org.apache.ibatis.cache.CacheKey;
@@ -189,7 +190,7 @@ public class SqlInterceptor implements Interceptor {
 		if (dbType == null) {
 			try {
 				String url = connection.getMetaData().getURL();
-				dbType = JdbcUtil.getDbType(url);
+				dbType = JdbcUtils.getDbTypeRaw(url,JdbcUtils.getDriverClassName(url));
 			}
 			catch (SQLException e) {
 				log.error("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 ", e);

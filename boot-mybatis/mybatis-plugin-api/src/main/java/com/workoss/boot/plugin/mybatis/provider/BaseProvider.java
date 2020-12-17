@@ -29,6 +29,7 @@ import com.workoss.boot.annotation.persistence.Table;
 import com.workoss.boot.annotation.persistence.Transient;
 import com.workoss.boot.plugin.mybatis.CrudDao;
 import org.apache.ibatis.builder.annotation.ProviderContext;
+import org.apache.ibatis.builder.annotation.ProviderMethodResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author workoss
  */
-public class BaseProvider {
+public class BaseProvider implements ProviderMethodResolver {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);
 

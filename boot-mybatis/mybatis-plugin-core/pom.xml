@@ -22,8 +22,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.fastsql</groupId>
-            <artifactId>fastsql</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
 			<optional>true</optional>
         </dependency>
 
@@ -55,12 +55,12 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.alibaba.fastsql:fastsql</include>
+									<include>com.alibaba:druid</include>
 								</includes>
 							</artifactSet>
 							<filters>
 								<filter>
-									<artifact>com.alibaba.fastsql:fastsql</artifact>
+									<artifact>com.alibaba:druid</artifact>
 									<excludes>
 										<exclude>tpcds/**</exclude>
 										<exclude>tpch/**</exclude>
@@ -70,8 +70,8 @@
 							</filters>
 							<relocations>
 								<relocation>
-									<pattern>com.alibaba.fastsql</pattern>
-									<shadedPattern>com.workoss.boot.fastsql</shadedPattern>
+									<pattern>com.alibaba.druid</pattern>
+									<shadedPattern>shade.com.alibaba.druid</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>
