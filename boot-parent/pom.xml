@@ -50,7 +50,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 
-		<jakarta.jakartaee-bom.version>8.0.0</jakarta.jakartaee-bom.version>
+		<jakarta.jakartaee-bom.version>9.0.0</jakarta.jakartaee-bom.version>
 		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
 		<jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
 		<com.sun.xml.bind.version>2.3.0</com.sun.xml.bind.version>
@@ -58,24 +58,24 @@
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.14.0</log4j2.version>
 
-		<jackson-bom.version>2.12.0</jackson-bom.version>
-		<netty-bom.version>4.1.56.Final</netty-bom.version>
+		<jackson-bom.version>2.12.1</jackson-bom.version>
+		<netty-bom.version>4.1.58.Final</netty-bom.version>
 		<asm.version>9.0</asm.version>
-		<reactor-bom.version>2020.0.2</reactor-bom.version>
+		<reactor-bom.version>2020.0.3</reactor-bom.version>
 		<rsocket-bom.version>1.1.0</rsocket-bom.version>
 
 
-		<hibernate-validator.version>7.0.0.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
 
 
 		<aspectj.version>1.9.6</aspectj.version>
 
-		<spring.version>5.3.2</spring.version>
-		<spring-boot.version>2.4.1</spring-boot.version>
+		<spring.version>5.3.3</spring.version>
+		<spring-boot.version>2.4.2</spring-boot.version>
 		<spring-cloud.version>2020.0.0</spring-cloud.version>
 		<spring-security.version>5.4.2</spring-security.version>
 		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
-		<spring-data-bom.version>2020.0.2</spring-data-bom.version>
+		<spring-data-bom.version>2020.0.3</spring-data-bom.version>
 
 		<mybatis.version>3.5.6</mybatis.version>
 		<mybatis-spring.version>2.0.6</mybatis-spring.version>
@@ -97,11 +97,11 @@
 		<mapstruct.version>1.4.1.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.7.0</junit-jupiter.version>
-		<mockito-core.version>3.6.28</mockito-core.version>
+		<mockito-core.version>3.7.7</mockito-core.version>
 
-		<debezium.version>1.4.0.CR1</debezium.version>
+		<debezium.version>1.4.0.Final</debezium.version>
 		<byte-buddy.version>1.10.19</byte-buddy.version>
-		<scalecube-cluster.version>2.6.0-RC7</scalecube-cluster.version>
+		<scalecube-cluster.version>2.6.6</scalecube-cluster.version>
 		<cloudevents.version>2.0.0.RC2</cloudevents.version>
 		<picocli.version>4.5.2</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
@@ -109,7 +109,7 @@
 		<springdoc-openapi.version>1.5.2</springdoc-openapi.version>
 		<druid.version>1.2.4</druid.version>
 		<h2.version>1.4.200</h2.version>
-		<rocksdbjni.version>6.14.6</rocksdbjni.version>
+		<rocksdbjni.version>6.15.2</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 

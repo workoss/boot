@@ -18,6 +18,7 @@ package com.workoss.boot.util.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.ResolvedType;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.workoss.boot.util.StringUtils;
@@ -103,6 +104,18 @@ public class JsonMapper {
 
 	public static <T> List<T> parseArray(String json, Class<T> tClass) {
 		return parseObject(json, build().buildCollectionType(ArrayList.class, tClass));
+	}
+
+	public static <T> T convertValue(Object fromValue, Class<T> toValueType) {
+		return build().getMapper().convertValue(fromValue, toValueType);
+	}
+
+	public static <T> T convertValue(Object fromValue, JavaType javaType) {
+		return build().getMapper().convertValue(fromValue, javaType);
+	}
+
+	public static <T> T convertValue(Object fromValue, TypeReference<T> toValueTypeRef) {
+		return build().getMapper().convertValue(fromValue, toValueTypeRef);
 	}
 
 	public String toJson(Object object) {
