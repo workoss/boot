@@ -72,7 +72,7 @@
 
 		<spring.version>5.3.3</spring.version>
 		<spring-boot.version>2.4.2</spring-boot.version>
-		<spring-cloud.version>2020.0.0</spring-cloud.version>
+		<spring-cloud.version>2020.0.1</spring-cloud.version>
 		<spring-security.version>5.4.2</spring-security.version>
 		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
 		<spring-data-bom.version>2020.0.3</spring-data-bom.version>
@@ -81,7 +81,7 @@
 		<mybatis-spring.version>2.0.6</mybatis-spring.version>
 		<mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
 
-		<HikariCP.version>3.4.5</HikariCP.version>
+		<HikariCP.version>4.0.1</HikariCP.version>
 
 		<r2dbc-bom.version>Arabba-SR8</r2dbc-bom.version>
 
@@ -93,20 +93,20 @@
 
 		<fastsql.version>2.0.0_preview_973</fastsql.version>
 
-		<lombok.version>1.18.16</lombok.version>
-		<mapstruct.version>1.4.1.Final</mapstruct.version>
+		<lombok.version>1.18.18</lombok.version>
+		<mapstruct.version>1.4.2.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.7.0</junit-jupiter.version>
 		<mockito-core.version>3.7.7</mockito-core.version>
 
-		<debezium.version>1.4.0.Final</debezium.version>
-		<byte-buddy.version>1.10.19</byte-buddy.version>
+		<debezium.version>1.4.1.Final</debezium.version>
+		<byte-buddy.version>1.10.20</byte-buddy.version>
 		<scalecube-cluster.version>2.6.6</scalecube-cluster.version>
 		<cloudevents.version>2.0.0.RC2</cloudevents.version>
-		<picocli.version>4.5.2</picocli.version>
+		<picocli.version>4.6.1</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
 
-		<springdoc-openapi.version>1.5.2</springdoc-openapi.version>
+		<springdoc-openapi.version>1.5.3</springdoc-openapi.version>
 		<druid.version>1.2.4</druid.version>
 		<h2.version>1.4.200</h2.version>
 		<rocksdbjni.version>6.15.2</rocksdbjni.version>
@@ -131,7 +131,7 @@
 		<maven-invoker-plugin.version>3.2.1</maven-invoker-plugin.version>
 		<maven-help-plugin.version>3.2.0</maven-help-plugin.version>
 		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
-		<maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
 		<maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.9.1</maven-site-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.26</spring-javaformat-maven-plugin.version>
