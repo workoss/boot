@@ -10,8 +10,11 @@ import java.net.URI;
 import java.util.function.Function;
 
 public class ReactorNettyConnector implements HttpConnector {
+
 	@Override
-	public Mono<HttpResponse> connect(HttpMethod method, URI uri, Function<? super HttpRequest, Mono<Void>> requestCallback) {
+	public Mono<HttpResponse> connect(HttpMethod method, URI uri,
+			Function<? super HttpRequest, Mono<Void>> requestCallback) {
 		return null;
 	}
+
 }

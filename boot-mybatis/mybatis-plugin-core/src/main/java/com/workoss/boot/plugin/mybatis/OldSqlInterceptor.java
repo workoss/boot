@@ -204,7 +204,7 @@ public class OldSqlInterceptor implements Interceptor {
 			String url;
 			try {
 				url = connection.getMetaData().getURL();
-				dbType = JdbcUtils.getDbTypeRaw(url,JdbcUtils.getDriverClassName(url));
+				dbType = JdbcUtils.getDbTypeRaw(url, JdbcUtils.getDriverClassName(url));
 			}
 			catch (SQLException e) {
 				log.error("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 ", e);

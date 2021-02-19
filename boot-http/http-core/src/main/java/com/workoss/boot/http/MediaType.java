@@ -91,8 +91,8 @@ public final class MediaType {
 	/**
 	 * Public constant media type for {@code application/problem+json}.
 	 *
-	 * @see <a href="https://tools.ietf.org/html/rfc7807#section-6.1">
-	 * Problem Details for HTTP APIs, 6.1. application/problem+json</a>
+	 * @see <a href="https://tools.ietf.org/html/rfc7807#section-6.1"> Problem Details for
+	 * HTTP APIs, 6.1. application/problem+json</a>
 	 */
 	public static final MediaType APPLICATION_PROBLEM_JSON;
 
@@ -100,11 +100,12 @@ public final class MediaType {
 	 * A String equivalent of {@link MediaType#APPLICATION_PROBLEM_JSON}.
 	 */
 	public static final String APPLICATION_PROBLEM_JSON_VALUE = "application/problem+json";
+
 	/**
 	 * Public constant media type for {@code application/problem+xml}.
 	 *
-	 * @see <a href="https://tools.ietf.org/html/rfc7807#section-6.2">
-	 * Problem Details for HTTP APIs, 6.2. application/problem+xml</a>
+	 * @see <a href="https://tools.ietf.org/html/rfc7807#section-6.2"> Problem Details for
+	 * HTTP APIs, 6.2. application/problem+xml</a>
 	 */
 	public static final MediaType APPLICATION_PROBLEM_XML;
 
@@ -216,7 +217,8 @@ public final class MediaType {
 	/**
 	 * Public constant media type for {@code text/event-stream}.
 	 *
-	 * @see <a href="https://www.w3.org/TR/eventsource/">Server-Sent Events W3C recommendation</a>
+	 * @see <a href="https://www.w3.org/TR/eventsource/">Server-Sent Events W3C
+	 * recommendation</a>
 	 */
 	public static final MediaType TEXT_EVENT_STREAM;
 
@@ -267,18 +269,20 @@ public final class MediaType {
 
 	private static final String PARAM_QUALITY_FACTOR = "q";
 
-
 	private static final String TOKEN = "([a-zA-Z0-9-!#$%&'*+.^_`{|}~]+)";
-	private static final String QUOTED = "\"([^\"]*)\"";
-	private static final Pattern TYPE_SUBTYPE = Pattern.compile(TOKEN + "/" + TOKEN);
-	private static final Pattern PARAMETER = Pattern.compile(
-			";\\s*(?:" + TOKEN + "=(?:" + TOKEN + "|" + QUOTED + "))?");
 
+	private static final String QUOTED = "\"([^\"]*)\"";
+
+	private static final Pattern TYPE_SUBTYPE = Pattern.compile(TOKEN + "/" + TOKEN);
+
+	private static final Pattern PARAMETER = Pattern
+			.compile(";\\s*(?:" + TOKEN + "=(?:" + TOKEN + "|" + QUOTED + "))?");
 
 	private final String type;
-	private final String subtype;
-	private String charset;
 
+	private final String subtype;
+
+	private String charset;
 
 	static {
 		// Not using "valueOf' to avoid static init cost
@@ -324,7 +328,6 @@ public final class MediaType {
 
 	/**
 	 * Returns a media type for {@code string}.
-	 *
 	 * @throws IllegalArgumentException if {@code string} is not a well-formed media type.
 	 */
 	public static MediaType get(String string) {
@@ -340,34 +343,29 @@ public final class MediaType {
 		for (int s = typeSubtype.end(); s < string.length(); s = parameter.end()) {
 			parameter.region(s, string.length());
 			if (!parameter.lookingAt()) {
-				throw new IllegalArgumentException("Parameter is not formatted correctly: \""
-						+ string.substring(s)
-						+ "\" for: \""
-						+ string
-						+ '"');
+				throw new IllegalArgumentException(
+						"Parameter is not formatted correctly: \"" + string.substring(s) + "\" for: \"" + string + '"');
 			}
 
 			String name = parameter.group(1);
-			if (name == null || !name.equalsIgnoreCase("charset")) continue;
+			if (name == null || !name.equalsIgnoreCase("charset"))
+				continue;
 			String charsetParameter;
 			String token = parameter.group(2);
 			if (token != null) {
-				// If the token is 'single-quoted' it's invalid! But we're lenient and strip the quotes.
+				// If the token is 'single-quoted' it's invalid! But we're lenient and
+				// strip the quotes.
 				charsetParameter = (token.startsWith("'") && token.endsWith("'") && token.length() > 2)
-						? token.substring(1, token.length() - 1)
-						: token;
-			} else {
-				// Value is "double-quoted". That's valid and our regex group already strips the quotes.
+						? token.substring(1, token.length() - 1) : token;
+			}
+			else {
+				// Value is "double-quoted". That's valid and our regex group already
+				// strips the quotes.
 				charsetParameter = parameter.group(3);
 			}
 			if (charset != null && !charsetParameter.equalsIgnoreCase(charset)) {
-				throw new IllegalArgumentException("Multiple charsets defined: \""
-						+ charset
-						+ "\" and: \""
-						+ charsetParameter
-						+ "\" for: \""
-						+ string
-						+ '"');
+				throw new IllegalArgumentException("Multiple charsets defined: \"" + charset + "\" and: \""
+						+ charsetParameter + "\" for: \"" + string + '"');
 			}
 			charset = charsetParameter;
 		}
@@ -376,14 +374,14 @@ public final class MediaType {
 	}
 
 	/**
-	 * Returns a media type for {@code string}, or null if {@code string} is not a well-formed media
-	 * type.
+	 * Returns a media type for {@code string}, or null if {@code string} is not a
+	 * well-formed media type.
 	 */
-	public static @Nullable
-	MediaType parse(String string) {
+	public static @Nullable MediaType parse(String string) {
 		try {
 			return get(string);
-		} catch (IllegalArgumentException ignored) {
+		}
+		catch (IllegalArgumentException ignored) {
 			return null;
 		}
 	}
@@ -404,34 +402,34 @@ public final class MediaType {
 	}
 
 	/**
-	 * Returns the charset of this media type, or null if this media type doesn't specify a charset.
+	 * Returns the charset of this media type, or null if this media type doesn't specify
+	 * a charset.
 	 */
-	public @Nullable
-	Charset charset() {
+	public @Nullable Charset charset() {
 		return charset(null);
 	}
 
 	/**
-	 * Returns the charset of this media type, or {@code defaultValue} if either this media type
-	 * doesn't specify a charset, of it its charset is unsupported by the current runtime.
+	 * Returns the charset of this media type, or {@code defaultValue} if either this
+	 * media type doesn't specify a charset, of it its charset is unsupported by the
+	 * current runtime.
 	 */
-	public @Nullable
-	Charset charset(@Nullable Charset defaultValue) {
+	public @Nullable Charset charset(@Nullable Charset defaultValue) {
 		try {
 			return charset != null ? Charset.forName(charset) : defaultValue;
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			return defaultValue; // This charset is invalid or unsupported. Give up.
 		}
 	}
 
 	/**
-	 * Returns the encoded media type, like "text/plain; charset=utf-8", appropriate for use in a
-	 * Content-Type header.
+	 * Returns the encoded media type, like "text/plain; charset=utf-8", appropriate for
+	 * use in a Content-Type header.
 	 */
 	@Override
 	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder(this.type)
-				.append("/").append(this.subtype);
+		StringBuilder stringBuilder = new StringBuilder(this.type).append("/").append(this.subtype);
 		if (this.charset != null) {
 			stringBuilder.append("; charset=").append(this.charset);
 		}
@@ -442,6 +440,5 @@ public final class MediaType {
 	public boolean equals(@Nullable Object other) {
 		return other instanceof MediaType && ((MediaType) other).toString().equals(toString());
 	}
-
 
 }

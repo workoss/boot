@@ -249,7 +249,8 @@ public class CollectionUtils {
 		return stringJoiner.toString();
 	}
 
-	public static String collectionToCommaDelimitedString(@Nullable Collection<?> coll, String delim, String prefix, String suffix){
+	public static String collectionToCommaDelimitedString(@Nullable Collection<?> coll, String delim, String prefix,
+			String suffix) {
 		if (isEmpty(coll)) {
 			return "";
 		}

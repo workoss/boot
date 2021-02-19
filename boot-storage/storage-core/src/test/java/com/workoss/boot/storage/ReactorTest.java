@@ -23,43 +23,38 @@ public class ReactorTest {
 
 	@Test
 	void testHttp() throws InterruptedException {
-//		HttpClient.create().get().uri("https://www.baidu.com").responseContent();
-		HttpClient.create().get().uri("https://www.baidu.com")
-				.responseConnection((httpClientResponse, connection) -> {
-					return connection.inbound().receive()
-							 .doOnSubscribe(subscription -> {
+		// HttpClient.create().get().uri("https://www.baidu.com").responseContent();
+		HttpClient.create().get().uri("https://www.baidu.com").responseConnection((httpClientResponse, connection) -> {
+			return connection.inbound().receive().doOnSubscribe(subscription -> {
 
-							 })
-							 .map(byteBuf -> {
+			}).map(byteBuf -> {
 
-							 	return byteBuf.readByte();
-							 });
-				});
-
-
+				return byteBuf.readByte();
+			});
+		});
 
 		ReactorClientHttpConnector connector = new ReactorClientHttpConnector();
-		ClientHttpResponse response = connector.connect(HttpMethod.GET, URI.create("https://www.baidu.com"), clientHttpRequest -> {
+		ClientHttpResponse response = connector
+				.connect(HttpMethod.GET, URI.create("https://www.baidu.com"), clientHttpRequest -> {
 
-			return Mono.empty();
-		}).block();
+					return Mono.empty();
+				}).block();
 
 		System.out.println(response.getStatusCode());
 		System.out.println(response.getCookies());
 		System.out.println(response.getHeaders());
 
-		String resp = DataBufferUtils.join(response.getBody())
-				.flatMap(dataBuffer -> {
-					byte[] bytes = new byte[dataBuffer.readableByteCount()];
-					// dataBuffer类容读取到bytes中
-					dataBuffer.read(bytes);
-					// 释放缓冲区
-					DataBufferUtils.release(dataBuffer);
-					return Mono.just(new String(bytes, StandardCharsets.UTF_8));
-				})
-				.block();
+		String resp = DataBufferUtils.join(response.getBody()).flatMap(dataBuffer -> {
+			byte[] bytes = new byte[dataBuffer.readableByteCount()];
+			// dataBuffer类容读取到bytes中
+			dataBuffer.read(bytes);
+			// 释放缓冲区
+			DataBufferUtils.release(dataBuffer);
+			return Mono.just(new String(bytes, StandardCharsets.UTF_8));
+		}).block();
 
 		System.out.println(resp);
 
 	}
+
 }

@@ -11,8 +11,8 @@ import java.util.Map;
  * @author workoss
  */
 public enum HttpMethod {
-	GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
 
+	GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
 
 	private static final Map<String, HttpMethod> MAPPINGS = new HashMap<>(16);
 
@@ -22,14 +22,13 @@ public enum HttpMethod {
 		}
 	}
 
-
 	@Nullable
 	public static HttpMethod resolve(@Nullable String method) {
 		return (method != null ? MAPPINGS.get(method) : null);
 	}
 
-
 	public boolean matches(String method) {
 		return (this == resolve(method));
 	}
+
 }

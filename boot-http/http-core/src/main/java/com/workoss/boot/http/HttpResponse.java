@@ -13,7 +13,7 @@ public abstract class HttpResponse implements Closeable {
 
 	private HttpRequest request;
 
-	protected HttpResponse(HttpRequest request){
+	protected HttpResponse(HttpRequest request) {
 		this.request = request;
 	}
 
@@ -23,12 +23,9 @@ public abstract class HttpResponse implements Closeable {
 
 	public abstract HttpHeaders getHeaders();
 
-
 	public abstract Flux<ByteBuffer> getBody();
 
-
 	public abstract Mono<byte[]> getBodyAsByteArray();
-
 
 	public abstract Mono<String> getBodyAsString();
 
@@ -38,7 +35,7 @@ public abstract class HttpResponse implements Closeable {
 		return request;
 	}
 
-	public HttpResponse buffer(){
+	public HttpResponse buffer() {
 		return new BufferedHttpResponse(this);
 	}
 
@@ -46,4 +43,5 @@ public abstract class HttpResponse implements Closeable {
 	public void close() throws IOException {
 
 	}
+
 }

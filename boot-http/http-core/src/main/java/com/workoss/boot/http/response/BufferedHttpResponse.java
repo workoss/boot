@@ -62,4 +62,5 @@ public final class BufferedHttpResponse extends HttpResponse {
 	public HttpResponse buffer() {
 		return this;
 	}
+
 }

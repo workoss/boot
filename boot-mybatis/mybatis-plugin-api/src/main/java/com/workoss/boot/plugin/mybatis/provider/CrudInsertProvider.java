@@ -71,20 +71,15 @@ public class CrudInsertProvider extends BaseProvider {
 				valueBuilder.append(",");
 				valueBuilder.append(" </if> ");
 			}
-			return sqlBuilder.append(" <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">")
-					.append(columnBuilder)
-					.append(" </trim> ")
-					.append(" <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">")
-					.append(valueBuilder)
-					.append(" </trim></script>")
-					.toString();
+			return sqlBuilder.append(" <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">").append(columnBuilder)
+					.append(" </trim> ").append(" <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">")
+					.append(valueBuilder).append(" </trim></script>").toString();
 		}));
 	}
 
 	public CharSequence insertBatch(Map<String, Object> params, ProviderContext context) {
 		return executeSql(context, (tableColumnInfo -> {
-			StringBuilder sqlBuilder = new StringBuilder("<script> insert into ")
-					.append(tableColumnInfo.getTableName())
+			StringBuilder sqlBuilder = new StringBuilder("<script> insert into ").append(tableColumnInfo.getTableName())
 					.append(" ( ");
 			List<String> columns = tableColumnInfo.getColumnNames();
 			List<String> propertys = tableColumnInfo.getPropertyNames();
@@ -99,19 +94,15 @@ public class CrudInsertProvider extends BaseProvider {
 				}
 			}
 			valueBuilder.append(")");
-			return sqlBuilder.append(" ) values ")
-					.append(
-							"<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">")
-					.append(valueBuilder)
-					.append("</foreach> </script>")
-					.toString();
+			return sqlBuilder.append(" ) values ").append(
+					"<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">")
+					.append(valueBuilder).append("</foreach> </script>").toString();
 		}));
 	}
 
 	public CharSequence insertOracleBatch(Map<String, Object> params, ProviderContext context) {
 		return executeSql(context, (tableColumnInfo -> {
-			StringBuilder singleSqlBuilder = new StringBuilder(" insert into ")
-					.append(tableColumnInfo.getTableName())
+			StringBuilder singleSqlBuilder = new StringBuilder(" insert into ").append(tableColumnInfo.getTableName())
 					.append(" ( ");
 			List<String> columns = tableColumnInfo.getColumnNames();
 			List<String> propertys = tableColumnInfo.getPropertyNames();
@@ -124,15 +115,11 @@ public class CrudInsertProvider extends BaseProvider {
 					valueBuilder.append(",");
 				}
 			}
-			singleSqlBuilder.append(" ) values ( ")
-					.append(valueBuilder)
-					.append(" ) ");
+			singleSqlBuilder.append(" ) values ( ").append(valueBuilder).append(" ) ");
 
-			return new StringBuilder("<script> begin; ")
-					.append("<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">")
-					.append(singleSqlBuilder)
-					.append("</foreach>; end </script>")
-					.toString();
+			return new StringBuilder("<script> begin; ").append(
+					"<foreach collection=\"list\" index=\"index\" item=\"item\" open=\"\" separator=\",\" close=\"\">")
+					.append(singleSqlBuilder).append("</foreach>; end </script>").toString();
 		}));
 	}
 

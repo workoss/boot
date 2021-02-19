@@ -13,9 +13,9 @@ import java.util.Map;
  * @author workoss
  */
 public interface MultiValueMap<K, V> extends Map<K, List<V>> {
+
 	/**
 	 * 返回 first value
-	 *
 	 * @param key key
 	 * @return value
 	 */
@@ -24,31 +24,27 @@ public interface MultiValueMap<K, V> extends Map<K, List<V>> {
 
 	/**
 	 * add key:value to list
-	 *
-	 * @param key   key
+	 * @param key key
 	 * @param value value
 	 */
 	void add(K key, @Nullable V value);
 
 	/**
 	 * add listvalues
-	 *
-	 * @param key    key
+	 * @param key key
 	 * @param values values
 	 */
 	void addAll(K key, List<? extends V> values);
 
 	/**
 	 * add multiValueMap
-	 *
 	 * @param values multiValueMap
 	 */
 	void addAll(MultiValueMap<K, V> values);
 
 	/**
 	 * key not exists add
-	 *
-	 * @param key   key
+	 * @param key key
 	 * @param value value
 	 */
 	default void addIfAbsent(K key, @Nullable V value) {
@@ -59,23 +55,21 @@ public interface MultiValueMap<K, V> extends Map<K, List<V>> {
 
 	/**
 	 * set key:value
-	 *
-	 * @param key   key
+	 * @param key key
 	 * @param value value
 	 */
 	void set(K key, @Nullable V value);
 
 	/**
 	 * set map
-	 *
 	 * @param values map
 	 */
 	void setAll(Map<K, V> values);
 
 	/**
 	 * -> single value map
-	 *
 	 * @return map
 	 */
 	Map<K, V> toSingleValueMap();
+
 }

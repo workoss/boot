@@ -4,4 +4,5 @@ package com.workoss.boot.http;
 public interface HttpClientProvider {
 
 	HttpClient create();
+
 }

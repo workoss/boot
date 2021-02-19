@@ -6,24 +6,24 @@ import com.workoss.boot.util.MultiValueMap;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class ReadOnlyHttpHeaders extends HttpHeaders{
+class ReadOnlyHttpHeaders extends HttpHeaders {
+
 	@Nullable
 	private MediaType cachedContentType;
 
 	@Nullable
 	private List<MediaType> cachedAccept;
 
-
 	ReadOnlyHttpHeaders(MultiValueMap<String, String> headers) {
 		super(headers);
 	}
-
 
 	@Override
 	public MediaType getContentType() {
 		if (this.cachedContentType != null) {
 			return this.cachedContentType;
-		} else {
+		}
+		else {
 			MediaType contentType = super.getContentType();
 			this.cachedContentType = contentType;
 			return contentType;
@@ -34,7 +34,8 @@ class ReadOnlyHttpHeaders extends HttpHeaders{
 	public List<MediaType> getAccept() {
 		if (this.cachedAccept != null) {
 			return this.cachedAccept;
-		} else {
+		}
+		else {
 			List<MediaType> accept = super.getAccept();
 			this.cachedAccept = accept;
 			return accept;
@@ -115,8 +116,12 @@ class ReadOnlyHttpHeaders extends HttpHeaders{
 	@Override
 	public Set<Map.Entry<String, List<String>>> entrySet() {
 		return this.headers.entrySet().stream().map(AbstractMap.SimpleImmutableEntry::new)
-				.collect(Collectors.collectingAndThen(
-						Collectors.toCollection(LinkedHashSet::new), // Retain original ordering of entries
+				.collect(Collectors.collectingAndThen(Collectors.toCollection(LinkedHashSet::new), // Retain
+																									// original
+																									// ordering
+																									// of
+																									// entries
 						Collections::unmodifiableSet));
 	}
+
 }

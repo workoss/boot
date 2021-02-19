@@ -6,19 +6,15 @@ import java.util.*;
 
 public class LinkedMultiValueMap<K, V> implements MultiValueMap<K, V>, Cloneable {
 
-
 	private Map<K, List<V>> targetMap;
-
 
 	public LinkedMultiValueMap() {
 		this(new LinkedHashMap<>());
 	}
 
-
 	public LinkedMultiValueMap(int initialCapacity) {
 		this(new LinkedHashMap<>(initialCapacity));
 	}
-
 
 	public LinkedMultiValueMap(Map<K, List<V>> otherMap) {
 		this.targetMap = otherMap;

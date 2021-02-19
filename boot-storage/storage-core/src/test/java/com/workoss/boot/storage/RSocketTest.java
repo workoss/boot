@@ -53,14 +53,13 @@ public class RSocketTest {
 			log.error("doOnError", throwable);
 		}).blockLast();
 
-//		System.out.println(resp);
+		// System.out.println(resp);
 
-		 resp = HttpClient.create().get().uri("https://www.qq.com")
-				.responseSingle((httpClientResponse, byteBufMono) -> {
-					System.out.println(httpClientResponse.status());
-					return byteBufMono.asString(StandardCharsets.UTF_8);
-				}).block();
-//		System.out.println(resp);
+		resp = HttpClient.create().get().uri("https://www.qq.com").responseSingle((httpClientResponse, byteBufMono) -> {
+			System.out.println(httpClientResponse.status());
+			return byteBufMono.asString(StandardCharsets.UTF_8);
+		}).block();
+		// System.out.println(resp);
 
 	}
 
