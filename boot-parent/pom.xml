@@ -50,7 +50,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 
-		<jakarta.jakartaee-bom.version>9.0.0</jakarta.jakartaee-bom.version>
+		<jakarta.jakartaee-bom.version>9.1.0-RC1</jakarta.jakartaee-bom.version>
 		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
 		<jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
 		<com.sun.xml.bind.version>2.3.0</com.sun.xml.bind.version>
@@ -58,7 +58,7 @@
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.14.0</log4j2.version>
 
-		<jackson-bom.version>2.12.1</jackson-bom.version>
+		<jackson-bom.version>2.12.2</jackson-bom.version>
 		<netty-bom.version>4.1.59.Final</netty-bom.version>
 		<asm.version>9.1</asm.version>
 		<reactor-bom.version>2020.0.4</reactor-bom.version>
@@ -74,7 +74,7 @@
 		<spring-boot.version>2.4.3</spring-boot.version>
 		<spring-cloud.version>2020.0.1</spring-cloud.version>
 		<spring-security.version>5.4.4</spring-security.version>
-		<spring-boot-admin.version>2.3.1</spring-boot-admin.version>
+		<spring-boot-admin.version>2.4.0</spring-boot-admin.version>
 		<spring-data-bom.version>2020.0.3</spring-data-bom.version>
 
 		<mybatis.version>3.5.6</mybatis.version>
@@ -83,9 +83,9 @@
 
 		<HikariCP.version>4.0.2</HikariCP.version>
 
-		<r2dbc-bom.version>Arabba-SR8</r2dbc-bom.version>
+		<r2dbc-bom.version>Arabba-SR9</r2dbc-bom.version>
 
-		<protobuf.version>3.14.0</protobuf.version>
+		<protobuf-bom.version>3.15.5</protobuf-bom.version>
 		<protostuff.version>1.7.2</protostuff.version>
 		<liquibase.version>4.3.1</liquibase.version>
 
@@ -97,17 +97,17 @@
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.7.1</junit-jupiter.version>
-		<mockito-core.version>3.7.7</mockito-core.version>
+		<mockito-core.version>3.8.0</mockito-core.version>
 
-		<debezium.version>1.5.0.Alpha1</debezium.version>
-		<byte-buddy.version>1.10.20</byte-buddy.version>
+		<debezium.version>1.5.0.Beta1</debezium.version>
+		<byte-buddy.version>1.10.21</byte-buddy.version>
 		<scalecube-cluster.version>2.6.6</scalecube-cluster.version>
 		<cloudevents.version>2.0.0</cloudevents.version>
 		<picocli.version>4.6.1</picocli.version>
 		<feign-bom.version>11.0</feign-bom.version>
 
-		<springdoc-openapi.version>1.5.4</springdoc-openapi.version>
-		<druid.version>1.2.4</druid.version>
+		<springdoc-openapi.version>1.5.5</springdoc-openapi.version>
+		<druid.version>1.2.5</druid.version>
 		<h2.version>1.4.200</h2.version>
 		<rocksdbjni.version>6.15.2</rocksdbjni.version>
 
@@ -313,7 +313,7 @@
 			<dependency>
 				<groupId>com.google.protobuf</groupId>
 				<artifactId>protobuf-bom</artifactId>
-				<version>${protobuf.version}</version>
+				<version>${protobuf-bom.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -870,29 +870,29 @@
 					<version>${git-commit-id-plugin.version}</version>
 					<executions>
 						<execution>
-							<id>get-the-git-infos</id>
 							<goals>
 								<goal>revision</goal>
 							</goals>
-							<phase>initialize</phase>
 						</execution>
 					</executions>
 					<configuration>
-						<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-						<prefix>git</prefix>
-						<verbose>false</verbose>
-						<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+						<!-- 指定git信息文件是否生成。缺失则默认为false -->
 						<generateGitPropertiesFile>true</generateGitPropertiesFile>
-						<generateGitPropertiesFilename>
-							${project.build.outputDirectory}/git.properties
-						</generateGitPropertiesFilename>
+						<!-- 指定.git文件夹路径。缺失则默认为${project.basedir}/.git -->
+						<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+						<!-- 指定git信息文件的输出路径 -->
+						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.json</generateGitPropertiesFilename>
+						<!-- <generateGitPropertiesFilename>${project.basedir}/git.json</generateGitPropertiesFilename> -->
+						<!-- 指定git信息文件的输出格式。缺失则默认为properties -->
 						<format>json</format>
-						<gitDescribe>
-							<skip>false</skip>
-							<always>false</always>
-							<dirty>-dirty</dirty>
-						</gitDescribe>
+						<!-- 指定当.git文件夹未找到时，构建是否失败。若设置true，则构建失败，若设置false，则跳过执行该构建步骤。缺失则默认为true -->
+						<failOnNoGitDirectory>true</failOnNoGitDirectory>
+						<!-- 指定当项目打包类型为pom时，是否取消构建。缺失则默认为true -->
 						<skipPoms>false</skipPoms>
+						<!-- 指定构建过程中，是否打印详细信息。缺失则默认为false -->
+						<verbose>false</verbose>
+						<dateFormat>yyyyMMdd</dateFormat>
+						<!-- <dateFormat>yyyy-MM-dd-HH:mm:ss</dateFormat> -->
 					</configuration>
 				</plugin>
 

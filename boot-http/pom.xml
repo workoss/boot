@@ -15,8 +15,8 @@
 
 	<modules>
 		<module>http-core</module>
-        <module>http-reactor-netty</module>
-    </modules>
+		<module>http-okhttp3</module>
+	</modules>
 
 
 

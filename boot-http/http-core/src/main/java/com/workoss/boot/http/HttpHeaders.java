@@ -504,11 +504,6 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
 	/**
-	 * An empty {@code HttpHeaders} instance (immutable).
-	 */
-	public static final HttpHeaders EMPTY = new ReadOnlyHttpHeaders(new LinkedMultiValueMap<>());
-
-	/**
 	 * Pattern matching ETag multiple field values in headers such as "If-Match",
 	 * "If-None-Match".
 	 *
@@ -541,7 +536,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 			DateTimeFormatter.ofPattern("EEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US),
 			DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy", Locale.US).withZone(GMT) };
 
-	final MultiValueMap<String, String> headers;
+	MultiValueMap<String, String> headers;
 
 	/**
 	 * Construct a new, empty instance of the {@code HttpHeaders} object.
@@ -562,6 +557,14 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	public HttpHeaders(MultiValueMap<String, String> headers) {
 		Assert.notNull(headers, "MultiValueMap must not be null");
 		this.headers = headers;
+	}
+
+	public HttpHeaders(Map<String, List<String>> headers) {
+		Assert.notNull(headers, "MultiValueMap must not be null");
+		if (this.headers == null) {
+			this.headers = new LinkedMultiValueMap<>();
+		}
+		this.headers.putAll(headers);
 	}
 
 	/**
@@ -910,14 +913,6 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	}
 
 	/**
-	 * Set a configured {@link CacheControl} instance as the new value of the
-	 * {@code Cache-Control} header.
-	 */
-	public void setCacheControl(CacheControl cacheControl) {
-		setOrRemove(CACHE_CONTROL, cacheControl.getHeaderValue());
-	}
-
-	/**
 	 * Set the (new) value of the {@code Cache-Control} header.
 	 */
 	public void setCacheControl(@Nullable String cacheControl) {
@@ -951,54 +946,6 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	 */
 	public List<String> getConnection() {
 		return getValuesAsList(CONNECTION);
-	}
-
-	/**
-	 * Set the {@code Content-Disposition} header when creating a
-	 * {@code "multipart/form-data"} request.
-	 * <p>
-	 * Applications typically would not set this header directly but rather prepare a
-	 * {@code MultiValueMap<String, Object>}, containing an Object or a for each part, and
-	 * then pass that to the {@code RestTemplate} or {@code WebClient}.
-	 * @param name the control name
-	 * @param filename the filename (may be {@code null})
-	 * @see #getContentDisposition()
-	 */
-	public void setContentDispositionFormData(String name, @Nullable String filename) {
-		Assert.notNull(name, "Name must not be null");
-		ContentDisposition.Builder disposition = ContentDisposition.builder("form-data").name(name);
-		if (StringUtils.hasText(filename)) {
-			disposition.filename(filename);
-		}
-		setContentDisposition(disposition.build());
-	}
-
-	/**
-	 * Set the {@literal Content-Disposition} header.
-	 * <p>
-	 * This could be used on a response to indicate if the content is expected to be
-	 * displayed inline in the browser or as an attachment to be saved locally.
-	 * <p>
-	 * It can also be used for a {@code "multipart/form-data"} request. For more details
-	 * see notes on {@link #setContentDispositionFormData}.
-	 *
-	 * @see #getContentDisposition()
-	 */
-	public void setContentDisposition(ContentDisposition contentDisposition) {
-		set(CONTENT_DISPOSITION, contentDisposition.toString());
-	}
-
-	/**
-	 * Return a parsed representation of the {@literal Content-Disposition} header.
-	 *
-	 * @see #setContentDisposition(ContentDisposition)
-	 */
-	public ContentDisposition getContentDisposition() {
-		String contentDisposition = getFirst(CONTENT_DISPOSITION);
-		if (StringUtils.hasText(contentDisposition)) {
-			return ContentDisposition.parse(contentDisposition);
-		}
-		return ContentDisposition.empty();
 	}
 
 	/**
@@ -1438,24 +1385,6 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	}
 
 	/**
-	 * Sets the (new) value of the {@code Range} header.
-	 */
-	public void setRange(List<HttpRange> ranges) {
-		String value = HttpRange.toString(ranges);
-		set(RANGE, value);
-	}
-
-	/**
-	 * Return the value of the {@code Range} header.
-	 * <p>
-	 * Returns an empty list when the range is unknown.
-	 */
-	public List<HttpRange> getRange() {
-		String value = getFirst(RANGE);
-		return HttpRange.parseRanges(value);
-	}
-
-	/**
 	 * Set the (new) value of the {@code Upgrade} header.
 	 */
 	public void setUpgrade(@Nullable String upgrade) {
@@ -1862,31 +1791,6 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 	}
 
 	/**
-	 * Apply a read-only {@code HttpHeaders} wrapper around the given headers, if
-	 * necessary.
-	 * @param headers the headers to expose
-	 * @return a read-only variant of the headers, or the original headers as-is
-	 */
-	public static HttpHeaders readOnlyHttpHeaders(HttpHeaders headers) {
-		Assert.notNull(headers, "HttpHeaders must not be null");
-		return (headers instanceof ReadOnlyHttpHeaders ? headers : new ReadOnlyHttpHeaders(headers.headers));
-	}
-
-	/**
-	 * Remove any read-only wrapper that may have been previously applied around the given
-	 * headers via {@link #readOnlyHttpHeaders(HttpHeaders)}.
-	 * @param headers the headers to expose
-	 * @return a writable variant of the headers, or the original headers as-is
-	 */
-	public static HttpHeaders writableHttpHeaders(HttpHeaders headers) {
-		Assert.notNull(headers, "HttpHeaders must not be null");
-		if (headers == EMPTY) {
-			return new HttpHeaders();
-		}
-		return (headers instanceof ReadOnlyHttpHeaders ? new HttpHeaders(headers.headers) : headers);
-	}
-
-	/**
 	 * Helps to format HTTP header values, as HTTP header values themselves can contain
 	 * comma-separated values, can become confusing with regular {@link Map} formatting
 	 * that also uses commas between entries.
@@ -1899,6 +1803,10 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 			return entry.getKey() + ":" + (values.size() == 1 ? "\"" + values.get(0) + "\""
 					: values.stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(", ")));
 		}).collect(Collectors.joining(", ", "[", "]"));
+	}
+
+	public static HttpHeaders of(Map<String, List<String>> headers) {
+		return new HttpHeaders(headers);
 	}
 
 	/**

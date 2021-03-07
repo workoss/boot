@@ -164,7 +164,7 @@ public abstract class Assert {
 	 * @see org.springframework.util.StringUtils#hasLength
 	 */
 	public static void hasLength(String text, String message) {
-		if (!org.springframework.util.StringUtils.hasLength(text)) {
+		if (!StringUtils.hasLength(text)) {
 			throw new IllegalArgumentException(message);
 		}
 	}
