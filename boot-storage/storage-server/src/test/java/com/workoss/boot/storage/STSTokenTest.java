@@ -19,8 +19,7 @@ import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.*;
 import com.huaweicloud.sdk.iam.v3.region.IamRegion;
 import com.workoss.boot.storage.model.STSToken;
-import com.yifengx.popeye.util.date.DateUtils;
-import com.yifengx.popeye.util.json.JsonMapper;
+import com.workoss.boot.util.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -38,8 +37,8 @@ public class STSTokenTest {
 
 	@Test
 	void testHuawei() {
-		String ak = "8ACZFOMKJUAAY1XQWKXR";
-		String sk = "Ftt34DyBSiGJ4GX82eans8CMxKaZBBilQBC9oC64";
+		String ak = "ak";
+		String sk = "sk";
 
 		ICredential auth = new GlobalCredentials().withAk(ak).withSk(sk);
 
@@ -95,8 +94,8 @@ public class STSTokenTest {
 
 	@Test
 	void testHuawei2() {
-		String ak = "ZZXXUWJBPM5JS9DDM6ZR";
-		String sk = "pTCBOVf8NbdUCzOE2w06hQz6XkURz4648MCALAbM";
+		String ak = "ak";
+		String sk = "sk";
 
 		ICredential auth = new GlobalCredentials().withAk(ak).withSk(sk);
 		IamClient client = IamClient.newBuilder().withCredential(auth).withRegion(IamRegion.CN_SOUTH_1).build();
@@ -136,8 +135,8 @@ public class STSTokenTest {
 			stsToken.setStsToken(credential.getSecuritytoken());
 			stsToken.setAccessKey(credential.getAccess());
 			stsToken.setSecretKey(credential.getSecret());
-			stsToken.setExpiration(
-					DateUtils.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
+//			stsToken.setExpiration(
+//					DateUtils.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
 			System.out.println(stsToken.toString());
 		}
 		catch (ConnectionException e) {
@@ -160,9 +159,9 @@ public class STSTokenTest {
 
 	@Test
 	void testOSS() {
-		String accessKeyId = "LTAI4G3Apnzprof18S52qTs7";
-		String accessKeySecret = "n7nLNV7MgmE7OxONClNfVb6qNb9F2I";
-		String roleArn = "acs:ram::1238831582674451:role/aliyunosstokengeneratorrole";
+		String accessKeyId = "ak";
+		String accessKeySecret = "sk";
+		String roleArn = "acs:ram::";
 		String roleSessionName = "alice";
 
 		String policy = "{\n" + "    \"Version\": \"1\",\n" + "    \"Statement\": [\n" + "     {\n"
@@ -196,8 +195,8 @@ public class STSTokenTest {
 			stsToken.setStsToken(credentials.getSecurityToken());
 			stsToken.setAccessKey(credentials.getAccessKeyId());
 			stsToken.setSecretKey(credentials.getAccessKeySecret());
-			stsToken.setExpiration(
-					DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
+//			stsToken.setExpiration(
+//					DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
 		}
 		catch (ServerException e) {
 			e.printStackTrace();
