@@ -15,7 +15,7 @@
 		<module>boot-mybatis/mybatis-plugin-core</module>
 		<module>boot-extension/boot-extension-core</module>
 		<module>boot-extension/boot-extension-spring</module>
-		<module>boot-storage/storage-core</module>
+		<module>boot-storage</module>
 		<module>boot-http</module>
 	</modules>
 	<properties>

@@ -1,0 +1,41 @@
+server:
+  port: 8088
+spring:
+  messages:
+    encoding: UTF-8
+    basename: i18n/message,i18n/valid
+    fallback-to-system-locale: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  webflux:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+      date: yyyy-MM-dd
+      time: HH:mm:ss
+    base-path: /storage
+  r2dbc:
+    name: r2dbc
+    url: r2dbc:mariadb://139.196.88.110:3307/o2o-grab?serverTimezone=Asia/Shanghai
+    username: o2o-grab
+    password: o2o-grab_12345
+    properties:
+      lock_timeout: 40000
+      statement_timeout: 40000
+      idle_in_transaction_session_timeout: 40000
+    pool:
+      enabled: true
+      max-size: 20
+      initial-size: 4
+
+
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+
+logging:
+  level:
+    org:
+      springframework:
+        r2dbc: DEBUG
+

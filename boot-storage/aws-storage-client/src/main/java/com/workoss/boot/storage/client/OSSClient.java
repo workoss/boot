@@ -1,0 +1,88 @@
+package com.workoss.boot.storage.client;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.workoss.boot.storage.config.StorageClientConfig;
+import com.workoss.boot.storage.model.StorageSignature;
+import com.workoss.boot.storage.model.StorageStsToken;
+import com.workoss.boot.storage.model.StorageType;
+import com.workoss.boot.storage.util.HttpClientUtil;
+import com.workoss.boot.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * 阿里云OSS 对象存储
+ *
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
+public class OSSClient extends AbstractS3Client {
+
+	private static final Logger log = LoggerFactory.getLogger(OSSClient.class);
+
+	private static ConcurrentHashMap<String, String> AVAIABLE_ENDPOINT = new ConcurrentHashMap<>();
+
+	@Override
+	public StorageType type() {
+		return StorageType.OSS;
+	}
+
+	@Override
+	protected void initConfig(StorageClientConfig config) {
+		if (StringUtils.isBlank(config.getEndpoint())) {
+			return;
+		}
+		checkEndpointUrl(config.getEndpoint());
+	}
+
+	@Override
+	protected AmazonS3 createClient(StorageClientConfig config, StorageStsToken stsToken) {
+		// endpoint 是否可以联通内网
+		String endpoint = config.getEndpoint();
+		if (!AVAIABLE_ENDPOINT.containsKey(endpoint)) {
+			AVAIABLE_ENDPOINT.put(endpoint, endpoint);
+			checkEndpointUrl(config.getEndpoint());
+		}
+		return createS3Client(config, endpoint, stsToken);
+	}
+
+	private void checkEndpointUrl(String endpoint) {
+		new Thread(() -> {
+			initAvaiableEndpointUrl(endpoint);
+		}, String.join("-", "POPEYE", type().name())).start();
+	}
+
+	private void initAvaiableEndpointUrl(String endpoint) {
+		// 多线程 异步 填入 endpoint 对应的 内网地址
+		String internalUrl = endpoint;
+		if (!endpoint.contains("internal.")) {
+			// 检测是否通 oss-cn-hangzhou.aliyuncs.com
+			// oss-cn-hangzhou-internal.aliyuncs.com
+			String host = endpoint.split("\\.")[0];
+			internalUrl = endpoint.replace(host, host + "-internal");
+		}
+		boolean checkValid = HttpClientUtil.checkUrlIsValid(internalUrl, 500);
+		if (checkValid) {
+			AVAIABLE_ENDPOINT.put(endpoint, internalUrl);
+			log.info("【popeye】OSS 地址:{} 内网可达，切换到内网请求", internalUrl);
+		}
+		else {
+			AVAIABLE_ENDPOINT.put(endpoint, endpoint);
+			log.info("【popeye】OSS 地址:{} 内网不可达，使用配置endpoint", endpoint);
+		}
+	}
+
+	@Override
+	protected StorageStsToken getStsToken(StorageClientConfig config, String key, String action) {
+		return requestSTSToken(config, key, action);
+	}
+
+	@Override
+	protected StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
+												 String successActionStatus) {
+		return requestSign(config, key, mimeType, successActionStatus);
+	}
+
+}

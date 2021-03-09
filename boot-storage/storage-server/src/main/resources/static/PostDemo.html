@@ -1,0 +1,40 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<form action="https://workoss.obs.cn-south-1.myhuaweicloud.com" method="post" enctype="multipart/form-data">
+
+    Object key
+    <!-- Object name -->
+    <input type="text" name="key" value="33.txt"/>
+<!--    <p>-->
+<!--        ACL-->
+<!--        &lt;!&ndash; Object ACL &ndash;&gt;-->
+<!--        <input type="text" name="x-obs-acl" value="public-read"/>-->
+<!--    </p>-->
+    <p>
+        Content-Type
+        <!-- Object MIME type -->
+        <input type="text" name="content-type" value="text/plain"/>
+    </p>
+    <p>
+        <!-- AK+Short date+Region+/s3/aws4_request -->
+        AccessKeyId:<input type="text" name="AccessKeyId" value=""/>
+    </p>
+    <p>
+        <!-- Base64 code of the policy -->
+        policy:<input type="text" name="policy" value=""/>
+    </p>
+    <p>
+        <!-- Signature information -->
+        signature:<input type="text" name="signature" value=""/>
+    </p>
+    <p>
+        文件：<input name="file" type="file"/>
+    </p>
+    <input name="submit" value="Upload" type="submit"/>
+</form>
+</body>
+</html>

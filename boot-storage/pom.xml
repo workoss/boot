@@ -14,6 +14,9 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>storage-core</module>
+        <module>aws-storage-client</module>
+		<module>minio-storage-client</module>
+		<module>storage-server</module>
 	</modules>
 
 
