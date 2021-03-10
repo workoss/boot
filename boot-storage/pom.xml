@@ -17,7 +17,8 @@
         <module>aws-storage-client</module>
 		<module>minio-storage-client</module>
 		<module>storage-server</module>
-	</modules>
+        <module>storage-client-spring-boot-starter</module>
+    </modules>
 
 
 </project>

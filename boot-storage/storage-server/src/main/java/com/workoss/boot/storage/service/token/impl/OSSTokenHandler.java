@@ -1,20 +1,34 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage.service.token.impl;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
-import com.workoss.boot.storage.service.token.AbstractTokenHandler;
 import com.workoss.boot.storage.context.Context;
 import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.model.UploadSign;
-import com.yifengx.popeye.util.StringUtils;
-import com.yifengx.popeye.util.date.DateUtils;
+import com.workoss.boot.storage.service.token.AbstractTokenHandler;
+import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.StringUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -101,9 +115,6 @@ public class OSSTokenHandler extends AbstractTokenHandler {
 			// 放入域名
 			stsToken.setEndpoint(getDomain(context, bucketName));
 			return Mono.just(stsToken);
-		}
-		catch (ServerException e) {
-			return Mono.error(new StorageException("10002", e.toString()));
 		}
 		catch (ClientException e) {
 			return Mono.error(new StorageException("10002", e.toString()));

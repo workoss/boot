@@ -1,14 +1,36 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.util;
 
 import com.workoss.boot.annotation.lang.NonNull;
 import com.workoss.boot.annotation.lang.Nullable;
 import com.workoss.boot.util.collection.CollectionUtils;
+import com.workoss.boot.util.collection.Pair;
+import com.workoss.boot.util.exception.BootException;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * 时间处理工具类，针对 Date 和 LocalDateTime 相关日期操作
@@ -16,22 +38,47 @@ import java.util.Date;
  * @author workoss
  */
 @SuppressWarnings("ALL")
-public class DateUtil {
+public class DateUtils {
 
-	/**
-	 * 默认支持的格式数组
-	 */
-	private static final String[] DATE_TIME_FORMATTER_PATTERNS = { "yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm:ss",
-			"yyyyMMddHHmmss", "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd", "yyyy/MM/dd" };
+	private static final Map<Pattern, Pair<Class<?>, String>> PATTERN_PATTERNSTR_MAP = new LinkedHashMap<>();
 
-	private static final String[] DATE_FORMATTER_PATTERNS = { "yyyy-MM-dd", "yyyy/MM/dd" };
+	private static final Map<String, DateTimeFormatter> PATTERN_DATEFORMAT_MAP = new ConcurrentHashMap<>();
+
+	static {
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"),
+				Pair.of(LocalDateTime.class, "yyyy-MM-dd HH:mm:ss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}$"),
+				Pair.of(LocalDateTime.class, "yyyy-MM-dd HH:mm:ss.SSS"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$"),
+				Pair.of(LocalDateTime.class, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$"),
+				Pair.of(LocalDateTime.class, "yyyy-MM-dd'T'HH:mm:ss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}$"),
+				Pair.of(LocalDateTime.class, "yyyy/MM/dd HH:mm:ss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}\\d{2}$"),
+				Pair.of(LocalDateTime.class, "yyyyMMddHHmmss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$"), Pair.of(LocalDate.class, "yyyy-MM-dd"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}\\d{2}\\d{2}$"), Pair.of(LocalDate.class, "yyyyMMdd"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}:\\d{2}:\\d{2}$"), Pair.of(LocalTime.class, "HH:mm:ss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}\\d{2}\\d{2}$"), Pair.of(LocalTime.class, "HHmmss"));
+	}
 
 	/**
 	 * 日期默认格式
 	 */
-	private static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-	private DateUtil() {
+	private DateUtils() {
+	}
+
+	static DateTimeFormatter getDateTimeFormatter(String pattern) {
+		if (StringUtils.isBlank(pattern)) {
+			pattern = DEFAULT_DATE_TIME_PATTERN;
+		}
+		if (!PATTERN_DATEFORMAT_MAP.containsKey(pattern)) {
+			PATTERN_DATEFORMAT_MAP.put(pattern, DateTimeFormatter.ofPattern(pattern));
+		}
+		return PATTERN_DATEFORMAT_MAP.get(pattern);
 	}
 
 	/**
@@ -65,8 +112,7 @@ public class DateUtil {
 	 * @return string
 	 */
 	public static String getCurrentDateTime(@Nullable String pattern) {
-		return getCurrentDateTime().format(
-				DateTimeFormatter.ofPattern(StringUtils.isBlank(pattern) ? DEFAULT_DATE_TIME_PATTERN : pattern));
+		return getCurrentDateTime().format(getDateTimeFormatter(pattern));
 	}
 
 	/**
@@ -129,8 +175,7 @@ public class DateUtil {
 	 * @return string
 	 */
 	public static String format(@NonNull LocalDateTime localDateTime, @Nullable String pattern) {
-		return localDateTime.format(
-				DateTimeFormatter.ofPattern(StringUtils.isBlank(pattern) ? DEFAULT_DATE_TIME_PATTERN : pattern));
+		return localDateTime.format(getDateTimeFormatter(pattern));
 	}
 
 	/**
@@ -142,8 +187,7 @@ public class DateUtil {
 	 * @return string
 	 */
 	public static String format(@NonNull LocalDate localDate, @Nullable String pattern) {
-		return localDate.format(
-				DateTimeFormatter.ofPattern(StringUtils.isBlank(pattern) ? DEFAULT_DATE_TIME_PATTERN : pattern));
+		return localDate.format(getDateTimeFormatter(pattern));
 	}
 
 	/**
@@ -184,19 +228,24 @@ public class DateUtil {
 	 * @return LocalDateTime
 	 */
 	public static LocalDateTime parse(@Nullable String str) {
-		return parse(str, DEFAULT_DATE_TIME_PATTERN);
-	}
-
-	/**
-	 * <p>
-	 * 解析日期字符为LocalDateTime
-	 * </p>
-	 * @param str 日期字符串
-	 * @param pattern 格式字符串 示例 ：yyyy-MM-dd HH:mm:ss
-	 * @return LocalDateTime
-	 */
-	public static LocalDateTime parse(@NonNull String str, @NonNull String pattern) {
-		return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(pattern));
+		for (Map.Entry<Pattern, Pair<Class<?>, String>> patternPairEntry : PATTERN_PATTERNSTR_MAP.entrySet()) {
+			if (patternPairEntry.getKey().matcher(str).matches()) {
+				Pair<Class<?>, String> pair = patternPairEntry.getValue();
+				Class<?> clazz = pair.getFirst();
+				if (LocalDateTime.class.getName().equalsIgnoreCase(clazz.getName())) {
+					return LocalDateTime.parse(str, getDateTimeFormatter(pair.getSecond()));
+				}
+				else if (LocalDate.class.getName().equalsIgnoreCase(clazz.getName())) {
+					return LocalDateTime.of(LocalDate.parse(str, getDateTimeFormatter(pair.getSecond())),
+							LocalTime.MIN);
+				}
+				else if (LocalTime.class.getName().equalsIgnoreCase(clazz.getName())) {
+					return LocalDateTime.of(LocalDate.of(1970, 1, 1),
+							LocalTime.parse(str, getDateTimeFormatter(pair.getSecond())));
+				}
+			}
+		}
+		throw new RuntimeException("没有找到匹配[" + str + "]的pattern");
 	}
 
 	/**
@@ -209,12 +258,12 @@ public class DateUtil {
 	 */
 	public static LocalDateTime parse(@NonNull String dateTime, @Nullable String... patterns) {
 		if (CollectionUtils.isEmpty(patterns)) {
-			patterns = DATE_TIME_FORMATTER_PATTERNS;
+			return parse(dateTime);
 		}
 		Exception e = null;
 		for (String pattern : patterns) {
 			try {
-				return LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern(pattern));
+				return LocalDateTime.parse(dateTime, getDateTimeFormatter(pattern));
 			}
 			catch (Exception ignored) {
 				e = ignored;
@@ -233,30 +282,18 @@ public class DateUtil {
 	 */
 	public static LocalDate localDateParse(@NonNull String dateTime, @Nullable String... patterns) {
 		if (CollectionUtils.isEmpty(patterns)) {
-			patterns = DATE_FORMATTER_PATTERNS;
+			return parse(dateTime).toLocalDate();
 		}
 		Exception e = null;
 		for (String pattern : patterns) {
 			try {
-				return LocalDate.parse(dateTime, DateTimeFormatter.ofPattern(pattern));
+				return LocalDate.parse(dateTime, getDateTimeFormatter(pattern));
 			}
 			catch (Exception ignored) {
 				e = ignored;
 			}
 		}
 		throw new RuntimeException(e);
-	}
-
-	/**
-	 * <p>
-	 * 解析日期字符为java.util.Date
-	 * </p>
-	 * @param str 日期字符串
-	 * @param pattern 格式字符串
-	 * @return Date
-	 */
-	public static Date parseDate(@NonNull String str, @NonNull String pattern) {
-		return toDate(LocalDateTime.parse(str, DateTimeFormatter.ofPattern(pattern)));
 	}
 
 	/**

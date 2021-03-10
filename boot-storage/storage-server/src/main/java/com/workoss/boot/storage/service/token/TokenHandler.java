@@ -1,10 +1,24 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage.service.token;
 
 import com.workoss.boot.storage.context.Context;
 import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.model.UploadSign;
-import com.yifengx.popeye.storage.model.*;
 import reactor.core.publisher.Mono;
 
 public interface TokenHandler {
@@ -12,12 +26,12 @@ public interface TokenHandler {
 	ThirdPlatformType getName();
 
 	Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key, String mimeType,
-                                        String successActionStatus);
+			String successActionStatus);
 
 	Mono<UploadSign> generateUploadStsSign(Context<String, String> context, String bucketName, String key,
 			String mimeType, String successActionStatus);
 
 	Mono<STSToken> generateStsToken(final Context<String, String> context, String bucketName, final String key,
-                                    final String action);
+			final String action);
 
 }

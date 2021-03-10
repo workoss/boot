@@ -16,18 +16,24 @@
 package com.workoss.boot.util.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.ResolvedType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.workoss.boot.util.StringUtils;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.workoss.boot.util.Assert;
+import com.workoss.boot.util.exception.BootException;
+import com.workoss.boot.util.reflect.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.function.Function;
 
@@ -43,7 +49,7 @@ public class JsonMapper {
 
 	private ObjectMapper mapper;
 
-	private JsonFactory jsonFactory = new JsonFactory();
+	private static final JsonFactory jsonFactory = new JsonFactory();
 
 	public JsonMapper() {
 		this(JsonInclude.Include.NON_NULL);
@@ -55,9 +61,16 @@ public class JsonMapper {
 		if (include != null) {
 			mapper.setSerializationInclusion(include);
 		}
+		mapper.setDateFormat(new DateTimeFormat());
 		mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
 		// 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		// 判断是否存在 LocalDateTime 若是有 增加序列号 反序列化
+		boolean existsJsr310 = ClassUtils
+				.isPresent("com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer", null);
+		if (existsJsr310) {
+			mapper.registerModule(new Java8DateTimeModule().getModule());
+		}
 	}
 
 	/**
@@ -123,8 +136,7 @@ public class JsonMapper {
 			return mapper.writeValueAsString(object);
 		}
 		catch (IOException e) {
-			logger.warn("write to json string error:{}", object, e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
@@ -148,12 +160,12 @@ public class JsonMapper {
 	}
 
 	public JsonNode readTree(String jsonStr) {
+		Assert.hasLength(jsonStr, "jsonStr not null");
 		try {
 			return this.mapper.readTree(jsonStr);
 		}
-		catch (IOException var3) {
-			logger.warn("readTree error:", var3);
-			return null;
+		catch (IOException e) {
+			throw new BootException(e);
 		}
 	}
 
@@ -162,8 +174,7 @@ public class JsonMapper {
 			return mapper.readTree(bytes);
 		}
 		catch (IOException e) {
-			logger.warn("readTree error:", e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
@@ -172,15 +183,13 @@ public class JsonMapper {
 			return mapper.readTree(inputStream);
 		}
 		catch (IOException e) {
-			logger.warn("readTree error:", e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
 	public <T> T fromJson(byte[] bytes, Function<Map<String, String>, Class<T>> func) {
-		if (bytes == null || bytes.length == 0) {
-			return null;
-		}
+		Assert.notNull(bytes, "bytes not null");
+		Assert.notNull(func, "clazz not null");
 		JsonNode jsonNode = readTree(bytes);
 		Map<String, String> context = new HashMap<>();
 		if (jsonNode.size() <= 0) {
@@ -200,35 +209,30 @@ public class JsonMapper {
 	}
 
 	public <T> T fromJson(byte[] bytes, Class<T> clazz) {
-		if (bytes == null || bytes.length == 0) {
-			return null;
-		}
+		Assert.notNull(bytes, "bytes not null");
+		Assert.notNull(clazz, "clazz not null");
 		try {
 			return mapper.readValue(bytes, clazz);
 		}
 		catch (IOException e) {
-			logger.warn("parse json bytes error:", e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
 	public <T> T fromJson(byte[] bytes, JavaType javaType) {
-		if (bytes == null || bytes.length == 0) {
-			return null;
-		}
+		Assert.notNull(bytes, "bytes not null");
+		Assert.notNull(javaType, "javaType not null");
 		try {
 			return mapper.readValue(bytes, javaType);
 		}
 		catch (IOException e) {
-			logger.warn("parse json bytes error:", e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
 	public <T> List<T> fromJson(String jsonString, ResolvedType resolvedType) {
-		if (StringUtils.isEmpty(jsonString)) {
-			return null;
-		}
+		Assert.hasLength(jsonString, "jsonString not empty");
+		Assert.notNull(resolvedType, "resolvedType not null");
 		try (JsonParser parser = jsonFactory.createParser(jsonString)) {
 			MappingIterator<T> mappingIterator = mapper.readValues(parser, resolvedType);
 			if (!mappingIterator.hasNext()) {
@@ -237,8 +241,7 @@ public class JsonMapper {
 			return mappingIterator.readAll();
 		}
 		catch (IOException e) {
-			logger.warn("parse json string error:" + jsonString, e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
@@ -254,16 +257,13 @@ public class JsonMapper {
 	 * @return 实例
 	 */
 	public <T> T fromJson(String jsonString, Class<T> clazz) {
-		if (StringUtils.isEmpty(jsonString)) {
-			return null;
-		}
-
+		Assert.hasLength(jsonString, "jsonString not empty");
+		Assert.notNull(clazz, "class not null");
 		try {
 			return mapper.readValue(jsonString, clazz);
 		}
 		catch (IOException e) {
-			logger.warn("parse json string error:" + jsonString, e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
@@ -275,16 +275,13 @@ public class JsonMapper {
 	 * @return 实例
 	 */
 	public <T> T fromJson(String jsonString, JavaType javaType) {
-		if (StringUtils.isEmpty(jsonString)) {
-			return null;
-		}
-
+		Assert.hasLength(jsonString, "jsonString not empty");
+		Assert.notNull(javaType, "javaType not null");
 		try {
 			return (T) mapper.readValue(jsonString, javaType);
 		}
 		catch (IOException e) {
-			logger.warn("parse json string error:" + jsonString, e);
-			return null;
+			throw new BootException(e);
 		}
 	}
 
@@ -308,11 +305,13 @@ public class JsonMapper {
 	 * @param object obj
 	 */
 	public void update(String jsonString, Object object) {
+		Assert.hasLength(jsonString, "jsonString not empty");
+		Assert.notNull(object, "object not null");
 		try {
 			mapper.readerForUpdating(object).readValue(jsonString);
 		}
 		catch (JsonProcessingException e) {
-			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
+			throw new BootException(e);
 		}
 	}
 

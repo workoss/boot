@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage.client;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -22,6 +37,7 @@ import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.storage.model.*;
 import com.workoss.boot.storage.util.HttpClientUtil;
 import com.workoss.boot.storage.util.StorageUtil;
+import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
 import com.workoss.boot.util.json.JsonMapper;
@@ -76,15 +92,13 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 客户端初始化配置
-	 *
 	 * @param config 配置信息
 	 */
 	protected abstract void initConfig(StorageClientConfig config);
 
 	/**
 	 * 创建s3客户端
-	 *
-	 * @param config   config
+	 * @param config config
 	 * @param stsToken stsToken
 	 * @return s3客户端
 	 */
@@ -94,7 +108,8 @@ public abstract class AbstractS3Client implements StorageClient {
 		AWSCredentials credentials = null;
 		if (stsToken == null) {
 			credentials = new BasicAWSCredentials(config.getAccessKey(), config.getSecretKey());
-		} else {
+		}
+		else {
 			credentials = new BasicSessionCredentials(stsToken.getAccessKey(), stsToken.getSecretKey(),
 					stsToken.getStsToken());
 		}
@@ -106,9 +121,8 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 生成stsToken
-	 *
 	 * @param config 配置
-	 * @param key    文件key
+	 * @param key 文件key
 	 * @param action 操作
 	 * @return stsToken
 	 */
@@ -116,15 +130,14 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 生成h5签名
-	 *
-	 * @param config              配置
-	 * @param key                 文件key
-	 * @param mimeType            文件类型
+	 * @param config 配置
+	 * @param key 文件key
+	 * @param mimeType 文件类型
 	 * @param successActionStatus 200 可以nul
 	 * @return 签名
 	 */
 	protected abstract StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
-														  String successActionStatus);
+			String successActionStatus);
 
 	protected AmazonS3 getClient(String key, String action) {
 		if (amazonS3 != null) {
@@ -171,11 +184,14 @@ public abstract class AbstractS3Client implements StorageClient {
 					.map(bucket -> new StorageBucketInfo(bucket.getName(),
 							bucket.getOwner() == null ? null : bucket.getOwner().getId(), bucket.getCreationDate()))
 					.collect(Collectors.toList());
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -193,11 +209,14 @@ public abstract class AbstractS3Client implements StorageClient {
 					.map(bucket -> new StorageBucketInfo(bucket.getName(),
 							bucket.getOwner() == null ? null : bucket.getOwner().getId(), bucket.getCreationDate()))
 					.findFirst().orElseGet(() -> null);
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -207,11 +226,14 @@ public abstract class AbstractS3Client implements StorageClient {
 		AmazonS3 amazonS3 = getClient("", "doesBucketExist");
 		try {
 			return amazonS3.doesBucketExistV2(config.getBucketName());
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -222,11 +244,14 @@ public abstract class AbstractS3Client implements StorageClient {
 		AmazonS3 amazonS3 = getClient(key, "doesObjectExist");
 		try {
 			return amazonS3.doesObjectExist(config.getBucketName(), key);
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -251,11 +276,14 @@ public abstract class AbstractS3Client implements StorageClient {
 			Date expireDate = (Date) metaData.get("Last-Modified");
 			storageFileInfo.setLastModified(expireDate != null ? expireDate.getTime() : null);
 			return storageFileInfo;
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -307,53 +335,58 @@ public abstract class AbstractS3Client implements StorageClient {
 				listing.addFileInfo(storageFileInfo);
 			}
 			return listing;
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, File file, Map<String, String> userMetaData,
-									 Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, file, null, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, InputStream inputStream, String contentType,
-									 Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
+			Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, inputStream, contentType, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, byte[] bytes, String contentType, Map<String, String> userMetaData,
-									 Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, bytes, contentType, userMetaData, consumer);
 	}
 
 	StorageFileInfo putObjectCommon(String key, Object in, String contentType, Map<String, String> userMetaData,
-									Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		AmazonS3 amazonS3 = getClient(key, "putObject");
 		try {
 			PutObjectRequest putObjectRequest = null;
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			if (StringUtils.isBlank(contentType)) {
-				//TODO getMimeType
-//				contentType = StorageUtil.getMimeType(key);
+				// TODO getMimeType
+				// contentType = StorageUtil.getMimeType(key);
 			}
 			if (StringUtils.isNotBlank(contentType)) {
 				objectMetadata.setContentType(contentType);
 			}
 			if (in instanceof File) {
 				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, (File) in);
-			} else if (in instanceof InputStream) {
+			}
+			else if (in instanceof InputStream) {
 				// 根据文件名称 放入objectMetaData
 				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, (InputStream) in, objectMetadata);
-			} else if (in instanceof byte[]) {
+			}
+			else if (in instanceof byte[]) {
 				InputStream is = new ByteArrayInputStream((byte[]) in);
 				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, is, objectMetadata);
 			}
@@ -384,11 +417,14 @@ public abstract class AbstractS3Client implements StorageClient {
 				storageFileInfo.setMetaData(metadata.getRawMetadata());
 			}
 			return storageFileInfo;
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -423,11 +459,14 @@ public abstract class AbstractS3Client implements StorageClient {
 				storageFileInfo.setETag(metadata.getETag());
 			}
 			return storageFileInfo;
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -449,11 +488,14 @@ public abstract class AbstractS3Client implements StorageClient {
 				return null;
 			}
 			return s3Object.getObjectContent();
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -462,9 +504,11 @@ public abstract class AbstractS3Client implements StorageClient {
 	public byte[] download(String key, Consumer<StorageProgressEvent> consumer) {
 		try (InputStream inputStream = downloadStream(key, consumer)) {
 			return IOUtils.toByteArray(inputStream);
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -486,18 +530,21 @@ public abstract class AbstractS3Client implements StorageClient {
 				return null;
 			}
 			return destFile;
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
 
 	@Override
 	public StorageFileInfo copyObject(String sourceKeyWithoutBasePath, String destinationKeyWithoutBasePath,
-									  Map<String, String> userMetaData) {
+			Map<String, String> userMetaData) {
 		AmazonS3 amazonS3 = getClient(sourceKeyWithoutBasePath, "copyObject");
 		try {
 			CopyObjectRequest copyObjectRequest = new CopyObjectRequest().withSourceBucketName(config.getBucketName())
@@ -517,11 +564,14 @@ public abstract class AbstractS3Client implements StorageClient {
 			storageFileInfo.setLastModified(copyObjectResult.getLastModifiedDate() != null
 					? copyObjectResult.getLastModifiedDate().getTime() : null);
 			return storageFileInfo;
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -533,11 +583,14 @@ public abstract class AbstractS3Client implements StorageClient {
 		try {
 			DeleteObjectRequest request = new DeleteObjectRequest(config.getBucketName(), key);
 			amazonS3.deleteObject(request);
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -558,11 +611,14 @@ public abstract class AbstractS3Client implements StorageClient {
 			request.setSSEAlgorithm(SSEAlgorithm.AES256);
 
 			return amazonS3.generatePresignedUrl(request);
-		} catch (AmazonS3Exception e) {
+		}
+		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			amazonS3.shutdown();
 		}
 	}
@@ -619,13 +675,14 @@ public abstract class AbstractS3Client implements StorageClient {
 		return stringBuilder.toString();
 	}
 
-
 	protected StorageStsToken requestSTSToken(StorageClientConfig config, String key, String action) {
 		String url = SdkHttpUtils.appendUri(config.getTokenUrl(), "/security/ststoken");
 		String paramJson = "{\"tenentId\":\"" + (StringUtils.isBlank(config.getTenentId()) ? "" : config.getTenentId())
 				+ "\",\"storageType\": \"" + config.getStorageType().name() + "\",\"bucketName\": \""
 				+ config.getBucketName() + "\",\"action\": \"" + action + "\",\"key\": \"" + key + "\"}";
 		return request(url, paramJson, jsonNode -> {
+			JsonNode dataNode = jsonNode.get("data");
+
 			StorageStsToken stsToken = JsonMapper.convertValue(jsonNode.get("data"), StorageStsToken.class);
 			boolean check = StringUtils.isNotBlank(stsToken.getAccessKey())
 					&& StringUtils.isNotBlank(stsToken.getSecretKey()) && StringUtils.isNotBlank(stsToken.getStsToken())
@@ -638,9 +695,8 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	}
 
-
 	protected StorageSignature requestSign(StorageClientConfig config, String key, String mimeType,
-										   String successActionStatus) {
+			String successActionStatus) {
 		String url = SdkHttpUtils.appendUri(config.getTokenUrl(), "/security/stssign");
 		String paramJson = "{\"tenentId\":\"" + (StringUtils.isBlank(config.getTenentId()) ? "" : config.getTenentId())
 				+ "\",\"storageType\": \"" + config.getStorageType().name() + "\",\"bucketName\": \""
@@ -664,7 +720,7 @@ public abstract class AbstractS3Client implements StorageClient {
 		return signature;
 	}
 
-	public static  <T> T request(String url, String body, Function<JsonNode, T> resultFun) {
+	public static <T> T request(String url, String body, Function<JsonNode, T> resultFun) {
 		Map<String, String> header = new HashMap<>();
 		header.put("X-SDK-CLIENT", "popeye");
 		String resp = HttpClientUtil.doPostJson(url, body, header);

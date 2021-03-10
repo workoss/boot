@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage.service.token.impl;
 
 import com.huaweicloud.sdk.core.auth.GlobalCredentials;
@@ -12,9 +27,9 @@ import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.service.token.AbstractTokenHandler;
-import com.yifengx.popeye.util.StringUtils;
-import com.yifengx.popeye.util.date.DateUtils;
-import com.yifengx.popeye.util.json.JsonMapper;
+import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.StringUtils;
+import com.workoss.boot.util.json.JsonMapper;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -54,10 +69,12 @@ public class OBSTokenHandler extends AbstractTokenHandler {
 	 * 生成web签名 policy
 	 * {"expiration":"2021-02-24T07:08:34.148Z","conditions":[{"x-obs-acl":"public-read"},{"bucket":"workoss"},{"key":"22.txt"},["content-length-range",
 	 * 0, MAX_UPLOAD_SIZE]]}
-	 * @param context
-	 * @param bucketName
-	 * @param key
-	 * @return
+	 * @param context 配置信息
+	 * @param bucketName 存储桶
+	 * @param key 文件key
+	 * @param mimeType 文件类型
+	 * @param successActionStatus form提交后状态
+	 * @return 签名
 	 */
 	@Override
 	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,

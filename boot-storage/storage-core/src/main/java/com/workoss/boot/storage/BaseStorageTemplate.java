@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage;
 
 import com.workoss.boot.annotation.lang.NonNull;
@@ -20,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author workoss
  */
 @SuppressWarnings("ALL")
-abstract class BaseStorageTemplate {
+abstract class BaseStorageTemplate implements StorageTemplate {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseStorageTemplate.class);
 
@@ -53,7 +68,6 @@ abstract class BaseStorageTemplate {
 		return clientMap;
 	}
 
-
 	public void destroy() throws Exception {
 		clientMap.entrySet().stream().forEach(clientEntry -> {
 			try {
@@ -65,7 +79,6 @@ abstract class BaseStorageTemplate {
 			}
 		});
 	}
-
 
 	public void afterPropertiesSet() throws Exception {
 		Map<StorageType, StorageClient> storageClientMap = loadStorageClient();
@@ -122,6 +135,9 @@ abstract class BaseStorageTemplate {
 		if (StringUtils.isBlank(config.getBucketName())) {
 			return;
 		}
+		if (storageClient == null) {
+			throw new StorageException("-1", "没有发现可用的client");
+		}
 		validStorageClientConfig(config);
 		try {
 			storageClient.init(config);
@@ -129,7 +145,7 @@ abstract class BaseStorageTemplate {
 			log.info("【popeye】StorageClient add client :{} to cache", key.toLowerCase());
 		}
 		catch (Exception e) {
-			log.error("【popeye】StorageClient add client to cache {}", key.toLowerCase());
+			log.error("【popeye】StorageClient add client to cache {} error", key.toLowerCase(), e);
 		}
 	}
 

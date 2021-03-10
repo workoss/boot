@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,12 +24,10 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-class StorageTempalteTest  {
+class StorageTempalteTest {
 
-//	@Autowired
-//	private StorageTemplate storageTemplate;
-
-
+	// @Autowired
+	// private StorageTemplate storageTemplate;
 
 	@Test
 	void testMinio() throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException,
@@ -30,10 +43,11 @@ class StorageTempalteTest  {
 		String sk = jsonNode.get("secretKey").asText();
 		String stsToken = jsonNode.get("stsToken").asText();
 		String endpoint = "https://oss-cn-shenzhen.aliyuncs.com";
-//		Provider provider = new StaticProvider(ak, sk, stsToken);
-//
-//		MinioClient minioClient = MinioClient.builder().endpoint(endpoint).region("oss").credentialsProvider(provider)
-//				.build();
+		// Provider provider = new StaticProvider(ak, sk, stsToken);
+		//
+		// MinioClient minioClient =
+		// MinioClient.builder().endpoint(endpoint).region("oss").credentialsProvider(provider)
+		// .build();
 
 		// minioClient.listBuckets()
 		// .stream().forEach(bucket -> {
@@ -63,7 +77,7 @@ class StorageTempalteTest  {
 
 		// minioClient.downloadObject(DownloadObjectArgs.builder().bucket("workoss").object("demo/ram1.png").filename("/home/workoss/down-ram.png").build());
 
-//		minioClient.removeObject(RemoveObjectArgs.builder().bucket("workoss").object("demo/ram1.png").build());
+		// minioClient.removeObject(RemoveObjectArgs.builder().bucket("workoss").object("demo/ram1.png").build());
 
 	}
 

@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2020-2021 workoss (WORKOSS)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.workoss.boot.storage;
 
 import com.aliyuncs.DefaultAcsClient;
@@ -19,6 +34,7 @@ import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.*;
 import com.huaweicloud.sdk.iam.v3.region.IamRegion;
 import com.workoss.boot.storage.model.STSToken;
+import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
@@ -135,8 +151,8 @@ public class STSTokenTest {
 			stsToken.setStsToken(credential.getSecuritytoken());
 			stsToken.setAccessKey(credential.getAccess());
 			stsToken.setSecretKey(credential.getSecret());
-//			stsToken.setExpiration(
-//					DateUtils.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
+			stsToken.setExpiration(
+					DateUtils.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
 			System.out.println(stsToken.toString());
 		}
 		catch (ConnectionException e) {
@@ -195,8 +211,8 @@ public class STSTokenTest {
 			stsToken.setStsToken(credentials.getSecurityToken());
 			stsToken.setAccessKey(credentials.getAccessKeyId());
 			stsToken.setSecretKey(credentials.getAccessKeySecret());
-//			stsToken.setExpiration(
-//					DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
+			stsToken.setExpiration(
+					DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
 		}
 		catch (ServerException e) {
 			e.printStackTrace();
