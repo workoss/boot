@@ -8,7 +8,6 @@ storage 对象存储模块
 * [x] Aliyun OSS client 上传下载
 * [x] HuaweiCloud OBS 上传下载
 * [x] storage-client-spring-boot-starter spring-boot starter组件
-* [x] 兼容openx版本
 * [x] STSToken生成服务
 
 客户端支持测试情况
@@ -24,13 +23,10 @@ storage 对象存储模块
 ### 项目模块
 
 * storage-server: 对象stsToken授权服务+web签名服务
-* storage-client: 对象存储API客户端
-* storage-client-lite: 对象存储API客户端 (jdk6 老项目使用 shade 仅依赖slf4j-api)
+* storage-core: 对象存储API客户端
+* aws-storage-client aws实现客户端
+* minio-storage-client minio实现客户端
 * storage-client-spring-boot-starter: 对象存储的spring-boot-starter组件，方便spring-boot 项目引入
-* openx-storage-client: 对openx项目的支持
-* popeye-example/storage-client-example: storage-client 示例
-* popeye-example/storage-client-spring-boot-example: storage spring-boot项目使用示例
-* popeye-example/openx-storage-client-example: storage openx项目示例
 
 ### 开发环境要求
 
@@ -120,9 +116,9 @@ popeye:
     enabled: true
     health: true
     default-client:
-      bucket-name: yf-example
+      bucket-name: example
       base-path: ehr
-      domain: https://yf-test-oss.yifengx.com
+      domain: https://xx.xxx.com
       token-url: https://x.x.x.x/storage
 ```
 
@@ -153,90 +149,6 @@ void testStorage(){
         }
 ```
 
-#### openx项目使用
-
-* 引入依赖
-
-```xml
-
-<dependency>
-    <groupId>com.yifengx.popeye</groupId>
-    <artifactId>openx-storage-client</artifactId>
-    <version>x.y.z</version>
-</dependency>
-```
-
-* 配置
-
-```xml
-
-<bean id="multiStorageClientConfig" class="com.yifengx.popeye.storage.config.DefaultMultiStorageClientConfig">
-    <property name="enabled" value="true"/>
-    <property name="defaultClient">
-        <bean class="com.yifengx.popeye.storage.config.StorageClientConfig">
-            <property name="bucketName" value="yf-example"/>
-            <property name="basePath" value="ehr"/>
-            <property name="domain" value="https://yf-test-oss.yifengx.com"/>
-            <property name="tokenUrl" value="https://x.x.x.x/storage"/>
-        </bean>
-    </property>
-</bean>
-<bean id="storageTemplate" class="com.yifengx.popeye.storage.StorageTemplate">
-<property name="multiStorageClientConfig" ref="multiStorageClientConfig"/>
-</bean>
-<bean id="/storage/signService" class="com.yifengx.popeye.storage.openx.impl.StorageSignServiceImpl">
-<constructor-arg ref="storageTemplate"/>
-</bean>
-```
-
-openx需要增加 com.yifengx.popeye.storage.openx.* 签名服务
-
-```xml
-
-<bean class="com.talkyun.openx.RestfulScanner">
-    <property name="path" value="com.yifeng.ssm.rest.api.*;com.yifengx.popeye.storage.openx.*"/>
-</bean>
-```
-
-* API使用
-
-```java
-@Autowired
-private StorageTemplate storageTemplate;
-@Test
-void testStorage(){
-        StorageFileInfo fileInfo=storageTemplate.client().getObject("data/1.png");
-        }
-```
-
-* h5签名服务
-
-```text
-POST http://domain/storage/signservice/sign
-Content-Type: application/json
-{
-    "key": "1.png",
-    "mimeType":"image/png"
-}
-```
-
-返回
-
-```json
-{
-  "storageType": "OSS",
-  "accessKey": "******accessKey*******",
-  "stsToken": "******stsToken******",
-  "policy": "******policy*******",
-  "signature": "******signature******",
-  "key": "demo.conf",
-  "host": "https://{bucket}.oss-cn-shenzhen.aliyuncs.com",
-  "expire": 1614238325615,
-  "mimeType": "text/plain",
-  "successActionStatus": null
-}
-```
-
 #### 普通客户端使用
 
 * 引入依赖
@@ -244,8 +156,8 @@ Content-Type: application/json
 ```xml
 
 <dependency>
-    <groupId>com.yifengx.popeye</groupId>
-    <artifactId>storage-client</artifactId>
+    <groupId>com.workoss.boot</groupId>
+    <artifactId>aws-storage-client</artifactId>
     <version>x.y.z</version>
 </dependency>
 ```
@@ -261,13 +173,13 @@ public class StorageConfig {
         DefaultMultiStorageClientConfig multiStorageClientConfig = new DefaultMultiStorageClientConfig();
         StorageClientConfig storageClientConfig = new StorageClientConfig();
         storageClientConfig.setBucketName("yf-example");
-        storageClientConfig.setDomain("https://yf-test-oss.yifengx.com");
+        storageClientConfig.setDomain("https://xx.xxx.com");
         storageClientConfig.setTokenUrl("https://x.x.x.x/storage");
         storageClientConfig.setBasePath("ehr");
         Map<String, StorageClientConfig> map = new HashMap<>();
-        map.put("yf-example", storageClientConfig);
+        map.put("example", storageClientConfig);
         multiStorageClientConfig.setClientConfigs(map);
-        multiStorageClientConfig.setDefaultClientKey("yf-example");
+        multiStorageClientConfig.setDefaultClientKey("example");
         return multiStorageClientConfig;
     }
 
@@ -290,32 +202,3 @@ void testStorage(){
         StorageFileInfo fileInfo=storageTemplate.client().getObject("data/1.png");
         }
 ```
-
-#### lite客户端使用
-
-* 引入依赖
-
-```xml
-
-<dependency>
-    <groupId>com.yifengx.popeye</groupId>
-    <artifactId>storage-client-lite</artifactId>
-    <version>x.y.z</version>
-</dependency>
-```
-
-* 配置及使用
-
-```java
-DefaultMultiStorageClientConfig multiStorageClientConfig=new DefaultMultiStorageClientConfig();
-        StorageClientConfig example=new StorageClientConfig();
-        example.setBucketName("yf-example");
-        example.setDomain("https://yf-test-oss.yifengx.com/");
-        example.setTokenUrl("https://x.x.x.x/storage");
-        example.setBasePath("/ssm/goodsImage/");
-        multiStorageClientConfig.setDefaultClient(example);
-        StorageTemplate storageTemplate=new StorageTemplate(multiStorageClientConfig);
-
-        StorageFileInfoListing listing=storageTemplate.client("yf-example").listObjects("5e79a51c28a3200001d9e719/CLOUD/major/1002044",null,null,10);
-```
-
