@@ -198,9 +198,9 @@ public class DateUtils {
 	 * formatDate(date, "yyyy/MM/dd HH:mm:ss") = "2019/02/10 23:12:10"
 	 * formatDate(date, "abc") throw IllegalArgumentException(Illegal pattern)
 	 * </pre>
-	 * @param date
+	 * @param date 日期
 	 * @param pattern 格式字符串，示例 ：yyyy-MM-dd HH:mm:ss
-	 * @return
+	 * @return string
 	 */
 	public static String format(@NonNull Date date, @Nullable String pattern) {
 		return format(toLocalDateTime(date), pattern);
@@ -213,7 +213,7 @@ public class DateUtils {
 	 * <pre>
 	 *  formatDate(date) == "2019-02-10 23:12:10"
 	 * </pre>
-	 * @param date
+	 * @param date 日期
 	 * @return String
 	 */
 	public static String format(@NonNull Date date) {
@@ -558,8 +558,8 @@ public class DateUtils {
 
 	/**
 	 * 获取localdatetime毫秒数
-	 * @param localDateTime
-	 * @return
+	 * @param localDateTime 日期
+	 * @return 秒
 	 */
 	public static long getMillis(@NonNull LocalDateTime localDateTime) {
 		if (localDateTime == null) {
@@ -572,8 +572,8 @@ public class DateUtils {
 	 * <p>
 	 * 获取localdatetime秒数
 	 * </p>
-	 * @param localDateTime
-	 * @return
+	 * @param localDateTime 日期
+	 * @return 秒
 	 */
 	public static long getSecond(@NonNull LocalDateTime localDateTime) {
 		if (localDateTime == null) {
@@ -586,8 +586,8 @@ public class DateUtils {
 	 * <p>
 	 * 获取某天开始时间，如：2020-09-17 00:00:00
 	 * </p>
-	 * @param localDateTime
-	 * @return
+	 * @param localDateTime 日期
+	 * @return LocalDateTime
 	 */
 	public static LocalDateTime getDayStart(@NonNull LocalDateTime localDateTime) {
 		if (localDateTime == null) {
@@ -601,8 +601,8 @@ public class DateUtils {
 	 * <p>
 	 * 获取某天结束时间，如：2020-09-17 23:59:59
 	 * </p>
-	 * @param localDateTime
-	 * @return
+	 * @param localDateTime 日期
+	 * @return LocalDateTime
 	 */
 	public static LocalDateTime getDayEnd(@NonNull LocalDateTime localDateTime) {
 		if (localDateTime == null) {
@@ -616,7 +616,7 @@ public class DateUtils {
 	 * <p>
 	 * 获取当天开始时间，如：2020-09-17 00:00:00
 	 * </p>
-	 * @return
+	 * @return LocalDateTime
 	 */
 	public static LocalDateTime getCurrentDayStart() {
 		return getDayStart(LocalDateTime.now());
@@ -626,7 +626,7 @@ public class DateUtils {
 	 * <p>
 	 * 获取当天结束时间 如：2020-09-17 23:59:59
 	 * </p>
-	 * @return
+	 * @return LocalDateTime
 	 */
 	public static LocalDateTime getCurrentDayEnd() {
 		return getDayEnd(LocalDateTime.now());

@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * baseDao
  *
- * @author: workoss
+ * @author workoss
  */
 public interface BaseDao<T, ID> {
 

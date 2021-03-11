@@ -106,8 +106,7 @@ public class HttpClientUtil implements Closeable {
 				if (value != null && "timeout".equalsIgnoreCase(param)) {
 					try {
 						return Long.parseLong(value) * 1000;
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						log.error("format KeepAlive timeout exception, exception:", e);
 					}
 				}
@@ -129,9 +128,10 @@ public class HttpClientUtil implements Closeable {
 
 	/**
 	 * 执行http post请求 默认采用Content-Type：application/json，Accept：application/json
-	 * @param uri 请求地址
+	 *
+	 * @param uri  请求地址
 	 * @param data 请求数据
-	 * @return
+	 * @return string
 	 */
 	public static String executePost(@NonNull String uri, @Nullable String data) {
 		long startTime = System.currentTimeMillis();
@@ -149,20 +149,17 @@ public class HttpClientUtil implements Closeable {
 			if (httpEntity != null) {
 				responseBody = EntityUtils.toString(httpEntity, "UTF-8");
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (method != null) {
 				method.abort();
 			}
 			log.error("execute post request exception, url:{}, cost time(ms):{}, exception:", uri,
 					(System.currentTimeMillis() - startTime), e);
-		}
-		finally {
+		} finally {
 			if (httpEntity != null) {
 				try {
 					EntityUtils.consumeQuietly(httpEntity);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					log.error("close response exception, url:{} cost time(ms):{} exception:{}, ", uri,
 							(System.currentTimeMillis() - startTime), e);
 				}
@@ -184,15 +181,14 @@ public class HttpClientUtil implements Closeable {
 		try (CloseableHttpResponse httpResponse = getHttpClient().execute(httpGet)) {
 			log.info("【HTTPCLIENT】checkUrlIsValid:{} statusCode:{}", url, httpResponse.getStatusLine().getStatusCode());
 			return true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warn("【HTTPCLIENT】checkUrlIsValid:{} ERROR:{}", url, e.getMessage());
 		}
 		return isValid;
 	}
 
 	public static String doPostJson(@NonNull String url, @Nullable String jsonParam,
-			@Nullable Map<String, String> headers) {
+									@Nullable Map<String, String> headers) {
 		HttpPost httpPost = null;
 		CloseableHttpResponse response = null;
 		try {
@@ -218,37 +214,31 @@ public class HttpClientUtil implements Closeable {
 				log.warn("[HTTP] url:{},status:{},resp:{}", url, response.getStatusLine(), resp);
 			}
 			return resp;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException("[send POST request error：]", e);
-		}
-		finally {
+		} finally {
 			try {
 				httpPost.releaseConnection();
 				if (response != null) {
 					response.close();
 				}
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 
 			}
 		}
 	}
 
 	/**
-	 * * 创建请求
-	 * @param uri 请求url
-	 * @param methodName 请求的方法类型
+	 * 创建请求
+	 *
+	 * @param uri         请求url
+	 * @param methodName  请求的方法类型
 	 * @param contentType contentType类型
-	 * @param timeout 超时时间
-	 * @param @return 入参
+	 * @param timeout     超时时间
 	 * @return HttpRequestBase 返回类型
-	 * @throws @author lisc
-	 * @date 2019年7月9日 上午11:37:00
-	 * @version V1.0
 	 */
 	public static HttpRequestBase getRequest(@NonNull String uri, @NonNull String methodName,
-			@Nullable String contentType, int timeout) {
+											 @Nullable String contentType, int timeout) {
 		HttpRequestBase method = null;
 		if (timeout <= 0) {
 			timeout = DEFAUL_TTIME_OUT;
@@ -258,14 +248,11 @@ public class HttpClientUtil implements Closeable {
 				.setExpectContinueEnabled(false).build();
 		if (HttpPut.METHOD_NAME.equalsIgnoreCase(methodName)) {
 			method = new HttpPut(uri);
-		}
-		else if (HttpPost.METHOD_NAME.equalsIgnoreCase(methodName)) {
+		} else if (HttpPost.METHOD_NAME.equalsIgnoreCase(methodName)) {
 			method = new HttpPost(uri);
-		}
-		else if (HttpGet.METHOD_NAME.equalsIgnoreCase(methodName)) {
+		} else if (HttpGet.METHOD_NAME.equalsIgnoreCase(methodName)) {
 			method = new HttpGet(uri);
-		}
-		else {
+		} else {
 			method = new HttpPost(uri);
 		}
 		if (StringUtils.isEmpty(contentType)) {
@@ -278,7 +265,7 @@ public class HttpClientUtil implements Closeable {
 	}
 
 	public static String doGet(@NonNull String path, @Nullable Map<String, String> param,
-			@Nullable Map<String, String> headers) {
+							   @Nullable Map<String, String> headers) {
 		HttpGet httpGet = null;
 		CloseableHttpResponse response = null;
 		// CloseableHttpClient httpClient = wrapClient(path);
@@ -307,26 +294,24 @@ public class HttpClientUtil implements Closeable {
 				log.warn("[HTTP] url:{},status:{},resp:{}", path, response.getStatusLine(), resp);
 			}
 			return resp;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new RuntimeException("[send Get request error：]", e);
-		}
-		finally {
+		} finally {
 			try {
 				httpGet.releaseConnection();
 				if (response != null) {
 					response.close();
 				}
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 			}
 		}
 	}
 
 	/**
 	 * 执行GET 请求
-	 * @param uri
-	 * @return
+	 *
+	 * @param uri url
+	 * @return string
 	 */
 	public static String executeGet(@NonNull String uri) {
 		long startTime = System.currentTimeMillis();
@@ -342,20 +327,17 @@ public class HttpClientUtil implements Closeable {
 				responseBody = EntityUtils.toString(httpEntity, "UTF-8");
 				log.info("request URL: {} Return status code：{}", uri, httpResponse.getStatusLine().getStatusCode());
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (method != null) {
 				method.abort();
 			}
 			log.error("execute get request exception, url:{},cost time(ms):{},exception:", uri,
 					(System.currentTimeMillis() - startTime), e);
-		}
-		finally {
+		} finally {
 			if (httpEntity != null) {
 				try {
 					EntityUtils.consumeQuietly(httpEntity);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					log.error("close response exception, url:{}, ,cost time(ms):{}, exception:", uri,
 							(System.currentTimeMillis() - startTime), e);
 				}

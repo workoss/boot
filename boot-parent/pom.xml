@@ -785,6 +785,12 @@
 							<goals>
 								<goal>jar</goal>
 							</goals>
+							<configuration>
+								<charset>${project.build.sourceEncoding}</charset>
+								<encoding>${project.build.sourceEncoding}</encoding>
+								<applyJavadocSecurityFix>true</applyJavadocSecurityFix>
+								<doclint>none</doclint>
+							</configuration>
 						</execution>
 					</executions>
 				</plugin>
@@ -958,6 +964,7 @@
 						<properties>
 							<owner>workoss</owner>
 							<email>WORKOSS</email>
+							<!--suppress UnresolvedMavenProperty -->
 							<project.inceptionYear>2020-2021</project.inceptionYear>
 							<!--suppress UnresolvedMavenProperty -->
 							<!--							<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
@@ -988,20 +995,10 @@
 
 	<profiles>
 		<profile>
-			<id>snapshot</id>
+			<id>ossrh</id>
 			<distributionManagement>
 				<snapshotRepository>
 					<id>sonatype-nexus-snapshots</id>
-					<name>Sonatype Nexus Snapshots</name>
-					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>release</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>ossrh</id>
 					<name>Sonatype Nexus Snapshots</name>
 					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 				</snapshotRepository>
@@ -1066,22 +1063,7 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-			<id>talkyun-repo</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>talkyun-snapshot</id>
-					<name>TalkYun Nexus Snapshot</name>
-					<url>http://nexus.yifengx.com/content/repositories/snapshots/</url>
-					<uniqueVersion>true</uniqueVersion>
-				</snapshotRepository>
-				<repository>
-					<id>talkyun-release</id>
-					<name>TalkYun Nexus Release</name>
-					<url>http://nexus.yifengx.com/content/repositories/releases/</url>
-				</repository>
-			</distributionManagement>
-		</profile>
+
 	</profiles>
 
 </project>

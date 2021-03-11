@@ -117,7 +117,8 @@
 					<properties>
 						<owner>workoss</owner>
 						<email>WORKOSS</email>
-						<project.inceptionYear>2020-2021</project.inceptionYear>
+						<!--suppress UnresolvedMavenProperty -->
+						<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>
 						<!--suppress UnresolvedMavenProperty -->
 						<!--						<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
 						<!--						<year>${project.inceptionYear}</year>-->
