@@ -20,7 +20,7 @@
 		<module>boot-storage/aws-storage-client</module>
 		<module>boot-storage/minio-storage-client</module>
 		<module>boot-storage/storage-client-spring-boot-starter</module>
-<!--		<module>boot-http</module>-->
+		<!--		<module>boot-http</module>-->
 	</modules>
 	<properties>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
@@ -33,14 +33,15 @@
 
 	<scm>
 		<url>https://github.com/workoss/boot</url>
-		<connection>
-			scm:git:git://github.com/workoss/boot.git
-		</connection>
-		<developerConnection>
-			scm:git:ssh://git@github.com/workoss/boot.git
-		</developerConnection>
-		<tag>v1.0.8-RC1</tag>
+		<connection>scm:git:https://github.com/workoss/boot.git</connection>
+		<developerConnection>scm:git:https://github.com/workoss/boot.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
+
+	<issueManagement>
+		<system>Github Issues</system>
+		<url>https://github.com/workoss/boot/issues</url>
+	</issueManagement>
 
 	<organization>
 		<name>Workoss Software, Inc.</name>

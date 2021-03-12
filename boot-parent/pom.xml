@@ -14,14 +14,20 @@
 
 	<scm>
 		<url>https://github.com/workoss/boot</url>
-		<connection>
-			scm:git:git://github.com/workoss/boot.git
-		</connection>
-		<developerConnection>
-			scm:git:ssh://git@github.com/workoss/boot.git
-		</developerConnection>
-		<tag>v1.0.8-RC1</tag>
+		<connection>scm:git:https://github.com/workoss/boot.git</connection>
+		<developerConnection>scm:git:https://github.com/workoss/boot.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
+
+	<issueManagement>
+		<system>Github Issues</system>
+		<url>https://github.com/workoss/boot/issues</url>
+	</issueManagement>
+
+	<organization>
+		<name>Workoss Software, Inc.</name>
+		<url>https://www.workoss.com</url>
+	</organization>
 
 	<licenses>
 		<license>
