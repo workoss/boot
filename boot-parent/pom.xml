@@ -8,9 +8,8 @@
 	<version>1.0.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-
 	<name>boot-parent</name>
-	<description>workoss boot extends</description>
+	<description>workoss boot</description>
 	<url>https://github.com/workoss/boot</url>
 
 	<scm>
@@ -147,13 +146,13 @@
 	<dependencyManagement>
 		<dependencies>
 
-<!--			<dependency>-->
-<!--				<groupId>jakarta.platform</groupId>-->
-<!--				<artifactId>jakarta.jakartaee-bom</artifactId>-->
-<!--				<version>${jakarta.jakartaee-bom.version}</version>-->
-<!--				<type>pom</type>-->
-<!--				<scope>import</scope>-->
-<!--			</dependency>-->
+			<!--			<dependency>-->
+			<!--				<groupId>jakarta.platform</groupId>-->
+			<!--				<artifactId>jakarta.jakartaee-bom</artifactId>-->
+			<!--				<version>${jakarta.jakartaee-bom.version}</version>-->
+			<!--				<type>pom</type>-->
+			<!--				<scope>import</scope>-->
+			<!--			</dependency>-->
 			<dependency>
 				<groupId>jakarta.servlet</groupId>
 				<artifactId>jakarta.servlet-api</artifactId>
@@ -773,6 +772,18 @@
 						<includes>
 							<include>**/*.*</include>
 						</includes>
+						<archive>
+							<addMavenDescriptor>true</addMavenDescriptor>
+							<index>true</index>
+							<manifest>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Specification-Version>${project.version}</Specification-Version>
+								<Implementation-Version>${project.version}</Implementation-Version>
+							</manifestEntries>
+						</archive>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -785,14 +796,19 @@
 							<goals>
 								<goal>jar</goal>
 							</goals>
-							<configuration>
-								<charset>${project.build.sourceEncoding}</charset>
-								<encoding>${project.build.sourceEncoding}</encoding>
-								<applyJavadocSecurityFix>true</applyJavadocSecurityFix>
-								<doclint>none</doclint>
-							</configuration>
 						</execution>
 					</executions>
+					<configuration>
+						<charset>${project.build.sourceEncoding}</charset>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<docencoding>${project.build.sourceEncoding}</docencoding>
+						<links>
+							<link>http://docs.oracle.com/javase/8/docs/api</link>
+						</links>
+						<doclint>none</doclint>
+						<doctitle>Boot ${project.version} API</doctitle>
+						<windowtitle>Boot ${project.version} API</windowtitle>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -916,7 +932,8 @@
 						<!-- 指定.git文件夹路径。缺失则默认为${project.basedir}/.git -->
 						<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
 						<!-- 指定git信息文件的输出路径 -->
-						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.json</generateGitPropertiesFilename>
+						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.json
+						</generateGitPropertiesFilename>
 						<!-- <generateGitPropertiesFilename>${project.basedir}/git.json</generateGitPropertiesFilename> -->
 						<!-- 指定git信息文件的输出格式。缺失则默认为properties -->
 						<format>json</format>
@@ -935,52 +952,37 @@
 					<groupId>com.mycila</groupId>
 					<artifactId>license-maven-plugin</artifactId>
 					<version>${license-maven-plugin.version}</version>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>remove</goal>
-								<goal>format</goal>
-							</goals>
-						</execution>
-					</executions>
 					<configuration>
-						<licenseSets>
-							<licenseSet>
-								<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-								<excludes>
-									<exclude>*.txt</exclude>
-									<exclude>*.sh</exclude>
-									<exclude>*.yml</exclude>
-									<exclude>.editorconfig</exclude>
-									<exclude>.gitignore</exclude>
-									<exclude>**/README</exclude>
-									<exclude>**/*.xml</exclude>
-									<exclude>src/test/resources/**</exclude>
-									<exclude>src/main/resources/**</exclude>
-								</excludes>
-							</licenseSet>
-						</licenseSets>
+						<quiet>true</quiet>
+						<header>src/license/license-header.txt</header>
+						<excludes>
+							<exclude>**/*.txt</exclude>
+							<exclude>**/*.sh</exclude>
+							<exclude>**/*.yml</exclude>
+							<exclude>.editorconfig</exclude>
+							<exclude>.gitignore</exclude>
+							<exclude>**/README</exclude>
+							<exclude>**/*.xml</exclude>
+							<exclude>src/test/resources/**</exclude>
+							<exclude>src/main/resources/**</exclude>
+						</excludes>
 						<properties>
 							<owner>workoss</owner>
 							<email>WORKOSS</email>
-							<!--suppress UnresolvedMavenProperty -->
-							<project.inceptionYear>2020-2021</project.inceptionYear>
-							<!--suppress UnresolvedMavenProperty -->
-							<!--							<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
+							<site>https://www.workoss.com</site>
+							<project.inceptionYear>2019</project.inceptionYear>
 						</properties>
 						<mapping>
 							<java>SLASHSTAR_STYLE</java>
 						</mapping>
 					</configuration>
-					<!--					<dependencies>-->
-					<!--						<dependency>-->
-					<!--							<groupId>com.mycila</groupId>-->
-					<!--							<artifactId>license-maven-plugin-git</artifactId>-->
-					<!--							&lt;!&ndash; make sure you use the same version as license-maven-plugin &ndash;&gt;-->
-					<!--							<version>${license-maven-plugin.version}</version>-->
-					<!--						</dependency>-->
-					<!--					</dependencies>-->
+					<dependencies>
+						<dependency>
+							<groupId>com.mycila</groupId>
+							<artifactId>license-maven-plugin-git</artifactId>
+							<version>${license-maven-plugin.version}</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 
 				<plugin>

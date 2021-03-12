@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<artifactId>boot-parent</artifactId>
 		<groupId>com.workoss.boot</groupId>
@@ -7,31 +8,21 @@
 		<relativePath>../boot-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-    <artifactId>boot-dependencies</artifactId>
-    <packaging>pom</packaging>
+	<artifactId>boot-dependencies</artifactId>
+	<packaging>pom</packaging>
 
-    <dependencyManagement>
-        <dependencies>
+	<dependencyManagement>
+		<dependencies>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
 				<artifactId>boot-annotation</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>com.workoss.boot</groupId>
-                <artifactId>mybatis-plugin-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.workoss.boot</groupId>
-                <artifactId>mybatis-plugin-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.workoss.boot</groupId>
-                <artifactId>boot-util</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-util</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
 				<artifactId>boot-extension-core</artifactId>
@@ -42,7 +33,32 @@
 				<artifactId>boot-extension-spring</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-        </dependencies>
-    </dependencyManagement>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>mybatis-plugin-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>mybatis-plugin-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>storage-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>aws-storage-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>storage-client-spring-boot-starter</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>

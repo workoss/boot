@@ -15,8 +15,11 @@
 		<module>boot-mybatis/mybatis-plugin-core</module>
 		<module>boot-extension/boot-extension-core</module>
 		<module>boot-extension/boot-extension-spring</module>
-		<module>boot-storage</module>
-		<module>boot-http</module>
+		<module>boot-storage/storage-core</module>
+		<module>boot-storage/storage-server</module>
+		<module>boot-storage/aws-storage-client</module>
+		<module>boot-storage/storage-client-spring-boot-starter</module>
+<!--		<module>boot-http</module>-->
 	</modules>
 	<properties>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
@@ -88,54 +91,6 @@
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${license-maven-plugin.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>remove</goal>
-							<goal>format</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<licenseSets>
-						<licenseSet>
-							<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-							<excludes>
-								<exclude>*.txt</exclude>
-								<exclude>*.sh</exclude>
-								<exclude>*.yml</exclude>
-								<exclude>.editorconfig</exclude>
-								<exclude>.gitignore</exclude>
-								<exclude>**/README</exclude>
-								<exclude>**/*.xml</exclude>
-								<exclude>src/test/resources/**</exclude>
-								<exclude>src/main/resources/**</exclude>
-							</excludes>
-						</licenseSet>
-					</licenseSets>
-					<properties>
-						<owner>workoss</owner>
-						<email>WORKOSS</email>
-						<!--suppress UnresolvedMavenProperty -->
-						<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>
-						<!--suppress UnresolvedMavenProperty -->
-						<!--						<project.inceptionYear>${license.git.copyrightYears}</project.inceptionYear>-->
-						<!--						<year>${project.inceptionYear}</year>-->
-					</properties>
-					<mapping>
-						<java>SLASHSTAR_STYLE</java>
-					</mapping>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>com.mycila</groupId>
-						<artifactId>license-maven-plugin-git</artifactId>
-						<!-- make sure you use the same version as license-maven-plugin -->
-						<version>${license-maven-plugin.version}</version>
-					</dependency>
-				</dependencies>
-
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
