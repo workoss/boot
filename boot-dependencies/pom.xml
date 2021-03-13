@@ -24,12 +24,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
-				<artifactId>boot-extension-core</artifactId>
+				<artifactId>extension-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
-				<artifactId>boot-extension-spring</artifactId>
+				<artifactId>extension-spring</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

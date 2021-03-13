@@ -11,8 +11,8 @@
 	<artifactId>boot-extension</artifactId>
 	<packaging>pom</packaging>
 	<modules>
-		<module>boot-extension-core</module>
-		<module>boot-extension-spring</module>
+		<module>extension-core</module>
+		<module>extension-spring</module>
 	</modules>
 
 </project>
