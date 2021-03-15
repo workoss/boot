@@ -112,7 +112,7 @@ public class SqlInterceptor implements Interceptor {
 		String sql = boundSql.getSql();
 		boolean changeSql = false;
 		if (sql.toLowerCase().contains(ORDER_QUERY_MAIN) && sql.toLowerCase().contains(ORDER_QUERY_BY)) {
-			log.debug("sql have order by ，ignore page.orderBy");
+			log.debug("sql have order by ，ignore orderBy");
 		}
 		else {
 			String orderBy = sqlParam.getSortBy();

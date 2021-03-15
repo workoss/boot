@@ -15,6 +15,7 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
+import com.workoss.boot.util.Assert;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
 import com.workoss.boot.util.reflect.ReflectUtils;
@@ -29,8 +30,21 @@ public class SqlHelper {
 
 	protected static final FastThreadLocal<SqlParam> LOCAL_SQL_PARAM = new FastThreadLocal<>();
 
-	static void setLocalPage(SqlParam sqlParam) {
-		LOCAL_SQL_PARAM.set(sqlParam);
+	public static PageBuilder page() {
+		return new PageBuilder();
+	}
+
+	public static PageBuilder page(Object pageParam){
+		return new PageBuilder(pageParam);
+	}
+
+	public static PageBuilder page(int pageNo, int limit) {
+		return new PageBuilder().page(pageNo, limit);
+	}
+
+	public static SortBuilder sort(String sortBy) {
+		Assert.hasLength(sortBy, "排序不能为空");
+		return new SortBuilder().sort(sortBy);
 	}
 
 	public static SqlParam getLocalSqlParam() {
@@ -41,141 +55,143 @@ public class SqlHelper {
 		LOCAL_SQL_PARAM.set(null);
 	}
 
-	public static SqlParamBuild onePage(int pageNo, int limit) {
-		return onePage(pageNo, limit, true);
-	}
 
-	public static SqlParamBuild onePage(int pageNo, int limit, boolean shouldCount) {
-		return page((pageNo - 1) * limit, limit, shouldCount);
-	}
-
-	public static SqlParamBuild page(int offset, int limit) {
-		return new SqlParamBuild(offset, limit, null, true, true);
-	}
-
-	public static SqlParamBuild page(int offset, int limit, boolean shouldCount) {
-		return new SqlParamBuild(offset, limit, null, true, shouldCount);
-	}
-
-	public static SqlParamBuild sortOnly(String sortBy) {
-		return new SqlParamBuild(sortBy, false, false);
-	}
-
-	public static SqlParamBuild startPage() {
-		return new SqlParamBuild(true);
-	}
-
-	public static SqlParamBuild startPage(Object pageParam) {
-		if (pageParam == null) {
-			return new SqlParamBuild(true);
+	protected static void start(SqlParam sqlParam) {
+		if (StringUtils.isNotBlank(sqlParam.getSortBy())) {
+			sqlParam.setSortBy(StringUtils.underscoreName(sqlParam.getSortBy()));
 		}
-		String clazName = pageParam.getClass().getName();
-		if (clazName.startsWith("java.lang.") || clazName.startsWith("java.math.")) {
-			throw new RuntimeException("please input object");
+		LOCAL_SQL_PARAM.set(sqlParam);
+	}
+
+	static class PageBuilder {
+
+		private SqlParamBuilder sqlParamBuilder;
+
+		public PageBuilder() {
+			this.sqlParamBuilder = new SqlParamBuilder();
 		}
 
-		return new SqlParamBuild(pageParam);
-	}
-
-	public static class SqlParamBuild {
-
-		private SqlParam sqlParam;
-
-		public SqlParamBuild(Object sqlParam) {
-			if (sqlParam instanceof SqlParam) {
-				this.sqlParam = (SqlParam) sqlParam;
+		public PageBuilder(Object pageObject){
+			if (pageObject == null) {
+				this.sqlParamBuilder = new SqlParamBuilder();
+				return;
 			}
-			else if (sqlParam instanceof Integer) {
-
+			String clazName = pageObject.getClass().getName();
+			if (clazName.startsWith("java.lang.") || clazName.startsWith("java.math.")) {
+				throw new RuntimeException("please input object");
 			}
-			else {
-				instanceSqlParam();
-				// 反射获取是否有属性 offset limit shouldCount sortBy 字段
-				Object offset = ReflectUtils.getPropertyByInvokeMethod(sqlParam, "offset");
-				Object limit = ReflectUtils.getPropertyByInvokeMethod(sqlParam, "limit");
+			if (pageObject instanceof SqlParam) {
+				sqlParamBuilder = new SqlParamBuilder((SqlParam) pageObject);
+				return;
+			}
+			this.sqlParamBuilder = new SqlParamBuilder();
+			if (pageObject instanceof Integer) {
+
+			} else {
+				Object offset = ReflectUtils.getPropertyByInvokeMethod(pageObject, "offset");
+				Object limit = ReflectUtils.getPropertyByInvokeMethod(pageObject, "limit");
 				if (limit != null) {
-					this.sqlParam.setOffset(offset == null ? 0 : Integer.parseInt(offset.toString()));
-					this.sqlParam.setLimit(limit == null ? 10 : Integer.parseInt(limit.toString()));
+					sqlParamBuilder.offset(offset == null ? 0 : Integer.parseInt(offset.toString()));
+					sqlParamBuilder.limit(limit == null ? 10 : Integer.parseInt(limit.toString()));
 				}
-				this.sqlParam.setSortBy((String) ReflectUtils.getPropertyByInvokeMethod(sqlParam, "sortBy"));
+				sqlParamBuilder.sort((String) ReflectUtils.getPropertyByInvokeMethod(pageObject, "sortBy"));
 			}
 		}
 
-		public SqlParamBuild(String sortBy, boolean shouldPage, boolean shouldCount) {
-			instanceSqlParam();
-			if (StringUtils.isNotBlank(sortBy)) {
-				this.sqlParam.setSortBy(sortBy);
-			}
-			this.sqlParam.setShouldCount(shouldCount);
-			if (shouldCount) {
-				this.sqlParam.setShouldPage(true);
-			}
-			else {
-				this.sqlParam.setShouldPage(shouldPage);
-			}
-		}
-
-		public SqlParamBuild(int offset, int limit, String sortBy, boolean shouldPage, boolean shouldCount) {
-			instanceSqlParam();
-			this.sqlParam.setOffset(offset);
-			this.sqlParam.setLimit(limit);
-			this.sqlParam.setSortBy(sortBy);
-			this.sqlParam.setShouldCount(shouldCount);
-			if (shouldCount) {
-				this.sqlParam.setShouldPage(true);
-			}
-			else {
-				this.sqlParam.setShouldPage(shouldPage);
-			}
-		}
-
-		public SqlParamBuild sortBy(String sortBy) {
-			instanceSqlParam();
-			this.sqlParam.setSortBy(sortBy);
+		public PageBuilder page(int pageNo, int limit) {
+			sqlParamBuilder.page(pageNo, limit);
 			return this;
 		}
 
-		public SqlParamBuild page(int offset, int limit) {
-			instanceSqlParam();
-			this.sqlParam.setOffset(offset);
-			this.sqlParam.setLimit(limit);
+		public PageBuilder sort(String sortBy) {
+			sqlParamBuilder.sort(sortBy);
 			return this;
 		}
 
-		public SqlParamBuild shouldPage(boolean shouldPage) {
-			instanceSqlParam();
-			this.sqlParam.setShouldPage(shouldPage);
-			return this;
-		}
-
-		public SqlParamBuild shouldCount(boolean shouldCount) {
-			instanceSqlParam();
-			if (shouldCount) {
-				this.sqlParam.setShouldPage(true);
-			}
-			this.sqlParam.setShouldCount(shouldCount);
-			return this;
-		}
-
-		private SqlParam instanceSqlParam() {
-			if (sqlParam == null) {
-				sqlParam = new SqlParam();
-			}
-			return sqlParam;
-		}
-
-		public SqlParam build() {
-			SqlParam sqlParam = instanceSqlParam();
-			if (StringUtils.isNotBlank(sqlParam.getSortBy())) {
-				sqlParam.setSortBy(StringUtils.underscoreName(sqlParam.getSortBy()));
-			}
+		public void start() {
+			SqlParam sqlParam = sqlParamBuilder.build();
 			if (sqlParam.getLimit() <= 0 || sqlParam.getOffset() < 0) {
 				throw new RuntimeException("分页参数 limit >0 offset>=0");
 			}
-			setLocalPage(sqlParam);
-			return sqlParam;
+			SqlHelper.start(sqlParam);
+		}
+	}
+
+
+	static class SortBuilder {
+
+		private SqlParamBuilder sqlParamBuilder;
+
+		public SortBuilder() {
+			this.sqlParamBuilder = new SqlParamBuilder();
 		}
 
+		public SortBuilder sort(String sortBy) {
+			sqlParamBuilder.sort(sortBy);
+			sqlParamBuilder.shouldCount(false);
+			sqlParamBuilder.shouldPage(false);
+			return this;
+		}
+
+		public void start() {
+			SqlParam sqlParam = sqlParamBuilder.build();
+			SqlHelper.start(sqlParam);
+		}
+	}
+
+	static class SqlParamBuilder {
+
+		private SqlParam sqlParam;
+
+		public SqlParamBuilder() {
+			if (sqlParam == null) {
+				this.sqlParam = new SqlParam();
+			}
+		}
+
+		public SqlParamBuilder(SqlParam sqlParam) {
+			this.sqlParam = sqlParam;
+		}
+
+
+		public SqlParamBuilder page(int pageNo, int limit) {
+			sqlParam.setOffset((pageNo - 1) * limit);
+			sqlParam.setLimit(limit);
+			sqlParam.setShouldPage(true);
+			return this;
+		}
+
+		public SqlParamBuilder offset(int offset) {
+			sqlParam.setOffset(offset);
+			return this;
+		}
+
+		public SqlParamBuilder limit(int limit) {
+			sqlParam.setLimit(limit);
+			return this;
+		}
+
+		public SqlParamBuilder shouldCount(boolean shouldCount) {
+			sqlParam.setShouldCount(shouldCount);
+			if (shouldCount) {
+				this.sqlParam.setShouldPage(true);
+			}
+			return this;
+		}
+
+		public SqlParamBuilder shouldPage(boolean shouldPage) {
+			sqlParam.setShouldPage(shouldPage);
+			return this;
+		}
+
+		public SqlParamBuilder sort(String sortBy) {
+			sqlParam.setSortBy(sortBy);
+			return this;
+		}
+
+		public SqlParam build() {
+			return sqlParam;
+		}
 	}
 
 }
