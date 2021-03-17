@@ -20,6 +20,8 @@ import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
 import com.workoss.boot.util.reflect.ReflectUtils;
 
+import java.util.function.Function;
+
 /**
  * SqlHelper
  *
@@ -34,7 +36,7 @@ public class SqlHelper {
 		return new PageBuilder();
 	}
 
-	public static PageBuilder page(Object pageParam){
+	public static PageBuilder page(Object pageParam) {
 		return new PageBuilder(pageParam);
 	}
 
@@ -63,7 +65,7 @@ public class SqlHelper {
 		LOCAL_SQL_PARAM.set(sqlParam);
 	}
 
-	static class PageBuilder {
+	public static class PageBuilder {
 
 		private SqlParamBuilder sqlParamBuilder;
 
@@ -71,7 +73,7 @@ public class SqlHelper {
 			this.sqlParamBuilder = new SqlParamBuilder();
 		}
 
-		public PageBuilder(Object pageObject){
+		public PageBuilder(Object pageObject) {
 			if (pageObject == null) {
 				this.sqlParamBuilder = new SqlParamBuilder();
 				return;
@@ -109,16 +111,48 @@ public class SqlHelper {
 		}
 
 		public void start() {
+			execute(null);
+		}
+
+		public <S> S execute(Function<SqlParam, S> mapper) {
 			SqlParam sqlParam = sqlParamBuilder.build();
 			if (sqlParam.getLimit() <= 0 || sqlParam.getOffset() < 0) {
 				throw new RuntimeException("分页参数 limit >0 offset>=0");
 			}
 			SqlHelper.start(sqlParam);
+			if (mapper == null) {
+				return null;
+			}
+			return mapper.apply(sqlParam);
 		}
+
+		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<SqlParam, S> daoMapper) {
+			return new BeanMapperBuilder(execute(daoMapper));
+		}
+
+
 	}
 
 
-	static class SortBuilder {
+	public static class BeanMapperBuilder<S, T> {
+
+		private S source;
+
+		public BeanMapperBuilder(S source) {
+			this.source = source;
+		}
+
+		public <T> T mapper(Function<S, T> mapperFunc) {
+			if (mapperFunc == null) {
+				return (T) source;
+			}
+			return mapperFunc.apply(source);
+		}
+
+	}
+
+
+	public static class SortBuilder {
 
 		private SqlParamBuilder sqlParamBuilder;
 
@@ -134,8 +168,20 @@ public class SqlHelper {
 		}
 
 		public void start() {
+			execute(null);
+		}
+
+		public <T> T execute(Function<SqlParam, T> mapper) {
 			SqlParam sqlParam = sqlParamBuilder.build();
 			SqlHelper.start(sqlParam);
+			if (mapper == null) {
+				return null;
+			}
+			return mapper.apply(sqlParam);
+		}
+
+		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<SqlParam, S> daoMapper) {
+			return new BeanMapperBuilder(execute(daoMapper));
 		}
 	}
 

@@ -21,7 +21,6 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
-import com.workoss.boot.storage.context.Context;
 import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
@@ -29,6 +28,7 @@ import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.service.token.AbstractTokenHandler;
 import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.StringUtils;
+import com.workoss.boot.util.context.Context;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -75,7 +75,7 @@ public class OSSTokenHandler extends AbstractTokenHandler {
 
 	@Override
 	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,
-			String mimeType, String successActionStatus) {
+											   String mimeType, String successActionStatus) {
 		String policyTemplate = "{\"expiration\":\"{{expiration}}\",\"conditions\":[{\"bucket\":\"{{bucketName}}\"},{\"key\":\"{{key}}\"},{{#mimeType}}{\"content-type\":\"{{mimeType}}\"},{{/mimeType}}[\"content-length-range\", 0, {{maxUploadSize}}]]}";
 		return Mono
 				.just(generateWebSign(policyTemplate, context, null, bucketName, key, mimeType, successActionStatus));

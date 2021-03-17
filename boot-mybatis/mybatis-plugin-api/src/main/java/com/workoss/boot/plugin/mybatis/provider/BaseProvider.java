@@ -40,17 +40,33 @@ import org.slf4j.LoggerFactory;
  */
 public class BaseProvider implements ProviderMethodResolver {
 
+	private static final ThreadLocal<String> DB_TYPE_LOCAL = new ThreadLocal<>();
+
 	private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);
 
 	private static final ConcurrentHashMap<String, String> SQL_MAP = new ConcurrentHashMap<>();
 
-	public String executeSql(ProviderContext context, SqlConsumer sqlConsumer) {
+	public static String getDbType(){
+		return DB_TYPE_LOCAL.get();
+	}
+
+	public static void setDbType(String dbType){
+		if (dbType == null){
+			DB_TYPE_LOCAL.remove();
+			return;
+		}
+		DB_TYPE_LOCAL.set(dbType);
+	}
+
+	public String executeSql(ProviderContext context, SqlCommand sqlCommand) {
 		String key = getSqlKey(context);
 		String sql = SQL_MAP.get(key);
 		if (sql != null) {
 			return sql;
 		}
-		sql = sqlConsumer.sqlCommand(getTableColumnInfo(context));
+		String dbType = getDbType();
+		System.out.println(dbType);
+		sql = sqlCommand.sqlCommand(getTableColumnInfo(context));
 		if (isBlank(sql)) {
 			throw new RuntimeException(key + " 获取sql失败");
 		}

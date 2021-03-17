@@ -21,7 +21,6 @@ import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.*;
 import com.huaweicloud.sdk.iam.v3.region.IamRegion;
-import com.workoss.boot.storage.context.Context;
 import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
@@ -29,6 +28,7 @@ import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.service.token.AbstractTokenHandler;
 import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.StringUtils;
+import com.workoss.boot.util.context.Context;
 import com.workoss.boot.util.json.JsonMapper;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -78,7 +78,7 @@ public class OBSTokenHandler extends AbstractTokenHandler {
 	 */
 	@Override
 	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,
-			String mimeType, String successActionStatus) {
+											   String mimeType, String successActionStatus) {
 		String policyTemplate = "{\n" + "    \"expiration\":\"{{expiration}}\",\n"
 				+ "    \"conditions\":[{\"bucket\":\"{{bucketName}}\"},\n" + "    {\"key\":\"{{key}}\"},\n"
 				+ "    {{#mimeType}}{\"content-type\":\"{{mimeType}}\"},{{/mimeType}}\n"

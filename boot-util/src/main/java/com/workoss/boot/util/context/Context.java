@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.plugin.mybatis.provider;
+package com.workoss.boot.util.context;
 
-/**
- * sql consumer
- *
- * @author workoss
- */
-@FunctionalInterface
-public interface SqlConsumer {
+public interface Context<K, V> {
 
-	/**
-	 * 获取sql
-	 * @param info 表信息
-	 * @return sql
-	 */
-	String sqlCommand(TableColumnInfo info);
+	boolean containsKey(K key);
+
+	V get(K key);
+
+	V get(K key, V defaultValue);
+
+	void set(K key, V value);
 
 }
