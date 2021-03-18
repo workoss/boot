@@ -15,23 +15,25 @@
  */
 package com.workoss.boot.plugin.mybatis.provider;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
-
 import com.workoss.boot.annotation.persistence.Column;
 import com.workoss.boot.annotation.persistence.Id;
 import com.workoss.boot.annotation.persistence.Table;
 import com.workoss.boot.annotation.persistence.Transient;
 import com.workoss.boot.plugin.mybatis.CrudDao;
+import com.workoss.boot.plugin.mybatis.util.ObjectUtil;
+import com.workoss.boot.plugin.mybatis.util.ProviderUtil;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.apache.ibatis.builder.annotation.ProviderMethodResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * BaseProvider
@@ -40,38 +42,43 @@ import org.slf4j.LoggerFactory;
  */
 public class BaseProvider implements ProviderMethodResolver {
 
-	private static final ThreadLocal<String> DB_TYPE_LOCAL = new ThreadLocal<>();
 
 	private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);
 
 	private static final ConcurrentHashMap<String, String> SQL_MAP = new ConcurrentHashMap<>();
 
-	public static String getDbType(){
-		return DB_TYPE_LOCAL.get();
+	public CharSequence executeQuery(Map<String, Object> params, ProviderContext context) {
+		return new StringJoiner(" ")
+				.add("<script>").add("${sql}")
+				.add("</script>").toString();
 	}
 
-	public static void setDbType(String dbType){
-		if (dbType == null){
-			DB_TYPE_LOCAL.remove();
-			return;
+	public CharSequence executeUpdate(Map<String, Object> params, ProviderContext context) {
+		return new StringJoiner(" ")
+				.add("<script>").add("${sql}")
+				.add("</script>").toString();
+	}
+
+	public String executeSql(ProviderContext context, Map<String, Object> params, SqlValidate sqlValidate) {
+		String dbType = ProviderUtil.getDbType(context, params);
+		if (dbType == null) {
+			log.warn("[MYBATIS]没有拦截器放入dbType,默认切换到default/mysql");
+			dbType = "default";
 		}
-		DB_TYPE_LOCAL.set(dbType);
-	}
-
-	public String executeSql(ProviderContext context, SqlCommand sqlCommand) {
-		String key = getSqlKey(context);
+		String key = getSqlKey(dbType, context);
 		String sql = SQL_MAP.get(key);
 		if (sql != null) {
 			return sql;
 		}
-		String dbType = getDbType();
-		System.out.println(dbType);
-		sql = sqlCommand.sqlCommand(getTableColumnInfo(context));
-		if (isBlank(sql)) {
+		TableColumnInfo tableColumnInfo = getTableColumnInfo(context);
+		sqlValidate.validate(tableColumnInfo);
+		sql = ProviderUtil.getScript(dbType, context.getMapperMethod().getName(), tableColumnInfo);
+		if (ObjectUtil.isBlank(sql)) {
 			throw new RuntimeException(key + " 获取sql失败");
 		}
 		SQL_MAP.put(key, sql);
 		log.debug("mybatis dao:{} 生成sql:{}", key, sql);
+		ProviderUtil.setDbType(null);
 		return sql;
 	}
 
@@ -81,13 +88,13 @@ public class BaseProvider implements ProviderMethodResolver {
 		tableColumnInfo.setTableName(getTableName(clazz));
 		Field[] fields = clazz.getDeclaredFields();
 		Stream.of(fields).filter(field -> !field.isAnnotationPresent(Transient.class)).forEach(field -> {
-			String columnName = underscoreName(field.getName());
+			String columnName = ObjectUtil.underscoreName(field.getName());
 			Annotation[] annotations = field.getAnnotations();
 			for (Annotation annotation : annotations) {
 				if (annotation instanceof Column) {
 					// 自定义列名称
 					Column column = (Column) annotation;
-					if (!isBlank(column.name())) {
+					if (!ObjectUtil.isBlank(column.name())) {
 						columnName = column.name();
 					}
 				}
@@ -103,57 +110,28 @@ public class BaseProvider implements ProviderMethodResolver {
 		return tableColumnInfo;
 	}
 
-	protected StringBuilder getSelectColumn(TableColumnInfo tableColumnInfo) {
-		StringBuilder sqlBuilder = new StringBuilder();
-		List<String> columnNames = tableColumnInfo.getColumnNames();
-		for (int i = 0, j = columnNames.size(); i < j; i++) {
-			sqlBuilder.append(columnNames.get(i) + " as " + tableColumnInfo.getPropertyNames().get(i));
-			if (i != j - 1) {
-				sqlBuilder.append(",");
-			}
-		}
-		return sqlBuilder;
-	}
-
-	protected StringBuilder getWhereSelectColumn(TableColumnInfo tableColumnInfo) {
-		StringBuilder sqlBuilder = new StringBuilder();
-		List<String> columnNames = tableColumnInfo.getColumnNames();
-		if (isEmpty(columnNames)) {
-			return sqlBuilder;
-		}
-		sqlBuilder.append(" <where> ");
-		for (int i = 0, j = columnNames.size(); i < j; i++) {
-			sqlBuilder.append(" <if test=\"record." + tableColumnInfo.getPropertyNames().get(i) + "!=null\"> ");
-			sqlBuilder.append(" and ");
-			sqlBuilder.append(tableColumnInfo.getColumnNames().get(i));
-			sqlBuilder.append("=");
-			sqlBuilder.append(bindParameter("record." + tableColumnInfo.getPropertyNames().get(i)));
-			sqlBuilder.append(" </if> ");
-		}
-		sqlBuilder.append(" </where> ");
-		return sqlBuilder;
-	}
-
-	protected String bindParameter(String property) {
-		return "#{" + property + "}";
-	}
 
 	private String getTableName(Class clazz) {
 		Table table = (Table) clazz.getAnnotation(Table.class);
 		if (table != null) {
-			if (!isBlank(table.name())) {
+			if (!ObjectUtil.isBlank(table.name())) {
 				return table.name();
 			}
 		}
-		return underscoreName(clazz.getSimpleName().replaceAll("Entity", ""));
+		return ObjectUtil.underscoreName(clazz.getSimpleName().replaceAll("Entity", ""));
 	}
 
-	private String getSqlKey(ProviderContext context) {
-		return context.getMapperType().getName() + "." + context.getMapperMethod().getName();
+	private String getSqlKey(String dbType, ProviderContext context) {
+		return new StringJoiner(".")
+				.add(dbType)
+				.add(context.getMapperType().getName())
+				.add(context.getMapperMethod().getName())
+				.toString();
 	}
 
 	/**
 	 * 获取BaseMapper接口中的泛型类型
+	 *
 	 * @param context 上下文
 	 * @return 对象
 	 */
@@ -165,40 +143,5 @@ public class BaseProvider implements ProviderMethodResolver {
 						"未找到BaseMapper的泛型类 " + context.getMapperType().getName() + "."));
 	}
 
-	private boolean isBlank(CharSequence cs) {
-		int strLen;
-		if ((cs == null) || ((strLen = cs.length()) == 0)) {
-			return true;
-		}
-
-		for (int i = 0; i < strLen; i++) {
-			if (!Character.isWhitespace(cs.charAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private boolean isEmpty(Collection<?> collection) {
-		return (collection == null) || collection.isEmpty();
-	}
-
-	private String underscoreName(String camelCaseName) {
-		StringBuilder result = new StringBuilder();
-		if (camelCaseName != null && camelCaseName.length() > 0) {
-			result.append(camelCaseName.substring(0, 1).toLowerCase());
-			for (int i = 1; i < camelCaseName.length(); i++) {
-				char ch = camelCaseName.charAt(i);
-				if (Character.isUpperCase(ch)) {
-					result.append("_");
-					result.append(Character.toLowerCase(ch));
-				}
-				else {
-					result.append(ch);
-				}
-			}
-		}
-		return result.toString();
-	}
 
 }

@@ -65,7 +65,7 @@ public class TableColumnInfo {
 		return tableName;
 	}
 
-	void setTableName(String tableName) {
+	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
 
@@ -73,7 +73,7 @@ public class TableColumnInfo {
 		return idPropertyName;
 	}
 
-	void setIdPropertyName(String idPropertyName) {
+	public void setIdPropertyName(String idPropertyName) {
 		this.idPropertyName = idPropertyName;
 	}
 
@@ -81,7 +81,7 @@ public class TableColumnInfo {
 		return idColumnName;
 	}
 
-	void setIdColumnName(String idColumnName) {
+	public void setIdColumnName(String idColumnName) {
 		this.idColumnName = idColumnName;
 	}
 

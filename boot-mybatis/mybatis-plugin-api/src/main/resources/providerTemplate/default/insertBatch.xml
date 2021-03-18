@@ -1,0 +1,14 @@
+<script><![CDATA[<script>]]>
+	insert into ${tableColumnInfo.tableName} (
+	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
+		${tableColumnInfo.columnNames[index]}
+	</foreach>
+	) values
+	<![CDATA[<foreach collection="list" item="item" index="index" open="" close="" separator=",">]]>
+	(<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close=""
+			  separator=",">
+		#@{item.${propertyName}}
+	</foreach>)
+	<![CDATA[</foreach>]]>
+	<![CDATA[</script>]]>
+</script>

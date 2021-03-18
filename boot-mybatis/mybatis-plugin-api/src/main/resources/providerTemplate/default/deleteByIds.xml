@@ -1,0 +1,11 @@
+<script>
+	<![CDATA[ <script> ]]>
+	delete from ${tableColumnInfo.tableName}
+	where ${tableColumnInfo.idColumnName} in
+	(<![CDATA[
+		<foreach collection="ids" item="id" index="index" open="" close="" separator=",">
+			#@{id}
+		 </foreach>
+		]]>)
+	<![CDATA[ </script> ]]>
+</script>

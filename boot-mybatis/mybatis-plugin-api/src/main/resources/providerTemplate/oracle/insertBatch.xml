@@ -1,0 +1,15 @@
+<script><![CDATA[<script>]]>
+	insert all
+	<![CDATA[<foreach collection="list" item="item" index="index" open="" close="" separator="">]]>
+	into ${tableColumnInfo.tableName} (
+	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
+		${tableColumnInfo.columnNames[index]}
+	</foreach>
+	) values
+	(<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator=",">
+		#@{item.${propertyName}}
+	</foreach>)
+	<![CDATA[</foreach>]]>
+	select 1 from dual
+	<![CDATA[</script>]]>
+</script>

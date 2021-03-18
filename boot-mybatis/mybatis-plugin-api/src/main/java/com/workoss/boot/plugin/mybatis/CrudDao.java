@@ -28,7 +28,7 @@ import org.apache.ibatis.annotations.*;
  *
  * @author workoss
  */
-public interface CrudDao<T, ID> {
+public interface CrudDao<T, ID>{
 
 	/**
 	 * 根据id查询
@@ -87,11 +87,10 @@ public interface CrudDao<T, ID> {
 	int insertSelective(@Param("record") T record);
 
 	/**
-	 * 批量插入
+	 * 批量插入 sqlServer注意不能太大（参数太多）
 	 * @param list 列表
 	 * @return 插入数量
 	 */
-	@InsertProvider(type = CrudInsertProvider.class, method = "insertOracleBatch", databaseId = "oracle")
 	@InsertProvider(type = CrudInsertProvider.class, method = "insertBatch")
 	int insertBatch(@Param("list") List<T> list);
 

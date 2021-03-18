@@ -1,9 +1,6 @@
 package com.workoss.boot;
 
 import com.workoss.boot.plugin.mybatis.SqlHelper;
-import org.apache.ibatis.parsing.XPathParser;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.defaults.DefaultSqlSession;
 
 import java.util.List;
 

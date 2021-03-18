@@ -15,6 +15,11 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
+import com.workoss.boot.plugin.mybatis.provider.BaseProvider;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +31,19 @@ import java.util.Map;
 public interface BaseDao<T, ID> {
 
 	/**
-	 * 执行sql
+	 * 执行查询
 	 * @param sql sql
 	 * @return 执行结果
 	 */
-	List<Map<String, Object>> executeNativeSql(String sql);
+	@SelectProvider(type = BaseProvider.class, method = "executeQuery")
+	List<Map<String, Object>> executeQuery(@Param("sql") String sql);
+
+	/**
+	 * 执行修改
+	 * @param sql
+	 * @return
+	 */
+	@UpdateProvider(type = BaseProvider.class, method = "executeUpdate")
+	int executeUpdate(@Param("sql") String sql);
 
 }

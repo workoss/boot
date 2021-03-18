@@ -1,0 +1,4 @@
+<script>
+	delete from ${tableColumnInfo.tableName}
+	where ${tableColumnInfo.idColumnName} = #@{id}
+</script>

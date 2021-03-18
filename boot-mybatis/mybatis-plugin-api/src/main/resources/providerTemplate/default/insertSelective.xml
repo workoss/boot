@@ -1,0 +1,23 @@
+<script><![CDATA[<script>]]>
+	insert into ${tableColumnInfo.tableName}
+	<![CDATA[<trim prefix="(" suffix=")" suffixOverrides=",">]]>
+	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator=",">
+		<![CDATA[
+            <if test="record.${propertyName} != null">
+               ${tableColumnInfo.columnNames[index]}
+            </if>
+        ]]>
+	</foreach>
+	<![CDATA[</trim>]]>
+	 values
+	<![CDATA[<trim prefix="(" suffix=")" suffixOverrides=",">]]>
+	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator=",">
+		<![CDATA[
+            <if test="record.${propertyName} != null">
+              #@{record.${propertyName}}
+            </if>
+        ]]>
+	</foreach>
+	<![CDATA[</trim>]]>
+	<![CDATA[ </script> ]]>
+</script>

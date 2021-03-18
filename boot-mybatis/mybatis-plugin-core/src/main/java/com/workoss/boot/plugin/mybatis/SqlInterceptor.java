@@ -22,6 +22,7 @@ import com.workoss.boot.plugin.mybatis.query.PageQuerySqlHandler;
 import com.workoss.boot.plugin.mybatis.query.SelectSqlActionExecutor;
 import com.workoss.boot.plugin.mybatis.query.SortQuerySqlHandler;
 import com.workoss.boot.plugin.mybatis.update.UpdateSqlActionExecutor;
+import com.workoss.boot.plugin.mybatis.util.ProviderUtil;
 import com.workoss.boot.util.context.Context;
 import com.workoss.boot.util.context.MapContext;
 import org.apache.ibatis.cache.CacheKey;
@@ -72,7 +73,7 @@ public class SqlInterceptor implements Interceptor {
 		Object parameter = args[1];
 		DbType dbType = MybatisUtil.getDbType(executor.getTransaction().getConnection());
 		if (dbType != null) {
-			BaseProvider.setDbType(dbType.name());
+			ProviderUtil.setDbType(dbType.name());
 			if (parameter instanceof Map) {
 				((Map) parameter).put("_dbType", dbType.name());
 			}
@@ -100,7 +101,7 @@ public class SqlInterceptor implements Interceptor {
 			return result;
 		} finally {
 			SqlHelper.clearSqlParam();
-			BaseProvider.setDbType(null);
+			ProviderUtil.setDbType(null);
 			log.debug("[MYBATIS] 插件SqlInterceptor 耗时 {}ms", (System.currentTimeMillis() - startTime));
 		}
 	}

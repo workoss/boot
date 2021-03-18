@@ -16,18 +16,18 @@
 package com.workoss.boot.plugin.mybatis.provider;
 
 /**
- * sql consumer
+ * sql 校验表信息或者参数
  *
  * @author workoss
  */
 @FunctionalInterface
-public interface SqlCommand {
+public interface SqlValidate {
 
 	/**
 	 * 获取sql
 	 * @param info 表信息
 	 * @return sql
 	 */
-	String sqlCommand(TableColumnInfo info);
+	void validate(TableColumnInfo info);
 
 }

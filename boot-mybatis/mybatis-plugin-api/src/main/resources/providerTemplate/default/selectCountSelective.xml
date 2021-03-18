@@ -1,0 +1,15 @@
+<script>
+	<![CDATA[ <script> ]]>
+	select count(${tableColumnInfo.idColumnName})
+	from ${tableColumnInfo.tableName}
+	<![CDATA[ <where> ]]>
+	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator="">
+		<![CDATA[
+             <if test="${propertyName} != null">
+              and ${tableColumnInfo.columnNames[index]} = #@{${propertyName}}
+            </if>
+        ]]>
+	</foreach>
+	<![CDATA[ </where> ]]>
+	<![CDATA[ </script> ]]>
+</script>
