@@ -66,7 +66,6 @@ public class SqlInterceptor implements Interceptor {
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
-		long startTime = System.currentTimeMillis();
 		Executor executor = (Executor) invocation.getTarget();
 		Object[] args = invocation.getArgs();
 		MappedStatement mappedStatement = (MappedStatement) args[0];
@@ -102,7 +101,6 @@ public class SqlInterceptor implements Interceptor {
 		} finally {
 			SqlHelper.clearSqlParam();
 			ProviderUtil.setDbType(null);
-			log.debug("[MYBATIS] 插件SqlInterceptor 耗时 {}ms", (System.currentTimeMillis() - startTime));
 		}
 	}
 

@@ -65,7 +65,7 @@
 		<jackson-bom.version>2.12.2</jackson-bom.version>
 		<netty-bom.version>4.1.60.Final</netty-bom.version>
 		<asm.version>9.1</asm.version>
-		<reactor-bom.version>2020.0.4</reactor-bom.version>
+		<reactor-bom.version>2020.0.5</reactor-bom.version>
 		<rsocket-bom.version>1.1.0</rsocket-bom.version>
 
 
@@ -74,9 +74,9 @@
 
 		<aspectj.version>1.9.6</aspectj.version>
 
-		<spring.version>5.3.4</spring.version>
-		<spring-boot.version>2.4.3</spring-boot.version>
-		<spring-cloud-dependencies.version>2020.0.1</spring-cloud-dependencies.version>
+		<spring.version>5.3.5</spring.version>
+		<spring-boot.version>2.4.4</spring-boot.version>
+		<spring-cloud-dependencies.version>2020.0.2</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.4.5</spring-security-bom.version>
 		<spring-boot-admin.version>2.4.0</spring-boot-admin.version>
 		<spring-data-bom.version>2020.0.5</spring-data-bom.version>
@@ -87,7 +87,7 @@
 
 		<HikariCP.version>4.0.3</HikariCP.version>
 
-		<spring-data-r2dbc.version>1.3.0-M4</spring-data-r2dbc.version>
+		<spring-data-r2dbc.version>1.3.0-M5</spring-data-r2dbc.version>
 		<r2dbc-bom.version>Arabba-SR9</r2dbc-bom.version>
 
 		<protobuf-bom.version>3.15.6</protobuf-bom.version>
@@ -109,16 +109,16 @@
 		<scalecube-cluster.version>2.6.6</scalecube-cluster.version>
 		<cloudevents.version>2.0.0</cloudevents.version>
 		<picocli.version>4.6.1</picocli.version>
-		<feign-bom.version>11.0</feign-bom.version>
+		<feign-bom.version>11.1</feign-bom.version>
 
-		<springdoc-openapi.version>1.5.5</springdoc-openapi.version>
+		<springdoc-openapi.version>1.5.6</springdoc-openapi.version>
 		<druid.version>1.2.5</druid.version>
 		<h2.version>1.4.200</h2.version>
-		<rocksdbjni.version>6.15.2</rocksdbjni.version>
+		<rocksdbjni.version>6.15.5</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.11.974</aws-java-sdk.version>
+		<aws-java-sdk.version>1.11.978</aws-java-sdk.version>
 
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
