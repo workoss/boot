@@ -8,21 +8,25 @@ import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import org.apache.ibatis.session.Configuration;
 
 import java.io.*;
+import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class ProviderUtil {
 
-	private static final String TEMPLATE_SUFFIX = ".xml";
+	private static final String TEMPLATE_BASE_ROOT = "providerTemplate/";
 
-	private static final String TEMPLATE_PACKAGE = "providerTemplate";
+	private static final String TEMPLATE_SUFFIX = ".xml";
 
 	private static final String DEFAULT_DBTYPE = "default";
 
@@ -34,13 +38,15 @@ public class ProviderUtil {
 
 	private static Lazy<Configuration> configurationLazy = Lazy.of(() -> new Configuration());
 
+	private static Lazy<PathMatcher> subPatternLazy = Lazy.of(() -> FileSystems.getDefault().getPathMatcher("glob:**/*.xml"));
 
-	public static String getDbType(){
+
+	public static String getDbType() {
 		return DB_TYPE_LOCAL.get();
 	}
 
-	public static void setDbType(String dbType){
-		if (dbType == null){
+	public static void setDbType(String dbType) {
+		if (dbType == null) {
 			DB_TYPE_LOCAL.remove();
 			return;
 		}
@@ -48,15 +54,15 @@ public class ProviderUtil {
 	}
 
 
-	public static String getDbType(ProviderContext context, Map<String,Object> paramters){
+	public static String getDbType(ProviderContext context, Map<String, Object> paramters) {
 		//优先参数中获取
 		String dbType = (String) paramters.get("_dbType");
 		//其次threadlocal中获取
-		if (dbType == null){
+		if (dbType == null) {
 			dbType = getDbType();
 		}
 		//_databaseId
-		if (dbType == null){
+		if (dbType == null) {
 			dbType = context.getDatabaseId();
 		}
 		return dbType;
@@ -75,7 +81,7 @@ public class ProviderUtil {
 				.replaceAll("@\\{", "{")
 				.replaceAll("\r\n", "")
 				.replaceAll("\n", "")
-				.replaceAll("\\s+"," ");
+				.replaceAll("\\s+", " ");
 	}
 
 	public static String getScriptTemplate(String dbType, String methodName) {
@@ -93,41 +99,80 @@ public class ProviderUtil {
 	}
 
 	private static void loadTemplateFile() {
+		URL url = ProviderUtil.class.getClassLoader().getResource(TEMPLATE_BASE_ROOT);
+		String protocal = url.getProtocol();
+		if ("jar".equalsIgnoreCase(protocal)) {
+			readTemplateFromJar(url);
+		} else {
+			readTemplateFromResource(url);
+		}
+	}
+
+	private static void readTemplateFromResource(URL url) {
 		try {
-			InputStream inputStream = ProviderUtil.class.getClassLoader().getResourceAsStream(TEMPLATE_PACKAGE+"/default/selectSelective.xml");
-			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-			String line="";
-			while((line=br.readLine())!=null){
-				System.out.println("getClassLoader: "+line);
-			}
-			URL url = ProviderUtil.class.getClassLoader().getResource(TEMPLATE_PACKAGE);
 			Files.find(Paths.get(url.toURI()), 2, (path, basicFileAttributes) -> basicFileAttributes.isRegularFile())
-					.forEach(path -> readAndAddCache(path));
+					.filter(path -> subPatternLazy.get().matches(path))
+					.forEach(path -> {
+						String dbType = path.getParent().getFileName().toString();
+						String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
+						try {
+							readAndAddCache(dbType, methodName, new FileInputStream(path.toFile()));
+						} catch (Exception e) {
+
+						}
+					});
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+
+		}
+	}
+
+	private static void readTemplateFromJar(URL url) {
+		try {
+			URLConnection con = url.openConnection();
+			JarURLConnection jarCon = (JarURLConnection) con;
+			JarFile jarFile = jarCon.getJarFile();
+			Enumeration<JarEntry> enumeration = jarFile.entries();
+			while (enumeration.hasMoreElements()) {
+				JarEntry entry = enumeration.nextElement();
+				String fileXmlPattern = entry.getName();
+				if (!fileXmlPattern.startsWith(TEMPLATE_BASE_ROOT)) {
+					continue;
+				}
+				Path path = Paths.get(fileXmlPattern);
+				if (!subPatternLazy.get().matches(path)) {
+					continue;
+				}
+				String dbType = path.getParent().getFileName().toString();
+				String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
+				InputStream inputStream = jarFile.getInputStream(entry);
+				readAndAddCache(dbType, methodName, inputStream);
+			}
+		} catch (Exception e) {
+
 		}
 
 	}
 
-	private static void readAndAddCache(Path path) {
-		try {
-			String dbType = path.getParent().getFileName().toString();
-			String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
-			String xml = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-			if (xml == null) {
-				return;
+
+	private static void readAndAddCache(String dbType, String methodName, InputStream inputStream) {
+		StringBuffer stringBuffer = new StringBuffer();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				stringBuffer.append(line);
 			}
-			SCRIPT_TEMPLATE_CACHE.put(getKey(dbType, methodName), xml);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		if (stringBuffer.length() == 0) {
+			return;
+		}
+		SCRIPT_TEMPLATE_CACHE.put(getKey(dbType, methodName), stringBuffer.toString());
 	}
 
 	private static String getKey(String dbType, String methodName) {
 		return new StringJoiner("_").add(dbType).add(methodName).toString();
 	}
-
-
 
 
 }

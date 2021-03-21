@@ -15,14 +15,8 @@ public class Lazy<T> implements Supplier<T> {
 	T value;
 	private volatile boolean resolved;
 
-	/**
-	 * Creates a new {@link Lazy} instance for the given supplier.
-	 *
-	 * @param supplier
-	 * @deprecated prefer {@link Lazy#of(Supplier)}, to be turned private in 2.5.
-	 */
-	@Deprecated
-	public Lazy(Supplier<? extends T> supplier) {
+
+	private Lazy(Supplier<? extends T> supplier) {
 		this(supplier, null, false);
 	}
 
@@ -56,7 +50,7 @@ public class Lazy<T> implements Supplier<T> {
 	 *
 	 * @param <T>   the type of the value to return eventually.
 	 * @param value the value to return.
-	 * @return
+	 * @return lazy
 	 */
 	public static <T> Lazy<T> of(T value) {
 
@@ -68,8 +62,7 @@ public class Lazy<T> implements Supplier<T> {
 	/**
 	 * Creates a pre-resolved empty {@link Lazy}.
 	 *
-	 * @return
-	 * @since 2.1
+	 * @return lazy
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Lazy<T> empty() {
@@ -80,7 +73,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * Returns the value created by the configured {@link Supplier}. Will return the calculated instance for subsequent
 	 * lookups.
 	 *
-	 * @return
+	 * @return lazy
 	 */
 	public T get() {
 
@@ -97,7 +90,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * Returns the {@link Optional} value created by the configured {@link Supplier}, allowing the absence of values in
 	 * contrast to {@link #get()}. Will return the calculated instance for subsequent lookups.
 	 *
-	 * @return
+	 * @return lazy
 	 */
 	public Optional<T> getOptional() {
 		return Optional.ofNullable(getNullable());
@@ -107,7 +100,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * Returns a new Lazy that will consume the given supplier in case the current one does not yield in a result.
 	 *
 	 * @param supplier must not be {@literal null}.
-	 * @return
+	 * @return lazy
 	 */
 	public Lazy<T> or(Supplier<? extends T> supplier) {
 
@@ -133,7 +126,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * {@literal null}.
 	 *
 	 * @param value
-	 * @return
+	 * @return lazy
 	 */
 	@Nullable
 	public T orElse(@Nullable T value) {
@@ -148,7 +141,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * value is {@literal null}.
 	 *
 	 * @param supplier must not be {@literal null}.
-	 * @return
+	 * @return lazy
 	 */
 	@Nullable
 	private T orElseGet(Supplier<? extends T> supplier) {
@@ -164,7 +157,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * Creates a new {@link Lazy} with the given {@link Function} lazily applied to the current one.
 	 *
 	 * @param function must not be {@literal null}.
-	 * @return
+	 * @return lazy
 	 */
 	public <S> Lazy<S> map(Function<? super T, ? extends S> function) {
 
@@ -177,7 +170,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * Creates a new {@link Lazy} with the given {@link Function} lazily applied to the current one.
 	 *
 	 * @param function must not be {@literal null}.
-	 * @return
+	 * @return lazy
 	 */
 	public <S> Lazy<S> flatMap(Function<? super T, Lazy<? extends S>> function) {
 
@@ -189,8 +182,7 @@ public class Lazy<T> implements Supplier<T> {
 	/**
 	 * Returns the value of the lazy evaluation.
 	 *
-	 * @return
-	 * @since 2.2
+	 * @return t
 	 */
 	@Nullable
 	public T getNullable() {

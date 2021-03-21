@@ -32,7 +32,6 @@ import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.context.MapContext;
 import com.workoss.boot.util.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
