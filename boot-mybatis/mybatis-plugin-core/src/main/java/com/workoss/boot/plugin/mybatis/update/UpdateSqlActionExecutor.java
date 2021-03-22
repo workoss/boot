@@ -9,6 +9,9 @@ public class UpdateSqlActionExecutor implements SqlActionExecutor {
 
 	public static final UpdateSqlActionExecutor INSTANCE = new UpdateSqlActionExecutor();
 
+	private UpdateSqlActionExecutor() {
+	}
+
 	@Override
 	public Object execute(Invocation invocation, SqlContext context) throws Throwable {
 		return invocation.proceed();
