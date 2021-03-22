@@ -3,7 +3,8 @@ package com.workoss.boot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DemoMapperImpl implements DemoMapper{
+public class DemoMapperImpl implements DemoMapper {
+
 	@Override
 	public DemoModel toTarget(DemoEntity source) {
 		return new DemoModel();
@@ -13,4 +14,5 @@ public class DemoMapperImpl implements DemoMapper{
 	public List<DemoModel> toTargetList(List<DemoEntity> sourceList) {
 		return new ArrayList<>();
 	}
+
 }

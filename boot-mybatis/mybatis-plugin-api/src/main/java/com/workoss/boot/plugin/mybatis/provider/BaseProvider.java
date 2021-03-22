@@ -42,21 +42,16 @@ import java.util.stream.Stream;
  */
 public class BaseProvider implements ProviderMethodResolver {
 
-
 	private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);
 
 	private static final ConcurrentHashMap<String, String> SQL_MAP = new ConcurrentHashMap<>();
 
 	public CharSequence executeQuery(Map<String, Object> params, ProviderContext context) {
-		return new StringJoiner(" ")
-				.add("<script>").add("${sql}")
-				.add("</script>").toString();
+		return new StringJoiner(" ").add("<script>").add("${sql}").add("</script>").toString();
 	}
 
 	public CharSequence executeUpdate(Map<String, Object> params, ProviderContext context) {
-		return new StringJoiner(" ")
-				.add("<script>").add("${sql}")
-				.add("</script>").toString();
+		return new StringJoiner(" ").add("<script>").add("${sql}").add("</script>").toString();
 	}
 
 	public String executeSql(ProviderContext context, Map<String, Object> params, SqlValidate sqlValidate) {
@@ -78,7 +73,6 @@ public class BaseProvider implements ProviderMethodResolver {
 		}
 		SQL_MAP.put(key, sql);
 		log.debug("mybatis dao:{} 生成sql:{}", key, sql);
-		ProviderUtil.setDbType(null);
 		return sql;
 	}
 
@@ -110,7 +104,6 @@ public class BaseProvider implements ProviderMethodResolver {
 		return tableColumnInfo;
 	}
 
-
 	private String getTableName(Class clazz) {
 		Table table = (Table) clazz.getAnnotation(Table.class);
 		if (table != null) {
@@ -122,16 +115,12 @@ public class BaseProvider implements ProviderMethodResolver {
 	}
 
 	private String getSqlKey(String dbType, ProviderContext context) {
-		return new StringJoiner(".")
-				.add(dbType)
-				.add(context.getMapperType().getName())
-				.add(context.getMapperMethod().getName())
-				.toString();
+		return new StringJoiner(".").add(dbType).add(context.getMapperType().getName())
+				.add(context.getMapperMethod().getName()).toString();
 	}
 
 	/**
 	 * 获取BaseMapper接口中的泛型类型
-	 *
 	 * @param context 上下文
 	 * @return 对象
 	 */
@@ -142,6 +131,5 @@ public class BaseProvider implements ProviderMethodResolver {
 				.orElseThrow(() -> new IllegalStateException(
 						"未找到BaseMapper的泛型类 " + context.getMapperType().getName() + "."));
 	}
-
 
 }

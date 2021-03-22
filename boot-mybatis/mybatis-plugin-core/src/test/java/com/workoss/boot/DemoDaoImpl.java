@@ -5,7 +5,8 @@ import com.workoss.boot.plugin.mybatis.PageResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DemoDaoImpl implements DemoDao{
+public class DemoDaoImpl implements DemoDao {
+
 	@Override
 	public PageResult<DemoEntity> selectPage(DemoEntity demoEntity) {
 		PageResult<DemoEntity> pageResult = new PageResult<>();
@@ -17,4 +18,5 @@ public class DemoDaoImpl implements DemoDao{
 		List<DemoEntity> demoEntities = new ArrayList<>();
 		return demoEntities;
 	}
+
 }

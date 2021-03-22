@@ -13,4 +13,5 @@ public class UpdateSqlActionExecutor implements SqlActionExecutor {
 	public Object execute(Invocation invocation, SqlContext context) throws Throwable {
 		return invocation.proceed();
 	}
+
 }

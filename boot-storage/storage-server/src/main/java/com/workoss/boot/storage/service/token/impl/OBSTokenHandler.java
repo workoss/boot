@@ -78,7 +78,7 @@ public class OBSTokenHandler extends AbstractTokenHandler {
 	 */
 	@Override
 	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,
-											   String mimeType, String successActionStatus) {
+			String mimeType, String successActionStatus) {
 		String policyTemplate = "{\n" + "    \"expiration\":\"{{expiration}}\",\n"
 				+ "    \"conditions\":[{\"bucket\":\"{{bucketName}}\"},\n" + "    {\"key\":\"{{key}}\"},\n"
 				+ "    {{#mimeType}}{\"content-type\":\"{{mimeType}}\"},{{/mimeType}}\n"

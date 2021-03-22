@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-
 public class SelectSqlActionExecutor implements SqlActionExecutor {
 
 	private static final Logger log = LoggerFactory.getLogger(SelectSqlActionExecutor.class);
@@ -35,7 +34,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		String key = sqlHandler.getClass().getSimpleName();
 		if (sqlHandlerMap.containsKey(key)) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
-		} else {
+		}
+		else {
 			sqlHandlerMap.put(key, sqlHandler);
 		}
 		return this;
@@ -54,7 +54,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(parameter);
 			cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
-		} else {
+		}
+		else {
 			cacheKey = (CacheKey) args[4];
 			boundSql = (BoundSql) args[5];
 		}
@@ -73,10 +74,9 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		context.putInput("cacheKey", cacheKey);
 		context.putInput("boundSql", boundSql);
 
-		sqlHandlerMap.entrySet().stream()
-				.forEach(stringQuerySqlHandlerEntry -> {
-					stringQuerySqlHandlerEntry.getValue().handler(context);
-				});
+		sqlHandlerMap.entrySet().stream().forEach(stringQuerySqlHandlerEntry -> {
+			stringQuerySqlHandlerEntry.getValue().handler(context);
+		});
 
 		Boolean change = (Boolean) context.getOutput("change");
 		if (!(change != null && Boolean.TRUE.compareTo(change) == 0)) {
@@ -84,11 +84,9 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		}
 		Object result = context.getOutput("result");
 		List<Object> list = executor.query((MappedStatement) context.getOutputOrInput("mappedStatement"),
-				context.getOutputOrInput("parameter"),
-				(RowBounds) context.getOutputOrInput("rowBounds"),
+				context.getOutputOrInput("parameter"), (RowBounds) context.getOutputOrInput("rowBounds"),
 				(ResultHandler) context.getOutputOrInput("resultHandler"),
-				(CacheKey) context.getOutputOrInput("cacheKey"),
-				(BoundSql) context.getOutputOrInput("boundSql"));
+				(CacheKey) context.getOutputOrInput("cacheKey"), (BoundSql) context.getOutputOrInput("boundSql"));
 		if (result instanceof PageResult) {
 			PageResult pageResult = (PageResult) result;
 			pageResult.addAll(list);
@@ -96,7 +94,6 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		}
 		return list;
 	}
-
 
 	private SqlParam initSqlParam(Object parameterObject) {
 		if (parameterObject instanceof SqlParam) {

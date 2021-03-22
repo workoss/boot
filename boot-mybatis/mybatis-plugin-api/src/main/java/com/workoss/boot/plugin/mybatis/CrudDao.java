@@ -28,7 +28,7 @@ import org.apache.ibatis.annotations.*;
  *
  * @author workoss
  */
-public interface CrudDao<T, ID>{
+public interface CrudDao<T, ID> {
 
 	/**
 	 * 根据id查询

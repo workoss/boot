@@ -75,7 +75,7 @@ public class OSSTokenHandler extends AbstractTokenHandler {
 
 	@Override
 	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,
-											   String mimeType, String successActionStatus) {
+			String mimeType, String successActionStatus) {
 		String policyTemplate = "{\"expiration\":\"{{expiration}}\",\"conditions\":[{\"bucket\":\"{{bucketName}}\"},{\"key\":\"{{key}}\"},{{#mimeType}}{\"content-type\":\"{{mimeType}}\"},{{/mimeType}}[\"content-length-range\", 0, {{maxUploadSize}}]]}";
 		return Mono
 				.just(generateWebSign(policyTemplate, context, null, bucketName, key, mimeType, successActionStatus));

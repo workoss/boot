@@ -36,11 +36,12 @@ public class SortQuerySqlHandler implements SqlHandler {
 		if (StringUtils.isBlank(orderBy)) {
 			return;
 		}
-		String newSql = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType)
-				.orderBy(orderBy.split(ORDER_BY_SEPERATE)).toString();
+		String newSql = SQLBuilderFactory.createSelectSQLBuilder(sql, dbType).orderBy(orderBy.split(ORDER_BY_SEPERATE))
+				.toString();
 		MappedStatement mappedStatement = (MappedStatement) context.getInput("mappedStatement");
-		boundSql = MybatisUtil.newBoundSql(mappedStatement,newSql,boundSql);
-		context.putOutput("boundSql",boundSql);
-		context.putOutput("change",true);
+		boundSql = MybatisUtil.newBoundSql(mappedStatement, newSql, boundSql);
+		context.putOutput("boundSql", boundSql);
+		context.putOutput("change", true);
 	}
+
 }

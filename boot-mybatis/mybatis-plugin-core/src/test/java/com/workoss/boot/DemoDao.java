@@ -9,4 +9,5 @@ public interface DemoDao {
 	PageResult<DemoEntity> selectPage(DemoEntity demoEntity);
 
 	List<DemoEntity> selectList(DemoEntity demoEntity);
+
 }

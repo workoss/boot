@@ -38,8 +38,8 @@ public class ProviderUtil {
 
 	private static Lazy<Configuration> configurationLazy = Lazy.of(() -> new Configuration());
 
-	private static Lazy<PathMatcher> subPatternLazy = Lazy.of(() -> FileSystems.getDefault().getPathMatcher("glob:**/*.xml"));
-
+	private static Lazy<PathMatcher> subPatternLazy = Lazy
+			.of(() -> FileSystems.getDefault().getPathMatcher("glob:**/*.xml"));
 
 	public static String getDbType() {
 		return DB_TYPE_LOCAL.get();
@@ -53,15 +53,14 @@ public class ProviderUtil {
 		DB_TYPE_LOCAL.set(dbType);
 	}
 
-
 	public static String getDbType(ProviderContext context, Map<String, Object> paramters) {
-		//优先参数中获取
+		// 优先参数中获取
 		String dbType = (String) paramters.get("_dbType");
-		//其次threadlocal中获取
+		// 其次threadlocal中获取
 		if (dbType == null) {
 			dbType = getDbType();
 		}
-		//_databaseId
+		// _databaseId
 		if (dbType == null) {
 			dbType = context.getDatabaseId();
 		}
@@ -77,11 +76,8 @@ public class ProviderUtil {
 		Configuration configuration = configurationLazy.get();
 		SqlSource sqlSource = languageDriver.createSqlSource(configuration, script, Map.class);
 		Map<String, Object> paramter = Collections.singletonMap("tableColumnInfo", tableColumnInfo);
-		return sqlSource.getBoundSql(paramter).getSql()
-				.replaceAll("@\\{", "{")
-				.replaceAll("\r\n", "")
-				.replaceAll("\n", "")
-				.replaceAll("\\s+", " ");
+		return sqlSource.getBoundSql(paramter).getSql().replaceAll("@\\{", "{").replaceAll("\r\n", "")
+				.replaceAll("\n", "").replaceAll("\\s+", " ");
 	}
 
 	public static String getScriptTemplate(String dbType, String methodName) {
@@ -103,7 +99,8 @@ public class ProviderUtil {
 		String protocal = url.getProtocol();
 		if ("jar".equalsIgnoreCase(protocal)) {
 			readTemplateFromJar(url);
-		} else {
+		}
+		else {
 			readTemplateFromResource(url);
 		}
 	}
@@ -111,17 +108,18 @@ public class ProviderUtil {
 	private static void readTemplateFromResource(URL url) {
 		try {
 			Files.find(Paths.get(url.toURI()), 2, (path, basicFileAttributes) -> basicFileAttributes.isRegularFile())
-					.filter(path -> subPatternLazy.get().matches(path))
-					.forEach(path -> {
+					.filter(path -> subPatternLazy.get().matches(path)).forEach(path -> {
 						String dbType = path.getParent().getFileName().toString();
 						String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
 						try {
 							readAndAddCache(dbType, methodName, new FileInputStream(path.toFile()));
-						} catch (Exception e) {
+						}
+						catch (Exception e) {
 
 						}
 					});
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 
 		}
 	}
@@ -147,12 +145,12 @@ public class ProviderUtil {
 				InputStream inputStream = jarFile.getInputStream(entry);
 				readAndAddCache(dbType, methodName, inputStream);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 
 		}
 
 	}
-
 
 	private static void readAndAddCache(String dbType, String methodName, InputStream inputStream) {
 		StringBuffer stringBuffer = new StringBuffer();
@@ -161,7 +159,8 @@ public class ProviderUtil {
 			while ((line = br.readLine()) != null) {
 				stringBuffer.append(line);
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 		if (stringBuffer.length() == 0) {
@@ -173,6 +172,5 @@ public class ProviderUtil {
 	private static String getKey(String dbType, String methodName) {
 		return new StringJoiner("_").add(dbType).add(methodName).toString();
 	}
-
 
 }

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 public class MybatisUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(MybatisUtil.class);
@@ -40,7 +39,8 @@ public class MybatisUtil {
 		try {
 			url = connection.getMetaData().getURL();
 			return JdbcUtils.getDbTypeRaw(url, JdbcUtils.getDriverClassName(url));
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			log.warn("根据数据库连接url:{} 获取不到dbType,请在插件中手动配置,错误 {}:{} ", e.getErrorCode(), e.getMessage());
 		}
 		return null;
@@ -57,28 +57,29 @@ public class MybatisUtil {
 		return newBoundSql;
 	}
 
-
-	public static Long count(DbType dbType, Executor executor, MappedStatement mappedStatement, Object parameter, RowBounds rowBounds,
-							 ResultHandler resultHandler, BoundSql boundSql) {
+	public static Long count(DbType dbType, Executor executor, MappedStatement mappedStatement, Object parameter,
+			RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
 		String countMsId = mappedStatement.getId() + countSuffix;
 		// 判断是否存在count
 		MappedStatement countMappedStatement = null;
 		try {
 			countMappedStatement = mappedStatement.getConfiguration().getMappedStatement(countMsId, false);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 
 		}
 		BoundSql countBoundSql;
 
 		if (countMappedStatement != null) {
 			countBoundSql = countMappedStatement.getBoundSql(parameter);
-		} else {
+		}
+		else {
 			countMappedStatement = COUNT_MS_MAPPEDSTATEMENT_CACHE.get(countMsId);
 			if (countMappedStatement == null) {
 				countMappedStatement = newCountMappedStatement(mappedStatement, countMsId);
 				COUNT_MS_MAPPEDSTATEMENT_CACHE.put(countMsId, countMappedStatement);
 			}
-//			countBoundSql = countMappedStatement.getBoundSql(parameter);
+			// countBoundSql = countMappedStatement.getBoundSql(parameter);
 			String countSql = PagerUtils.count(boundSql.getSql(), dbType);
 			countBoundSql = new BoundSql(countMappedStatement.getConfiguration(), countSql,
 					boundSql.getParameterMappings(), parameter);
@@ -98,7 +99,8 @@ public class MybatisUtil {
 				return 0L;
 			}
 			return (Long) list.get(0);
-		} catch (SQLException sqlException) {
+		}
+		catch (SQLException sqlException) {
 			throw new RuntimeException("[MYBATIS]COUNT:" + countBoundSql.getSql() + "查询失败", sqlException);
 		}
 	}

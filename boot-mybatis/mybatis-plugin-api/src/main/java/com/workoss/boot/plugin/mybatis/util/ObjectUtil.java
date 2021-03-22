@@ -9,6 +9,7 @@ import java.util.Collection;
 public class ObjectUtil {
 
 	private static final int INITIAL_HASH = 7;
+
 	private static final int MULTIPLIER = 31;
 
 	public static boolean isBlank(CharSequence cs) {
@@ -38,7 +39,8 @@ public class ObjectUtil {
 				if (Character.isUpperCase(ch)) {
 					result.append("_");
 					result.append(Character.toLowerCase(ch));
-				} else {
+				}
+				else {
 					result.append(ch);
 				}
 			}
@@ -46,17 +48,15 @@ public class ObjectUtil {
 		return result.toString();
 	}
 
-
-
-
 	public static boolean isPresent(String className, @Nullable ClassLoader classLoader) {
-		if (classLoader == null){
+		if (classLoader == null) {
 			classLoader = getDefaultClassLoader();
 		}
 		try {
-			Class.forName(className,false,classLoader);
+			Class.forName(className, false, classLoader);
 			return true;
-		} catch (ClassNotFoundException e) {
+		}
+		catch (ClassNotFoundException e) {
 			return false;
 		}
 	}
@@ -87,12 +87,10 @@ public class ObjectUtil {
 		return cl;
 	}
 
-
 	/**
 	 * Assert that an object is not {@code null}.
 	 * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>
-	 *
-	 * @param object  the object to check
+	 * @param object the object to check
 	 * @param message the exception message to use if the assertion fails
 	 * @throws IllegalArgumentException if the object is {@code null}
 	 */
@@ -155,8 +153,8 @@ public class ObjectUtil {
 	}
 
 	/**
-	 * Return a hash code based on the contents of the specified array.
-	 * If {@code array} is {@code null}, this method returns 0.
+	 * Return a hash code based on the contents of the specified array. If {@code array}
+	 * is {@code null}, this method returns 0.
 	 */
 	public static int nullSafeHashCode(@Nullable Object[] array) {
 		if (array == null) {
@@ -199,4 +197,5 @@ public class ObjectUtil {
 		}
 		return false;
 	}
+
 }

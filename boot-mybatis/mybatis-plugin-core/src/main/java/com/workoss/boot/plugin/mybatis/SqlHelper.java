@@ -57,7 +57,6 @@ public class SqlHelper {
 		LOCAL_SQL_PARAM.set(null);
 	}
 
-
 	protected static void start(SqlParam sqlParam) {
 		if (StringUtils.isNotBlank(sqlParam.getSortBy())) {
 			sqlParam.setSortBy(StringUtils.underscoreName(sqlParam.getSortBy()));
@@ -89,7 +88,8 @@ public class SqlHelper {
 			this.sqlParamBuilder = new SqlParamBuilder();
 			if (pageObject instanceof Integer) {
 
-			} else {
+			}
+			else {
 				Object offset = ReflectUtils.getPropertyByInvokeMethod(pageObject, "offset");
 				Object limit = ReflectUtils.getPropertyByInvokeMethod(pageObject, "limit");
 				if (limit != null) {
@@ -130,9 +130,7 @@ public class SqlHelper {
 			return new BeanMapperBuilder(execute(daoMapper));
 		}
 
-
 	}
-
 
 	public static class BeanMapperBuilder<S, T> {
 
@@ -150,7 +148,6 @@ public class SqlHelper {
 		}
 
 	}
-
 
 	public static class SortBuilder {
 
@@ -183,6 +180,7 @@ public class SqlHelper {
 		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<SqlParam, S> daoMapper) {
 			return new BeanMapperBuilder(execute(daoMapper));
 		}
+
 	}
 
 	static class SqlParamBuilder {
@@ -198,7 +196,6 @@ public class SqlHelper {
 		public SqlParamBuilder(SqlParam sqlParam) {
 			this.sqlParam = sqlParam;
 		}
-
 
 		public SqlParamBuilder page(int pageNo, int limit) {
 			sqlParam.setOffset((pageNo - 1) * limit);
@@ -238,6 +235,7 @@ public class SqlHelper {
 		public SqlParam build() {
 			return sqlParam;
 		}
+
 	}
 
 }

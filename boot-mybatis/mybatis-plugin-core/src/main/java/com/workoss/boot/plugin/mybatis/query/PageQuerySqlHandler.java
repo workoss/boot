@@ -39,7 +39,8 @@ public class PageQuerySqlHandler implements SqlHandler {
 			Object parameter = context.getOutputOrInput("parameter");
 			ResultHandler resultHandler = (ResultHandler) context.getInput("resultHandler");
 			RowBounds rowBounds = (RowBounds) context.getOutputOrInput("rowBounds");
-			Long count = MybatisUtil.count(dbType, executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
+			Long count = MybatisUtil.count(dbType, executor, mappedStatement, parameter, rowBounds, resultHandler,
+					boundSql);
 			pageResult.setCount(count.intValue());
 			context.putOutput("result", pageResult);
 			if (count <= 0) {
@@ -51,4 +52,5 @@ public class PageQuerySqlHandler implements SqlHandler {
 		boundSql = MybatisUtil.newBoundSql(mappedStatement, pageSql, boundSql);
 		context.putOutput("boundSql", boundSql);
 	}
+
 }

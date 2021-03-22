@@ -27,13 +27,13 @@ import java.util.Map;
 public class CrudInsertProvider extends BaseProvider {
 
 	public CharSequence insert(Map<String, Object> params, ProviderContext context) {
-		return executeSql(context, params,(tableColumnInfo -> {
+		return executeSql(context, params, (tableColumnInfo -> {
 
 		}));
 	}
 
 	public CharSequence insertSelective(Map<String, Object> params, ProviderContext context) {
-		return executeSql(context,params, (tableColumnInfo -> {
+		return executeSql(context, params, (tableColumnInfo -> {
 
 		}));
 	}
@@ -43,6 +43,5 @@ public class CrudInsertProvider extends BaseProvider {
 
 		}));
 	}
-
 
 }

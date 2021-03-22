@@ -18,8 +18,8 @@ public class SqlContext extends MapContext {
 		return this.get(getOutputKey(key));
 	}
 
-	public Object getOutputOrInput(String key){
-		return this.getOrDefault(getOutputKey(key),getInput(key));
+	public Object getOutputOrInput(String key) {
+		return this.getOrDefault(getOutputKey(key), getInput(key));
 	}
 
 	public void putOutput(String key, Object value) {
@@ -33,4 +33,5 @@ public class SqlContext extends MapContext {
 	private String getOutputKey(String key) {
 		return new StringJoiner("_").add("OUT").add(key).toString();
 	}
+
 }

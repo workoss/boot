@@ -7,25 +7,26 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Lazy<T> implements Supplier<T> {
+
 	private static final Lazy<?> EMPTY = new Lazy<>(() -> null, null, true);
 
 	private final Supplier<? extends T> supplier;
 
-	private @Nullable
-	T value;
-	private volatile boolean resolved;
+	private @Nullable T value;
 
+	private volatile boolean resolved;
 
 	private Lazy(Supplier<? extends T> supplier) {
 		this(supplier, null, false);
 	}
 
 	/**
-	 * Creates a new {@link Lazy} for the given {@link Supplier}, value and whether it has been resolved or not.
-	 *
+	 * Creates a new {@link Lazy} for the given {@link Supplier}, value and whether it has
+	 * been resolved or not.
 	 * @param supplier must not be {@literal null}.
-	 * @param value    can be {@literal null}.
-	 * @param resolved whether the value handed into the constructor represents a resolved value.
+	 * @param value can be {@literal null}.
+	 * @param resolved whether the value handed into the constructor represents a resolved
+	 * value.
 	 */
 	private Lazy(Supplier<? extends T> supplier, @Nullable T value, boolean resolved) {
 
@@ -36,8 +37,7 @@ public class Lazy<T> implements Supplier<T> {
 
 	/**
 	 * Creates a new {@link Lazy} to produce an object lazily.
-	 *
-	 * @param <T>      the type of which to produce an object of eventually.
+	 * @param <T> the type of which to produce an object of eventually.
 	 * @param supplier the {@link Supplier} to create the object lazily.
 	 * @return
 	 */
@@ -47,8 +47,7 @@ public class Lazy<T> implements Supplier<T> {
 
 	/**
 	 * Creates a new {@link Lazy} to return the given value.
-	 *
-	 * @param <T>   the type of the value to return eventually.
+	 * @param <T> the type of the value to return eventually.
 	 * @param value the value to return.
 	 * @return lazy
 	 */
@@ -61,7 +60,6 @@ public class Lazy<T> implements Supplier<T> {
 
 	/**
 	 * Creates a pre-resolved empty {@link Lazy}.
-	 *
 	 * @return lazy
 	 */
 	@SuppressWarnings("unchecked")
@@ -70,9 +68,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Returns the value created by the configured {@link Supplier}. Will return the calculated instance for subsequent
-	 * lookups.
-	 *
+	 * Returns the value created by the configured {@link Supplier}. Will return the
+	 * calculated instance for subsequent lookups.
 	 * @return lazy
 	 */
 	public T get() {
@@ -87,9 +84,9 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Returns the {@link Optional} value created by the configured {@link Supplier}, allowing the absence of values in
-	 * contrast to {@link #get()}. Will return the calculated instance for subsequent lookups.
-	 *
+	 * Returns the {@link Optional} value created by the configured {@link Supplier},
+	 * allowing the absence of values in contrast to {@link #get()}. Will return the
+	 * calculated instance for subsequent lookups.
 	 * @return lazy
 	 */
 	public Optional<T> getOptional() {
@@ -97,8 +94,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Returns a new Lazy that will consume the given supplier in case the current one does not yield in a result.
-	 *
+	 * Returns a new Lazy that will consume the given supplier in case the current one
+	 * does not yield in a result.
 	 * @param supplier must not be {@literal null}.
 	 * @return lazy
 	 */
@@ -110,8 +107,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Returns a new Lazy that will return the given value in case the current one does not yield in a result.
-	 *
+	 * Returns a new Lazy that will return the given value in case the current one does
+	 * not yield in a result.
 	 * @return lazy
 	 */
 	public Lazy<T> or(T value) {
@@ -122,9 +119,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Returns the value of the lazy computation or the given default value in case the computation yields
-	 * {@literal null}.
-	 *
+	 * Returns the value of the lazy computation or the given default value in case the
+	 * computation yields {@literal null}.
 	 * @param value
 	 * @return lazy
 	 */
@@ -137,9 +133,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Returns the value of the lazy computation or the value produced by the given {@link Supplier} in case the original
-	 * value is {@literal null}.
-	 *
+	 * Returns the value of the lazy computation or the value produced by the given
+	 * {@link Supplier} in case the original value is {@literal null}.
 	 * @param supplier must not be {@literal null}.
 	 * @return lazy
 	 */
@@ -154,8 +149,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Creates a new {@link Lazy} with the given {@link Function} lazily applied to the current one.
-	 *
+	 * Creates a new {@link Lazy} with the given {@link Function} lazily applied to the
+	 * current one.
 	 * @param function must not be {@literal null}.
 	 * @return lazy
 	 */
@@ -167,8 +162,8 @@ public class Lazy<T> implements Supplier<T> {
 	}
 
 	/**
-	 * Creates a new {@link Lazy} with the given {@link Function} lazily applied to the current one.
-	 *
+	 * Creates a new {@link Lazy} with the given {@link Function} lazily applied to the
+	 * current one.
 	 * @param function must not be {@literal null}.
 	 * @return lazy
 	 */
@@ -181,7 +176,6 @@ public class Lazy<T> implements Supplier<T> {
 
 	/**
 	 * Returns the value of the lazy evaluation.
-	 *
 	 * @return t
 	 */
 	@Nullable
@@ -199,6 +193,7 @@ public class Lazy<T> implements Supplier<T> {
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -227,6 +222,7 @@ public class Lazy<T> implements Supplier<T> {
 
 	/*
 	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -239,4 +235,5 @@ public class Lazy<T> implements Supplier<T> {
 
 		return result;
 	}
+
 }

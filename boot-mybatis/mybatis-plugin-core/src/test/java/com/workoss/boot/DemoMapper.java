@@ -7,4 +7,5 @@ public interface DemoMapper {
 	DemoModel toTarget(DemoEntity source);
 
 	List<DemoModel> toTargetList(List<DemoEntity> sourceList);
+
 }
