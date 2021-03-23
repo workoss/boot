@@ -30,7 +30,7 @@ public class PageResult<E> extends ArrayList<E> implements Closeable {
 
 	private int limit = 10;
 
-	private int count = 0;
+	private int count = -1;
 
 	private int pageNo = 1;
 

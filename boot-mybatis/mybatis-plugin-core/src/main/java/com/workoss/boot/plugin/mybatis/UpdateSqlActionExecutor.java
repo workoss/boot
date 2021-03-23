@@ -1,8 +1,6 @@
-package com.workoss.boot.plugin.mybatis.update;
+package com.workoss.boot.plugin.mybatis;
 
-import com.workoss.boot.plugin.mybatis.SqlActionExecutor;
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
-import com.workoss.boot.util.context.Context;
 import org.apache.ibatis.plugin.Invocation;
 
 public class UpdateSqlActionExecutor implements SqlActionExecutor {

@@ -17,14 +17,9 @@ package com.workoss.boot.plugin.mybatis;
 
 import com.alibaba.druid.DbType;
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
-import com.workoss.boot.plugin.mybatis.provider.BaseProvider;
 import com.workoss.boot.plugin.mybatis.query.PageQuerySqlHandler;
-import com.workoss.boot.plugin.mybatis.query.SelectSqlActionExecutor;
 import com.workoss.boot.plugin.mybatis.query.SortQuerySqlHandler;
-import com.workoss.boot.plugin.mybatis.update.UpdateSqlActionExecutor;
 import com.workoss.boot.plugin.mybatis.util.ProviderUtil;
-import com.workoss.boot.util.context.Context;
-import com.workoss.boot.util.context.MapContext;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -44,12 +39,12 @@ import java.util.Properties;
  *
  * @author workoss
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
-@Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }),
+@SuppressWarnings({"unchecked", "rawtypes"})
+@Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
 		@Signature(type = Executor.class, method = "query",
-				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
-		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class }), })
+				args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),})
 public class SqlInterceptor implements Interceptor {
 
 	private static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
@@ -57,7 +52,18 @@ public class SqlInterceptor implements Interceptor {
 	private Properties properties;
 
 	public SqlInterceptor() {
-		SelectSqlActionExecutor.INSTANCE.add(new SortQuerySqlHandler()).add(new PageQuerySqlHandler());
+		SelectSqlActionExecutor.INSTANCE.addAfter(new SortQuerySqlHandler())
+				.addAfter(new PageQuerySqlHandler());
+	}
+
+	public SqlInterceptor addQueryHandlerBefore(SqlHandler sqlHandler) {
+		SelectSqlActionExecutor.INSTANCE.addBefore(sqlHandler);
+		return this;
+	}
+
+	public SqlInterceptor addQueryHandlerAfter(SqlHandler sqlHandler) {
+		SelectSqlActionExecutor.INSTANCE.addAfter(sqlHandler);
+		return this;
 	}
 
 	@Override
@@ -82,20 +88,19 @@ public class SqlInterceptor implements Interceptor {
 		Object result = null;
 		try {
 			switch (sqlCommandType) {
-			case SELECT:
-				context.putInput("sqlParam", SqlHelper.getLocalSqlParam());
-				result = SelectSqlActionExecutor.INSTANCE.execute(invocation, context);
-				break;
-			case UPDATE:
-				result = UpdateSqlActionExecutor.INSTANCE.execute(invocation, context);
-				break;
-			default:
-				result = invocation.proceed();
-				break;
+				case SELECT:
+					context.putInput("sqlParam", SqlHelper.getLocalSqlParam());
+					result = SelectSqlActionExecutor.INSTANCE.execute(invocation, context);
+					break;
+				case UPDATE:
+					result = UpdateSqlActionExecutor.INSTANCE.execute(invocation, context);
+					break;
+				default:
+					result = invocation.proceed();
+					break;
 			}
 			return result;
-		}
-		finally {
+		} finally {
 			SqlHelper.clearSqlParam();
 			ProviderUtil.setDbType(null);
 		}
@@ -103,6 +108,7 @@ public class SqlInterceptor implements Interceptor {
 
 	/**
 	 * 只拦截Execuate
+	 *
 	 * @param target 插件对象
 	 * @return object
 	 */
@@ -110,8 +116,7 @@ public class SqlInterceptor implements Interceptor {
 	public Object plugin(Object target) {
 		if (target instanceof Executor) {
 			return Plugin.wrap(target, this);
-		}
-		else {
+		} else {
 			return target;
 		}
 	}

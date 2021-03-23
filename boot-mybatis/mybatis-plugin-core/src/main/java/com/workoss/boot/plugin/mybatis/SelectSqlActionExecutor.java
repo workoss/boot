@@ -1,9 +1,5 @@
-package com.workoss.boot.plugin.mybatis.query;
+package com.workoss.boot.plugin.mybatis;
 
-import com.workoss.boot.plugin.mybatis.PageResult;
-import com.workoss.boot.plugin.mybatis.SqlHandler;
-import com.workoss.boot.plugin.mybatis.SqlActionExecutor;
-import com.workoss.boot.plugin.mybatis.SqlParam;
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
 import com.workoss.boot.util.reflect.BeanCopierUtil;
 import org.apache.ibatis.cache.CacheKey;
@@ -28,17 +24,30 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 
 	private final String PAGE_PARAM = "page";
 
-	private Map<String, SqlHandler> sqlHandlerMap = new LinkedHashMap<>();
+	private Map<String, SqlHandler> sqlHandlerMap = new HashMap<>();
+
+	private List<String> handlerKeys = new ArrayList<>();
 
 	private SelectSqlActionExecutor() {
 	}
 
-	public SelectSqlActionExecutor add(SqlHandler sqlHandler) {
+	protected SelectSqlActionExecutor addAfter(SqlHandler sqlHandler) {
 		String key = sqlHandler.getClass().getSimpleName();
 		if (sqlHandlerMap.containsKey(key)) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
+		} else {
+			handlerKeys.add(key);
+			sqlHandlerMap.put(key, sqlHandler);
 		}
-		else {
+		return this;
+	}
+
+	protected SelectSqlActionExecutor addBefore(SqlHandler sqlHandler) {
+		String key = sqlHandler.getClass().getSimpleName();
+		if (sqlHandlerMap.containsKey(key)) {
+			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
+		} else {
+			handlerKeys.add(0, key);
 			sqlHandlerMap.put(key, sqlHandler);
 		}
 		return this;
@@ -57,8 +66,7 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(parameter);
 			cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
-		}
-		else {
+		} else {
 			cacheKey = (CacheKey) args[4];
 			boundSql = (BoundSql) args[5];
 		}
@@ -77,25 +85,29 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		context.putInput("cacheKey", cacheKey);
 		context.putInput("boundSql", boundSql);
 
-		sqlHandlerMap.entrySet().stream().forEach(stringQuerySqlHandlerEntry -> {
-			stringQuerySqlHandlerEntry.getValue().handler(context);
+		handlerKeys.stream().forEach(handlerKey -> {
+			sqlHandlerMap.get(handlerKey).handler(context);
 		});
-
 		Boolean change = (Boolean) context.getOutput("change");
 		if (!(change != null && Boolean.TRUE.compareTo(change) == 0)) {
 			return invocation.proceed();
 		}
 		Object result = context.getOutput("result");
-		List<Object> list = executor.query((MappedStatement) context.getOutputOrInput("mappedStatement"),
+		if (result != null && result instanceof PageResult) {
+			PageResult pageResult = (PageResult) result;
+			if (pageResult.getCount() > 0) {
+				pageResult.addAll(query(executor, context));
+			}
+			return pageResult;
+		}
+		return query(executor, context);
+	}
+
+	private List<Object> query(Executor executor, SqlContext context) throws Throwable {
+		return executor.query((MappedStatement) context.getOutputOrInput("mappedStatement"),
 				context.getOutputOrInput("parameter"), (RowBounds) context.getOutputOrInput("rowBounds"),
 				(ResultHandler) context.getOutputOrInput("resultHandler"),
 				(CacheKey) context.getOutputOrInput("cacheKey"), (BoundSql) context.getOutputOrInput("boundSql"));
-		if (result instanceof PageResult) {
-			PageResult pageResult = (PageResult) result;
-			pageResult.addAll(list);
-			return pageResult;
-		}
-		return list;
 	}
 
 	private SqlParam initSqlParam(Object parameterObject) {
