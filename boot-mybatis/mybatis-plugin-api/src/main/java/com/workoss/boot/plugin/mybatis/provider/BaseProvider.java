@@ -54,7 +54,7 @@ public class BaseProvider implements ProviderMethodResolver {
 		return new StringJoiner(" ").add("<script>").add("${sql}").add("</script>").toString();
 	}
 
-	public String executeSql(ProviderContext context, Map<String, Object> params, SqlValidate sqlValidate) {
+	public CharSequence dynamicSql(Map<String, Object> params, ProviderContext context) {
 		String dbType = ProviderUtil.getDbType(context, params);
 		if (dbType == null) {
 			log.warn("[MYBATIS]没有拦截器放入dbType,默认切换到default/mysql");
@@ -66,7 +66,6 @@ public class BaseProvider implements ProviderMethodResolver {
 			return sql;
 		}
 		TableColumnInfo tableColumnInfo = getTableColumnInfo(context);
-		sqlValidate.validate(tableColumnInfo);
 		sql = ProviderUtil.getScript(dbType, context.getMapperMethod().getName(), tableColumnInfo);
 		if (ObjectUtil.isBlank(sql)) {
 			throw new RuntimeException(key + " 获取sql失败");

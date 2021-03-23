@@ -33,15 +33,43 @@ public class SqlHelper {
 	protected static final FastThreadLocal<SqlParam> LOCAL_SQL_PARAM = new FastThreadLocal<>();
 
 	public static PageBuilder page() {
-		return new PageBuilder();
+		return page(null);
 	}
 
-	public static PageBuilder page(Object pageParam) {
-		return new PageBuilder(pageParam);
+	public static PageBuilder page(Object pageObject) {
+		if (pageObject == null) {
+			return new PageBuilder();
+		}
+		String clazName = pageObject.getClass().getName();
+		if (clazName.startsWith("java.lang.") || clazName.startsWith("java.math.")) {
+			throw new RuntimeException("please input object");
+		}
+		PageBuilder pageBuilder = null;
+		if (pageObject instanceof SqlParam) {
+			pageBuilder = new PageBuilder((SqlParam) pageObject);
+			return pageBuilder;
+		}
+		pageBuilder = new PageBuilder();
+		Object offset = ReflectUtils.getPropertyByInvokeMethod(pageObject, "offset");
+		Object limit = ReflectUtils.getPropertyByInvokeMethod(pageObject, "limit");
+		pageBuilder.sort((String) ReflectUtils.getPropertyByInvokeMethod(pageObject, "sortBy"));
+		if (limit != null) {
+			int limitNum = Integer.parseInt(limit.toString());
+			Integer offsetNum = null;
+			if (offset == null) {
+				Object pageNo = ReflectUtils.getPropertyByInvokeMethod(pageObject, "pageNo");
+				offsetNum = (pageNo == null ? 0 : ((Integer.parseInt(pageNo.toString()) - 1) * limitNum));
+			}
+			else {
+				offsetNum = Integer.parseInt(offset.toString());
+			}
+			pageBuilder.page(offsetNum, limitNum);
+		}
+		return pageBuilder;
 	}
 
-	public static PageBuilder page(int pageNo, int limit) {
-		return new PageBuilder().page(pageNo, limit);
+	public static PageBuilder page(int pageNo, int limit, boolean shouldCount) {
+		return new PageBuilder().page((pageNo - 1) * limit, limit).shouldCount(shouldCount);
 	}
 
 	public static SortBuilder sort(String sortBy) {
@@ -72,36 +100,17 @@ public class SqlHelper {
 			this.sqlParamBuilder = new SqlParamBuilder();
 		}
 
-		public PageBuilder(Object pageObject) {
-			if (pageObject == null) {
-				this.sqlParamBuilder = new SqlParamBuilder();
-				return;
-			}
-			String clazName = pageObject.getClass().getName();
-			if (clazName.startsWith("java.lang.") || clazName.startsWith("java.math.")) {
-				throw new RuntimeException("please input object");
-			}
-			if (pageObject instanceof SqlParam) {
-				sqlParamBuilder = new SqlParamBuilder((SqlParam) pageObject);
-				return;
-			}
-			this.sqlParamBuilder = new SqlParamBuilder();
-			if (pageObject instanceof Integer) {
-
-			}
-			else {
-				Object offset = ReflectUtils.getPropertyByInvokeMethod(pageObject, "offset");
-				Object limit = ReflectUtils.getPropertyByInvokeMethod(pageObject, "limit");
-				if (limit != null) {
-					sqlParamBuilder.offset(offset == null ? 0 : Integer.parseInt(offset.toString()));
-					sqlParamBuilder.limit(limit == null ? 10 : Integer.parseInt(limit.toString()));
-				}
-				sqlParamBuilder.sort((String) ReflectUtils.getPropertyByInvokeMethod(pageObject, "sortBy"));
-			}
+		public PageBuilder(SqlParam sqlParam) {
+			this.sqlParamBuilder = new SqlParamBuilder(sqlParam);
 		}
 
-		public PageBuilder page(int pageNo, int limit) {
-			sqlParamBuilder.page(pageNo, limit);
+		public PageBuilder page(int offset, int limit) {
+			sqlParamBuilder.page(offset, limit);
+			return this;
+		}
+
+		public PageBuilder shouldCount(boolean shouldCount) {
+			sqlParamBuilder.shouldCount(shouldCount);
 			return this;
 		}
 
@@ -197,8 +206,13 @@ public class SqlHelper {
 			this.sqlParam = sqlParam;
 		}
 
-		public SqlParamBuilder page(int pageNo, int limit) {
-			sqlParam.setOffset((pageNo - 1) * limit);
+		public SqlParamBuilder param(SqlParam param) {
+			this.sqlParam = param;
+			return this;
+		}
+
+		public SqlParamBuilder page(int offset, int limit) {
+			sqlParam.setOffset(offset);
 			sqlParam.setLimit(limit);
 			sqlParam.setShouldPage(true);
 			return this;

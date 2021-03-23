@@ -37,7 +37,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		String key = sqlHandler.getClass().getSimpleName();
 		if (sqlHandlerMap.containsKey(key)) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
-		} else {
+		}
+		else {
 			sqlHandlerMap.put(key, sqlHandler);
 		}
 		return this;
@@ -56,7 +57,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(parameter);
 			cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
-		} else {
+		}
+		else {
 			cacheKey = (CacheKey) args[4];
 			boundSql = (BoundSql) args[5];
 		}

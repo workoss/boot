@@ -15,13 +15,10 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
-import java.util.List;
-
-import com.workoss.boot.plugin.mybatis.provider.CrudDeleteProvider;
-import com.workoss.boot.plugin.mybatis.provider.CrudInsertProvider;
-import com.workoss.boot.plugin.mybatis.provider.CrudSelectProvider;
-import com.workoss.boot.plugin.mybatis.provider.CrudUpdateProvider;
+import com.workoss.boot.plugin.mybatis.provider.BaseProvider;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * crudDao
@@ -35,7 +32,7 @@ public interface CrudDao<T, ID> {
 	 * @param id 主键
 	 * @return 对象
 	 */
-	@SelectProvider(type = CrudSelectProvider.class, method = "selectById")
+	@SelectProvider(type = BaseProvider.class, method = "dynamicSql")
 	T selectById(@Param("id") ID id);
 
 	/**
@@ -43,7 +40,7 @@ public interface CrudDao<T, ID> {
 	 * @param ids 主键
 	 * @return 对象列表
 	 */
-	@SelectProvider(type = CrudSelectProvider.class, method = "selectByIds")
+	@SelectProvider(type = BaseProvider.class, method = "dynamicSql")
 	List<T> selectByIds(@Param("ids") List<ID> ids);
 
 	/**
@@ -51,7 +48,7 @@ public interface CrudDao<T, ID> {
 	 * @param record 对象
 	 * @return 对象列表
 	 */
-	@SelectProvider(type = CrudSelectProvider.class, method = "selectSelective")
+	@SelectProvider(type = BaseProvider.class, method = "dynamicSql")
 	List<T> selectSelective(@Param("record") T record);
 
 	/**
@@ -59,7 +56,7 @@ public interface CrudDao<T, ID> {
 	 * @param record 对象
 	 * @return page
 	 */
-	@SelectProvider(type = CrudSelectProvider.class, method = "selectSelective")
+	@SelectProvider(type = BaseProvider.class, method = "dynamicSql")
 	PageResult<T> selectPageSelective(@Param("record") T record);
 
 	/**
@@ -67,7 +64,7 @@ public interface CrudDao<T, ID> {
 	 * @param record 对象
 	 * @return count
 	 */
-	@SelectProvider(type = CrudSelectProvider.class, method = "selectCountSelective")
+	@SelectProvider(type = BaseProvider.class, method = "dynamicSql")
 	int selectCountSelective(@Param("record") T record);
 
 	/**
@@ -75,7 +72,7 @@ public interface CrudDao<T, ID> {
 	 * @param record 对象
 	 * @return 数目
 	 */
-	@InsertProvider(type = CrudInsertProvider.class, method = "insert")
+	@InsertProvider(type = BaseProvider.class, method = "dynamicSql")
 	int insert(@Param("record") T record);
 
 	/**
@@ -83,7 +80,7 @@ public interface CrudDao<T, ID> {
 	 * @param record 对象
 	 * @return 插入数目
 	 */
-	@InsertProvider(type = CrudInsertProvider.class, method = "insertSelective")
+	@InsertProvider(type = BaseProvider.class, method = "dynamicSql")
 	int insertSelective(@Param("record") T record);
 
 	/**
@@ -91,7 +88,7 @@ public interface CrudDao<T, ID> {
 	 * @param list 列表
 	 * @return 插入数量
 	 */
-	@InsertProvider(type = CrudInsertProvider.class, method = "insertBatch")
+	@InsertProvider(type = BaseProvider.class, method = "dynamicSql")
 	int insertBatch(@Param("list") List<T> list);
 
 	/**
@@ -100,7 +97,7 @@ public interface CrudDao<T, ID> {
 	 * @param id 主键
 	 * @return 修改数量
 	 */
-	@UpdateProvider(type = CrudUpdateProvider.class, method = "updateById")
+	@UpdateProvider(type = BaseProvider.class, method = "dynamicSql")
 	int updateById(@Param("record") T record, @Param("id") ID id);
 
 	/**
@@ -108,7 +105,7 @@ public interface CrudDao<T, ID> {
 	 * @param id 主键
 	 * @return 删除数目
 	 */
-	@DeleteProvider(type = CrudDeleteProvider.class, method = "deleteById")
+	@DeleteProvider(type = BaseProvider.class, method = "dynamicSql")
 	int deleteById(@Param("id") ID id);
 
 	/**
@@ -116,7 +113,7 @@ public interface CrudDao<T, ID> {
 	 * @param ids 主键
 	 * @return 删除数目
 	 */
-	@DeleteProvider(type = CrudDeleteProvider.class, method = "deleteByIds")
+	@DeleteProvider(type = BaseProvider.class, method = "dynamicSql")
 	int deleteByIds(@Param("ids") List<ID> ids);
 
 	/**
@@ -124,7 +121,7 @@ public interface CrudDao<T, ID> {
 	 * @param t 对象
 	 * @return 删除数目
 	 */
-	@DeleteProvider(type = CrudDeleteProvider.class, method = "deleteSelective")
+	@DeleteProvider(type = BaseProvider.class, method = "dynamicSql")
 	int deleteSelective(@Param("record") T t);
 
 }
