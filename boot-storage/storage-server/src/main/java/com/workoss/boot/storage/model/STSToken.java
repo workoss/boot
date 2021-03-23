@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
  *
  * @author workoss
  */
+@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 @ToString
 @Data
 public class STSToken extends BaseStorageModel {

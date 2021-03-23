@@ -29,6 +29,7 @@ import com.workoss.boot.storage.service.token.AbstractTokenHandler;
 import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.context.Context;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -41,7 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author workoss
  */
-@Service
+@SuppressWarnings("ALL")
+@Component
 public class OSSTokenHandler extends AbstractTokenHandler {
 
 	private static final Map<String, String> REGION_CACHE = new ConcurrentHashMap<>();

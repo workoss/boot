@@ -21,16 +21,51 @@ import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.util.context.Context;
 import reactor.core.publisher.Mono;
 
+/**
+ * token处理
+ *
+ * @author workoss
+ */
 public interface TokenHandler {
 
+	/**
+	 * 平台名称
+	 * @return 三方平台类型
+	 */
 	ThirdPlatformType getName();
 
+	/**
+	 * 生产html5 签名
+	 * @param context 上下文
+	 * @param bucketName 存储桶
+	 * @param key 文件key
+	 * @param mimeType 文件类型
+	 * @param successActionStatus 上传成功后返回状态
+	 * @return 签名
+	 */
 	Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key, String mimeType,
 			String successActionStatus);
 
+	/**
+	 * 生产html5 签名(临时stsToken方式)
+	 * @param context 上下文
+	 * @param bucketName 存储桶
+	 * @param key 文件key
+	 * @param mimeType 文件类型
+	 * @param successActionStatus 上传成功后返回状态
+	 * @return 签名
+	 */
 	Mono<UploadSign> generateUploadStsSign(Context<String, String> context, String bucketName, String key,
 			String mimeType, String successActionStatus);
 
+	/**
+	 * 生成stsToken
+	 * @param context 上下文
+	 * @param bucketName 存储桶
+	 * @param key 文件key
+	 * @param action 操作
+	 * @return stsToken
+	 */
 	Mono<STSToken> generateStsToken(final Context<String, String> context, String bucketName, final String key,
 			final String action);
 

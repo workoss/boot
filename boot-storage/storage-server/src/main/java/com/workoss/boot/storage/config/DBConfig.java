@@ -37,6 +37,7 @@ import reactor.core.publisher.Mono;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 @EnableTransactionManagement
 @EnableR2dbcAuditing
 @EnableR2dbcRepositories
@@ -52,7 +53,7 @@ public class DBConfig {
 	}
 
 	@Bean
-	BeforeConvertCallback<? extends IdEntity> beforeConvertIDCallback(DatabaseClient databaseClient) {
+	BeforeConvertCallback<? extends IdEntity> beforeConvertIdCallback(DatabaseClient databaseClient) {
 		return (idEntity, sqlIdentifier) -> {
 			if (idEntity.getId() == null) {
 				idEntity.setId(System.currentTimeMillis());

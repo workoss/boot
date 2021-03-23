@@ -36,6 +36,10 @@ public interface MultiStorageClientConfig {
 	 */
 	boolean isEnabled();
 
+	/**
+	 * 是否健康监测
+	 * @return true/false
+	 */
 	boolean isHealth();
 
 	/**

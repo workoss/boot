@@ -30,14 +30,40 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * token AbstractTokenHandler
+ *
+ * @author workoss
+ */
 public abstract class AbstractTokenHandler implements TokenHandler {
 
 	public static final String ALLOW_ALL = "*";
 
+	private static final int SIGN_SIZE = 50;
+
+	/**
+	 * 获取权限action
+	 * @param bucketName 存储桶
+	 * @param action 操作
+	 * @return action字符串
+	 */
 	protected abstract String getAction(String bucketName, String action);
 
+	/**
+	 * 获取权限resource
+	 * @param bucketName 存储桶
+	 * @param action 操作
+	 * @param key 文件key
+	 * @return resource 字符串
+	 */
 	protected abstract String getResource(String bucketName, String action, String key);
 
+	/**
+	 * 获取存储桶域名
+	 * @param context 上下文
+	 * @param bucketName 存储桶
+	 * @return 域名
+	 */
 	protected abstract String getDomain(final Context<String, String> context, String bucketName);
 
 	protected String renderSecurityTokenPolicy(final Context<String, String> context, String bucketName, String key,
@@ -67,8 +93,8 @@ public abstract class AbstractTokenHandler implements TokenHandler {
 		}
 		if (stsToken != null) {
 			String stToken = stsToken.getStsToken();
-			if (stToken.length() > 50) {
-				stToken = stToken.substring(0, 50);
+			if (stToken.length() > SIGN_SIZE) {
+				stToken = stToken.substring(0, SIGN_SIZE);
 			}
 			policyContext.put("stsToken", stToken);
 		}

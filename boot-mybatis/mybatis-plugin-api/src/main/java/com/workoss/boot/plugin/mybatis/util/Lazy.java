@@ -6,6 +6,12 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * 懒加载
+ *
+ * @param <T> 泛型
+ * @author workoss
+ */
 public class Lazy<T> implements Supplier<T> {
 
 	private static final Lazy<?> EMPTY = new Lazy<>(() -> null, null, true);
@@ -72,6 +78,7 @@ public class Lazy<T> implements Supplier<T> {
 	 * calculated instance for subsequent lookups.
 	 * @return lazy
 	 */
+	@Override
 	public T get() {
 
 		T value = getNullable();
@@ -191,11 +198,6 @@ public class Lazy<T> implements Supplier<T> {
 		return value;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(@Nullable Object o) {
 
@@ -220,11 +222,6 @@ public class Lazy<T> implements Supplier<T> {
 		return ObjectUtil.nullSafeEquals(value, lazy.value);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 

@@ -15,14 +15,42 @@
  */
 package com.workoss.boot.util.context;
 
+/**
+ * 上下文
+ *
+ * @param <K> key
+ * @param <V> value
+ * @author workoss
+ */
 public interface Context<K, V> {
 
+	/**
+	 * 是否包含
+	 * @param key key
+	 * @return true/false
+	 */
 	boolean containsKey(K key);
 
+	/**
+	 * 获取值
+	 * @param key key
+	 * @return value
+	 */
 	V get(K key);
 
+	/**
+	 * 获取值/默认值
+	 * @param key key
+	 * @param defaultValue 默认值
+	 * @return 值
+	 */
 	V get(K key, V defaultValue);
 
+	/**
+	 * set值
+	 * @param key key
+	 * @param value 值
+	 */
 	void set(K key, V value);
 
 }

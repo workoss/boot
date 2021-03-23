@@ -23,6 +23,11 @@ import com.workoss.boot.util.DateUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * java8 日期模块
+ *
+ * @author workoss
+ */
 public class Java8DateTimeModule {
 
 	public Module getModule() {

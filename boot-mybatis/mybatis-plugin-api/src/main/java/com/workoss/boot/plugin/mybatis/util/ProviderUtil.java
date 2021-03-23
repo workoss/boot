@@ -22,7 +22,14 @@ import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * mybatis Provider 工具类
+ *
+ * @author workoss
+ */
 public class ProviderUtil {
+
+	private static final String JAR_PROTOCAL = "jar";
 
 	private static final String TEMPLATE_BASE_ROOT = "providerTemplate/";
 
@@ -97,7 +104,7 @@ public class ProviderUtil {
 	private static void loadTemplateFile() {
 		URL url = ProviderUtil.class.getClassLoader().getResource(TEMPLATE_BASE_ROOT);
 		String protocal = url.getProtocol();
-		if ("jar".equalsIgnoreCase(protocal)) {
+		if (JAR_PROTOCAL.equalsIgnoreCase(protocal)) {
 			readTemplateFromJar(url);
 		}
 		else {

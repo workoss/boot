@@ -12,6 +12,11 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 排序拦截器
+ *
+ * @author workoss
+ */
 public class SortQuerySqlHandler implements SqlHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(SortQuerySqlHandler.class);

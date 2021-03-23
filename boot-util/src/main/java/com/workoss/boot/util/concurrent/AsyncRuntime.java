@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
-
+@SuppressWarnings("ALL")
 public class AsyncRuntime {
 
 	private static final Logger log = LoggerFactory.getLogger(AsyncRuntime.class);

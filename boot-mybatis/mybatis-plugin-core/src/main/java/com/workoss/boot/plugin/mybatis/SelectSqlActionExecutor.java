@@ -14,6 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * 查询执行类
+ *
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class SelectSqlActionExecutor implements SqlActionExecutor {
 
 	private static final Logger log = LoggerFactory.getLogger(SelectSqlActionExecutor.class);
@@ -35,7 +41,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		String key = sqlHandler.getClass().getSimpleName();
 		if (sqlHandlerMap.containsKey(key)) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
-		} else {
+		}
+		else {
 			handlerKeys.add(key);
 			sqlHandlerMap.put(key, sqlHandler);
 		}
@@ -46,7 +53,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		String key = sqlHandler.getClass().getSimpleName();
 		if (sqlHandlerMap.containsKey(key)) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
-		} else {
+		}
+		else {
 			handlerKeys.add(0, key);
 			sqlHandlerMap.put(key, sqlHandler);
 		}
@@ -66,7 +74,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		if (args.length == 4) {
 			boundSql = mappedStatement.getBoundSql(parameter);
 			cacheKey = executor.createCacheKey(mappedStatement, parameter, rowBounds, boundSql);
-		} else {
+		}
+		else {
 			cacheKey = (CacheKey) args[4];
 			boundSql = (BoundSql) args[5];
 		}

@@ -19,6 +19,11 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * web 签名请求参数
+ *
+ * @author workoss
+ */
 @Data
 public class UploadSignParam extends StorageParam {
 

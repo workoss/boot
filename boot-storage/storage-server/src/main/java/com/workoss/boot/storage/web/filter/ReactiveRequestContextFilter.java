@@ -21,6 +21,11 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+/**
+ * webflux request 复用 拦截器
+ *
+ * @author workoss
+ */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class ReactiveRequestContextFilter implements WebFilter {
 

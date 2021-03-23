@@ -22,6 +22,11 @@ import javax.xml.bind.Unmarshaller;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * jaxbContextContainer
+ *
+ * @author workoss
+ */
 public final class JaxbContextContainer {
 
 	private final ConcurrentMap<Class<?>, JAXBContext> jaxbContexts = new ConcurrentHashMap<>(64);

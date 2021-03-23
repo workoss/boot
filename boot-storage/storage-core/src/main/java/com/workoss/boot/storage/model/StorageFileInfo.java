@@ -23,6 +23,7 @@ import java.util.Map;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class StorageFileInfo {
 
 	private String bucketName;

@@ -20,6 +20,11 @@ import com.workoss.boot.storage.model.BaseStorageModel;
 import com.workoss.boot.storage.web.vo.UploadSignParam;
 import org.mapstruct.Mapper;
 
+/**
+ * UploadSignParam = StorageModel
+ *
+ * @author workoss
+ */
 @Mapper(componentModel = "spring")
 public interface UploadSignParamToStorageModelMapper extends BeanMapper<UploadSignParam, BaseStorageModel> {
 

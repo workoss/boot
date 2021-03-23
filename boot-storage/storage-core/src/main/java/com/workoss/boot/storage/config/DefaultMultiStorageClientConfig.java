@@ -50,6 +50,7 @@ public class DefaultMultiStorageClientConfig implements MultiStorageClientConfig
 		this.enabled = enabled;
 	}
 
+	@Override
 	public boolean isHealth() {
 		return health;
 	}

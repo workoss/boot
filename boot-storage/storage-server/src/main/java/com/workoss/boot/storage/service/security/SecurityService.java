@@ -27,12 +27,35 @@ import reactor.core.publisher.Mono;
  */
 public interface SecurityService {
 
+	/**
+	 * 获取html5上传签名（非临时）
+	 * @param storage 基础参数
+	 * @param key 文件key
+	 * @param mimeType 文件类型
+	 * @param successActionStatus 上传返回状态 200
+	 * @return 签名参数
+	 */
 	Mono<UploadSign> generateUploadSign(BaseStorageModel storage, String key, String mimeType,
 			String successActionStatus);
 
+	/**
+	 * 获取html5上传签名(临时stsToken方式)
+	 * @param storage 基本参数
+	 * @param key 文件key
+	 * @param mimeType 文件类型
+	 * @param successActionStatus 上传返回状态 200
+	 * @return 签名参数
+	 */
 	Mono<UploadSign> generateUploadStsSign(BaseStorageModel storage, String key, String mimeType,
 			String successActionStatus);
 
+	/**
+	 * 生成临时凭证 客户端使用
+	 * @param storage 基本配置
+	 * @param key 文件key
+	 * @param action 操作
+	 * @return
+	 */
 	Mono<STSToken> generateStsToken(BaseStorageModel storage, String key, String action);
 
 }

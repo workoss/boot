@@ -20,6 +20,12 @@ import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.web.vo.UploadSignVO;
 import org.mapstruct.Mapper;
 
+/**
+ * UploadSign = UploadSignVO
+ *
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 @Mapper(componentModel = "spring")
 public interface UploadSignToVOMapper extends BeanMapper<UploadSign, UploadSignVO> {
 

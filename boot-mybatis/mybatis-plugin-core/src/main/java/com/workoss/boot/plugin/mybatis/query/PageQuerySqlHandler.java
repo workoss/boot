@@ -15,6 +15,11 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 分页拦截器
+ *
+ * @author workoss
+ */
 public class PageQuerySqlHandler implements SqlHandler {
 
 	private static final Logger log = LoggerFactory.getLogger(PageQuerySqlHandler.class);

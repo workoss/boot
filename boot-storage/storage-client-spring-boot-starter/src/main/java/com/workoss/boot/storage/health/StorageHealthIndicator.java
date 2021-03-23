@@ -21,6 +21,11 @@ import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 
+/**
+ * storage health
+ *
+ * @author workoss
+ */
 public class StorageHealthIndicator extends AbstractHealthIndicator {
 
 	private final StorageTemplate storageTemplate;

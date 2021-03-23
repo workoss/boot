@@ -18,6 +18,11 @@ package com.workoss.boot.storage.repository;
 import lombok.Data;
 import org.springframework.data.relational.core.mapping.Column;
 
+/**
+ * 租户基础对象
+ *
+ * @author workoss
+ */
 @Data
 public class TenantEntity extends IdEntity {
 

@@ -6,6 +6,11 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * 对象工具类
+ *
+ * @author workoss
+ */
 public class ObjectUtil {
 
 	private static final int INITIAL_HASH = 7;

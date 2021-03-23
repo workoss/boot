@@ -20,6 +20,12 @@ import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.web.vo.STSTokenVO;
 import org.mapstruct.Mapper;
 
+/**
+ * sts token 参数 复制mapper
+ *
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 @Mapper(componentModel = "spring")
 public interface STSTokenToVOMapper extends BeanMapper<STSToken, STSTokenVO> {
 

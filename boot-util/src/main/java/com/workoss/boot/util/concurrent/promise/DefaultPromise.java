@@ -468,7 +468,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 			}
 			notifyingListeners = true;
 			temListeners = this.listeners;
-			this.listeners = null; // 通知完之后就置空，不再通知第二次
+			this.listeners = null;
 		}
 
 		while (true) {

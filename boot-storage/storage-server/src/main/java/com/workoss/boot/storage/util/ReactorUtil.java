@@ -23,18 +23,19 @@ import reactor.core.publisher.Signal;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+/**
+ * reactor 工具类
+ *
+ * @author workoss
+ */
 public class ReactorUtil {
 
 	private static <K, V> Function<K, Mono<Signal<? extends V>>> reader(Cache<K, Signal<? extends V>> cache) {
-		return key -> {
-			return Mono.justOrEmpty(cache.getIfPresent(key));
-		};
+		return key -> Mono.justOrEmpty(cache.getIfPresent(key));
 	}
 
 	private static <K, V> BiFunction<K, Signal<? extends V>, Mono<Void>> writer(Cache<K, Signal<? extends V>> cache) {
-		return (key, value) -> {
-			return Mono.fromRunnable(() -> cache.put(key, value));
-		};
+		return (key, value) -> Mono.fromRunnable(() -> cache.put(key, value));
 	}
 
 	public static <K, V> Mono<V> createCacheMono(Cache<K, Signal<? extends V>> cache, K key, Mono<V> defaultValue) {

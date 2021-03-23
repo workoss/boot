@@ -22,6 +22,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * DateTime 格式化
+ *
+ * @author workoss
+ */
 public class DateTimeFormat extends SimpleDateFormat {
 
 	private String[] patterns = new String[0];

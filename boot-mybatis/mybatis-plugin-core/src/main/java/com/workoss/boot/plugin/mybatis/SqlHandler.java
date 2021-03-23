@@ -2,6 +2,11 @@ package com.workoss.boot.plugin.mybatis;
 
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
 
+/**
+ * 拦截器
+ *
+ * @author workoss
+ */
 @FunctionalInterface
 public interface SqlHandler {
 

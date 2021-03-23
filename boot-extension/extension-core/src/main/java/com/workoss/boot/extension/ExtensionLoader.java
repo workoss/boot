@@ -355,7 +355,7 @@ public class ExtensionLoader<T> {
 	private void loadSuccess(String alias, ExtensionClass<T> extensionClass) {
 		if (listener != null) {
 			try {
-				listener.onLoad(extensionClass); // 加载完毕，通知监听器
+				listener.onLoad(extensionClass);
 				all.put(alias, extensionClass);
 			}
 			catch (Exception e) {
@@ -375,7 +375,7 @@ public class ExtensionLoader<T> {
 		line = line.trim();
 		int i0 = line.indexOf('#');
 		if (i0 == 0 || line.length() == 0) {
-			return null; // 当前行是注释 或者 空
+			return null;
 		}
 		if (i0 > 0) {
 			line = line.substring(0, i0).trim();
@@ -385,7 +385,7 @@ public class ExtensionLoader<T> {
 		String className;
 		int i = line.indexOf('=');
 		if (i > 0) {
-			alias = line.substring(0, i).trim(); // 以代码里的为准
+			alias = line.substring(0, i).trim();
 			className = line.substring(i + 1).trim();
 		}
 		else {

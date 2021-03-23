@@ -15,10 +15,27 @@
  */
 package com.workoss.boot.storage.mapper;
 
+/**
+ * 对象复制
+ *
+ * @param <S> source
+ * @param <T> target
+ * @author workoss
+ */
 public interface BeanMapper<S, T> {
 
+	/**
+	 * source -> T
+	 * @param source source
+	 * @return target
+	 */
 	T toTarget(S source);
 
+	/**
+	 * target -> S
+	 * @param target target
+	 * @return source
+	 */
 	S toSource(T target);
 
 }

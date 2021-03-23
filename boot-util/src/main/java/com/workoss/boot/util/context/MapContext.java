@@ -17,6 +17,13 @@ package com.workoss.boot.util.context;
 
 import java.util.HashMap;
 
+/**
+ * map 上下文
+ *
+ * @param <K> key
+ * @param <V> value
+ * @author workoss
+ */
 public class MapContext<K, V> extends HashMap<K, V> implements Context<K, V> {
 
 	public static MapContext<String, String> EMPTY = new MapContext<>();

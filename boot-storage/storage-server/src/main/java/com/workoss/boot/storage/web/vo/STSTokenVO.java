@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 @Data
 public class STSTokenVO {
 

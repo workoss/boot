@@ -22,7 +22,10 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 生成stsToken参数
+ *
+ * @author workoss
  */
+@SuppressWarnings("ALL")
 @Data
 public class STSTokenParam extends StorageParam {
 

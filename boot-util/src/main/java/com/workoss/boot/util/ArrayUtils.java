@@ -17,8 +17,13 @@ package com.workoss.boot.util;
 
 /**
  * 集合工具类
+ *
+ * @author workoss
  */
-public abstract class ArrayUtils {
+public class ArrayUtils {
+
+	private ArrayUtils() {
+	}
 
 	public static String[] concat(String[] a, String[] b) {
 		if (b == null) {

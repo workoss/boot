@@ -19,6 +19,13 @@ import org.springframework.lang.Nullable;
 
 import java.util.*;
 
+/**
+ * multiMap
+ *
+ * @param <K> key
+ * @param <V> list泛型
+ * @author workoss
+ */
 public class LinkedMultiValueMap<K, V> implements MultiValueMap<K, V>, Cloneable {
 
 	private Map<K, List<V>> targetMap;

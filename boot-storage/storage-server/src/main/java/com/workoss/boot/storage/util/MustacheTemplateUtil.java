@@ -21,6 +21,11 @@ import com.workoss.boot.util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * mustache模板工具类
+ *
+ * @author workoss
+ */
 public class MustacheTemplateUtil {
 
 	private static final Mustache.Compiler INSTANCE = Mustache.compiler().escapeHTML(false);
@@ -30,7 +35,7 @@ public class MustacheTemplateUtil {
 			return null;
 		}
 		if (map == null) {
-			map = new HashMap<>();
+			map = new HashMap<>(8);
 		}
 		return INSTANCE.compile(template).execute(map);
 	}
@@ -40,7 +45,7 @@ public class MustacheTemplateUtil {
 			return null;
 		}
 		if (object == null) {
-			object = new HashMap<>();
+			object = new HashMap<>(8);
 		}
 		return INSTANCE.withFormatter(formatter).compile(template).execute(object);
 	}
@@ -50,7 +55,7 @@ public class MustacheTemplateUtil {
 			return null;
 		}
 		if (object == null) {
-			object = new HashMap<>();
+			object = new HashMap<>(8);
 		}
 		return INSTANCE.compile(template).execute(object);
 	}

@@ -222,37 +222,9 @@ public abstract class BaseHashUtil {
 		return crc32.getValue();
 	}
 
-	////////////////// 基于Guava的MurMurHash ///////////////////
-	/* *//**
-			 * 对输入字符串进行murmur32散列, 返回值可能是负数
-			 */
-	/*
-	 * public static int murmur32AsInt(byte[] input) { return
-	 * Hashing.murmur3_32(MURMUR_SEED).hashBytes(input).asInt(); }
-	 *
-	 *//**
-		 * 对输入字符串进行murmur32散列, 返回值可能是负数
-		 */
-	/*
-	 * public static int murmur32AsInt(String input) { return
-	 * Hashing.murmur3_32(MURMUR_SEED).hashString(input, UTF_8).asInt(); }
-	 *
-	 *//**
-		 * 对输入字符串进行murmur128散列, 返回值可能是负数
-		 */
-
-	/*
-	 * public static long murmur128AsLong(byte[] input) { return
-	 * Hashing.murmur3_128(MURMUR_SEED).hashBytes(input).asLong(); }
-	 *
-	 */
-
 	/**
 	 * 对输入字符串进行murmur128散列, 返回值可能是负数
-	 *//*
-		 * public static long murmur128AsLong(String input) { return
-		 * Hashing.murmur3_128(MURMUR_SEED).hashString(input, UTF_8).asLong(); }
-		 */
+	 */
 	public static void removeMd5Digest() {
 		MD5_DIGEST.remove();
 	}

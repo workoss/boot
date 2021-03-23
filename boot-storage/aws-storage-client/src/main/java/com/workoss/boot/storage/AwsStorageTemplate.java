@@ -19,6 +19,11 @@ import com.amazonaws.http.IdleConnectionReaper;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
+/**
+ * aws storageTemplate
+ *
+ * @author workoss
+ */
 public class AwsStorageTemplate extends BaseStorageTemplate implements InitializingBean, DisposableBean {
 
 	@Override

@@ -36,6 +36,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * 全局返回处理器
+ *
+ * @author workoss
+ */
 @Slf4j
 public class GlobalResponseHandler extends ResponseBodyResultHandler {
 

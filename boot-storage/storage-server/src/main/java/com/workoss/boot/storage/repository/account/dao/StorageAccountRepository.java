@@ -24,7 +24,9 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 /**
- * 账号查询
+ * 账号查询 repository
+ *
+ * @author workoss
  */
 @Repository
 public interface StorageAccountRepository extends R2dbcRepository<StorageAccountEntity, Long> {
@@ -39,6 +41,14 @@ public interface StorageAccountRepository extends R2dbcRepository<StorageAccount
 	Flux<StorageAccountEntity> findByAccountTypeAndState(ThirdPlatformType accountType, AccountState state,
 			Pageable pageable);
 
+	/**
+	 * 通过账号类型，状态，租户id查询
+	 * @param accountType 账号类别
+	 * @param state 状态
+	 * @param tenentId 租户ID
+	 * @param pageable 分页参数
+	 * @return 账号配置信息
+	 */
 	Flux<StorageAccountEntity> findByAccountTypeAndStateAndTenantId(ThirdPlatformType accountType, AccountState state,
 			String tenentId, Pageable pageable);
 

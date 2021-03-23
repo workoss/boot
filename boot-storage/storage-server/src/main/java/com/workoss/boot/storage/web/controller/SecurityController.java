@@ -38,6 +38,7 @@ import reactor.core.publisher.Mono;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 @Validated
 @RequestMapping("/security")
 @RestController

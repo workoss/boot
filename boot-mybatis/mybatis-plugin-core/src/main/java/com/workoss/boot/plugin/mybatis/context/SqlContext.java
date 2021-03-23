@@ -4,6 +4,7 @@ import com.workoss.boot.util.context.MapContext;
 
 import java.util.StringJoiner;
 
+@SuppressWarnings("ALL")
 public class SqlContext extends MapContext {
 
 	public Object getInput(String key) {

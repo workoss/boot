@@ -28,6 +28,12 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * 自定义jacksonlocalDate格式化
+ *
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer {
 
 	private String[] patterns = new String[0];
@@ -53,8 +59,9 @@ public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.js
 			if (t == JsonToken.END_ARRAY) {
 				return null;
 			}
-			if ((t == JsonToken.VALUE_STRING || t == JsonToken.VALUE_EMBEDDED_OBJECT)
-					&& context.isEnabled(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)) {
+			boolean valueBoolean = (t == JsonToken.VALUE_STRING || t == JsonToken.VALUE_EMBEDDED_OBJECT)
+					&& context.isEnabled(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS);
+			if (valueBoolean) {
 				final LocalDateTime parsed = deserialize(parser, context);
 				if (parser.nextToken() != JsonToken.END_ARRAY) {
 					handleMissingEndArrayForSingle(parser, context);
@@ -83,9 +90,9 @@ public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.js
 					else {
 						int partialSecond = parser.getIntValue();
 						if (partialSecond < 1_000
-								&& !context.isEnabled(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS))
-							partialSecond *= 1_000_000; // value is milliseconds, convert
-														// it to nanoseconds
+								&& !context.isEnabled(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)) {
+							partialSecond *= 1_000_000;
+						}
 						if (parser.nextToken() != JsonToken.END_ARRAY) {
 							throw context.wrongTokenException(parser, handledType(), JsonToken.END_ARRAY,
 									"Expected array to end");
@@ -107,6 +114,7 @@ public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.js
 		return _handleUnexpectedToken(context, parser, "Expected array or string.");
 	}
 
+	@Override
 	protected LocalDateTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
 		String string = string0.trim();
 		if (string.length() == 0) {

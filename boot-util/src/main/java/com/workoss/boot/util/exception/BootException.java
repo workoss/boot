@@ -15,6 +15,11 @@
  */
 package com.workoss.boot.util.exception;
 
+/**
+ * boot异常
+ *
+ * @author workoss
+ */
 public class BootException extends RuntimeException {
 
 	private String errcode;
@@ -52,6 +57,7 @@ public class BootException extends RuntimeException {
 		return this.errmsg;
 	}
 
+	@Override
 	public String toString() {
 		return "{\"errcode\":\"" + this.errcode + "\",\"errmsg\":\"" + this.errmsg + "\"}";
 	}

@@ -21,18 +21,48 @@ import com.workoss.boot.storage.config.MultiStorageClientConfig;
 
 import java.util.Map;
 
+/**
+ * 对象存储模板
+ *
+ * @author workoss
+ */
 public interface StorageTemplate {
 
+	/**
+	 * 设置 配置
+	 * @param multiStorageClientConfig 配置
+	 */
 	void setMultiStorageClientConfig(MultiStorageClientConfig multiStorageClientConfig);
 
+	/**
+	 * 获取默认客户端
+	 * @return 客户端
+	 */
 	StorageClient client();
 
+	/**
+	 * 获取 key 客户端
+	 * @param key 关键字
+	 * @return 客户端
+	 */
 	StorageClient client(@NonNull String key);
 
+	/**
+	 * 所有客户端
+	 * @return 所有客户端
+	 */
 	Map<String, StorageClient> allClients();
 
+	/**
+	 * 销毁
+	 * @throws Exception 异常
+	 */
 	void destroy() throws Exception;
 
+	/**
+	 * 初始化执行
+	 * @throws Exception 异常
+	 */
 	void afterPropertiesSet() throws Exception;
 
 }

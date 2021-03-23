@@ -19,6 +19,11 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 账号对象
+ *
+ * @author workoss
+ */
 @Data
 public class StorageAccount {
 
@@ -27,6 +32,9 @@ public class StorageAccount {
 	 */
 	private ThirdPlatformType accountType;
 
+	/**
+	 * 三方账号ak
+	 */
 	private String accessKey;
 
 	/**

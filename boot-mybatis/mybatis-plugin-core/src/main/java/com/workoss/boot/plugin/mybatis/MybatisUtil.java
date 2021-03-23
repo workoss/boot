@@ -22,6 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * mybatis 常用工具类
+ *
+ * @author workoss
+ */
 public class MybatisUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(MybatisUtil.class);
@@ -79,7 +84,6 @@ public class MybatisUtil {
 				countMappedStatement = newCountMappedStatement(mappedStatement, countMsId);
 				COUNT_MS_MAPPEDSTATEMENT_CACHE.put(countMsId, countMappedStatement);
 			}
-			// countBoundSql = countMappedStatement.getBoundSql(parameter);
 			String countSql = PagerUtils.count(boundSql.getSql(), dbType);
 			countBoundSql = new BoundSql(countMappedStatement.getConfiguration(), countSql,
 					boundSql.getParameterMappings(), parameter);

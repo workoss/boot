@@ -19,6 +19,11 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
+/**
+ * ID 基础类
+ *
+ * @author workoss
+ */
 @Data
 public class IdEntity {
 

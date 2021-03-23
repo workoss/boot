@@ -17,6 +17,8 @@ package com.workoss.boot.storage.model;
 
 /**
  * 三方服务商
+ *
+ * @author workoss
  */
 public enum ThirdPlatformType {
 

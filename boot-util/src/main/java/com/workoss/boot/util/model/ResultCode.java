@@ -15,9 +15,25 @@
  */
 package com.workoss.boot.util.model;
 
+/**
+ * 全局状态
+ *
+ * @author workoss
+ */
 public enum ResultCode {
 
-	SUCCESS("0", "OK"), VALID_ERROR("-1", "参数校验错误"), SERVER_ERROR("-2", "服务异常");
+	/**
+	 * 正常状态
+	 */
+	SUCCESS("0", "OK"),
+	/**
+	 * 校验参数错误
+	 */
+	VALID_ERROR("-1", "参数校验错误"),
+	/**
+	 * 服务异常
+	 */
+	SERVER_ERROR("-2", "服务异常");
 
 	private String code;
 

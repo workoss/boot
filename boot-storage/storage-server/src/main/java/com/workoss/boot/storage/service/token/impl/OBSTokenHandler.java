@@ -44,6 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 @Component
 public class OBSTokenHandler extends AbstractTokenHandler {
 

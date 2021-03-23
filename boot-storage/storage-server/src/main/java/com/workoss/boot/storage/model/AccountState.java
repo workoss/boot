@@ -15,8 +15,20 @@
  */
 package com.workoss.boot.storage.model;
 
+/**
+ * 账号状态
+ *
+ * @author workoss
+ */
 public enum AccountState {
 
-	ON, OFF;
+	/**
+	 * 账号启用
+	 */
+	ON,
+	/**
+	 * 账号关闭
+	 */
+	OFF;
 
 }
