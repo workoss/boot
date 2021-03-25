@@ -52,7 +52,7 @@ public interface CrudDao<T, ID> {
 	List<T> selectSelective(@Param("record") T record);
 
 	/**
-	 * 分页查询
+	 * 分页查询 需要结合拦截器使用
 	 * @param record 对象
 	 * @return page
 	 */
