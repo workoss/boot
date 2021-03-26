@@ -94,7 +94,7 @@
 		<protostuff.version>1.7.2</protostuff.version>
 		<liquibase.version>4.3.1</liquibase.version>
 
-		<caffeine.version>2.9.0</caffeine.version>
+		<caffeine.version>3.0.1</caffeine.version>
 
 		<fastsql.version>2.0.0_preview_973</fastsql.version>
 
