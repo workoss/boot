@@ -29,6 +29,9 @@ public enum ThirdPlatformType {
 	/**
 	 * 华为云OBS
 	 */
-	OBS
-
+	OBS,
+	/**
+	 * 腾讯云COS
+	 */
+	COS
 }

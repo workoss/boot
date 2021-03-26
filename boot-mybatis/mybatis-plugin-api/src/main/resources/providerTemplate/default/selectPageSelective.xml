@@ -1,0 +1,18 @@
+<script>
+	<![CDATA[ <script> ]]>
+	select
+	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
+		${columnName} as ${tableColumnInfo.propertyNames[index]}
+	</foreach>
+	from ${tableColumnInfo.tableName}
+	<![CDATA[ <where> ]]>
+	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator="">
+		<![CDATA[
+             <if test="record.${propertyName} != null">
+              and ${tableColumnInfo.columnNames[index]} = #@{record.${propertyName}}
+            </if>
+        ]]>
+	</foreach>
+	<![CDATA[ </where> ]]>
+	<![CDATA[ </script> ]]>
+</script>
