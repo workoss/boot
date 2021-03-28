@@ -130,7 +130,7 @@ public interface StorageClient {
 	 * 下载 sts 不能使用
 	 * @param key 文件key
 	 * @param consumer 事件监听
-	 * @return
+	 * @return 文件对象
 	 */
 	StorageFileInfo downloadWithSign(@NonNull String key, @Nullable Consumer<StorageProgressEvent> consumer);
 
@@ -164,7 +164,7 @@ public interface StorageClient {
 	 * @param sourceKeyWithoutBasePath 源key
 	 * @param destinationKeyWithoutBasePath 目标key
 	 * @param userMetaData 用户属性
-	 * @return
+	 * @return 文件对象
 	 */
 	StorageFileInfo copyObject(@NonNull String sourceKeyWithoutBasePath, @NonNull String destinationKeyWithoutBasePath,
 			@Nullable Map<String, String> userMetaData);
@@ -180,7 +180,7 @@ public interface StorageClient {
 	 * @param key 文件名称 包括 路径
 	 * @param mimeType 文件类型 text/plain 为空 则根据key自动获取
 	 * @param successActionStatus 可以为空 为空 则web form上传 无字段success_action_status
-	 * @return
+	 * @return 文件对象
 	 */
 	StorageSignature generateWebUploadSign(@NonNull String key, @Nullable String mimeType,
 			@Nullable String successActionStatus);

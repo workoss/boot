@@ -41,7 +41,7 @@ public interface BaseDao<T, ID> {
 	/**
 	 * 执行修改
 	 * @param sql
-	 * @return
+	 * @return 执行成功行数
 	 */
 	@UpdateProvider(type = BaseProvider.class, method = "executeUpdate")
 	int executeUpdate(@Param("sql") String sql);

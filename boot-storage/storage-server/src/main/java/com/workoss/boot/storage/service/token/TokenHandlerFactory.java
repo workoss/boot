@@ -52,8 +52,9 @@ public class TokenHandlerFactory implements ApplicationContextAware, Initializin
 			TOKEN_HANDLER_CACHE.put(tokenHandler.getName(), tokenHandler);
 			log.info("[TOKEN_HANDLER] 新增handler {}: {}", tokenHandler.getName(), tokenHandler.toString());
 		});
-
 	}
+
+
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

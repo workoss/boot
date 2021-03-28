@@ -34,4 +34,5 @@ public enum ThirdPlatformType {
 	 * 腾讯云COS
 	 */
 	COS
+
 }

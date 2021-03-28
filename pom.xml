@@ -4,7 +4,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>${revision}</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-dependencies</module>
@@ -22,11 +22,13 @@
 		<!--		<module>boot-http</module>-->
 	</modules>
 	<properties>
+		<revision>1.1.0-SNAPSHOT</revision>
 		<maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.27</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.0.rc2</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
 		<git-commit-id-plugin.version>4.0.3</git-commit-id-plugin.version>
+		<flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
@@ -100,6 +102,20 @@
 				<configuration>
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<version>${flatten-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>flatten-clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -25,20 +25,20 @@ public interface ExtensionFactory {
 
 	/**
 	 * getExtension
-	 * @param tClass
-	 * @param alias
-	 * @param <T>
-	 * @return
+	 * @param tClass 类
+	 * @param alias 别名
+	 * @param <T> 泛型
+	 * @return 实例化
 	 */
 	<T> T getExtension(Class<T> tClass, String alias);
 
 	/**
 	 * getExtension
-	 * @param tClass
-	 * @param alias
-	 * @param listener
-	 * @param <T>
-	 * @return
+	 * @param tClass 类
+	 * @param alias 别称
+	 * @param listener 监听器
+	 * @param <T> 泛型
+	 * @return 实例化
 	 */
 	<T> T getExtension(Class<T> tClass, String alias, ExtensionLoaderListener<T> listener);
 

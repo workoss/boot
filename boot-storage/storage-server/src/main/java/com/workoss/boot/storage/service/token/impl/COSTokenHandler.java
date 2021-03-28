@@ -10,9 +10,15 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class COSTokenHandler extends AbstractTokenHandler {
+
+	@Override
+	public ThirdPlatformType getName() {
+		return ThirdPlatformType.COS;
+	}
+
 	@Override
 	protected String getAction(String bucketName, String action) {
-		return ThirdPlatformType.COS.name();
+		return null;
 	}
 
 	@Override
@@ -25,23 +31,23 @@ public class COSTokenHandler extends AbstractTokenHandler {
 		return null;
 	}
 
+
 	@Override
-	public ThirdPlatformType getName() {
+	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,
+			String mimeType, String successActionStatus) {
 		return null;
 	}
 
 	@Override
-	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key, String mimeType, String successActionStatus) {
+	public Mono<UploadSign> generateUploadStsSign(Context<String, String> context, String bucketName, String key,
+			String mimeType, String successActionStatus) {
 		return null;
 	}
 
 	@Override
-	public Mono<UploadSign> generateUploadStsSign(Context<String, String> context, String bucketName, String key, String mimeType, String successActionStatus) {
+	public Mono<STSToken> generateStsToken(Context<String, String> context, String bucketName, String key,
+			String action) {
 		return null;
 	}
 
-	@Override
-	public Mono<STSToken> generateStsToken(Context<String, String> context, String bucketName, String key, String action) {
-		return null;
-	}
 }

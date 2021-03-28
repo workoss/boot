@@ -4,7 +4,7 @@
 
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot-parent</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<name>boot-parent</name>
@@ -50,14 +50,15 @@
 	</developers>
 
 	<properties>
+		<revision>1.1.0-SNAPSHOT</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 
 		<jakarta.jakartaee-bom.version>9.1.0-RC1</jakarta.jakartaee-bom.version>
 		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
-		<jakarta.xml.bind-api.version>3.0.0</jakarta.xml.bind-api.version>
-		<com.sun.xml.bind.version>3.0.0</com.sun.xml.bind.version>
+		<jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
+		<com.sun.xml.bind.version>2.3.3</com.sun.xml.bind.version>
 
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.14.1</log4j2.version>
@@ -79,7 +80,7 @@
 		<spring-cloud-dependencies.version>2020.0.2</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.4.5</spring-security-bom.version>
 		<spring-boot-admin.version>2.4.0</spring-boot-admin.version>
-		<spring-data-bom.version>2020.0.6</spring-data-bom.version>
+		<spring-data-bom.version>2021.0.0-M5</spring-data-bom.version>
 
 		<mybatis.version>3.5.6</mybatis.version>
 		<mybatis-spring.version>2.0.6</mybatis-spring.version>
@@ -141,6 +142,7 @@
 		<maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
 		<maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.9.1</maven-site-plugin.version>
+		<flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.27</spring-javaformat-maven-plugin.version>
 		<git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
 		<versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
@@ -151,6 +153,22 @@
 
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-annotation</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-dependencies</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>boot-util</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!--			<dependency>-->
 			<!--				<groupId>jakarta.platform</groupId>-->
@@ -248,6 +266,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
@@ -275,7 +294,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
 
 			<dependency>
 				<groupId>org.springframework.data</groupId>
@@ -904,6 +922,33 @@
 				</plugin>
 
 				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>flatten-maven-plugin</artifactId>
+					<version>${flatten-maven-plugin.version}</version>
+					<configuration>
+<!--						<updatePomFile>true</updatePomFile>-->
+						<flattenMode>resolveCiFriendliesOnly</flattenMode>
+					</configuration>
+					<executions>
+						<execution>
+							<!-- Tidy up all POMs before they are published -->
+							<id>flatten</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>flatten</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>flatten-clean</id>
+							<phase>clean</phase>
+							<goals>
+								<goal>clean</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
 					<groupId>io.spring.javaformat</groupId>
 					<artifactId>spring-javaformat-maven-plugin</artifactId>
 					<version>${spring-javaformat-maven-plugin.version}</version>
@@ -1008,6 +1053,12 @@
 
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>

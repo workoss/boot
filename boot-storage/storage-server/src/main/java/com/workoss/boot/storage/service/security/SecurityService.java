@@ -54,7 +54,7 @@ public interface SecurityService {
 	 * @param storage 基本配置
 	 * @param key 文件key
 	 * @param action 操作
-	 * @return
+	 * @return stsToken签名
 	 */
 	Mono<STSToken> generateStsToken(BaseStorageModel storage, String key, String action);
 

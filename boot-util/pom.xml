@@ -3,7 +3,7 @@
     <parent>
         <artifactId>boot-parent</artifactId>
         <groupId>com.workoss.boot</groupId>
-        <version>1.1.0-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../boot-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -49,12 +49,6 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
             <optional>true</optional>
         </dependency>
-
-		<dependency>
-			<groupId>com.mycila</groupId>
-			<artifactId>license-maven-plugin-git</artifactId>
-			<version>4.0.rc2</version>
-		</dependency>
 
     </dependencies>
 

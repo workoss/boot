@@ -18,7 +18,6 @@ package com.workoss.boot.storage.web.vo;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
