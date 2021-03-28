@@ -147,7 +147,7 @@
 								</exclude>
 							</excludes>
 							<image>
-								<builder>paketobuildpacks/builder:tiny</builder>
+								<builder>paketobuildpacks/builder:base</builder>
 								<env>
 									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
 									<BP_NATIVE_IMAGE_BUILD_ARGUMENTS></BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
