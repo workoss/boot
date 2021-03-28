@@ -12,6 +12,12 @@
 	<artifactId>storage-server</artifactId>
 	<packaging>jar</packaging>
 
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -52,10 +58,7 @@
 			<artifactId>r2dbc-mariadb</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-relational</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
@@ -147,6 +150,7 @@
 								<builder>paketobuildpacks/builder:tiny</builder>
 								<env>
 									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+									<BP_NATIVE_IMAGE_BUILD_ARGUMENTS></BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
 								</env>
 							</image>
 						</configuration>
@@ -155,6 +159,10 @@
 						<groupId>org.springframework.experimental</groupId>
 						<artifactId>spring-aot-maven-plugin</artifactId>
 						<version>0.9.1</version>
+						<configuration>
+							<debugVerify>true</debugVerify>
+							<removeUnusedConfig>true</removeUnusedConfig>
+						</configuration>
 						<executions>
 							<execution>
 								<id>test-generate</id>
@@ -167,6 +175,40 @@
 								<goals>
 									<goal>generate</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>native-image</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.nativeimage</groupId>
+						<artifactId>native-image-maven-plugin</artifactId>
+						<version>21.0.0</version>
+						<configuration>
+							<!-- The native image build needs to know the entry point to your application -->
+							<mainClass>com.workoss.boot.storage.StorageApplication</mainClass>
+							<buildArgs>
+								<!--                                -H:ReflectionConfigurationFiles=classes/reflect-config.json-->
+								<!--                                -H:DynamicProxyConfigurationFiles=classes/proxy-config.json-->
+								-H:+ReportExceptionStackTraces
+								-Dspring.native.remove-jmx-support=true
+								-Dspring.native.remove-xml-support=true
+								-Dspring.spel.ignore=true
+								-Dspring.remove.unused.config=true
+								--enable-https
+							</buildArgs>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>native-image</goal>
+								</goals>
+								<phase>package</phase>
 							</execution>
 						</executions>
 					</plugin>
