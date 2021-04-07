@@ -153,23 +153,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-
-			<dependency>
-				<groupId>com.workoss.boot</groupId>
-				<artifactId>boot-annotation</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.workoss.boot</groupId>
-				<artifactId>boot-dependencies</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.workoss.boot</groupId>
-				<artifactId>boot-util</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
 			<!--			<dependency>-->
 			<!--				<groupId>jakarta.platform</groupId>-->
 			<!--				<artifactId>jakarta.jakartaee-bom</artifactId>-->
@@ -926,7 +909,7 @@
 					<artifactId>flatten-maven-plugin</artifactId>
 					<version>${flatten-maven-plugin.version}</version>
 					<configuration>
-<!--						<updatePomFile>true</updatePomFile>-->
+						<updatePomFile>true</updatePomFile>
 						<flattenMode>resolveCiFriendliesOnly</flattenMode>
 					</configuration>
 					<executions>
