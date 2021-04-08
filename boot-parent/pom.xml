@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.workoss.boot</groupId>
@@ -31,7 +32,7 @@
 	<licenses>
 		<license>
 			<name>The Apache Software License,Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
 
@@ -340,7 +341,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
 
 
 			<dependency>
@@ -819,7 +819,7 @@
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<docencoding>${project.build.sourceEncoding}</docencoding>
 						<links>
-							<link>http://docs.oracle.com/javase/8/docs/api</link>
+							<link>https://docs.oracle.com/javase/8/docs/api</link>
 						</links>
 						<doclint>none</doclint>
 						<doctitle>Boot ${project.version} API</doctitle>
