@@ -52,9 +52,12 @@
 
 	<properties>
 		<revision>1.1.0-SNAPSHOT</revision>
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
 
 		<jakarta.jakartaee-bom.version>9.1.0-RC1</jakarta.jakartaee-bom.version>
 		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
