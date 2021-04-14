@@ -4,6 +4,11 @@ import com.workoss.boot.util.context.MapContext;
 
 import java.util.StringJoiner;
 
+/**
+ * mybatis Sql上下文
+ *
+ * @author workoss
+ */
 @SuppressWarnings("ALL")
 public class SqlContext extends MapContext {
 
