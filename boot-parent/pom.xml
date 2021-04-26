@@ -115,7 +115,7 @@
 		<picocli.version>4.6.1</picocli.version>
 		<feign-bom.version>11.1</feign-bom.version>
 
-		<springdoc-openapi.version>1.5.7</springdoc-openapi.version>
+		<springdoc-openapi.version>1.5.8</springdoc-openapi.version>
 		<druid.version>1.2.6</druid.version>
 		<h2.version>1.4.200</h2.version>
 		<rocksdbjni.version>6.19.3</rocksdbjni.version>
