@@ -44,7 +44,7 @@ public class ExtensionClass<T> implements Sortable {
 	/**
 	 * 是否单例
 	 */
-	protected boolean singleton;
+	protected volatile boolean singleton;
 
 	/**
 	 * 扩展点排序值，大的优先级高
@@ -68,6 +68,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * 构造函数
+	 *
 	 * @param clazz 扩展实现类名
 	 * @param alias 扩展别名
 	 */
@@ -78,6 +79,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * 得到服务端实例对象，如果是单例则返回单例对象，如果不是则返回新创建的实例对象
+	 *
 	 * @return 扩展点对象实例
 	 */
 	public T getExtInstance() {
@@ -86,38 +88,39 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * 得到服务端实例对象，如果是单例则返回单例对象，如果不是则返回新创建的实例对象
+	 *
 	 * @param argTypes 构造函数参数类型
-	 * @param args 构造函数参数值
+	 * @param args     构造函数参数值
 	 * @return 扩展点对象实例 ext instance
 	 */
 	public T getExtInstance(Class[] argTypes, Object[] args) {
-		if (clazz != null) {
-			try {
-				// 如果是单例
-				if (singleton) {
-					if (instance == null) {
-						synchronized (this) {
-							if (instance == null) {
-								instance = ClassUtils.newInstanceWithArgs(clazz, argTypes, args);
-							}
-						}
-					}
-					// 保留单例
-					return instance;
-				}
-				else {
-					return ClassUtils.newInstanceWithArgs(clazz, argTypes, args);
-				}
-			}
-			catch (Exception e) {
-				throw new RuntimeException("create " + clazz.getCanonicalName() + " instance error", e);
-			}
+		if (clazz == null) {
+			throw new RuntimeException("Class of ExtensionClass is null");
 		}
-		throw new RuntimeException("Class of ExtensionClass is null");
+		try {
+			// 如果是单例
+			if (!singleton) {
+				return ClassUtils.newInstanceWithArgs(clazz, argTypes, args);
+			}
+			if (instance != null) {
+				// 保留单例
+				return instance;
+			}
+			synchronized (this) {
+				if (instance == null) {
+					instance = ClassUtils.newInstanceWithArgs(clazz, argTypes, args);
+				}
+			}
+			return instance;
+		} catch (Exception e) {
+			throw new RuntimeException("create " + clazz.getCanonicalName() + " instance error", e);
+		}
+
 	}
 
 	/**
 	 * Gets tag.
+	 *
 	 * @return the tag
 	 */
 	public String getAlias() {
@@ -126,6 +129,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Gets code.
+	 *
 	 * @return the code
 	 */
 	public byte getCode() {
@@ -134,6 +138,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Sets code.
+	 *
 	 * @param code the code
 	 * @return the code
 	 */
@@ -144,6 +149,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Is singleton boolean.
+	 *
 	 * @return the boolean
 	 */
 	public boolean isSingleton() {
@@ -152,6 +158,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Sets singleton.
+	 *
 	 * @param singleton the singleton
 	 */
 	public void setSingleton(boolean singleton) {
@@ -160,6 +167,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Gets clazz.
+	 *
 	 * @return the clazz
 	 */
 	public Class<? extends T> getClazz() {
@@ -168,6 +176,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Gets order.
+	 *
 	 * @return the order
 	 */
 	@Override
@@ -177,6 +186,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Sets order.
+	 *
 	 * @param order the order
 	 * @return the order
 	 */
@@ -187,6 +197,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Is override boolean.
+	 *
 	 * @return the boolean
 	 */
 	public boolean isOverride() {
@@ -195,6 +206,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Sets override.
+	 *
 	 * @param override the override
 	 * @return the override
 	 */
@@ -205,6 +217,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Get rejection string [ ].
+	 *
 	 * @return the string [ ]
 	 */
 	public String[] getRejection() {
@@ -213,6 +226,7 @@ public class ExtensionClass<T> implements Sortable {
 
 	/**
 	 * Sets rejection.
+	 *
 	 * @param rejection the rejection
 	 * @return the rejection
 	 */

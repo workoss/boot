@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.*;
 
 /**
  * http client util
@@ -51,9 +53,9 @@ public class HttpClientUtil implements Closeable {
 
 	private static final Logger log = LoggerFactory.getLogger(HttpClientUtil.class);
 
-	public static PoolingHttpClientConnectionManager cm = null;
+	private static PoolingHttpClientConnectionManager cm = null;
 
-	public static CloseableHttpClient httpClient = null;
+	private static CloseableHttpClient httpClient = null;
 
 	/**
 	 * 默认content 类型
@@ -71,24 +73,34 @@ public class HttpClientUtil implements Closeable {
 
 	private static final int DEFAULT_HTTP_KEEP_TIME = 15000;
 
-	static {
-		initPools();
-	}
+	private final static Object syncLock = new Object(); // 相当于线程锁,用于线程安全
+
 
 	private HttpClientUtil() {
 
 	}
 
-	/**
-	 * 初始化连接池
-	 */
-	public static synchronized void initPools() {
-		if (httpClient == null) {
+
+	private static CloseableHttpClient getHttpClient() {
+		if (httpClient!=null){
+			return httpClient;
+		}
+		synchronized (syncLock){
+			if (httpClient!=null){
+				return httpClient;
+			}
 			cm = new PoolingHttpClientConnectionManager();
 			cm.setDefaultMaxPerRoute(COUNT);
 			cm.setMaxTotal(TOTAL_COUNT);
 			httpClient = HttpClients.custom().setKeepAliveStrategy(defaultStrategy).setConnectionManager(cm).build();
+			Runtime.getRuntime().addShutdownHook(new Thread(){
+				@Override
+				public void run() {
+					cm.shutdown();
+				}
+			});
 		}
+		return httpClient;
 	}
 
 	/**
@@ -116,16 +128,7 @@ public class HttpClientUtil implements Closeable {
 		}
 	};
 
-	public static CloseableHttpClient getHttpClient() {
-		if (httpClient == null) {
-			initPools();
-		}
-		return httpClient;
-	}
 
-	private static PoolingHttpClientConnectionManager getHttpConnectionManager() {
-		return cm;
-	}
 
 	/**
 	 * 执行http post请求 默认采用Content-Type：application/json，Accept：application/json
@@ -283,8 +286,8 @@ public class HttpClientUtil implements Closeable {
 		try {
 			builder = new URIBuilder(path);
 			if (param != null) {
-				for (String key : param.keySet()) {
-					builder.addParameter(key, param.get(key));
+				for (Map.Entry<String,String> keyset : param.entrySet()) {
+					builder.addParameter(keyset.getKey(), keyset.getValue());
 				}
 			}
 			URI uri = builder.build();
@@ -364,9 +367,6 @@ public class HttpClientUtil implements Closeable {
 	public void close() throws IOException {
 		if (httpClient != null) {
 			httpClient.close();
-		}
-		if (cm != null) {
-			cm.close();
 		}
 	}
 

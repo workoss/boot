@@ -15,8 +15,8 @@
  */
 package com.workoss.boot.util;
 
-import org.springframework.lang.Nullable;
-import org.springframework.util.CollectionUtils;
+import com.workoss.boot.annotation.lang.Nullable;
+import com.workoss.boot.util.collection.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -228,7 +228,7 @@ public class StringUtils {
 	}
 
 	public static String[] tokenizeToStringArray(@Nullable String str, String delimiters, boolean trimTokens,
-			boolean ignoreEmptyTokens) {
+												 boolean ignoreEmptyTokens) {
 		if (str == null) {
 			return EMPTY_STRING_ARRAY;
 		}
@@ -298,7 +298,7 @@ public class StringUtils {
 				maskBuilder.append("*");
 			}
 		}
-		return name.replaceAll("(\\D{1})(.*)", "$1" + maskBuilder.toString());
+		return name.replaceAll("(\\D)(.*)", "$1" + maskBuilder.toString());
 	}
 
 	public static String phoneMask(String phone) {

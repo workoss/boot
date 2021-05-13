@@ -99,6 +99,9 @@ public abstract class AbstractTokenHandler implements TokenHandler {
 			policyContext.put("stsToken", stToken);
 		}
 		String policyText = MustacheTemplateUtil.render(policyTemplate, policyContext);
+		if (policyText == null){
+			return null;
+		}
 		String policyBase64 = BaseEncodeUtil.encodeBase64(policyText.getBytes(StandardCharsets.UTF_8));
 
 		UploadSign uploadSign = new UploadSign();

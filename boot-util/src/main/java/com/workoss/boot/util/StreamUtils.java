@@ -61,13 +61,13 @@ public class StreamUtils {
 		if (in == null) {
 			return "";
 		}
-
 		StringBuilder out = new StringBuilder();
-		InputStreamReader reader = new InputStreamReader(in, charset);
-		char[] buffer = new char[BUFFER_SIZE];
-		int bytesRead = -1;
-		while ((bytesRead = reader.read(buffer)) != -1) {
-			out.append(buffer, 0, bytesRead);
+		try (InputStreamReader reader = new InputStreamReader(in, charset)){
+			char[] buffer = new char[BUFFER_SIZE];
+			int bytesRead = -1;
+			while ((bytesRead = reader.read(buffer)) != -1) {
+				out.append(buffer, 0, bytesRead);
+			}
 		}
 		return out.toString();
 	}
@@ -125,9 +125,10 @@ public class StreamUtils {
 		Assert.notNull(charset, "No Charset specified");
 		Assert.notNull(out, "No OutputStream specified");
 
-		Writer writer = new OutputStreamWriter(out, charset);
-		writer.write(in);
-		writer.flush();
+		try (Writer writer = new OutputStreamWriter(out, charset)){
+			writer.write(in);
+			writer.flush();
+		}
 	}
 
 	/**
@@ -179,7 +180,7 @@ public class StreamUtils {
 		}
 
 		long bytesToCopy = end - start + 1;
-		byte[] buffer = new byte[(int) Math.min(org.springframework.util.StreamUtils.BUFFER_SIZE, bytesToCopy)];
+		byte[] buffer = new byte[(int) Math.min(StreamUtils.BUFFER_SIZE, bytesToCopy)];
 		while (bytesToCopy > 0) {
 			int bytesRead = in.read(buffer);
 			if (bytesRead == -1) {
