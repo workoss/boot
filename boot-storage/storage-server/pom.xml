@@ -110,18 +110,19 @@
 			<artifactId>mapstruct-jdk8</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.experimental</groupId>
-			<artifactId>spring-native</artifactId>
-			<version>0.9.2</version>
-		</dependency>
-
 	</dependencies>
 
 
 	<profiles>
 		<profile>
 			<id>native</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.experimental</groupId>
+					<artifactId>spring-native</artifactId>
+					<version>0.9.2</version>
+				</dependency>
+			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
