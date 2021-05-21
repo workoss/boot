@@ -80,7 +80,7 @@
 		<aspectj.version>1.9.6</aspectj.version>
 
 		<spring.version>5.3.7</spring.version>
-		<spring-boot.version>2.4.5</spring-boot.version>
+		<spring-boot.version>2.5.0</spring-boot.version>
 		<spring-cloud-dependencies.version>2020.0.2</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.5.0</spring-security-bom.version>
 		<spring-boot-admin.version>2.4.1</spring-boot-admin.version>
