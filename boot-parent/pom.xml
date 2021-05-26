@@ -961,30 +961,49 @@
 					<version>${git-commit-id-plugin.version}</version>
 					<executions>
 						<execution>
+							<id>get-the-git-infos</id>
 							<goals>
 								<goal>revision</goal>
 							</goals>
+							<!-- *NOTE*: The default phase of revision is initialize, but in case you want to
+                                     change it, you can do so by adding the phase here -->
+							<phase>initialize</phase>
+						</execution>
+						<execution>
+							<id>validate-the-git-infos</id>
+							<goals>
+								<goal>validateRevision</goal>
+							</goals>
+							<!-- *NOTE*: The default phase of validateRevision is verify, but in case you want to
+										 change it, you can do so by adding the phase here -->
+							<phase>package</phase>
 						</execution>
 					</executions>
 					<configuration>
-						<!-- 指定git信息文件是否生成。缺失则默认为false -->
-						<generateGitPropertiesFile>true</generateGitPropertiesFile>
 						<!-- 指定.git文件夹路径。缺失则默认为${project.basedir}/.git -->
 						<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-						<!-- 指定git信息文件的输出路径 -->
-						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.json
-						</generateGitPropertiesFilename>
-						<!-- <generateGitPropertiesFilename>${project.basedir}/git.json</generateGitPropertiesFilename> -->
-						<!-- 指定git信息文件的输出格式。缺失则默认为properties -->
-						<format>json</format>
-						<!-- 指定当.git文件夹未找到时，构建是否失败。若设置true，则构建失败，若设置false，则跳过执行该构建步骤。缺失则默认为true -->
-						<failOnNoGitDirectory>true</failOnNoGitDirectory>
-						<!-- 指定当项目打包类型为pom时，是否取消构建。缺失则默认为true -->
-						<skipPoms>false</skipPoms>
+						<prefix>git</prefix>
+						<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+						<dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
+						<!-- 指定git信息文件是否生成。缺失则默认为false -->
+						<generateGitPropertiesFile>true</generateGitPropertiesFile>
 						<!-- 指定构建过程中，是否打印详细信息。缺失则默认为false -->
 						<verbose>false</verbose>
-						<dateFormat>yyyyMMdd</dateFormat>
-						<!-- <dateFormat>yyyy-MM-dd-HH:mm:ss</dateFormat> -->
+						<!-- 指定git信息文件的输出路径 -->
+						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+						<!-- <generateGitPropertiesFilename>${project.basedir}/git.json</generateGitPropertiesFilename> -->
+						<!-- 指定git信息文件的输出格式。缺失则默认为properties -->
+						<format>properties</format>
+						<!-- 指定当项目打包类型为pom时，是否取消构建。缺失则默认为true -->
+						<skipPoms>true</skipPoms>
+						<injectAllReactorProjects>false</injectAllReactorProjects>
+						<!-- 指定当.git文件夹未找到时，构建是否失败。若设置true，则构建失败，若设置false，则跳过执行该构建步骤。缺失则默认为true -->
+						<failOnNoGitDirectory>true</failOnNoGitDirectory>
+						<failOnUnableToExtractRepoInfo>true</failOnUnableToExtractRepoInfo>
+						<skip>false</skip>
+						<offline>false</offline>
+						<runOnlyOnce>false</runOnlyOnce>
+
 					</configuration>
 				</plugin>
 
@@ -1070,6 +1089,10 @@
 			</distributionManagement>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>pl.project13.maven</groupId>
+						<artifactId>git-commit-id-plugin</artifactId>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-release-plugin</artifactId>
