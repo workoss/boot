@@ -73,25 +73,23 @@ public class HttpUtil implements Closeable {
 
 	private final static Object syncLock = new Object(); // 相当于线程锁,用于线程安全
 
-
 	private HttpUtil() {
 
 	}
 
-
 	private static CloseableHttpClient getHttpClient() {
-		if (httpClient!=null){
+		if (httpClient != null) {
 			return httpClient;
 		}
-		synchronized (syncLock){
-			if (httpClient!=null){
+		synchronized (syncLock) {
+			if (httpClient != null) {
 				return httpClient;
 			}
 			cm = new PoolingHttpClientConnectionManager();
 			cm.setDefaultMaxPerRoute(COUNT);
 			cm.setMaxTotal(TOTAL_COUNT);
 			httpClient = HttpClients.custom().setKeepAliveStrategy(defaultStrategy).setConnectionManager(cm).build();
-			Runtime.getRuntime().addShutdownHook(new Thread(){
+			Runtime.getRuntime().addShutdownHook(new Thread() {
 				@Override
 				public void run() {
 					cm.shutdown();
@@ -125,8 +123,6 @@ public class HttpUtil implements Closeable {
 			return keepTime * 1000;
 		}
 	};
-
-
 
 	/**
 	 * 执行http post请求 默认采用Content-Type：application/json，Accept：application/json
@@ -284,7 +280,7 @@ public class HttpUtil implements Closeable {
 		try {
 			builder = new URIBuilder(path);
 			if (param != null) {
-				for (Map.Entry<String,String> keyset : param.entrySet()) {
+				for (Map.Entry<String, String> keyset : param.entrySet()) {
 					builder.addParameter(keyset.getKey(), keyset.getValue());
 				}
 			}
@@ -369,7 +365,7 @@ public class HttpUtil implements Closeable {
 	}
 
 	public static void main(String[] args) {
-		boolean check = checkUrlIsValid("https://oss-cn-shenzhen.aliyuncs.com",200);
+		boolean check = checkUrlIsValid("https://oss-cn-shenzhen.aliyuncs.com", 200);
 		System.out.println(check);
 	}
 

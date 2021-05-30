@@ -30,14 +30,14 @@ public class StreamUtils {
 
 	public static final byte[] EMPTY_CONTENT = new byte[0];
 
-
-	public static void close(Closeable closeable){
-		if (closeable==null){
+	public static void close(Closeable closeable) {
+		if (closeable == null) {
 			return;
 		}
 		try {
 			closeable.close();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -74,7 +74,7 @@ public class StreamUtils {
 			return "";
 		}
 		StringBuilder out = new StringBuilder();
-		try (InputStreamReader reader = new InputStreamReader(in, charset)){
+		try (InputStreamReader reader = new InputStreamReader(in, charset)) {
 			char[] buffer = new char[BUFFER_SIZE];
 			int bytesRead = -1;
 			while ((bytesRead = reader.read(buffer)) != -1) {
@@ -137,7 +137,7 @@ public class StreamUtils {
 		Assert.notNull(charset, "No Charset specified");
 		Assert.notNull(out, "No OutputStream specified");
 
-		try (Writer writer = new OutputStreamWriter(out, charset)){
+		try (Writer writer = new OutputStreamWriter(out, charset)) {
 			writer.write(in);
 			writer.flush();
 		}

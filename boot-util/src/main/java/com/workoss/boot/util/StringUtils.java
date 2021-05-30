@@ -228,7 +228,7 @@ public class StringUtils {
 	}
 
 	public static String[] tokenizeToStringArray(@Nullable String str, String delimiters, boolean trimTokens,
-												 boolean ignoreEmptyTokens) {
+			boolean ignoreEmptyTokens) {
 		if (str == null) {
 			return EMPTY_STRING_ARRAY;
 		}

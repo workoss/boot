@@ -74,7 +74,7 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 			response.getHeaders().add(HttpHeaders.DATE, DateUtils.getCurrentDateTime("yyyy-MM-dd HH:mm:ss.SSS"));
 			return Mono.empty();
 		});
-		if (exchange.getResponse() == null){
+		if (exchange.getResponse() == null) {
 			return Mono.empty();
 		}
 		if (HttpStatus.OK.value() != exchange.getResponse().getRawStatusCode()) {

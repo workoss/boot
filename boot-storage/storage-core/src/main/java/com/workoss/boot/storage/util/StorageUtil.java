@@ -111,7 +111,8 @@ public class StorageUtil {
 		return String.format("%s:%s", action, key);
 	}
 
-	public static StorageStsToken requestSTSToken(StorageHttpFunction httpFunc, StorageClientConfig config, String key, String action) {
+	public static StorageStsToken requestSTSToken(StorageHttpFunction httpFunc, StorageClientConfig config, String key,
+			String action) {
 		String url = formatTokenUrl(config.getTokenUrl()) + "/security/ststoken";
 		String paramJson = StorageUtil.buildStsTokenParam(config, key, action);
 		return request(url, paramJson, httpFunc, jsonNode -> {
@@ -128,8 +129,8 @@ public class StorageUtil {
 
 	}
 
-	public static StorageSignature requestSign(StorageHttpFunction httpFunc, StorageClientConfig config, String key, String mimeType,
-										   String successActionStatus) {
+	public static StorageSignature requestSign(StorageHttpFunction httpFunc, StorageClientConfig config, String key,
+			String mimeType, String successActionStatus) {
 		String url = formatTokenUrl(config.getTokenUrl()) + "/security/stssign";
 		String paramJson = StorageUtil.buildSignatureParam(config, key, mimeType, successActionStatus);
 		StorageSignature signature = request(url, paramJson, httpFunc, jsonNode -> {
@@ -149,8 +150,8 @@ public class StorageUtil {
 		return signature;
 	}
 
-
-	public static <T> T request(String url, String body, StorageHttpFunction httpFunc, Function<JsonNode, T> resultFun) {
+	public static <T> T request(String url, String body, StorageHttpFunction httpFunc,
+			Function<JsonNode, T> resultFun) {
 		Map<String, String> header = new HashMap<>();
 		header.put("X-SDK-CLIENT", "popeye");
 		String resp = httpFunc.apply(url, body, header);
@@ -168,7 +169,6 @@ public class StorageUtil {
 		return resultFun.apply(jsonNode);
 	}
 
-
 	private static String formatTokenUrl(String tokenUrl) {
 		if (tokenUrl.endsWith(SLASH)) {
 			tokenUrl = tokenUrl.substring(0, tokenUrl.length() - 1);
@@ -181,21 +181,17 @@ public class StorageUtil {
 		return String.format(paramJson, (config.getTenentId() == null ? StringUtils.EMPTY : config.getTenentId()),
 				(config.getStorageType() == null ? StringUtils.EMPTY : config.getStorageType().name()),
 				(config.getBucketName() == null ? StringUtils.EMPTY : config.getBucketName()),
-				(action == null ? StringUtils.EMPTY : action),
-				(key == null ? StringUtils.EMPTY : key)
-		);
+				(action == null ? StringUtils.EMPTY : action), (key == null ? StringUtils.EMPTY : key));
 	}
 
 	public static String buildSignatureParam(StorageClientConfig config, String key, String mimeType,
-											 String successActionStatus) {
+			String successActionStatus) {
 		String paramJson = "{\"tenentId\": \"%s\", \"storageType\": \"%s\", \"bucketName\": \"%s\", \"key\": \"%s\", \"mimeType\": \"%s\", \"successActionStatus\": \"%s\"}";
 		return String.format(paramJson, (config.getTenentId() == null ? StringUtils.EMPTY : config.getTenentId()),
 				(config.getStorageType() == null ? StringUtils.EMPTY : config.getStorageType().name()),
 				(config.getBucketName() == null ? StringUtils.EMPTY : config.getBucketName()),
-				(key == null ? StringUtils.EMPTY : key),
-				(mimeType == null ? StringUtils.EMPTY : mimeType),
-				(successActionStatus == null ? StringUtils.EMPTY : successActionStatus)
-		);
+				(key == null ? StringUtils.EMPTY : key), (mimeType == null ? StringUtils.EMPTY : mimeType),
+				(successActionStatus == null ? StringUtils.EMPTY : successActionStatus));
 	}
 
 }

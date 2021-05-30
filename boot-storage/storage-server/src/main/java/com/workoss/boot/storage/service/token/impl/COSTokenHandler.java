@@ -46,7 +46,6 @@ public class COSTokenHandler extends AbstractTokenHandler {
 		return null;
 	}
 
-
 	@Override
 	public Mono<UploadSign> generateUploadSign(Context<String, String> context, String bucketName, String key,
 			String mimeType, String successActionStatus) {

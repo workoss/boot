@@ -121,15 +121,9 @@ public class StorageFileInfo {
 
 	@Override
 	public String toString() {
-		return "StorageFileInfo{" +
-				"bucketName='" + bucketName + '\'' +
-				", key='" + key + '\'' +
-				", host='" + host + '\'' +
-				", metaData=" + metaData +
-				", content=" + content +
-				", eTag='" + eTag + '\'' +
-				", lastModified=" + lastModified +
-				", size=" + size +
-				'}';
+		return "StorageFileInfo{" + "bucketName='" + bucketName + '\'' + ", key='" + key + '\'' + ", host='" + host
+				+ '\'' + ", metaData=" + metaData + ", content=" + content + ", eTag='" + eTag + '\''
+				+ ", lastModified=" + lastModified + ", size=" + size + '}';
 	}
+
 }

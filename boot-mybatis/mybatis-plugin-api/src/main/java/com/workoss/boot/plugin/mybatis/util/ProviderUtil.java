@@ -133,7 +133,7 @@ public class ProviderUtil {
 					.filter(path -> subPatternLazy.get().matches(path)).forEach(path -> {
 						String dbType = path.getParent().getFileName().toString();
 						String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
-						try(FileInputStream fileInputStream = new FileInputStream(path.toFile())) {
+						try (FileInputStream fileInputStream = new FileInputStream(path.toFile())) {
 							readAndAddCache(dbType, methodName, fileInputStream);
 						}
 						catch (Exception e) {
