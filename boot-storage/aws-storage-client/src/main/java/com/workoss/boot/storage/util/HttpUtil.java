@@ -40,8 +40,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.TimerTask;
-import java.util.concurrent.*;
 
 /**
  * http client util
@@ -49,9 +47,9 @@ import java.util.concurrent.*;
  * @author workoss
  **/
 @SuppressWarnings("ALL")
-public class HttpClientUtil implements Closeable {
+public class HttpUtil implements Closeable {
 
-	private static final Logger log = LoggerFactory.getLogger(HttpClientUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
 
 	private static PoolingHttpClientConnectionManager cm = null;
 
@@ -76,7 +74,7 @@ public class HttpClientUtil implements Closeable {
 	private final static Object syncLock = new Object(); // 相当于线程锁,用于线程安全
 
 
-	private HttpClientUtil() {
+	private HttpUtil() {
 
 	}
 
@@ -368,6 +366,11 @@ public class HttpClientUtil implements Closeable {
 		if (httpClient != null) {
 			httpClient.close();
 		}
+	}
+
+	public static void main(String[] args) {
+		boolean check = checkUrlIsValid("https://oss-cn-shenzhen.aliyuncs.com",200);
+		System.out.println(check);
 	}
 
 }

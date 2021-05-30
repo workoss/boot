@@ -1,36 +1,19 @@
-/*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.workoss.boot.storage.client;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.workoss.boot.storage.config.StorageClientConfig;
 import com.workoss.boot.storage.model.StorageSignature;
 import com.workoss.boot.storage.model.StorageStsToken;
 import com.workoss.boot.storage.model.StorageType;
 import com.workoss.boot.storage.util.HttpUtil;
 import com.workoss.boot.util.StringUtils;
+import io.minio.MinioClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 阿里云OSS 对象存储
- *
- * @author workoss
+ * 阿里云 OSS 对象存储
  */
 @SuppressWarnings("ALL")
 public class OSSClient extends AbstractS3Client {
@@ -52,8 +35,10 @@ public class OSSClient extends AbstractS3Client {
 		checkEndpointUrl(config.getEndpoint());
 	}
 
+
+
 	@Override
-	protected AmazonS3 createClient(StorageClientConfig config, StorageStsToken stsToken) {
+	protected MinioClient createClient(StorageClientConfig config, StorageStsToken stsToken) {
 		// endpoint 是否可以联通内网
 		String endpoint = config.getEndpoint();
 		if (!AVAIABLE_ENDPOINT.containsKey(endpoint)) {
@@ -62,6 +47,17 @@ public class OSSClient extends AbstractS3Client {
 		}
 		return createS3Client(config, endpoint, stsToken);
 	}
+
+	@Override
+	protected StorageStsToken getStsToken(StorageClientConfig config, String key, String action) {
+		return requestSTSToken(config,key,action);
+	}
+
+	@Override
+	protected StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType, String successActionStatus) {
+		return requestSign(config,key,mimeType,successActionStatus);
+	}
+
 
 	private void checkEndpointUrl(String endpoint) {
 		new Thread(() -> {
@@ -88,16 +84,4 @@ public class OSSClient extends AbstractS3Client {
 			log.info("【STORAGE】OSS 地址:{} 内网不可达，使用配置endpoint", endpoint);
 		}
 	}
-
-	@Override
-	protected StorageStsToken getStsToken(StorageClientConfig config, String key, String action) {
-		return requestSTSToken(config, key, action);
-	}
-
-	@Override
-	protected StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
-			String successActionStatus) {
-		return requestSign(config, key, mimeType, successActionStatus);
-	}
-
 }

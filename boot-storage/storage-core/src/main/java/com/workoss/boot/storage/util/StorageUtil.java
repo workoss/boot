@@ -15,7 +15,19 @@
  */
 package com.workoss.boot.storage.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.workoss.boot.storage.config.StorageClientConfig;
+import com.workoss.boot.storage.exception.StorageException;
+import com.workoss.boot.storage.model.StorageSignature;
+import com.workoss.boot.storage.model.StorageStsToken;
+import com.workoss.boot.util.Assert;
 import com.workoss.boot.util.StringUtils;
+import com.workoss.boot.util.json.JsonMapper;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 对象存储工具类
@@ -58,6 +70,132 @@ public class StorageUtil {
 	public static String replaceStartEndSlash(String url) {
 		url = replaceEndSlash(url);
 		return replaceStartSlash(url);
+	}
+
+	public static String formatHost(StorageClientConfig conf) {
+		if (StringUtils.isNotBlank(conf.getDomain())) {
+			return conf.getDomain();
+		}
+		String endpoint = conf.getEndpoint();
+		URI uri = URI.create(endpoint);
+		return String.format("%s://%s.%s%s", uri.getScheme(), conf.getBucketName(), uri.getHost(), uri.getPath());
+	}
+
+	public static String formatKey(String basePath, String key, boolean isDir) {
+		Assert.hasLength(key, "key不能为空");
+		URI uri = URI.create(key);
+		// 去掉域名host
+		key = uri.getPath().replaceAll(StorageUtil.DOUBLE_SLASH, StorageUtil.SLASH);
+		// 开始/去掉
+		key = StorageUtil.replaceStartEndSlash(key);
+		// 传入完整url 并且path以 basePath 开头， 需要去除
+		if (StringUtils.isNotBlank(uri.getHost())) {
+			StringBuilder stringBuilder = new StringBuilder(key);
+			if (isDir) {
+				stringBuilder.append(StorageUtil.SLASH);
+			}
+			return stringBuilder.toString();
+		}
+		if (StringUtils.isBlank(basePath)) {
+			return key;
+		}
+		StringBuilder stringBuilder = new StringBuilder(basePath).append(StorageUtil.SLASH).append(key);
+		if (isDir) {
+			stringBuilder.append(StorageUtil.SLASH);
+		}
+		return stringBuilder.toString();
+	}
+
+	public static String generateCacheKey(String action, String key) {
+		Assert.hasLength(action, "action不能为空");
+		return String.format("%s:%s", action, key);
+	}
+
+	public static StorageStsToken requestSTSToken(StorageHttpFunction httpFunc, StorageClientConfig config, String key, String action) {
+		String url = formatTokenUrl(config.getTokenUrl()) + "/security/ststoken";
+		String paramJson = StorageUtil.buildStsTokenParam(config, key, action);
+		return request(url, paramJson, httpFunc, jsonNode -> {
+			JsonNode dataNode = jsonNode.get("data");
+			StorageStsToken stsToken = JsonMapper.convertValue(jsonNode.get("data"), StorageStsToken.class);
+			boolean check = StringUtils.isNotBlank(stsToken.getAccessKey())
+					&& StringUtils.isNotBlank(stsToken.getSecretKey()) && StringUtils.isNotBlank(stsToken.getStsToken())
+					&& stsToken.getExpiration() != null;
+			if (!check) {
+				throw new StorageException("00001", "返回结果不正常");
+			}
+			return stsToken;
+		});
+
+	}
+
+	public static StorageSignature requestSign(StorageHttpFunction httpFunc, StorageClientConfig config, String key, String mimeType,
+										   String successActionStatus) {
+		String url = formatTokenUrl(config.getTokenUrl()) + "/security/stssign";
+		String paramJson = StorageUtil.buildSignatureParam(config, key, mimeType, successActionStatus);
+		StorageSignature signature = request(url, paramJson, httpFunc, jsonNode -> {
+			StorageSignature storageSignature = JsonMapper.convertValue(jsonNode.get("data"), StorageSignature.class);
+			boolean check = StringUtils.isNotBlank(storageSignature.getAccessKey())
+					&& StringUtils.isNotBlank(storageSignature.getSignature())
+					&& StringUtils.isNotBlank(storageSignature.getPolicy());
+			if (!check) {
+				throw new StorageException("00001", "返回结果不正常");
+			}
+			// config 设置了domain 覆盖
+			if (StringUtils.isNotBlank(config.getDomain())) {
+				storageSignature.setHost(config.getDomain());
+			}
+			return storageSignature;
+		});
+		return signature;
+	}
+
+
+	public static <T> T request(String url, String body, StorageHttpFunction httpFunc, Function<JsonNode, T> resultFun) {
+		Map<String, String> header = new HashMap<>();
+		header.put("X-SDK-CLIENT", "popeye");
+		String resp = httpFunc.apply(url, body, header);
+		if (StringUtils.isBlank(resp)) {
+			throw new StorageException("00001", "请求:" + url + "失败");
+		}
+		JsonNode jsonNode = JsonMapper.parse(resp);
+		if (!jsonNode.has("code") || !jsonNode.has("data")) {
+			throw new StorageException(resp);
+		}
+		String code = jsonNode.get("code").asText();
+		if (!"0".equalsIgnoreCase(code)) {
+			throw new StorageException(code, jsonNode.has("message") ? jsonNode.get("message").asText() : null);
+		}
+		return resultFun.apply(jsonNode);
+	}
+
+
+	private static String formatTokenUrl(String tokenUrl) {
+		if (tokenUrl.endsWith(SLASH)) {
+			tokenUrl = tokenUrl.substring(0, tokenUrl.length() - 1);
+		}
+		return tokenUrl;
+	}
+
+	public static String buildStsTokenParam(StorageClientConfig config, String key, String action) {
+		String paramJson = "{\"tenentId\": \"%s\", \"storageType\": \"%s\", \"bucketName\": \"%s\", \"action\": \"%s\", \"key\": \"%s\"}";
+		return String.format(paramJson, (config.getTenentId() == null ? StringUtils.EMPTY : config.getTenentId()),
+				(config.getStorageType() == null ? StringUtils.EMPTY : config.getStorageType().name()),
+				(config.getBucketName() == null ? StringUtils.EMPTY : config.getBucketName()),
+				(action == null ? StringUtils.EMPTY : action),
+				(key == null ? StringUtils.EMPTY : key)
+		);
+	}
+
+	public static String buildSignatureParam(StorageClientConfig config, String key, String mimeType,
+											 String successActionStatus) {
+		String paramJson = "{\"tenentId\": \"%s\", \"storageType\": \"%s\", \"bucketName\": \"%s\", \"key\": \"%s\", \"mimeType\": \"%s\", \"successActionStatus\": \"%s\"}";
+		return String.format(paramJson, (config.getTenentId() == null ? StringUtils.EMPTY : config.getTenentId()),
+				(config.getStorageType() == null ? StringUtils.EMPTY : config.getStorageType().name()),
+				(config.getBucketName() == null ? StringUtils.EMPTY : config.getBucketName()),
+				(key == null ? StringUtils.EMPTY : key),
+				(mimeType == null ? StringUtils.EMPTY : mimeType),
+				(successActionStatus == null ? StringUtils.EMPTY : successActionStatus)
+		);
 	}
 
 }

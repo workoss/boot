@@ -54,6 +54,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
+				<artifactId>minio-storage-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
 				<artifactId>storage-client-spring-boot-starter</artifactId>
 				<version>${project.version}</version>
 			</dependency>

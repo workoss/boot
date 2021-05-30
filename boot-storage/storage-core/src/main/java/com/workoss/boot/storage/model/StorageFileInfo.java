@@ -40,6 +40,10 @@ public class StorageFileInfo {
 
 	private Long lastModified;
 
+	private Long size;
+
+	private String owner;
+
 	public StorageFileInfo() {
 	}
 
@@ -99,11 +103,33 @@ public class StorageFileInfo {
 		this.lastModified = lastModified;
 	}
 
-	@Override
-	public String toString() {
-		return "StorageFileInfo{" + "bucketName='" + bucketName + '\'' + ", key='" + key + '\'' + ", host='" + host
-				+ '\'' + ", metaData=" + metaData + ", content=" + content + ", eTag='" + eTag + '\''
-				+ ", lastModified=" + lastModified + '}';
+	public Long getSize() {
+		return size;
 	}
 
+	public void setSize(Long size) {
+		this.size = size;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	@Override
+	public String toString() {
+		return "StorageFileInfo{" +
+				"bucketName='" + bucketName + '\'' +
+				", key='" + key + '\'' +
+				", host='" + host + '\'' +
+				", metaData=" + metaData +
+				", content=" + content +
+				", eTag='" + eTag + '\'' +
+				", lastModified=" + lastModified +
+				", size=" + size +
+				'}';
+	}
 }

@@ -68,12 +68,12 @@ class StorageTempalteTest {
 		// minioClient.getObject(GetObjectArgs.builder().bucket("yf-res-te").object("index.html").build());
 		// System.out.println(objectResponse.headers());
 
-		// File file = new File("/home/workoss/oss_ram.png");
-		// InputStream inputStream = new FileInputStream(file);
-		// ObjectWriteResponse putResponse
-		// =minioClient.putObject(PutObjectArgs.builder().bucket("workoss").contentType("image/png").object("demo/ram1.png").stream(inputStream,
-		// file.length(), 0).build());
-		// System.out.println(putResponse.headers().toMultimap());
+//		 File file = new File("/home/workoss/oss_ram.png");
+//		 InputStream inputStream = new FileInputStream(file);
+//		 ObjectWriteResponse putResponse
+//		 =minioClient.putObject(PutObjectArgs.builder().bucket("workoss").contentType("image/png").object("demo/ram1.png").stream(inputStream,
+//		 file.length(), 0).build());
+//		 System.out.println(putResponse.headers().toMultimap());
 
 		// minioClient.downloadObject(DownloadObjectArgs.builder().bucket("workoss").object("demo/ram1.png").filename("/home/workoss/down-ram.png").build());
 

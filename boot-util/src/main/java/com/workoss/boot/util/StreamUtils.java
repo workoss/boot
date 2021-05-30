@@ -30,6 +30,18 @@ public class StreamUtils {
 
 	public static final byte[] EMPTY_CONTENT = new byte[0];
 
+
+	public static void close(Closeable closeable){
+		if (closeable==null){
+			return;
+		}
+		try {
+			closeable.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Copy the contents of the given InputStream into a new byte array.
 	 * <p>

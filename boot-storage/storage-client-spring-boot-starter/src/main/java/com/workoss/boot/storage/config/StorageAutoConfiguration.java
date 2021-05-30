@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 @ConditionalOnClass({ StorageTemplate.class })
 @EnableConfigurationProperties({ MultiStorageClientConfigProperties.class })
 @ConditionalOnProperty(prefix = MultiStorageClientConfig.PREFIX, value = MultiStorageClientConfig.ENABLED,
-		havingValue = "true")
+		matchIfMissing = true)
 public class StorageAutoConfiguration {
 
 	@ConditionalOnClass(name = { "com.workoss.boot.storage.AwsStorageTemplate" })
