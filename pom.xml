@@ -4,7 +4,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>${revision}</version>
+	<version>1.1.0-M1</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-dependencies</module>
@@ -36,7 +36,7 @@
 		<url>https://github.com/workoss/boot</url>
 		<connection>scm:git:https://github.com/workoss/boot.git</connection>
 		<developerConnection>scm:git:https://github.com/workoss/boot.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v1.1.0-M1</tag>
 	</scm>
 
 	<issueManagement>
