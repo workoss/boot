@@ -1,0 +1,10 @@
+
+
+boot:
+  storage:
+    enabled: true
+    default-client:
+      storage-type: OSS
+      bucket-name: workoss
+      token-url: http://192.168.228.165:8088/storage
+
