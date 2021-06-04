@@ -161,7 +161,7 @@ public abstract class Assert {
 	 * @param text the String to check
 	 * @param message the exception message to use if the assertion fails
 	 * @throws IllegalArgumentException if the text is empty
-	 * @see org.springframework.util.StringUtils#hasLength
+	 * @see StringUtils#hasLength
 	 */
 	public static void hasLength(String text, String message) {
 		if (!StringUtils.hasLength(text)) {
@@ -179,10 +179,10 @@ public abstract class Assert {
 	 * fails
 	 * @throws IllegalArgumentException if the text is empty
 	 * @since 5.0
-	 * @see org.springframework.util.StringUtils#hasLength
+	 * @see StringUtils#hasLength
 	 */
 	public static void hasLength(String text, Supplier<String> messageSupplier) {
-		if (!org.springframework.util.StringUtils.hasLength(text)) {
+		if (!StringUtils.hasLength(text)) {
 			throw new IllegalArgumentException(nullSafeGet(messageSupplier));
 		}
 	}
@@ -194,10 +194,10 @@ public abstract class Assert {
 	 * @param text the String to check
 	 * @param message the exception message to use if the assertion fails
 	 * @throws IllegalArgumentException if the text does not contain valid text content
-	 * @see org.springframework.util.StringUtils#hasText
+	 * @see StringUtils#hasText
 	 */
 	public static void hasText(String text, String message) {
-		if (!org.springframework.util.StringUtils.hasText(text)) {
+		if (!StringUtils.hasText(text)) {
 			throw new IllegalArgumentException(message);
 		}
 	}
@@ -213,10 +213,10 @@ public abstract class Assert {
 	 * fails
 	 * @throws IllegalArgumentException if the text does not contain valid text content
 	 * @since 5.0
-	 * @see org.springframework.util.StringUtils#hasText
+	 * @see StringUtils#hasText
 	 */
 	public static void hasText(String text, Supplier<String> messageSupplier) {
-		if (!org.springframework.util.StringUtils.hasText(text)) {
+		if (!StringUtils.hasText(text)) {
 			throw new IllegalArgumentException(nullSafeGet(messageSupplier));
 		}
 	}
@@ -230,8 +230,8 @@ public abstract class Assert {
 	 * @throws IllegalArgumentException if the text contains the substring
 	 */
 	public static void doesNotContain(String textToSearch, String substring, String message) {
-		if (org.springframework.util.StringUtils.hasLength(textToSearch)
-				&& org.springframework.util.StringUtils.hasLength(substring) && textToSearch.contains(substring)) {
+		if (StringUtils.hasLength(textToSearch)
+				&& StringUtils.hasLength(substring) && textToSearch.contains(substring)) {
 			throw new IllegalArgumentException(message);
 		}
 	}
@@ -248,8 +248,8 @@ public abstract class Assert {
 	 * @since 5.0
 	 */
 	public static void doesNotContain(String textToSearch, String substring, Supplier<String> messageSupplier) {
-		if (org.springframework.util.StringUtils.hasLength(textToSearch)
-				&& org.springframework.util.StringUtils.hasLength(substring) && textToSearch.contains(substring)) {
+		if (StringUtils.hasLength(textToSearch)
+				&& StringUtils.hasLength(substring) && textToSearch.contains(substring)) {
 			throw new IllegalArgumentException(nullSafeGet(messageSupplier));
 		}
 	}
@@ -539,7 +539,7 @@ public abstract class Assert {
 		String className = (obj != null ? obj.getClass().getName() : "null");
 		String result = "";
 		boolean defaultMessage = true;
-		if (org.springframework.util.StringUtils.hasLength(msg)) {
+		if (StringUtils.hasLength(msg)) {
 			if (endsWithSeparator(msg)) {
 				result = msg + " ";
 			}
