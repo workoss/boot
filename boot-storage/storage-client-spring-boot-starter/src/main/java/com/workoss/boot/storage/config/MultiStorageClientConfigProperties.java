@@ -26,14 +26,14 @@ import java.util.Map;
  *
  * @author workoss
  */
-@ConfigurationProperties(prefix = "boot.storage")
+@ConfigurationProperties(prefix = MultiStorageClientConfig.PREFIX)
 public class MultiStorageClientConfigProperties implements MultiStorageClientConfig {
 
 	private boolean enabled = true;
 
 	private boolean health = false;
 
-	private String defaultClientKey = "default";
+	private String defaultClientKey = DEFAULT_CLIENT_KEY;
 
 	/**
 	 * 单个客户端配置

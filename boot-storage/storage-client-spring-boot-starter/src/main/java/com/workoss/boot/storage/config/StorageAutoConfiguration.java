@@ -19,10 +19,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workoss.boot.storage.AwsStorageTemplate;
 import com.workoss.boot.storage.MinioStorageTemplate;
 import com.workoss.boot.storage.StorageTemplate;
+import com.workoss.boot.storage.health.StorageClientEndpoint;
 import com.workoss.boot.storage.health.StorageHealthIndicator;
 import com.workoss.boot.storage.web.filter.StorageServiceFilter;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -67,12 +71,19 @@ public class StorageAutoConfiguration {
 			havingValue = "true")
 	protected static class EnableStorageHealthAutoConfiguration {
 
+		@Bean
+		public StorageClientEndpoint storageClientEndpoint(MultiStorageClientConfigProperties configProperties){
+			return new StorageClientEndpoint(configProperties);
+		}
+
 		@ConditionalOnProperty(prefix = MultiStorageClientConfig.PREFIX, value = MultiStorageClientConfig.HEALTH,
 				havingValue = "true", matchIfMissing = true)
 		@Bean
 		StorageHealthIndicator storageHealthIndicator(StorageTemplate storageTemplate) {
 			return new StorageHealthIndicator(storageTemplate);
 		}
+
+
 
 	}
 

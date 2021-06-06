@@ -30,6 +30,8 @@ public interface MultiStorageClientConfig {
 
 	String HEALTH = "health";
 
+	String DEFAULT_CLIENT_KEY = "default";
+
 	/**
 	 * 是否启用
 	 * @return true/false

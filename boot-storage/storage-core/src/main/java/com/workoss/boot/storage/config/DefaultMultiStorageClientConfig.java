@@ -29,7 +29,7 @@ public class DefaultMultiStorageClientConfig implements MultiStorageClientConfig
 
 	private boolean health = true;
 
-	private String defaultClientKey = "default";
+	private String defaultClientKey = DEFAULT_CLIENT_KEY;
 
 	/**
 	 * 单个客户端配置
