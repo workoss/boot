@@ -27,7 +27,6 @@ import io.minio.MinioClient;
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
 public class COSClient extends AbstractS3Client {
 
 	@Override

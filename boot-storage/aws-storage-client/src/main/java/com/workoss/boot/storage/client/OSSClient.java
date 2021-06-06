@@ -32,7 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
 public class OSSClient extends AbstractS3Client {
 
 	private static final Logger log = LoggerFactory.getLogger(OSSClient.class);

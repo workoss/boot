@@ -58,7 +58,6 @@ import java.util.stream.Collectors;
  * @author workoss
  */
 @SuppressWarnings("ALL")
-
 public abstract class AbstractS3Client implements StorageClient {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractS3Client.class);

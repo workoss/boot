@@ -27,7 +27,6 @@ import com.workoss.boot.storage.model.StorageType;
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
 public class COSClient extends AbstractS3Client {
 
 	@Override

@@ -26,7 +26,6 @@ import io.minio.MinioClient;
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
 public class OBSClient extends AbstractS3Client {
 
 	@Override
