@@ -58,7 +58,7 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
 
-		<jakarta.jakartaee-bom.version>9.1.0-RC1</jakarta.jakartaee-bom.version>
+		<jakarta.jakartaee-bom.version>9.1.0</jakarta.jakartaee-bom.version>
 		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
 		<jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
 		<com.sun.xml.bind.version>2.3.3</com.sun.xml.bind.version>
@@ -1145,7 +1145,6 @@
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
 
 </project>
