@@ -43,8 +43,6 @@ public class PageQuerySqlHandler implements SqlHandler {
 	public void handler(SqlContext context) {
 		SqlParam sqlParam = (SqlParam) context.getInput("sqlParam");
 		DbType dbType = (DbType) context.getInput("dbType");
-		BoundSql boundSql = (BoundSql) context.getOutputOrInput("boundSql");
-		String sql = boundSql.getSql();
 		if (!sqlParam.getShouldPage()) {
 			return;
 		}
@@ -52,15 +50,15 @@ public class PageQuerySqlHandler implements SqlHandler {
 		pageResult.setOffset(sqlParam.getOffset());
 		pageResult.setLimit(sqlParam.getLimit());
 		pageResult.setSortBy(sqlParam.getSortBy());
-
 		MappedStatement mappedStatement = (MappedStatement) context.getInput("mappedStatement");
 		if (sqlParam.getShouldCount()) {
 			Executor executor = (Executor) context.getInput("executor");
 			Object parameter = context.getOutputOrInput("parameter");
 			ResultHandler resultHandler = (ResultHandler) context.getInput("resultHandler");
 			RowBounds rowBounds = (RowBounds) context.getOutputOrInput("rowBounds");
+			BoundSql originBoundSql = (BoundSql) context.getInput("boundSql");
 			Long count = MybatisUtil.count(dbType, executor, mappedStatement, parameter, rowBounds, resultHandler,
-					boundSql);
+					originBoundSql);
 			pageResult.setCount(count.intValue());
 			context.putOutput("result", pageResult);
 			if (count <= 0) {
@@ -68,6 +66,8 @@ public class PageQuerySqlHandler implements SqlHandler {
 			}
 		}
 		context.putOutput("change", true);
+		BoundSql boundSql = (BoundSql) context.getOutputOrInput("boundSql");
+		String sql = boundSql.getSql();
 		String pageSql = PagerUtils.limit(sql, dbType, sqlParam.getOffset(), sqlParam.getLimit());
 		boundSql = MybatisUtil.newBoundSql(mappedStatement, pageSql, boundSql);
 		context.putOutput("boundSql", boundSql);
