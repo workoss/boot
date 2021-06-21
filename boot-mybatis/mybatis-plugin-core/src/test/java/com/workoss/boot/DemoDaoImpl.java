@@ -34,4 +34,10 @@ public class DemoDaoImpl implements DemoDao {
 		return demoEntities;
 	}
 
+	@Override
+	public List<DemoEntity> selectSome(String name, String type, Integer age) {
+		System.out.println("==========");
+		return null;
+	}
+
 }

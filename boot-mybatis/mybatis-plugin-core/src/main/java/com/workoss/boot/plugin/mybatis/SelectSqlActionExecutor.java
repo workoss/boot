@@ -45,35 +45,35 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 
 	private final String PAGE_PARAM = "page";
 
-	private Map<String, SqlHandler> sqlHandlerMap = new HashMap<>();
-
-	private List<String> handlerKeys = new ArrayList<>();
+	private List<SqlHandler> sqlHandlers = new ArrayList<>();
 
 	private SelectSqlActionExecutor() {
 	}
 
 	protected SelectSqlActionExecutor addAfter(SqlHandler sqlHandler) {
-		String key = sqlHandler.getClass().getSimpleName();
-		if (sqlHandlerMap.containsKey(key)) {
-			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
-		}
-		else {
-			handlerKeys.add(key);
-			sqlHandlerMap.put(key, sqlHandler);
+		if (!checkExists(sqlHandler)) {
+			sqlHandlers.add(sqlHandler);
 		}
 		return this;
 	}
 
 	protected SelectSqlActionExecutor addBefore(SqlHandler sqlHandler) {
-		String key = sqlHandler.getClass().getSimpleName();
-		if (sqlHandlerMap.containsKey(key)) {
-			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
-		}
-		else {
-			handlerKeys.add(0, key);
-			sqlHandlerMap.put(key, sqlHandler);
+		if (!checkExists(sqlHandler)) {
+			sqlHandlers.add(0, sqlHandler);
 		}
 		return this;
+	}
+
+	private boolean checkExists(SqlHandler sqlHandler){
+		String key = sqlHandler.getClass().getSimpleName();
+		Optional<SqlHandler> handlerOptional = sqlHandlers.stream()
+				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName()))
+				.findFirst();
+		if (handlerOptional.isPresent()) {
+			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -109,9 +109,10 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		context.putInput("cacheKey", cacheKey);
 		context.putInput("boundSql", boundSql);
 
-		handlerKeys.stream().forEach(handlerKey -> {
-			sqlHandlerMap.get(handlerKey).handler(context);
-		});
+		for (SqlHandler sqlHandler : sqlHandlers) {
+			sqlHandler.handler(context);
+		}
+
 		Boolean change = (Boolean) context.getOutput("change");
 		if (!(change != null && Boolean.TRUE.compareTo(change) == 0)) {
 			return invocation.proceed();

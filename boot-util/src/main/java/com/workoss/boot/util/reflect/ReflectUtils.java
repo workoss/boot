@@ -59,6 +59,8 @@ public class ReflectUtils {
 
 	private static Map<String, AbstractMethodAccess> methodAccessCache = new ConcurrentHashMap<>();
 
+	private static Map<String, AbstractFieldAccess> fieldAccessCache = new ConcurrentHashMap<>();
+
 	private static Map<String, Map<String, Object>> classMethodCache = new ConcurrentHashMap<>();
 
 	private static final ConcurrentMap<Class, String> TYPE_STR_CACHE = new ConcurrentHashMap<Class, String>();
@@ -73,6 +75,7 @@ public class ReflectUtils {
 			log.warn("{} 没有找到方法 {}", obj.getClass(), methodName);
 			return null;
 		}
+		AbstractFieldAccess.get(obj.getClass()).getFieldNames();
 		AbstractMethodAccess methodAccess = getMethodAccessCache(obj.getClass());
 		if (param == null) {
 			return methodAccess.invoke(obj, methodAccess.getIndex(methodName));
@@ -111,7 +114,8 @@ public class ReflectUtils {
 
 	/**
 	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
-	 * @param obj 对象
+	 *
+	 * @param obj       对象
 	 * @param fieldName 属性名
 	 * @return obj对象
 	 */
@@ -125,8 +129,7 @@ public class ReflectUtils {
 		Object result = null;
 		try {
 			result = field.get(obj);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			log.error("不可能抛出的异常{}", e.getMessage());
 		}
 		return result;
@@ -134,21 +137,19 @@ public class ReflectUtils {
 
 	/**
 	 * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
-	 * @param obj 对象
+	 *
+	 * @param obj       对象
 	 * @param fieldName 属性名
-	 * @param value 属性值
+	 * @param value     属性值
 	 */
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
 		Field field = getAccessibleField(obj, fieldName);
-
 		if (field == null) {
 			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + "]");
 		}
-
 		try {
 			field.set(obj, value);
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			log.error("不可能抛出的异常:{}", e.getMessage());
 		}
 	}
@@ -163,10 +164,21 @@ public class ReflectUtils {
 		return methodAccess;
 	}
 
+	public static AbstractFieldAccess getFieldAccessCache(Class obj) {
+		AbstractFieldAccess fieldAccess = fieldAccessCache.get(CACHE_PREFIX + obj.getName());
+		if (fieldAccess == null) {
+			fieldAccess = AbstractFieldAccess.get(obj);
+			fieldAccessCache.put(CACHE_PREFIX + obj.getName(), fieldAccess);
+			return fieldAccess;
+		}
+		return fieldAccess;
+	}
+
 	/**
 	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访问.
 	 * <p>
-	 * @param obj 对象
+	 *
+	 * @param obj       对象
 	 * @param fieldName 属性名
 	 * @return field
 	 */
@@ -180,8 +192,7 @@ public class ReflectUtils {
 				Field field = superClass.getDeclaredField(fieldName);
 				makeAccessible(field);
 				return field;
-			}
-			catch (NoSuchFieldException e) {// NOSONAR
+			} catch (NoSuchFieldException e) {// NOSONAR
 				// Field不在当前类定义,继续向上转型
 			}
 		}
@@ -199,7 +210,8 @@ public class ReflectUtils {
 
 	/**
 	 * 注册服务所在的ClassLoader
-	 * @param appName 应用名
+	 *
+	 * @param appName     应用名
 	 * @param classloader 应用级别ClassLoader
 	 */
 	public static void registerAppClassLoader(String appName, ClassLoader classloader) {
@@ -208,6 +220,7 @@ public class ReflectUtils {
 
 	/**
 	 * 得到服务的自定义ClassLoader
+	 *
 	 * @param appName 应用名
 	 * @return 应用级别ClassLoader
 	 */
@@ -215,16 +228,16 @@ public class ReflectUtils {
 		ClassLoader appClassLoader = APPNAME_CLASSLOADER_MAP.get(appName);
 		if (appClassLoader == null) {
 			return ClassLoaderUtils.getCurrentClassLoader();
-		}
-		else {
+		} else {
 			return appClassLoader;
 		}
 	}
 
 	/**
 	 * 注册服务所在的ClassLoader
+	 *
 	 * @param serviceUniqueName 服务唯一名称
-	 * @param classloader 服务级别ClassLoader
+	 * @param classloader       服务级别ClassLoader
 	 */
 	public static void registerServiceClassLoader(String serviceUniqueName, ClassLoader classloader) {
 		SERVICE_CLASSLOADER_MAP.put(serviceUniqueName, classloader);
@@ -232,6 +245,7 @@ public class ReflectUtils {
 
 	/**
 	 * 得到服务的自定义ClassLoader
+	 *
 	 * @param serviceUniqueName 服务唯一名称
 	 * @return 服务级别ClassLoader
 	 */
@@ -239,15 +253,15 @@ public class ReflectUtils {
 		ClassLoader appClassLoader = SERVICE_CLASSLOADER_MAP.get(serviceUniqueName);
 		if (appClassLoader == null) {
 			return ClassLoaderUtils.getCurrentClassLoader();
-		}
-		else {
+		} else {
 			return appClassLoader;
 		}
 	}
 
 	/**
 	 * 放入类描述缓存
-	 * @param clazz 类
+	 *
+	 * @param clazz   类
 	 * @param typeStr 对象描述
 	 */
 	public static void putTypeStrCache(Class clazz, String typeStr) {
@@ -256,6 +270,7 @@ public class ReflectUtils {
 
 	/**
 	 * 得到类描述缓存
+	 *
 	 * @param clazz 类
 	 * @return 类描述
 	 */

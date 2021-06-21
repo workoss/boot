@@ -25,4 +25,6 @@ public interface DemoDao {
 
 	List<DemoEntity> selectList(DemoEntity demoEntity);
 
+	List<DemoEntity> selectSome(String name,String type,Integer age);
+
 }
