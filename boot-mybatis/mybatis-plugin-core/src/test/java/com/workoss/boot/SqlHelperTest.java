@@ -28,21 +28,17 @@ import java.util.function.Function;
 
 public class SqlHelperTest {
 
-
-
-
-
-	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+	public static void main(String[] args)
+			throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
 		DemoDao demoDao = new DemoDaoImpl();
 		DemoMapper demoMapper = new DemoMapperImpl();
 		DemoEntity demoEntity = new DemoEntity();
 
-//		SqlHelper.page(1, 10, false).start();
-//		List<DemoEntity> demoEntities = demoDao.selectList(demoEntity);
+		// SqlHelper.page(1, 10, false).start();
+		// List<DemoEntity> demoEntities = demoDao.selectList(demoEntity);
 
-		List<DemoEntity> entityList = SqlHelper.page(1, 10, false)
-				.execute(sqlParam -> demoDao.selectList(demoEntity));
+		List<DemoEntity> entityList = SqlHelper.page(1, 10, false).execute(sqlParam -> demoDao.selectList(demoEntity));
 
 		Function3<String, String, Integer, List<DemoEntity>> selectSome = demoDao::selectSome;
 		Method write = selectSome.getClass().getDeclaredMethod("writeReplace");
@@ -65,12 +61,13 @@ public class SqlHelperTest {
 		System.out.println(serializedLambda1.getImplMethodSignature());
 		System.out.println(serializedLambda1.getImplClass());
 
-//		Arrays.stream(selectSome.getClass().getDeclaredMethods()).forEach(method -> {
-//			System.out.println(method.getName()+"-"+method.getParameterCount()+"-"+method.getReturnType());
-//		});
+		// Arrays.stream(selectSome.getClass().getDeclaredMethods()).forEach(method -> {
+		// System.out.println(method.getName()+"-"+method.getParameterCount()+"-"+method.getReturnType());
+		// });
 
-//		List<DemoModel> modelList = SqlHelper.page(1, 10, false)
-//				.executeAndMapper(sqlParam -> demoDao.selectList(demoEntity)).mapper(demoMapper::toTargetList);
+		// List<DemoModel> modelList = SqlHelper.page(1, 10, false)
+		// .executeAndMapper(sqlParam ->
+		// demoDao.selectList(demoEntity)).mapper(demoMapper::toTargetList);
 
 	}
 

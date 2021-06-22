@@ -46,21 +46,16 @@ public class StorageClientEndpoint {
 			clientConfigMap = new HashMap<>();
 		}
 		if (multiStorageClientConfig.getDefaultClient() != null) {
-			clientConfigMap.put(
-					(multiStorageClientConfig.getDefaultClientKey() != null ?
-							multiStorageClientConfig.getDefaultClientKey() :
-							MultiStorageClientConfig.DEFAULT_CLIENT_KEY),
+			clientConfigMap.put((multiStorageClientConfig.getDefaultClientKey() != null
+					? multiStorageClientConfig.getDefaultClientKey() : MultiStorageClientConfig.DEFAULT_CLIENT_KEY),
 					multiStorageClientConfig.getDefaultClient());
 		}
-		return clientConfigMap.entrySet()
-				.stream()
-				.peek(entry -> {
-					StorageClientConfig clientConfig = entry.getValue();
-					clientConfig.setAccessKey(null);
-					clientConfig.setSecretKey(null);
-					entry.setValue(clientConfig);
-				})
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		return clientConfigMap.entrySet().stream().peek(entry -> {
+			StorageClientConfig clientConfig = entry.getValue();
+			clientConfig.setAccessKey(null);
+			clientConfig.setSecretKey(null);
+			entry.setValue(clientConfig);
+		}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
 }

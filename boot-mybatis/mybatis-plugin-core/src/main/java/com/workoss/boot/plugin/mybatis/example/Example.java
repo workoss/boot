@@ -31,9 +31,8 @@ public interface Example<T> {
 
 	ExampleMatcher getMatcher();
 
-
 	default Class<T> getProbeType() {
-		//TODO
+		// TODO
 		return (Class<T>) ClassUtils.unwrapCglib(getProbe().getClass());
 	}
 

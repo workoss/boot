@@ -15,7 +15,6 @@
  */
 package com.workoss.boot.plugin.mybatis.example;
 
-
 import com.workoss.boot.util.Assert;
 import com.workoss.boot.util.ObjectUtil;
 
@@ -25,11 +24,17 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TypedExampleMatcher implements ExampleMatcher {
+
 	private final NullHandler nullHandler;
+
 	private final StringMatcher defaultStringMatcher;
+
 	private final PropertySpecifiers propertySpecifiers;
+
 	private final Set<String> ignoredPaths;
+
 	private final boolean defaultIgnoreCase;
+
 	private final MatchMode mode;
 
 	TypedExampleMatcher() {
@@ -39,7 +44,8 @@ public class TypedExampleMatcher implements ExampleMatcher {
 	}
 
 	private TypedExampleMatcher(NullHandler nullHandler, StringMatcher defaultStringMatcher,
-								PropertySpecifiers propertySpecifiers, Set<String> ignoredPaths, boolean defaultIgnoreCase, MatchMode mode) {
+			PropertySpecifiers propertySpecifiers, Set<String> ignoredPaths, boolean defaultIgnoreCase,
+			MatchMode mode) {
 		this.nullHandler = nullHandler;
 		this.defaultStringMatcher = defaultStringMatcher;
 		this.propertySpecifiers = propertySpecifiers;
@@ -47,7 +53,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 		this.defaultIgnoreCase = defaultIgnoreCase;
 		this.mode = mode;
 	}
-
 
 	@Override
 	public ExampleMatcher withIgnorePaths(String... ignoredPaths) {
@@ -62,7 +67,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 				defaultIgnoreCase, mode);
 	}
 
-
 	@Override
 	public ExampleMatcher withStringMatcher(StringMatcher defaultStringMatcher) {
 
@@ -72,13 +76,11 @@ public class TypedExampleMatcher implements ExampleMatcher {
 				defaultIgnoreCase, mode);
 	}
 
-
 	@Override
 	public ExampleMatcher withIgnoreCase(boolean defaultIgnoreCase) {
 		return new TypedExampleMatcher(nullHandler, defaultStringMatcher, propertySpecifiers, ignoredPaths,
 				defaultIgnoreCase, mode);
 	}
-
 
 	@Override
 	public ExampleMatcher withMatcher(String propertyPath, GenericPropertyMatcher genericPropertyMatcher) {
@@ -105,7 +107,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 				defaultIgnoreCase, mode);
 	}
 
-
 	@Override
 	public ExampleMatcher withTransformer(String propertyPath, PropertyValueTransformer propertyValueTransformer) {
 
@@ -120,7 +121,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 		return new TypedExampleMatcher(nullHandler, defaultStringMatcher, propertySpecifiers, ignoredPaths,
 				defaultIgnoreCase, mode);
 	}
-
 
 	@Override
 	public ExampleMatcher withIgnoreCase(String... propertyPaths) {
@@ -139,7 +139,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 				defaultIgnoreCase, mode);
 	}
 
-
 	@Override
 	public ExampleMatcher withNullHandler(NullHandler nullHandler) {
 
@@ -148,36 +147,30 @@ public class TypedExampleMatcher implements ExampleMatcher {
 				defaultIgnoreCase, mode);
 	}
 
-
 	@Override
 	public NullHandler getNullHandler() {
 		return nullHandler;
 	}
-
 
 	@Override
 	public StringMatcher getDefaultStringMatcher() {
 		return defaultStringMatcher;
 	}
 
-
 	@Override
 	public boolean isIgnoreCaseEnabled() {
 		return this.defaultIgnoreCase;
 	}
-
 
 	@Override
 	public Set<String> getIgnoredPaths() {
 		return ignoredPaths;
 	}
 
-
 	@Override
 	public PropertySpecifiers getPropertySpecifiers() {
 		return propertySpecifiers;
 	}
-
 
 	@Override
 	public MatchMode getMatchMode() {
@@ -185,9 +178,8 @@ public class TypedExampleMatcher implements ExampleMatcher {
 	}
 
 	TypedExampleMatcher withMode(MatchMode mode) {
-		return this.mode == mode ? this
-				: new TypedExampleMatcher(this.nullHandler, this.defaultStringMatcher, this.propertySpecifiers,
-				this.ignoredPaths, this.defaultIgnoreCase, mode);
+		return this.mode == mode ? this : new TypedExampleMatcher(this.nullHandler, this.defaultStringMatcher,
+				this.propertySpecifiers, this.ignoredPaths, this.defaultIgnoreCase, mode);
 	}
 
 	private PropertySpecifier getOrCreatePropertySpecifier(String propertyPath, PropertySpecifiers propertySpecifiers) {
@@ -198,7 +190,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 
 		return new PropertySpecifier(propertyPath);
 	}
-
 
 	@Override
 	public boolean equals(Object o) {
@@ -237,7 +228,6 @@ public class TypedExampleMatcher implements ExampleMatcher {
 		return mode == that.mode;
 	}
 
-
 	@Override
 	public int hashCode() {
 		int result = ObjectUtil.nullSafeHashCode(nullHandler);
@@ -249,11 +239,11 @@ public class TypedExampleMatcher implements ExampleMatcher {
 		return result;
 	}
 
-
 	@Override
 	public String toString() {
 		return "TypedExampleMatcher{" + "nullHandler=" + nullHandler + ", defaultStringMatcher=" + defaultStringMatcher
-				+ ", propertySpecifiers=" + propertySpecifiers + ", ignoredPaths=" + ignoredPaths + ", defaultIgnoreCase="
-				+ defaultIgnoreCase + ", mode=" + mode + '}';
+				+ ", propertySpecifiers=" + propertySpecifiers + ", ignoredPaths=" + ignoredPaths
+				+ ", defaultIgnoreCase=" + defaultIgnoreCase + ", mode=" + mode + '}';
 	}
+
 }

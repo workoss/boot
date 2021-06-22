@@ -79,15 +79,13 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 客户端初始化
-	 *
 	 * @param config 配置
 	 */
 	protected abstract void initConfig(StorageClientConfig config);
 
 	/**
 	 * 创建minio 客户端
-	 *
-	 * @param config   配置
+	 * @param config 配置
 	 * @param stsToken stsToken
 	 * @return minio客户端
 	 */
@@ -97,7 +95,8 @@ public abstract class AbstractS3Client implements StorageClient {
 		Provider provider = null;
 		if (stsToken == null) {
 			provider = new StaticProvider(config.getAccessKey(), config.getSecretKey(), null);
-		} else {
+		}
+		else {
 			provider = new StaticProvider(stsToken.getAccessKey(), stsToken.getSecretKey(), stsToken.getStsToken());
 		}
 		return MinioClient.builder().endpoint(endpoint).credentialsProvider(provider)
@@ -109,7 +108,8 @@ public abstract class AbstractS3Client implements StorageClient {
 		MinioClient minioClient = getClient("", "doesBucketExist");
 		try {
 			return minioClient.bucketExists(BucketExistsArgs.builder().bucket(config.getBucketName()).build());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -126,7 +126,8 @@ public abstract class AbstractS3Client implements StorageClient {
 					.map(bucket -> new StorageBucketInfo(bucket.name(), null,
 							DateUtils.toDate(bucket.creationDate().toLocalDateTime())))
 					.findFirst().orElseGet(() -> null);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -141,7 +142,8 @@ public abstract class AbstractS3Client implements StorageClient {
 			}
 			return buckets.stream().map(bucket -> new StorageBucketInfo(bucket.name(), null,
 					DateUtils.toDate(bucket.creationDate().toLocalDateTime()))).collect(Collectors.toList());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -154,7 +156,8 @@ public abstract class AbstractS3Client implements StorageClient {
 			StatObjectResponse response = minioClient
 					.statObject(StatObjectArgs.builder().bucket(config.getBucketName()).object(key).build());
 			return true;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			return false;
 		}
 	}
@@ -177,7 +180,8 @@ public abstract class AbstractS3Client implements StorageClient {
 			storageFileInfo.setMetaData(userMeta);
 			storageFileInfo.setETag(response.etag());
 			return storageFileInfo;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -224,31 +228,32 @@ public abstract class AbstractS3Client implements StorageClient {
 				listing.addFileInfo(fileInfo);
 			}
 			return listing;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, File file, Map<String, String> userMetaData,
-									 Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, file, null, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, InputStream inputStream, String contentType,
-									 Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
+			Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, inputStream, contentType, userMetaData, consumer);
 	}
 
 	@Override
-	public StorageFileInfo putObject(String key, byte[] bytes, String contentType,
-									 Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
+	public StorageFileInfo putObject(String key, byte[] bytes, String contentType, Map<String, String> userMetaData,
+			Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, bytes, contentType, userMetaData, consumer);
 	}
 
 	StorageFileInfo putObjectCommon(String key, Object in, String contentType, Map<String, String> userMetaData,
-									Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		MinioClient minioClient = getClient(key, "putObject");
 		InputStream inputStream = null;
@@ -256,10 +261,12 @@ public abstract class AbstractS3Client implements StorageClient {
 			PutObjectArgs.Builder builder = PutObjectArgs.builder().bucket(config.getBucketName()).object(key);
 			if (in instanceof File) {
 				inputStream = new FileInputStream((File) in);
-			} else if (in instanceof InputStream) {
+			}
+			else if (in instanceof InputStream) {
 				// 根据文件名称 放入objectMetaData
 				inputStream = (InputStream) in;
-			} else if (in instanceof byte[]) {
+			}
+			else if (in instanceof byte[]) {
 				inputStream = new ByteArrayInputStream((byte[]) in);
 			}
 			builder.stream(inputStream, inputStream.available(), -1);
@@ -278,9 +285,11 @@ public abstract class AbstractS3Client implements StorageClient {
 			fileInfo.setETag(objectWriteResponse.etag());
 			fileInfo.setHost(formatHost());
 			return fileInfo;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
-		} finally {
+		}
+		finally {
 			StreamUtils.close(inputStream);
 		}
 	}
@@ -298,7 +307,8 @@ public abstract class AbstractS3Client implements StorageClient {
 			GetObjectResponse objectResponse = minioClient
 					.getObject(GetObjectArgs.builder().bucket(config.getBucketName()).object(key).build());
 			return objectResponse;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -307,7 +317,8 @@ public abstract class AbstractS3Client implements StorageClient {
 	public byte[] download(String key, Consumer<StorageProgressEvent> consumer) {
 		try (InputStream inputStream = downloadStream(key, consumer)) {
 			return StreamUtils.copyToByteArray(inputStream);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -320,14 +331,15 @@ public abstract class AbstractS3Client implements StorageClient {
 			minioClient.downloadObject(DownloadObjectArgs.builder().bucket(config.getBucketName()).object(key)
 					.filename(destFile.getPath()).build());
 			return destFile;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
 
 	@Override
 	public StorageFileInfo copyObject(String sourceKeyWithoutBasePath, String destinationKeyWithoutBasePath,
-									  Map<String, String> userMetaData) {
+			Map<String, String> userMetaData) {
 		MinioClient minioClient = getClient(sourceKeyWithoutBasePath, "copyObject");
 		try {
 			if (userMetaData == null) {
@@ -345,7 +357,8 @@ public abstract class AbstractS3Client implements StorageClient {
 			fileInfo.setETag(response.etag());
 			fileInfo.setHost(formatHost());
 			return fileInfo;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -356,14 +369,14 @@ public abstract class AbstractS3Client implements StorageClient {
 		MinioClient minioClient = getClient(key, "deleteObject");
 		try {
 			minioClient.removeObject(RemoveObjectArgs.builder().bucket(config.getBucketName()).object(key).build());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
 
 	@Override
-	public StorageSignature generateWebUploadSign(String key, String mimeType,
-												  String successActionStatus) {
+	public StorageSignature generateWebUploadSign(String key, String mimeType, String successActionStatus) {
 		key = formatKey(key, false);
 		return generateSignagure(config, key, mimeType, successActionStatus);
 	}
@@ -377,7 +390,8 @@ public abstract class AbstractS3Client implements StorageClient {
 			String url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
 					.bucket(config.getBucketName()).expiry(expire, TimeUnit.MILLISECONDS).object(key).build());
 			return new URL(url);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -389,16 +403,15 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 生成stsToken
-	 *
 	 * @param config 配置
-	 * @param key    文件key
+	 * @param key 文件key
 	 * @param action 操作
 	 * @return
 	 */
 	protected abstract StorageStsToken getStsToken(StorageClientConfig config, String key, String action);
 
 	protected abstract StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
-														  String successActionStatus);
+			String successActionStatus);
 
 	protected MinioClient getClient(String key, String action) {
 		if (minioClient != null) {
@@ -445,7 +458,7 @@ public abstract class AbstractS3Client implements StorageClient {
 	}
 
 	protected StorageSignature requestSign(StorageClientConfig config, String key, String mimeType,
-										   String successActionStatus) {
+			String successActionStatus) {
 		return StorageUtil.requestSign(HttpUtil::executePost, config, key, mimeType, successActionStatus);
 	}
 

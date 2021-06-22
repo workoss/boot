@@ -41,13 +41,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 @SuppressWarnings("ALL")
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnClass({StorageTemplate.class})
-@EnableConfigurationProperties({MultiStorageClientConfigProperties.class})
+@ConditionalOnClass({ StorageTemplate.class })
+@EnableConfigurationProperties({ MultiStorageClientConfigProperties.class })
 @ConditionalOnProperty(prefix = MultiStorageClientConfig.PREFIX, value = MultiStorageClientConfig.ENABLED,
 		matchIfMissing = true)
 public class StorageAutoConfiguration {
 
-	@ConditionalOnClass(name = {"com.workoss.boot.storage.AwsStorageTemplate"})
+	@ConditionalOnClass(name = { "com.workoss.boot.storage.AwsStorageTemplate" })
 	@Bean
 	StorageTemplate storageTemplate(MultiStorageClientConfigProperties configProperties) {
 		StorageTemplate storageTemplate = new AwsStorageTemplate();
@@ -58,17 +58,15 @@ public class StorageAutoConfiguration {
 	protected
 
 	@ConditionalOnClass(
-			name = {"com.workoss.boot.storage.MinioStorageTemplate"})
-	@Bean
-	StorageTemplate minioStorageTemplate(
-			MultiStorageClientConfigProperties configProperties) {
+			name = { "com.workoss.boot.storage.MinioStorageTemplate" }) @Bean StorageTemplate minioStorageTemplate(
+					MultiStorageClientConfigProperties configProperties) {
 		StorageTemplate storageTemplate = new MinioStorageTemplate();
 		storageTemplate.setMultiStorageClientConfig(configProperties);
 		return storageTemplate;
 	}
 
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnClass({HealthIndicator.class})
+	@ConditionalOnClass({ HealthIndicator.class })
 	@ConditionalOnProperty(prefix = MultiStorageClientConfig.PREFIX, value = MultiStorageClientConfig.HEALTH,
 			matchIfMissing = true)
 	protected static class EnableStorageHealthAutoConfiguration {
@@ -78,16 +76,14 @@ public class StorageAutoConfiguration {
 			return new StorageClientEndpoint(configProperties);
 		}
 
-
 		@Bean
 		StorageHealthIndicator storageHealthIndicator(StorageTemplate storageTemplate) {
 			return new StorageHealthIndicator(storageTemplate);
 		}
 
-
 	}
 
-	@ConditionalOnClass({HttpServletRequest.class, ObjectMapper.class})
+	@ConditionalOnClass({ HttpServletRequest.class, ObjectMapper.class })
 	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 	@ConditionalOnMissingBean
 	@Bean

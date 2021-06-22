@@ -230,8 +230,8 @@ public abstract class Assert {
 	 * @throws IllegalArgumentException if the text contains the substring
 	 */
 	public static void doesNotContain(String textToSearch, String substring, String message) {
-		if (StringUtils.hasLength(textToSearch)
-				&& StringUtils.hasLength(substring) && textToSearch.contains(substring)) {
+		if (StringUtils.hasLength(textToSearch) && StringUtils.hasLength(substring)
+				&& textToSearch.contains(substring)) {
 			throw new IllegalArgumentException(message);
 		}
 	}
@@ -248,8 +248,8 @@ public abstract class Assert {
 	 * @since 5.0
 	 */
 	public static void doesNotContain(String textToSearch, String substring, Supplier<String> messageSupplier) {
-		if (StringUtils.hasLength(textToSearch)
-				&& StringUtils.hasLength(substring) && textToSearch.contains(substring)) {
+		if (StringUtils.hasLength(textToSearch) && StringUtils.hasLength(substring)
+				&& textToSearch.contains(substring)) {
 			throw new IllegalArgumentException(nullSafeGet(messageSupplier));
 		}
 	}

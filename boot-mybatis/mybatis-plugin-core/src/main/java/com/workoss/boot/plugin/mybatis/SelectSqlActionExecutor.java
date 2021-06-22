@@ -64,11 +64,10 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 		return this;
 	}
 
-	private boolean checkExists(SqlHandler sqlHandler){
+	private boolean checkExists(SqlHandler sqlHandler) {
 		String key = sqlHandler.getClass().getSimpleName();
 		Optional<SqlHandler> handlerOptional = sqlHandlers.stream()
-				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName()))
-				.findFirst();
+				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName())).findFirst();
 		if (handlerOptional.isPresent()) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
 			return true;

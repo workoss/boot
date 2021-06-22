@@ -39,18 +39,17 @@ import java.util.*;
  *
  * @author workoss
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
-@Intercepts({@Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
+@SuppressWarnings({ "unchecked", "rawtypes" })
+@Intercepts({ @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }),
 		@Signature(type = Executor.class, method = "query",
-				args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
-		@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),})
+				args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
+		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
+				RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class }), })
 public class SqlInterceptor implements Interceptor {
 
 	private static final Logger log = LoggerFactory.getLogger(SqlInterceptor.class);
 
 	private Properties properties;
-
 
 	private List<ParamHandler> paramHandlers = new ArrayList<>();
 
@@ -73,11 +72,10 @@ public class SqlInterceptor implements Interceptor {
 		return this;
 	}
 
-	private boolean checkExists(ParamHandler paramHandler){
+	private boolean checkExists(ParamHandler paramHandler) {
 		String key = paramHandlers.getClass().getSimpleName();
 		Optional<ParamHandler> handlerOptional = paramHandlers.stream()
-				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName()))
-				.findFirst();
+				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName())).findFirst();
 		if (handlerOptional.isPresent()) {
 			log.warn("[MYBATIS] ParamHandler:{} 新增已经存在，不能重复增加", paramHandler.getClass().getName());
 			return true;
@@ -118,19 +116,20 @@ public class SqlInterceptor implements Interceptor {
 		Object result = null;
 		try {
 			switch (sqlCommandType) {
-				case SELECT:
-					context.putInput("sqlParam", SqlHelper.getLocalSqlParam());
-					result = SelectSqlActionExecutor.INSTANCE.execute(invocation, context);
-					break;
-				case UPDATE:
-					result = UpdateSqlActionExecutor.INSTANCE.execute(invocation, context);
-					break;
-				default:
-					result = invocation.proceed();
-					break;
+			case SELECT:
+				context.putInput("sqlParam", SqlHelper.getLocalSqlParam());
+				result = SelectSqlActionExecutor.INSTANCE.execute(invocation, context);
+				break;
+			case UPDATE:
+				result = UpdateSqlActionExecutor.INSTANCE.execute(invocation, context);
+				break;
+			default:
+				result = invocation.proceed();
+				break;
 			}
 			return result;
-		} finally {
+		}
+		finally {
 			SqlHelper.clearSqlParam();
 			ProviderUtil.setDbType(null);
 		}
@@ -138,7 +137,6 @@ public class SqlInterceptor implements Interceptor {
 
 	/**
 	 * 只拦截Execuate
-	 *
 	 * @param target 插件对象
 	 * @return object
 	 */
@@ -146,7 +144,8 @@ public class SqlInterceptor implements Interceptor {
 	public Object plugin(Object target) {
 		if (target instanceof Executor) {
 			return Plugin.wrap(target, this);
-		} else {
+		}
+		else {
 			return target;
 		}
 	}

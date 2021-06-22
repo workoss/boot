@@ -21,6 +21,7 @@ import org.springframework.util.ObjectUtils;
 class TypedExample<T> implements Example<T> {
 
 	private final T probe;
+
 	private final ExampleMatcher matcher;
 
 	TypedExample(T probe, ExampleMatcher matcher) {
@@ -39,7 +40,6 @@ class TypedExample<T> implements Example<T> {
 	public ExampleMatcher getMatcher() {
 		return this.matcher;
 	}
-
 
 	@Override
 	public boolean equals(Object o) {
@@ -60,7 +60,6 @@ class TypedExample<T> implements Example<T> {
 		return ObjectUtils.nullSafeEquals(matcher, that.matcher);
 	}
 
-
 	@Override
 	public int hashCode() {
 		int result = ObjectUtils.nullSafeHashCode(probe);
@@ -68,9 +67,9 @@ class TypedExample<T> implements Example<T> {
 		return result;
 	}
 
-
 	@Override
 	public String toString() {
 		return "TypedExample{" + "probe=" + probe + ", matcher=" + matcher + '}';
 	}
+
 }
