@@ -22,7 +22,6 @@
 		<!--		<module>boot-http</module>-->
 	</modules>
 	<properties>
-		<revision>1.1.0-SNAPSHOT</revision>
 		<maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.28</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.1</license-maven-plugin.version>
@@ -102,20 +101,6 @@
 				<configuration>
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>flatten-maven-plugin</artifactId>
-				<version>${flatten-maven-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>flatten.clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
