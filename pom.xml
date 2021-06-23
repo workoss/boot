@@ -10,15 +10,9 @@
 		<module>boot-dependencies</module>
 		<module>boot-annotation</module>
 		<module>boot-util</module>
-		<module>boot-mybatis/mybatis-plugin-api</module>
-		<module>boot-mybatis/mybatis-plugin-core</module>
-		<module>boot-extension/extension-core</module>
-		<module>boot-extension/extension-spring</module>
-		<module>boot-storage/storage-core</module>
-		<module>boot-storage/storage-server</module>
-		<module>boot-storage/aws-storage-client</module>
-		<module>boot-storage/minio-storage-client</module>
-		<module>boot-storage/storage-client-spring-boot-starter</module>
+		<module>boot-mybatis</module>
+		<module>boot-extension</module>
+		<module>boot-storage</module>
 		<!--		<module>boot-http</module>-->
 	</modules>
 	<properties>
