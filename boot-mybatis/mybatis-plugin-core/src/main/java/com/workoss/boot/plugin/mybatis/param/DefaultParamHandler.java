@@ -42,12 +42,11 @@ public class DefaultParamHandler implements ParamHandler {
 			if (fieldNames == null) {
 				return;
 			}
-			Map<String, Object> parameterMap = new MapperMethod.ParamMap<>();
-			parameterMap.put("_dbType", dbType);
+			parameter = new MapperMethod.ParamMap<>();
+			((Map<String,Object>)parameter).put("_dbType", dbType);
 			for (String fieldName : fieldNames) {
-				parameterMap.put(fieldName, ReflectUtils.getPropertyByInvokeMethod(parameter, fieldName));
+				((Map<String,Object>)parameter).put(fieldName, ReflectUtils.getPropertyByInvokeMethod(parameter, fieldName));
 			}
-			parameter = parameterMap;
 		}
 	}
 

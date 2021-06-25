@@ -21,6 +21,7 @@ import com.workoss.boot.plugin.mybatis.param.DefaultParamHandler;
 import com.workoss.boot.plugin.mybatis.query.PageQuerySqlHandler;
 import com.workoss.boot.plugin.mybatis.query.SortQuerySqlHandler;
 import com.workoss.boot.plugin.mybatis.util.ProviderUtil;
+import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -102,6 +103,9 @@ public class SqlInterceptor implements Interceptor {
 		DbType dbType = MybatisUtil.getDbType(executor.getTransaction().getConnection());
 		if (dbType != null) {
 			ProviderUtil.setDbType(dbType.name());
+		}
+		if (parameter == null){
+			parameter = new MapperMethod.ParamMap<>();
 		}
 		for (ParamHandler paramHandler : paramHandlers) {
 			paramHandler.handler(parameter);
