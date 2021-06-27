@@ -98,8 +98,6 @@
 
 		<caffeine.version>2.9.1</caffeine.version>
 
-		<fastsql.version>2.0.0_preview_973</fastsql.version>
-
 		<lombok.version>1.18.20</lombok.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 
@@ -383,12 +381,6 @@
 				<version>${hibernate-validator.version}</version>
 			</dependency>
 
-
-			<dependency>
-				<groupId>com.alibaba.fastsql</groupId>
-				<artifactId>fastsql</artifactId>
-				<version>${fastsql.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>com.github.ben-manes.caffeine</groupId>
