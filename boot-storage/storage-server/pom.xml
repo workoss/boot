@@ -146,7 +146,7 @@
 					<plugin>
 						<groupId>org.springframework.experimental</groupId>
 						<artifactId>spring-aot-maven-plugin</artifactId>
-						<version>0.10.0</version>
+						<version>0.10.1</version>
 						<configuration>
 							<debugVerify>true</debugVerify>
 							<removeUnusedConfig>true</removeUnusedConfig>
