@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>com.huaweicloud.sdk</groupId>
 			<artifactId>huaweicloud-sdk-iam</artifactId>
-			<version>3.0.49</version>
+			<version>3.0.50</version>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.validation</groupId>
