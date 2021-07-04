@@ -37,6 +37,10 @@ public class DefaultParamHandler implements ParamHandler {
 			((Map) parameter).put("_dbType", dbType);
 		}
 		else {
+			String className = parameter.getClass().getName();
+			if (className.startsWith("java.") || className.startsWith("javax.")) {
+				return;
+			}
 			AbstractFieldAccess fieldAccess = ReflectUtils.getFieldAccessCache(parameter.getClass());
 			String[] fieldNames = fieldAccess.getFieldNames();
 			if (fieldNames == null) {
