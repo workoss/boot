@@ -176,7 +176,7 @@
 					<plugin>
 						<groupId>org.graalvm.nativeimage</groupId>
 						<artifactId>native-image-maven-plugin</artifactId>
-						<version>21.1.0</version>
+						<version>21.2.0</version>
 						<configuration>
 							<!-- The native image build needs to know the entry point to your application -->
 							<mainClass>com.workoss.boot.storage.StorageApplication</mainClass>
