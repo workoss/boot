@@ -17,10 +17,14 @@ package com.workoss.boot.util.json;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.workoss.boot.util.DateUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -32,11 +36,17 @@ public class Java8DateTimeModule {
 
 	public Module getModule() {
 		LocalDateTimeDeserializer localDateTimeDeserializer = new LocalDateTimeDeserializer();
-		JavaTimeModule javaTimeModule = new JavaTimeModule();
-		javaTimeModule.addDeserializer(LocalDateTime.class, localDateTimeDeserializer);
-		javaTimeModule.addSerializer(LocalDateTime.class,
-				new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_TIME_PATTERN)));
-		return javaTimeModule;
+		LocalDateDeserializer localDateDeserializer = new LocalDateDeserializer();
+		LocalTimeDeserializer localTimeDeserializer = new LocalTimeDeserializer();
+		return new JavaTimeModule().addDeserializer(LocalDateTime.class, localDateTimeDeserializer)
+				.addSerializer(LocalDateTime.class,
+						new LocalDateTimeSerializer(
+								DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_TIME_PATTERN)))
+				.addDeserializer(LocalDate.class, localDateDeserializer)
+				.addSerializer(LocalDate.class,
+						new LocalDateSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_PATTERN)))
+				.addDeserializer(LocalTime.class, localTimeDeserializer).addSerializer(LocalTime.class,
+						new LocalTimeSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_TIME_PATTERN)));
 	}
 
 }

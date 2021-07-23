@@ -16,49 +16,32 @@
 package com.workoss.boot.util.json;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
 
 import java.io.IOException;
 import java.time.DateTimeException;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * 自定义jacksonlocalDate格式化
- *
- * @author workoss
- */
-@SuppressWarnings("ALL")
-public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer {
+public class LocalTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer {
 
 	private String[] patterns = new String[0];
 
-	public LocalDateTimeDeserializer(String... patterns) {
-		super(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_TIME_PATTERN));
+	public LocalTimeDeserializer(String... patterns) {
+		super(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_TIME_PATTERN));
 		if (CollectionUtils.isNotEmpty(patterns)) {
 			this.patterns = patterns;
 		}
 	}
 
 	@Override
-	public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-		LocalDateTime localDateTime = null;
-		if (parser.hasTokenId(JsonTokenId.ID_STRING)) {
-			localDateTime = _fromString(parser, context, parser.getText());
-		}
-		// 30-Sep-2020, tatu: New! "Scalar from Object" (mostly for XML)
-		if (parser.isExpectedStartObjectToken()) {
-			localDateTime = _fromString(parser, context, context.extractScalarFromObject(parser, this, handledType()));
-		}
-		return localDateTime != null ? localDateTime : super.deserialize(parser, context);
+	public LocalTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+		return super.deserialize(parser, context);
 	}
 
-	protected LocalDateTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
+	protected LocalTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
 		String string = string0.trim();
 		if (string.length() == 0) {
 			// 22-Oct-2020, tatu: not sure if we should pass original (to distinguish
@@ -67,7 +50,7 @@ public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.js
 			return _fromEmptyString(p, ctxt, string);
 		}
 		try {
-			return DateUtils.parse(string, patterns);
+			return DateUtils.localTimeParse(string);
 		}
 		catch (DateTimeException e) {
 

@@ -5,14 +5,14 @@ spring:
     encoding: UTF-8
     basename: i18n/message,i18n/valid
     fallback-to-system-locale: true
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
   webflux:
+    base-path: /storage
     format:
       date-time: yyyy-MM-dd HH:mm:ss
       date: yyyy-MM-dd
       time: HH:mm:ss
-    base-path: /storage
+
+
   r2dbc:
     name: r2dbc
     url: r2dbc:mariadb://139.196.88.110:3307/o2o-grab?serverTimezone=Asia/Shanghai

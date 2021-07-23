@@ -23,6 +23,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.workoss.boot.storage.web.advice.GlobalResponseHandler;
 import com.workoss.boot.storage.web.filter.ReactiveRequestContextFilter;
+import com.workoss.boot.util.DateUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.MessageSource;
@@ -56,6 +57,7 @@ import java.util.Map;
 @Configuration
 public class WebConfig {
 
+
 	@Bean
 	public GlobalResponseHandler globalResponseHandler(ServerCodecConfigurer serverCodecConfigurer,
 			RequestedContentTypeResolver requestedContentTypeResolver) {
@@ -64,15 +66,18 @@ public class WebConfig {
 
 	@Bean
 	public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(Environment environment) {
-		String datetimePattern = environment.getProperty("spring.webflux.format.date-time", "yyyy-MM-dd HH:mm:ss");
-		String datePattern = environment.getProperty("spring.webflux.format.date", "yyyy-MM-dd");
-		String timePattern = environment.getProperty("spring.webflux.format.time", "HH:mm:ss");
+		String datetimePattern = environment.getProperty("spring.webflux.format.date-time", DateUtils.DEFAULT_DATE_TIME_PATTERN);
+		String datePattern = environment.getProperty("spring.webflux.format.date", DateUtils.DEFAULT_DATE_PATTERN);
+		String timePattern = environment.getProperty("spring.webflux.format.time", DateUtils.DEFAULT_TIME_PATTERN);
+		String timeZone = environment.getProperty("spring.jackson.time-zone",DateUtils.DEFAULT_TIME_ZONE);
 
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern);
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
 
-		return builder -> builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter))
+		return builder -> builder
+				.timeZone(timeZone)
+				.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter))
 				.serializerByType(LocalDate.class, new LocalDateSerializer(dateFormatter))
 				.serializerByType(LocalTime.class, new LocalTimeSerializer(timeFormatter))
 				.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter))

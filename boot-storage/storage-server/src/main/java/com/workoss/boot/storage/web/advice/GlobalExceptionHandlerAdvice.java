@@ -51,7 +51,7 @@ public class GlobalExceptionHandlerAdvice {
 	@ExceptionHandler({ MethodArgumentNotValidException.class })
 	public ResultInfo validationErrorHandler(MethodArgumentNotValidException exception) {
 		String errorInfo = exception.getBindingResult().getAllErrors().stream().map(error -> {
-			log.warn("【VALID】参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
+			log.warn("[VALID]参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
 			return error.getDefaultMessage();
 		}).collect(Collectors.joining(";"));
 		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), errorInfo);
@@ -61,7 +61,7 @@ public class GlobalExceptionHandlerAdvice {
 	@ExceptionHandler({ ConstraintViolationException.class })
 	public ResultInfo validationErrorHandler(ConstraintViolationException exception) {
 		String errorInfo = exception.getConstraintViolations().stream().map(error -> {
-			log.warn("【VALID】参数校验异常 {}:{}", error.getPropertyPath(), error.getMessage());
+			log.warn("[VALID]参数校验异常 {}:{}", error.getPropertyPath(), error.getMessage());
 			return error.getMessage();
 		}).collect(Collectors.joining(";"));
 		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), errorInfo);
@@ -71,7 +71,7 @@ public class GlobalExceptionHandlerAdvice {
 	@ExceptionHandler({ WebExchangeBindException.class })
 	public ResultInfo validationErrorHandler(WebExchangeBindException exception) {
 		String errorInfo = exception.getBindingResult().getAllErrors().stream().map(error -> {
-			log.warn("【VALID】参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
+			log.warn("[VALID]参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
 			return error.getDefaultMessage();
 		}).collect(Collectors.joining(";"));
 		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), errorInfo);
@@ -80,7 +80,7 @@ public class GlobalExceptionHandlerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler({ IllegalArgumentException.class })
 	public ResultInfo defaultException(IllegalArgumentException exception) {
-		log.warn("【VALID】参数校验异常 {}", exception.getMessage());
+		log.warn("[VALID]参数校验异常 {}", exception.getMessage());
 		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), exception.getMessage());
 	}
 

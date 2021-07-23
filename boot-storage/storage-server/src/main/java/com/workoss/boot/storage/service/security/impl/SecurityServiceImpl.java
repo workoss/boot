@@ -56,7 +56,7 @@ public class SecurityServiceImpl implements SecurityService {
 	private static final Cache<String, Signal<? extends MapContext<String, String>>> ACCOUNT_CACHE = Caffeine
 			.newBuilder().initialCapacity(4).maximumSize(50).expireAfterWrite(Duration.ofHours(1))
 			.removalListener((key, value, cause) -> {
-				log.debug("【popeye】ACCOUNT_CACHE KEY：{} cause:{}", key, cause);
+				log.debug("[popeye]ACCOUNT_CACHE KEY：{} cause:{}", key, cause);
 			}).build();
 
 	public SecurityServiceImpl(StorageAccountRepository storageAccountRepository,
@@ -81,7 +81,7 @@ public class SecurityServiceImpl implements SecurityService {
 						context.put("policy", accountEntity.getPolicyTemplate());
 						return Mono.just(context);
 					}).doOnSuccess(context -> {
-						log.debug("【popeye】ACCOUNT_CACHE KEY：{} LOAD FROM DB", storage.getStorageType());
+						log.debug("[popeye]ACCOUNT_CACHE KEY：{} LOAD FROM DB", storage.getStorageType());
 					});
 		});
 	}

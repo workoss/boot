@@ -67,11 +67,14 @@ public class DateUtils {
 	 * 日期默认格式
 	 */
 	public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
+	public static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
+	public static final String DEFAULT_TIME_ZONE = "Asia/Shanghai";
 
 	private DateUtils() {
 	}
 
-	static DateTimeFormatter getDateTimeFormatter(String pattern) {
+	public static DateTimeFormatter getDateTimeFormatter(String pattern) {
 		if (StringUtils.isBlank(pattern)) {
 			pattern = DEFAULT_DATE_TIME_PATTERN;
 		}
@@ -272,6 +275,22 @@ public class DateUtils {
 		throw new RuntimeException(e);
 	}
 
+
+	public static LocalTime localTimeParse(@NonNull String time, @Nullable String... patterns) {
+		if (CollectionUtils.isEmpty(patterns)) {
+			return parse(time).toLocalTime();
+		}
+		Exception e = null;
+		for (String pattern : patterns) {
+			try {
+				return LocalTime.parse(time, getDateTimeFormatter(pattern));
+			}
+			catch (Exception ignored) {
+				e = ignored;
+			}
+		}
+		throw new RuntimeException(e);
+	}
 	/**
 	 * <p>
 	 * 格式化日期

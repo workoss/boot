@@ -113,7 +113,7 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 					GlobalResponseHandler.class.getDeclaredMethod("methodForParams"), -1);
 		}
 		catch (NoSuchMethodException e) {
-			log.error("【GLOBAL】[获取 METHOD_PARAMETER_MONO_COMMON_RESULT 时，找不都方法");
+			log.error("[GLOBAL][获取 METHOD_PARAMETER_MONO_COMMON_RESULT 时，找不都方法");
 			throw new RuntimeException(e);
 		}
 	}
