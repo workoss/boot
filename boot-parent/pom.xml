@@ -114,7 +114,7 @@
 		<springdoc-openapi.version>1.5.9</springdoc-openapi.version>
 		<druid.version>1.2.6</druid.version>
 		<h2.version>1.4.200</h2.version>
-		<rocksdbjni.version>6.22.1</rocksdbjni.version>
+		<rocksdbjni.version>6.22.1.1</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
