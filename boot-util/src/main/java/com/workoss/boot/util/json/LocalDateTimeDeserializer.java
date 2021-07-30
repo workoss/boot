@@ -16,10 +16,8 @@
 package com.workoss.boot.util.json;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
 
@@ -33,7 +31,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
+
 public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer {
 
 	private String[] patterns = new String[0];
@@ -70,7 +68,7 @@ public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.js
 			return DateUtils.parse(string, patterns);
 		}
 		catch (DateTimeException e) {
-
+			//ignore
 		}
 		return null;
 	}

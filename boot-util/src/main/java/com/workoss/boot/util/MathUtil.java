@@ -35,7 +35,7 @@ public class MathUtil {
 	 * <li>{@code >= 2^30} - 2^30</li>
 	 * </ul>
 	 */
-	public static final int safeFindNextPositivePowerOfTwo(int value) {
+	public static int safeFindNextPositivePowerOfTwo(int value) {
 		return value <= 0 ? 1 : value >= 0x40000000 ? 0x40000000 : findNextPositivePowerOfTwo(value);
 	}
 

@@ -22,6 +22,7 @@ import java.util.Arrays;
 /**
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class ObjectUtil {
 
 	public static <T> T checkNotNull(T arg, String text) {

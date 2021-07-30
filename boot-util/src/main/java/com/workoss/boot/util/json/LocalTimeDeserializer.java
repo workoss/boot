@@ -50,10 +50,10 @@ public class LocalTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310
 			return _fromEmptyString(p, ctxt, string);
 		}
 		try {
-			return DateUtils.localTimeParse(string);
+			return DateUtils.localTimeParse(string,patterns);
 		}
 		catch (DateTimeException e) {
-
+			//ignore
 		}
 		return null;
 	}

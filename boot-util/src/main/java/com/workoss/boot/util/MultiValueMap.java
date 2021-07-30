@@ -27,6 +27,7 @@ import java.util.Map;
  * @param <V> value
  * @author workoss
  */
+@SuppressWarnings("unused")
 public interface MultiValueMap<K, V> extends Map<K, List<V>> {
 
 	/**

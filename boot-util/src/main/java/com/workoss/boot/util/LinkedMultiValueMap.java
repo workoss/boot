@@ -15,6 +15,7 @@
  */
 package com.workoss.boot.util;
 
+import com.workoss.boot.annotation.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.*;
@@ -26,9 +27,10 @@ import java.util.*;
  * @param <V> list泛型
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class LinkedMultiValueMap<K, V> implements MultiValueMap<K, V>, Cloneable {
 
-	private Map<K, List<V>> targetMap;
+	private final Map<K, List<V>> targetMap;
 
 	public LinkedMultiValueMap() {
 		this(new LinkedHashMap<>());
@@ -130,7 +132,7 @@ public class LinkedMultiValueMap<K, V> implements MultiValueMap<K, V>, Cloneable
 	}
 
 	@Override
-	public void putAll(Map<? extends K, ? extends List<V>> map) {
+	public void putAll(@NonNull Map<? extends K, ? extends List<V>> map) {
 		this.targetMap.putAll(map);
 	}
 
@@ -168,5 +170,6 @@ public class LinkedMultiValueMap<K, V> implements MultiValueMap<K, V>, Cloneable
 	public String toString() {
 		return this.targetMap.toString();
 	}
+
 
 }

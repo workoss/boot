@@ -30,7 +30,7 @@ public class ExceptionUtils {
 	public static String toString(Throwable e) {
 		StackTraceElement[] traces = e.getStackTrace();
 		StringBuilder sb = new StringBuilder(1024);
-		sb.append(e.toString()).append("\n");
+		sb.append(e).append("\n");
 		if (traces != null) {
 			for (StackTraceElement trace : traces) {
 				sb.append("\tat ").append(trace).append("\n");
@@ -48,7 +48,7 @@ public class ExceptionUtils {
 	public static String toShortString(Throwable e, int stackLevel) {
 		StackTraceElement[] traces = e.getStackTrace();
 		StringBuilder sb = new StringBuilder(1024);
-		sb.append(e.toString()).append("\t");
+		sb.append(e).append("\t");
 		if (traces != null) {
 			for (int i = 0; i < traces.length; i++) {
 				if (i < stackLevel) {

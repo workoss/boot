@@ -58,15 +58,14 @@ public class LocalDateDeserializer extends com.fasterxml.jackson.datatype.jsr310
 			// handled like "regular" empty (same as pre-2.12)
 			return _fromEmptyString(p, ctxt, string);
 		}
-		LocalDate localDate = null;
 		try {
 			// as per [datatype-jsr310#37], only check for optional (and, incorrect...)
 			// time marker 'T'
 			// if we are using default formatter
-			localDate = DateUtils.localDateParse(string);
+			return DateUtils.localDateParse(string,patterns);
 		}
 		catch (DateTimeException e) {
-
+			//ignore
 		}
 		return null;
 	}

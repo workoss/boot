@@ -19,12 +19,10 @@ import com.workoss.boot.annotation.lang.NonNull;
 import com.workoss.boot.annotation.lang.Nullable;
 import com.workoss.boot.util.collection.CollectionUtils;
 import com.workoss.boot.util.collection.Pair;
-import com.workoss.boot.util.exception.BootException;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -39,6 +37,17 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings("ALL")
 public class DateUtils {
+
+	/**
+	 * 日期默认格式
+	 */
+	public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+	public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
+
+	public static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
+
+	public static final String DEFAULT_TIME_ZONE = "Asia/Shanghai";
 
 	private static final Map<Pattern, Pair<Class<?>, String>> PATTERN_PATTERNSTR_MAP = new LinkedHashMap<>();
 
@@ -62,14 +71,6 @@ public class DateUtils {
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}:\\d{2}:\\d{2}$"), Pair.of(LocalTime.class, "HH:mm:ss"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}\\d{2}\\d{2}$"), Pair.of(LocalTime.class, "HHmmss"));
 	}
-
-	/**
-	 * 日期默认格式
-	 */
-	public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-	public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
-	public static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
-	public static final String DEFAULT_TIME_ZONE = "Asia/Shanghai";
 
 	private DateUtils() {
 	}
@@ -231,6 +232,9 @@ public class DateUtils {
 	 * @return LocalDateTime
 	 */
 	public static LocalDateTime parse(@Nullable String str) {
+		if (StringUtils.isBlank(str)) {
+			throw new RuntimeException("str 必须是日期时间字符串");
+		}
 		for (Map.Entry<Pattern, Pair<Class<?>, String>> patternPairEntry : PATTERN_PATTERNSTR_MAP.entrySet()) {
 			if (patternPairEntry.getKey().matcher(str).matches()) {
 				Pair<Class<?>, String> pair = patternPairEntry.getValue();
@@ -268,13 +272,12 @@ public class DateUtils {
 			try {
 				return LocalDateTime.parse(dateTime, getDateTimeFormatter(pattern));
 			}
-			catch (Exception ignored) {
-				e = ignored;
+			catch (Exception ignoredException) {
+				e = ignoredException;
 			}
 		}
 		throw new RuntimeException(e);
 	}
-
 
 	public static LocalTime localTimeParse(@NonNull String time, @Nullable String... patterns) {
 		if (CollectionUtils.isEmpty(patterns)) {
@@ -285,12 +288,13 @@ public class DateUtils {
 			try {
 				return LocalTime.parse(time, getDateTimeFormatter(pattern));
 			}
-			catch (Exception ignored) {
-				e = ignored;
+			catch (Exception ignoredException) {
+				e = ignoredException;
 			}
 		}
 		throw new RuntimeException(e);
 	}
+
 	/**
 	 * <p>
 	 * 格式化日期
@@ -308,8 +312,8 @@ public class DateUtils {
 			try {
 				return LocalDate.parse(dateTime, getDateTimeFormatter(pattern));
 			}
-			catch (Exception ignored) {
-				e = ignored;
+			catch (Exception ignoredException) {
+				e = ignoredException;
 			}
 		}
 		throw new RuntimeException(e);
@@ -581,10 +585,7 @@ public class DateUtils {
 	 * @return 秒
 	 */
 	public static long getMillis(@NonNull LocalDateTime localDateTime) {
-		if (localDateTime == null) {
-			return 0;
-		}
-		return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		return localDateTime == null ? 0 : localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 	}
 
 	/**
@@ -609,11 +610,7 @@ public class DateUtils {
 	 * @return LocalDateTime
 	 */
 	public static LocalDateTime getDayStart(@NonNull LocalDateTime localDateTime) {
-		if (localDateTime == null) {
-			return null;
-		}
-		localDateTime = localDateTime.withHour(0).withMinute(0).withSecond(0);
-		return localDateTime;
+		return localDateTime == null ? null : localDateTime.withHour(0).withMinute(0).withSecond(0);
 	}
 
 	/**
@@ -624,11 +621,7 @@ public class DateUtils {
 	 * @return LocalDateTime
 	 */
 	public static LocalDateTime getDayEnd(@NonNull LocalDateTime localDateTime) {
-		if (localDateTime == null) {
-			return null;
-		}
-		localDateTime = localDateTime.withHour(23).withMinute(59).withSecond(59);
-		return localDateTime;
+		return localDateTime == null ? null : localDateTime.withHour(23).withMinute(59).withSecond(59);
 	}
 
 	/**

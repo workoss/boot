@@ -28,12 +28,12 @@ import java.util.regex.Pattern;
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("unused")
 public class StringUtils {
 
-	public static String EMPTY = "";
-
 	public static final String[] EMPTY_STRING_ARRAY = new String[0];
+	private static final ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>(16);
+	public static String EMPTY = "";
 
 	public static boolean isEmpty(CharSequence cs) {
 		return (cs == null) || (cs.length() == 0);
@@ -67,10 +67,7 @@ public class StringUtils {
 
 	public static boolean isBlank(CharSequence... cs) {
 		for (CharSequence c : cs) {
-			if (isBlank(c)) {
-				continue;
-			}
-			else {
+			if (isNotBlank(c)) {
 				return false;
 			}
 		}
@@ -105,10 +102,7 @@ public class StringUtils {
 
 	public static boolean compareLength(CharSequence str, int minLength, int maxLength) {
 		int strlength = (isBlank(str) ? 0 : str.length());
-		if (strlength >= minLength && strlength <= maxLength) {
-			return true;
-		}
-		return false;
+		return strlength >= minLength && strlength <= maxLength;
 	}
 
 	public static boolean hasLength(String str) {
@@ -119,17 +113,17 @@ public class StringUtils {
 		if (!hasLength(str)) {
 			return false;
 		}
-		else {
-			int strLen = str.length();
 
-			for (int i = 0; i < strLen; ++i) {
-				if (!Character.isWhitespace(str.charAt(i))) {
-					return true;
-				}
+		int strLen = str.length();
+
+		for (int i = 0; i < strLen; ++i) {
+			if (!Character.isWhitespace(str.charAt(i))) {
+				return true;
 			}
-
-			return false;
 		}
+
+		return false;
+
 	}
 
 	public static boolean isTrue(Object obj) {
@@ -255,8 +249,6 @@ public class StringUtils {
 		return renderString(content, "\\$\\{", "\\}", map, nullValue);
 	}
 
-	private static ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>(16);
-
 	public static String renderString(String content, String prefixPattern, String suffixPattern,
 			Map<String, String> map, String nullValue) {
 		if (StringUtils.isBlank(content)) {
@@ -298,7 +290,7 @@ public class StringUtils {
 				maskBuilder.append("*");
 			}
 		}
-		return name.replaceAll("(\\D)(.*)", "$1" + maskBuilder.toString());
+		return name.replaceAll("(\\D)(.*)", "$1" + maskBuilder);
 	}
 
 	public static String phoneMask(String phone) {

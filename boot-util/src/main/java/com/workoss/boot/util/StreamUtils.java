@@ -15,12 +15,15 @@
  */
 package com.workoss.boot.util;
 
+import com.workoss.boot.annotation.lang.NonNull;
+
 import java.io.*;
 import java.nio.charset.Charset;
 
 /**
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StreamUtils {
 
 	/**
@@ -76,7 +79,7 @@ public class StreamUtils {
 		StringBuilder out = new StringBuilder();
 		try (InputStreamReader reader = new InputStreamReader(in, charset)) {
 			char[] buffer = new char[BUFFER_SIZE];
-			int bytesRead = -1;
+			int bytesRead;
 			while ((bytesRead = reader.read(buffer)) != -1) {
 				out.append(buffer, 0, bytesRead);
 			}
@@ -158,7 +161,7 @@ public class StreamUtils {
 
 		int byteCount = 0;
 		byte[] buffer = new byte[BUFFER_SIZE];
-		int bytesRead = -1;
+		int bytesRead;
 		while ((bytesRead = in.read(buffer)) != -1) {
 			out.write(buffer, 0, bytesRead);
 			byteCount += bytesRead;
@@ -222,7 +225,7 @@ public class StreamUtils {
 	public static int drain(InputStream in) throws IOException {
 		Assert.notNull(in, "No InputStream specified");
 		byte[] buffer = new byte[BUFFER_SIZE];
-		int bytesRead = -1;
+		int bytesRead;
 		int byteCount = 0;
 		while ((bytesRead = in.read(buffer)) != -1) {
 			byteCount += bytesRead;
@@ -268,7 +271,8 @@ public class StreamUtils {
 		}
 
 		@Override
-		public void close() throws IOException {
+		public void close() {
+			// ignore
 		}
 
 	}
@@ -280,13 +284,14 @@ public class StreamUtils {
 		}
 
 		@Override
-		public void write(byte[] b, int off, int let) throws IOException {
+		public void write(@NonNull byte[] b, int off, int let) throws IOException {
 			// It is critical that we override this method for performance
 			this.out.write(b, off, let);
 		}
 
 		@Override
-		public void close() throws IOException {
+		public void close() {
+			// ignore
 		}
 
 	}
