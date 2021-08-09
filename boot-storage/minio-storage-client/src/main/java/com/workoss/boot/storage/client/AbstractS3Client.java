@@ -15,9 +15,8 @@
  */
 package com.workoss.boot.storage.client;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.workoss.boot.storage.config.StorageClientConfig;
 import com.workoss.boot.storage.exception.StorageClientNotFoundException;
 import com.workoss.boot.storage.exception.StorageDownloadException;
@@ -65,10 +64,10 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	protected StorageClientConfig config;
 
-	protected static Cache<String, StorageStsToken> STS_TOKEN_CACHE = Caffeine.newBuilder()
+	protected static Cache<String, StorageStsToken> STS_TOKEN_CACHE = CacheBuilder.newBuilder()
 			.expireAfterWrite(12, TimeUnit.MINUTES).maximumSize(200)
-			.removalListener((String key, StorageStsToken value, RemovalCause cause) -> {
-				log.debug("【STORAGE】STS_TOKEN_CACHE KEY：{} cause:{}", key, cause);
+			.removalListener(notification -> {
+				log.debug("【STORAGE】STS_TOKEN_CACHE KEY：{} cause:{}", notification.getKey(), notification.getCause());
 			}).build();
 
 	@Override
