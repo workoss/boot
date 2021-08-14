@@ -143,7 +143,7 @@
 		<maven-site-plugin.version>3.9.1</maven-site-plugin.version>
 		<flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.28</spring-javaformat-maven-plugin.version>
-		<git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
+		<git-commit-id-maven-plugin.version>4.9.9</git-commit-id-maven-plugin.version>
 		<versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
 		<license-maven-plugin.version>4.1</license-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
@@ -558,8 +558,8 @@
 
 	<repositories>
 		<repository>
-			<id>alimaven</id>
-			<name>aliyun maven</name>
+			<id>aliyunmaven</id>
+			<name>阿里云公共仓库</name>
 			<url>https://maven.aliyun.com/repository/public</url>
 		</repository>
 		<repository>
@@ -574,88 +574,22 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>spring</id>
-			<name>spring lib-milestone</name>
-			<url>https://repo.spring.io/libs-milestone</url>
+			<id>aliyun-spring</id>
+			<name>aliyun-spring</name>
+			<url>https://maven.aliyun.com/repository/spring</url>
 		</repository>
-		<repository>
-			<id>libs-milestone-local</id>
-			<name>libs-milestone-local</name>
-			<url>https://repo.spring.io/libs-milestone-local</url>
-		</repository>
-		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>rdc-releases</id>
-			<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>rdc-snapshots</id>
-			<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
+
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>spring</id>
-			<name>spring lib-milestone</name>
-			<url>https://repo.spring.io/libs-milestone</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<id>aliyunmaven</id>
+			<name>阿里云公共仓库</name>
+			<url>https://maven.aliyun.com/repository/public</url>
 		</pluginRepository>
 		<pluginRepository>
-			<id>aliyun-public</id>
-			<name>aliyun-public</name>
-			<url>https://maven.aliyun.com/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>rdc-releases</id>
-			<url>https://packages.aliyun.com/maven/repository/2018751-release-sb65PP/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>rdc-snapshots</id>
-			<url>https://packages.aliyun.com/maven/repository/2018751-snapshot-UpWoHZ/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<id>aliyun-spring-plugin</id>
+			<name>aliyun-spring-plugin</name>
+			<url>https://maven.aliyun.com/repository/spring-plugin</url>
 		</pluginRepository>
 	</pluginRepositories>
 

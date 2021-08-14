@@ -29,6 +29,6 @@ public enum AccountState {
 	/**
 	 * 账号关闭
 	 */
-	OFF;
+	OFF
 
 }

@@ -16,6 +16,7 @@
 package com.workoss.boot.storage.web.vo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 
@@ -24,6 +25,7 @@ import javax.validation.constraints.NotBlank;
  *
  * @author workoss
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class UploadSignParam extends StorageParam {
 

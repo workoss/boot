@@ -22,6 +22,7 @@ package com.workoss.boot.storage.mapper;
  * @param <T> target
  * @author workoss
  */
+@SuppressWarnings("unused")
 public interface BeanMapper<S, T> {
 
 	/**

@@ -28,6 +28,7 @@ import java.util.function.Function;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class ReactorUtil {
 
 	private static <K, V> Function<K, Mono<Signal<? extends V>>> reader(Cache<K, Signal<? extends V>> cache) {

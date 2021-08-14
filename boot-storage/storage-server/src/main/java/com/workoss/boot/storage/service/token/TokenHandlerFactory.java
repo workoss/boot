@@ -15,6 +15,7 @@
  */
 package com.workoss.boot.storage.service.token;
 
+import com.workoss.boot.annotation.lang.Nullable;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -35,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class TokenHandlerFactory implements ApplicationContextAware, InitializingBean {
 
-	private static Map<ThirdPlatformType, TokenHandler> TOKEN_HANDLER_CACHE = new ConcurrentHashMap();
+	private static Map<ThirdPlatformType, TokenHandler> TOKEN_HANDLER_CACHE = new ConcurrentHashMap<>();
 
 	private ApplicationContext applicationContext;
 
@@ -47,15 +48,15 @@ public class TokenHandlerFactory implements ApplicationContextAware, Initializin
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		applicationContext.getBeansOfType(TokenHandler.class).values().forEach(tokenHandler -> {
 			TOKEN_HANDLER_CACHE.put(tokenHandler.getName(), tokenHandler);
-			log.info("[TOKEN_HANDLER] 新增handler {}: {}", tokenHandler.getName(), tokenHandler.toString());
+			log.info("[TOKEN_HANDLER] 新增handler {}: {}", tokenHandler.getName(), tokenHandler);
 		});
 	}
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	public void setApplicationContext(@Nullable ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
 

@@ -23,6 +23,7 @@ import java.util.List;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StorageFileInfoListing {
 
 	private String nextToken;

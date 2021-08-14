@@ -26,6 +26,7 @@ import reactor.core.publisher.Mono;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class ReactiveRequestContextFilter implements WebFilter {
 

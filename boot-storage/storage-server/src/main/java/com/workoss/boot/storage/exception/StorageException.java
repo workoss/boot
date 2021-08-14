@@ -22,6 +22,7 @@ import com.workoss.boot.util.exception.BootException;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StorageException extends BootException {
 
 	public StorageException(String errcode) {

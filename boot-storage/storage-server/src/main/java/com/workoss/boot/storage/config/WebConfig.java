@@ -46,7 +46,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -90,9 +90,9 @@ public class WebConfig {
 	public CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.setAllowedOriginPatterns(Arrays.asList("*"));
-		config.setAllowedHeaders(Arrays.asList("*"));
-		config.setAllowedMethods(Arrays.asList("*"));
+		config.setAllowedOriginPatterns(Collections.singletonList("*"));
+		config.setAllowedHeaders(Collections.singletonList("*"));
+		config.setAllowedMethods(Collections.singletonList("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
 		return new CorsWebFilter(source);

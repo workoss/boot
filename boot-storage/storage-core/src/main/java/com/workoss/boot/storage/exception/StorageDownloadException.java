@@ -20,6 +20,7 @@ package com.workoss.boot.storage.exception;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StorageDownloadException extends StorageException {
 
 	public StorageDownloadException(String s) {

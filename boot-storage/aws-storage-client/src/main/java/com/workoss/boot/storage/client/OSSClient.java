@@ -63,9 +63,7 @@ public class OSSClient extends AbstractS3Client {
 	}
 
 	private void checkEndpointUrl(String endpoint) {
-		new Thread(() -> {
-			initAvaiableEndpointUrl(endpoint);
-		}, String.join("-", "STORAGE", type().name())).start();
+		new Thread(() -> initAvaiableEndpointUrl(endpoint), String.join("-", "STORAGE", type().name())).start();
 	}
 
 	private void initAvaiableEndpointUrl(String endpoint) {
@@ -81,8 +79,7 @@ public class OSSClient extends AbstractS3Client {
 		if (checkValid) {
 			AVAIABLE_ENDPOINT.put(endpoint, internalUrl);
 			log.info("【STORAGE】OSS 地址:{} 内网可达，切换到内网请求", internalUrl);
-		}
-		else {
+		} else {
 			AVAIABLE_ENDPOINT.put(endpoint, endpoint);
 			log.info("【STORAGE】OSS 地址:{} 内网不可达，使用配置endpoint", endpoint);
 		}
@@ -95,7 +92,7 @@ public class OSSClient extends AbstractS3Client {
 
 	@Override
 	protected StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
-			String successActionStatus) {
+												 String successActionStatus) {
 		return requestSign(config, key, mimeType, successActionStatus);
 	}
 

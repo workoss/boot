@@ -20,6 +20,7 @@ package com.workoss.boot.storage.model;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StorageSignature {
 
 	private StorageType storageType;

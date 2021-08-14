@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class ReactiveRequestContextHolder {
 
 	static final Class<ServerHttpRequest> CONTEXT_KEY = ServerHttpRequest.class;

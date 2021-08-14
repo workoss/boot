@@ -22,6 +22,7 @@ import java.util.Date;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StorageStsToken {
 
 	/**

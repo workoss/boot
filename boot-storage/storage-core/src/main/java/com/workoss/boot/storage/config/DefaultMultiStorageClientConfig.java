@@ -23,6 +23,7 @@ import java.util.Map;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class DefaultMultiStorageClientConfig implements MultiStorageClientConfig {
 
 	private boolean enabled = true;

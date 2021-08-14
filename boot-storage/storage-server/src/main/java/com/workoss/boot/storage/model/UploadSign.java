@@ -16,12 +16,14 @@
 package com.workoss.boot.storage.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 签名返回
  *
  * @author workoss
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class UploadSign extends BaseStorageModel {
 

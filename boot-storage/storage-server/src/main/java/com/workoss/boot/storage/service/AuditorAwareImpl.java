@@ -25,6 +25,7 @@ import java.util.Optional;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 @Component
 public class AuditorAwareImpl implements AuditorAware<String> {
 

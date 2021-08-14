@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class HttpUtil implements Closeable {
 
 	private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
@@ -81,9 +82,7 @@ public class HttpUtil implements Closeable {
 		RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonParam);
 		Request.Builder builder = new Request.Builder().url(url).post(requestBody);
 		if (headers != null) {
-			headers.entrySet().forEach(stringStringEntry -> {
-				builder.header(stringStringEntry.getKey(), stringStringEntry.getValue());
-			});
+			headers.forEach(builder::header);
 		}
 		try (Response response = getHttpClient().newCall(builder.build()).execute()) {
 			String respBody = null;
@@ -123,7 +122,7 @@ public class HttpUtil implements Closeable {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 
 	}
 

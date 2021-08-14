@@ -74,9 +74,7 @@ public class OSSClient extends AbstractS3Client {
 	}
 
 	private void checkEndpointUrl(String endpoint) {
-		new Thread(() -> {
-			initAvaiableEndpointUrl(endpoint);
-		}, String.join("-", "STORAGE", type().name())).start();
+		new Thread(() -> initAvaiableEndpointUrl(endpoint), String.join("-", "STORAGE", type().name())).start();
 	}
 
 	private void initAvaiableEndpointUrl(String endpoint) {

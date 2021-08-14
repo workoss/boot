@@ -72,10 +72,10 @@ abstract class BaseStorageTemplate implements StorageTemplate {
 		clientMap.entrySet().stream().forEach(clientEntry -> {
 			try {
 				clientEntry.getValue().shutdown();
-				log.info("【popeye】Storage key:{} close success", clientEntry.getKey());
+				log.info("【storage】Storage key:{} close success", clientEntry.getKey());
 			}
 			catch (Exception e) {
-				log.error("【popeye】Storage key:{} close error", clientEntry.getKey(), e);
+				log.error("【storage】Storage key:{} close error", clientEntry.getKey(), e);
 			}
 		});
 	}
@@ -84,7 +84,7 @@ abstract class BaseStorageTemplate implements StorageTemplate {
 		Map<StorageType, StorageClient> storageClientMap = loadStorageClient();
 		Map<StorageType, Integer> initNumMap = new HashMap<StorageType, Integer>(4);
 		if (multiStorageClientConfig != null && multiStorageClientConfig.isEnabled()) {
-			log.info("【popeye】multiStorageClientConfig init start");
+			log.info("【storage】multiStorageClientConfig init start");
 			Optional.ofNullable(multiStorageClientConfig.getClientConfigs()).orElse(new HashMap<>(16)).entrySet()
 					.stream()
 					.filter(storageClientConfigEntry -> storageClientMap
@@ -142,10 +142,10 @@ abstract class BaseStorageTemplate implements StorageTemplate {
 		try {
 			storageClient.init(config);
 			clientMap.put(key.toLowerCase(), storageClient);
-			log.info("【popeye】StorageClient add client :{} to cache", key.toLowerCase());
+			log.info("【storage】StorageClient add client :{} to cache", key.toLowerCase());
 		}
 		catch (Exception e) {
-			log.error("【popeye】StorageClient add client to cache {} error", key.toLowerCase(), e);
+			log.error("【storage】StorageClient add client to cache {} error", key.toLowerCase(), e);
 		}
 	}
 

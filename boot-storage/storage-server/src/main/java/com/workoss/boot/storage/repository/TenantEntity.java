@@ -16,6 +16,7 @@
 package com.workoss.boot.storage.repository;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.relational.core.mapping.Column;
 
 /**
@@ -23,6 +24,7 @@ import org.springframework.data.relational.core.mapping.Column;
  *
  * @author workoss
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class TenantEntity extends IdEntity {
 

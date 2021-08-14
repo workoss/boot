@@ -71,13 +71,12 @@ public abstract class AbstractTokenHandler implements TokenHandler {
 		Map<String, String> policyContext = new HashMap<>(2);
 		policyContext.put("resource", getResource(bucketName, action, key));
 		policyContext.put("action", getAction(bucketName, action));
-		String policy = MustacheTemplateUtil.render(context.get("policy"), policyContext);
-		return policy;
+		return MustacheTemplateUtil.render(context.get("policy"), policyContext);
 	}
 
 	protected UploadSign generateWebSign(String policyTemplate, Context<String, String> context, STSToken stsToken,
 			String bucketName, String key, String mimeType, String successActionStatus) {
-		Long durationSeconds = Long.parseLong(context.get("token_duration_seconds", "1200"));
+		long durationSeconds = Long.parseLong(context.get("token_duration_seconds", "1200"));
 		LocalDateTime expireTime = DateUtils.plusSeconds(DateUtils.getCurrentDateTime(), durationSeconds - 5 * 60);
 
 		Map<String, String> policyContext = new HashMap<>(8);

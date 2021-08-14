@@ -26,6 +26,7 @@ import java.util.Map;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public interface StorageTemplate {
 
 	/**

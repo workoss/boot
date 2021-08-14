@@ -26,6 +26,7 @@ import java.util.Map;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class MustacheTemplateUtil {
 
 	private static final Mustache.Compiler INSTANCE = Mustache.compiler().escapeHTML(false);

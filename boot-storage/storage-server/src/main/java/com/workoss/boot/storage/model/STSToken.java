@@ -16,6 +16,7 @@
 package com.workoss.boot.storage.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
  *
  * @author workoss
  */
-@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Data
 public class STSToken extends BaseStorageModel {

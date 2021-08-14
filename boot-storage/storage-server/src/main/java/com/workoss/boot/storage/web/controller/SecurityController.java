@@ -15,22 +15,23 @@
  */
 package com.workoss.boot.storage.web.controller;
 
-import com.workoss.boot.storage.mapper.web.STSTokenToVOMapper;
-import com.workoss.boot.storage.mapper.web.UploadSignToVOMapper;
 import com.workoss.boot.storage.mapper.web.STSTokenParamToStorageModelMapper;
+import com.workoss.boot.storage.mapper.web.STSTokenToVOMapper;
 import com.workoss.boot.storage.mapper.web.UploadSignParamToStorageModelMapper;
+import com.workoss.boot.storage.mapper.web.UploadSignToVOMapper;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.service.security.SecurityService;
 import com.workoss.boot.storage.web.vo.STSTokenParam;
 import com.workoss.boot.storage.web.vo.STSTokenVO;
-import com.workoss.boot.storage.web.vo.UploadSignVO;
 import com.workoss.boot.storage.web.vo.UploadSignParam;
-
+import com.workoss.boot.storage.web.vo.UploadSignVO;
 import com.workoss.boot.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
@@ -44,20 +45,23 @@ import reactor.core.publisher.Mono;
 @RestController
 public class SecurityController {
 
-	@Autowired
-	private SecurityService securityService;
+	private final SecurityService securityService;
 
-	@Autowired
-	private STSTokenParamToStorageModelMapper stsTokenToStorageModelMapper;
+	private final STSTokenParamToStorageModelMapper stsTokenToStorageModelMapper;
 
-	@Autowired
-	private STSTokenToVOMapper stsTokenToVOMapper;
+	private final STSTokenToVOMapper stsTokenToVOMapper;
 
-	@Autowired
-	private UploadSignParamToStorageModelMapper uploadSignParamToStorageModelMapper;
+	private final UploadSignParamToStorageModelMapper uploadSignParamToStorageModelMapper;
 
-	@Autowired
-	private UploadSignToVOMapper uploadSignToVOMapper;
+	private final UploadSignToVOMapper uploadSignToVOMapper;
+
+	public SecurityController(SecurityService securityService, STSTokenParamToStorageModelMapper stsTokenToStorageModelMapper, STSTokenToVOMapper stsTokenToVOMapper, UploadSignParamToStorageModelMapper uploadSignParamToStorageModelMapper, UploadSignToVOMapper uploadSignToVOMapper) {
+		this.securityService = securityService;
+		this.stsTokenToStorageModelMapper = stsTokenToStorageModelMapper;
+		this.stsTokenToVOMapper = stsTokenToVOMapper;
+		this.uploadSignParamToStorageModelMapper = uploadSignParamToStorageModelMapper;
+		this.uploadSignToVOMapper = uploadSignToVOMapper;
+	}
 
 	@PostMapping("/sign")
 	public Mono<UploadSignVO> generateWebSign(@Validated @RequestBody UploadSignParam param) {

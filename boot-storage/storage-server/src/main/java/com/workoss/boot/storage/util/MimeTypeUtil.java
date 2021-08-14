@@ -16,6 +16,7 @@
 package com.workoss.boot.storage.util;
 
 import org.springframework.http.MediaTypeFactory;
+import org.springframework.util.MimeType;
 
 /**
  * mimeType 工具
@@ -25,7 +26,7 @@ import org.springframework.http.MediaTypeFactory;
 public final class MimeTypeUtil {
 
 	public static String getMediaType(String key) {
-		return MediaTypeFactory.getMediaType(key).map(mediaType -> mediaType.toString()).orElse(null);
+		return MediaTypeFactory.getMediaType(key).map(MimeType::toString).orElse(null);
 	}
 
 }

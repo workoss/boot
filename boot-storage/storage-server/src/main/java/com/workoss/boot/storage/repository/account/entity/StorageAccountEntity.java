@@ -19,9 +19,9 @@ import com.workoss.boot.storage.model.AccountState;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.repository.TenantEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
  *
  * @author workoss
  */
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Data
 @Table("storage_account")
