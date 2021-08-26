@@ -56,17 +56,21 @@ public class DateUtils {
 	static {
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"),
 				Pair.of(LocalDateTime.class, "yyyy-MM-dd HH:mm:ss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$"), Pair.of(LocalDate.class, "yyyy-MM-dd"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}:\\d{2}:\\d{2}$"), Pair.of(LocalTime.class, "HH:mm:ss"));
+
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}$"),
 				Pair.of(LocalDateTime.class, "yyyy-MM-dd HH:mm:ss.SSS"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$"),
 				Pair.of(LocalDateTime.class, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$"),
 				Pair.of(LocalDateTime.class, "yyyy-MM-dd'T'HH:mm:ss"));
+		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"),
+				Pair.of(LocalDateTime.class, "yyyy-MM-dd'T'HH:mm:ss'Z'"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}$"),
 				Pair.of(LocalDateTime.class, "yyyy/MM/dd HH:mm:ss"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}\\d{2}$"),
 				Pair.of(LocalDateTime.class, "yyyyMMddHHmmss"));
-		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$"), Pair.of(LocalDate.class, "yyyy-MM-dd"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{4}\\d{2}\\d{2}$"), Pair.of(LocalDate.class, "yyyyMMdd"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}:\\d{2}:\\d{2}$"), Pair.of(LocalTime.class, "HH:mm:ss"));
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}\\d{2}\\d{2}$"), Pair.of(LocalTime.class, "HHmmss"));
