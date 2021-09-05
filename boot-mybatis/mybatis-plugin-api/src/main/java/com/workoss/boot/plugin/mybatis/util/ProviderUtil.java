@@ -15,9 +15,8 @@
  */
 package com.workoss.boot.plugin.mybatis.util;
 
-import com.workoss.boot.plugin.mybatis.provider.TableColumnInfo;
+import com.workoss.boot.plugin.mybatis.provider.ClassTableColumnInfo;
 import org.apache.ibatis.builder.annotation.ProviderContext;
-import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import org.apache.ibatis.session.Configuration;
@@ -26,14 +25,12 @@ import java.io.*;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -89,7 +86,8 @@ public class ProviderUtil {
 		return dbType;
 	}
 
-	public static String getScript(String dbType, String methodName, TableColumnInfo tableColumnInfo) {
+
+	public static String getScript(String dbType, String methodName, ClassTableColumnInfo tableColumnInfo) {
 		String script = getScriptTemplate(dbType, methodName);
 		if (ObjectUtil.isBlank(script)) {
 			return null;

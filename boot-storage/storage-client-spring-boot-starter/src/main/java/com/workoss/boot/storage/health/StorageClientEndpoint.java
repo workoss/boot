@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * @author workoss
  */
 @SuppressWarnings("unused")
-@Endpoint(id = "storage-client")
+@Endpoint(id = "storage")
 public class StorageClientEndpoint {
 
 	private final MultiStorageClientConfig multiStorageClientConfig;

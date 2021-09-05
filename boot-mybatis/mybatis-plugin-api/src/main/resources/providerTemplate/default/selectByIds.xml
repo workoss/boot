@@ -1,11 +1,11 @@
 <script>
 	<![CDATA[ <script> ]]>
 	select
-	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
-		${columnName} as ${tableColumnInfo.propertyNames[index]}
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		${columnInfo.columnName} as ${columnInfo.propertyName}
 	</foreach>
 	from ${tableColumnInfo.tableName}
-	where ${tableColumnInfo.idColumnName} in
+	where ${tableColumnInfo.idColumn.columnName} in
 	(<![CDATA[
 		<foreach collection="ids" item="id" index="index" open="" close="" separator=",">
 			#@{id}

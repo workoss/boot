@@ -1,15 +1,15 @@
 <script>
 	<![CDATA[ <script> ]]>
 	select
-	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
-		${columnName} as ${tableColumnInfo.propertyNames[index]}
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		${columnInfo.columnName} as ${columnInfo.propertyName}
 	</foreach>
 	from ${tableColumnInfo.tableName}
 	<![CDATA[ <where> ]]>
-	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator="">
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator="">
 		<![CDATA[
-             <if test="record.${propertyName} != null">
-              and ${tableColumnInfo.columnNames[index]} = #@{record.${propertyName}}
+             <if test="${columnInfo.propertyName} != null">
+              and ${columnInfo.columnName} = #@{${columnInfo.propertyName}}
             </if>
         ]]>
 	</foreach>

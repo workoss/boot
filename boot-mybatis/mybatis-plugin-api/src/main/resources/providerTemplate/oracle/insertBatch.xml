@@ -2,12 +2,12 @@
 	insert all
 	<![CDATA[<foreach collection="list" item="item" index="index" open="" close="" separator="">]]>
 	into ${tableColumnInfo.tableName} (
-	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
-		${tableColumnInfo.columnNames[index]}
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		${columnInfo.columnNames}
 	</foreach>
 	) values
-	(<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator=",">
-		#@{item.${propertyName}}
+	(<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		#@{item.${columnInfo.propertyName}}
 	</foreach>)
 	<![CDATA[</foreach>]]>
 	select 1 from dual

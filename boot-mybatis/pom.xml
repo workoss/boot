@@ -13,5 +13,7 @@
 	<modules>
 		<module>mybatis-plugin-api</module>
 		<module>mybatis-plugin-core</module>
+        <module>mybatis-plugin-javax-api</module>
+		<module>mybatis-plugin-jakarta-api</module>
 	</modules>
 </project>

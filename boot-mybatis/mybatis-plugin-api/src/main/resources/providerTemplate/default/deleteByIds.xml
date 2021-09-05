@@ -1,7 +1,7 @@
 <script>
 	<![CDATA[ <script> ]]>
 	delete from ${tableColumnInfo.tableName}
-	where ${tableColumnInfo.idColumnName} in
+	where ${tableColumnInfo.idColumn.columnName} in
 	(<![CDATA[
 		<foreach collection="ids" item="id" index="index" open="" close="" separator=",">
 			#@{id}

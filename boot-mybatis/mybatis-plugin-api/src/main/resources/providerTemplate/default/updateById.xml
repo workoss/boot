@@ -2,14 +2,14 @@
 	<![CDATA[ <script> ]]>
 	update ${tableColumnInfo.tableName}
 	<![CDATA[ <set> ]]>
-	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator="">
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator="">
 		<![CDATA[
-             <if test="record.${propertyName} != null">
-               ${tableColumnInfo.columnNames[index]} = #@{record.${propertyName}},
+             <if test="record.${columnInfo.propertyName} != null">
+               ${columnInfo.columnNames} = #@{record.${columnInfo.propertyName}},
             </if>
         ]]>
 	</foreach>
 	<![CDATA[ </set> ]]>
-	where ${tableColumnInfo.idColumnName} = #@{id}
+	where ${tableColumnInfo.idColumn.columnName} = #@{id}
 	<![CDATA[ </script> ]]>
 </script>

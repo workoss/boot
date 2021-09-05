@@ -1,11 +1,11 @@
 <script>
 	insert into ${tableColumnInfo.tableName} (
-	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
-		${columnName}
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		${columnInfo.columnName}
 	</foreach>
 	) values (
-	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator=",">
-		#@{record.${propertyName}}
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		#@{record.${columnInfo.propertyName}}
 	</foreach>
 	)
 </script>

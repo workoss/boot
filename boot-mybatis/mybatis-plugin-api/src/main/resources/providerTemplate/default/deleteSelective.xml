@@ -2,10 +2,10 @@
 	<![CDATA[ <script> ]]>
 	delete from ${tableColumnInfo.tableName}
 	<![CDATA[ <where> ]]>
-	<foreach collection="tableColumnInfo.propertyNames" item="propertyName" index="index" open="" close="" separator="">
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator="">
 		<![CDATA[
-             <if test="record.${propertyName} != null">
-              and ${tableColumnInfo.columnNames[index]} = #@{record.${propertyName}}
+             <if test="record.${columnInfo.propertyName} != null">
+              and ${columnInfo.columnName} = #@{record.${columnInfo.propertyName}}
             </if>
         ]]>
 	</foreach>

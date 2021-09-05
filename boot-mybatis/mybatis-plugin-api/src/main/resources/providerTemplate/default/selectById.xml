@@ -1,8 +1,8 @@
 <script>
 	select
-	<foreach collection="tableColumnInfo.columnNames" item="columnName" index="index" open="" close="" separator=",">
-		${columnName} as ${tableColumnInfo.propertyNames[index]}
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+		${columnInfo.columnName} as ${columnInfo.propertyName}
 	</foreach>
 	from ${tableColumnInfo.tableName}
-	where ${tableColumnInfo.idColumnName} = #@{id}
+	where ${tableColumnInfo.idColumn.columnName} = #@{id}
 </script>

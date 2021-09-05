@@ -128,6 +128,7 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 
 	@Test
 	void testDataClient() throws InterruptedException {
+
 		// databaseClient.sql().bind()
 		r2dbcEntityTemplate.count(Query.query(CriteriaDefinition.empty()), StorageAccountEntity.class).doOnNext(num -> {
 			System.out.println(Thread.currentThread().getName() + ":" + num);
