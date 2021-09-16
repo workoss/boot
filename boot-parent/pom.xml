@@ -92,7 +92,7 @@
 
 		<r2dbc-bom.version>Arabba-SR10</r2dbc-bom.version>
 
-		<protobuf-bom.version>3.17.3</protobuf-bom.version>
+		<protobuf-bom.version>3.18.0</protobuf-bom.version>
 		<protostuff.version>1.7.4</protostuff.version>
 		<liquibase.version>4.4.3</liquibase.version>
 
