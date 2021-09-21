@@ -26,6 +26,10 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * @author workoss
+ */
+@SuppressWarnings("ALL")
 public class LocalDateDeserializer extends com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer {
 
 	private String[] patterns = new String[0];
@@ -50,6 +54,7 @@ public class LocalDateDeserializer extends com.fasterxml.jackson.datatype.jsr310
 		return localDate != null ? localDate : super.deserialize(parser, context);
 	}
 
+	@Override
 	protected LocalDate _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
 		String string = string0.trim();
 		if (string.length() == 0) {

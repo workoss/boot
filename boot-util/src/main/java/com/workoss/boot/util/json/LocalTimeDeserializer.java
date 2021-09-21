@@ -25,6 +25,7 @@ import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+@SuppressWarnings("ALL")
 public class LocalTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer {
 
 	private String[] patterns = new String[0];
@@ -41,6 +42,7 @@ public class LocalTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310
 		return super.deserialize(parser, context);
 	}
 
+	@Override
 	protected LocalTime _fromString(JsonParser p, DeserializationContext ctxt, String string0) throws IOException {
 		String string = string0.trim();
 		if (string.length() == 0) {
