@@ -22,7 +22,7 @@ import com.workoss.boot.plugin.mybatis.util.ObjectUtil;
  *
  * @author workoss
  */
-class JavaxClassFinderMatcher implements ClassFinderMatcher {
+public class JavaxClassFinderMatcher implements ClassFinderMatcher {
 
 	@Override
 	public int order() {

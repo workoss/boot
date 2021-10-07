@@ -27,6 +27,11 @@ import javax.persistence.Transient;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
+/**
+ * javax class finder
+ *
+ * @author workoss
+ */
 @SuppressWarnings("ALL")
 class JavaxEntityClassFinder extends GenericEntityClassFinder {
 

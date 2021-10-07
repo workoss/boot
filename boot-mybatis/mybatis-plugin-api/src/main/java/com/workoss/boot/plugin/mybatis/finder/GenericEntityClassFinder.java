@@ -28,12 +28,15 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+/**
+ * @author workoss
+ */
 public abstract class GenericEntityClassFinder implements EntityClassFinder {
 
 	abstract String getTableName(Class clazz);
 
 	Optional<ClassTableColumnInfo> findTableColumnInfo(ProviderContext context, Predicate<Field> filter,
-			BiConsumer<ClassTableColumnInfo, Field> fieldConsumer) {
+													   BiConsumer<ClassTableColumnInfo, Field> fieldConsumer) {
 		ClassTableColumnInfo tableColumnInfo = new ClassTableColumnInfo();
 		return findEntityClass(context).map(aClass -> {
 			String tableName = getTableName(aClass);
@@ -49,6 +52,7 @@ public abstract class GenericEntityClassFinder implements EntityClassFinder {
 
 	/**
 	 * 查找当前方法对应的实体类
+	 *
 	 * @param context mybatis context
 	 * @return 实体类
 	 */

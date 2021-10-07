@@ -752,6 +752,8 @@
 							<link>https://docs.oracle.com/javase/8/docs/api</link>
 						</links>
 						<doclint>none</doclint>
+						<fixClassComment>true</fixClassComment>
+						<failOnWarnings>false</failOnWarnings>
 						<doctitle>Boot ${project.version} API</doctitle>
 						<windowtitle>Boot ${project.version} API</windowtitle>
 					</configuration>
