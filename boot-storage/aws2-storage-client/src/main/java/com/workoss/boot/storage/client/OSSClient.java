@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -64,15 +65,14 @@ public class OSSClient extends AbstractS3Client {
 	}
 
 	private void checkEndpointUrl(String endpoint) {
-		new Thread(() -> initAvaiableEndpointUrl(endpoint), String.join("-", "STORAGE", type().name())).start();
+		CompletableFuture.runAsync(() -> initAvaiableEndpointUrl(endpoint)).join();
 	}
 
 	private void initAvaiableEndpointUrl(String endpoint) {
 		// 多线程 异步 填入 endpoint 对应的 内网地址
 		String internalUrl = endpoint;
 		if (!endpoint.contains("internal.")) {
-			// 检测是否通 oss-cn-hangzhou.aliyuncs.com
-			// oss-cn-hangzhou-internal.aliyuncs.com
+			// 检测是否通 oss-cn-hangzhou.aliyuncs.com oss-cn-hangzhou-internal.aliyuncs.com
 			String host = endpoint.split("\\.")[0];
 			internalUrl = endpoint.replace(host, host + "-internal");
 		}

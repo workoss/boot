@@ -34,6 +34,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.awscore.exception.AwsErrorDetails;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
@@ -191,6 +192,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.collect(Collectors.toList());
 
 		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
+		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
@@ -209,6 +213,13 @@ public abstract class AbstractS3Client implements StorageClient {
 							bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
 					.findFirst().orElse(null);
 		}
+		catch (S3Exception s3Exception) {
+			AwsErrorDetails awsErrorDetails = s3Exception.awsErrorDetails();
+			if (awsErrorDetails != null) {
+				throw new StorageException(awsErrorDetails.errorCode(), awsErrorDetails.errorMessage());
+			}
+			throw new StorageException(s3Exception.requestId(), s3Exception);
+		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
@@ -220,6 +231,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			HeadBucketRequest headBucketRequest = HeadBucketRequest.builder().bucket(config.getBucketName()).build();
 			HeadBucketResponse headBucketResponse = s3AsyncClient.headBucket(headBucketRequest).get();
 			return true;
+		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
@@ -234,6 +248,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.build();
 			HeadObjectResponse headObjectResponse = s3AsyncClient.headObject(headObjectRequest).get();
 
+		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
@@ -262,6 +279,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.setSize(response.contentLength());
 			return storageFileInfo;
 
+		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
@@ -312,6 +332,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			}
 			return listing;
 
+		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
@@ -372,6 +395,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.setHost(formatHost()).setETag(putObjectResponse.eTag());
 			return storageFileInfo;
 		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
+		}
 		catch (Exception e) {
 			if (e instanceof StorageException) {
 				StorageException e1 = (StorageException) e;
@@ -401,6 +427,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.setSize(response.contentLength());
 			return storageFileInfo;
 		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
+		}
 		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
@@ -416,6 +445,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.getObject(getObjectRequest, AsyncResponseTransformer.toBytes()).get();
 			return getObjectResponseResponseBytes.asByteArray();
 		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
+		}
 		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
@@ -430,6 +462,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			GetObjectResponse getObjectResponse = s3AsyncClient
 					.getObject(getObjectRequest, AsyncResponseTransformer.toFile(destFile)).get();
 			return destFile;
+		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
@@ -453,6 +488,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.setHost(formatHost()).setETag(copyObjectResult.eTag())
 					.setLastModified(copyObjectResult.lastModified().toEpochMilli());
 		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
+		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
@@ -465,6 +503,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(config.getBucketName())
 					.key(key).build();
 			DeleteObjectResponse deleteObjectResponse = s3AsyncClient.deleteObject(deleteObjectRequest).get();
+		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
@@ -486,7 +527,6 @@ public abstract class AbstractS3Client implements StorageClient {
 
 			GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
 					.getObjectRequest(getObjectRequest).signatureDuration(Duration.ofMinutes(15)).build();
-
 			S3Presigner s3Presigner = S3Presigner.builder()
 					// .credentialsProvider()
 					.build();
@@ -494,9 +534,20 @@ public abstract class AbstractS3Client implements StorageClient {
 
 			return presignedGetObjectRequest.url();
 		}
+		catch (S3Exception s3Exception) {
+			throw throwS3Exception(s3Exception);
+		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
+	}
+
+	StorageException throwS3Exception(S3Exception s3Exception) {
+		AwsErrorDetails awsErrorDetails = s3Exception.awsErrorDetails();
+		if (awsErrorDetails != null) {
+			return new StorageException(awsErrorDetails.errorCode(), awsErrorDetails.errorMessage());
+		}
+		return new StorageException(s3Exception.requestId(), s3Exception);
 	}
 
 	@Override
