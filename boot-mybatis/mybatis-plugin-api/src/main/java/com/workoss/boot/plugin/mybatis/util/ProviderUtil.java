@@ -86,7 +86,6 @@ public class ProviderUtil {
 		return dbType;
 	}
 
-
 	public static String getScript(String dbType, String methodName, ClassTableColumnInfo tableColumnInfo) {
 		String script = getScriptTemplate(dbType, methodName);
 		if (ObjectUtil.isBlank(script)) {

@@ -36,48 +36,54 @@ public class StorageFileInfoListing {
 
 	private List<StorageFileInfo> fileInfos = new ArrayList<>();
 
-	public void addFileInfo(StorageFileInfo storageFileInfo) {
+	public StorageFileInfoListing addFileInfo(StorageFileInfo storageFileInfo) {
 		this.fileInfos.add(storageFileInfo);
+		return this;
 	}
 
 	public String getNextToken() {
 		return nextToken;
 	}
 
-	public void setNextToken(String nextToken) {
+	public StorageFileInfoListing setNextToken(String nextToken) {
 		this.nextToken = nextToken;
+		return this;
 	}
 
 	public Integer getMaxKeys() {
 		return maxKeys;
 	}
 
-	public void setMaxKeys(Integer maxKeys) {
+	public StorageFileInfoListing setMaxKeys(Integer maxKeys) {
 		this.maxKeys = maxKeys;
+		return this;
 	}
 
 	public String getEncodingType() {
 		return encodingType;
 	}
 
-	public void setEncodingType(String encodingType) {
+	public StorageFileInfoListing setEncodingType(String encodingType) {
 		this.encodingType = encodingType;
+		return this;
 	}
 
 	public String getPrefix() {
 		return prefix;
 	}
 
-	public void setPrefix(String prefix) {
+	public StorageFileInfoListing setPrefix(String prefix) {
 		this.prefix = prefix;
+		return this;
 	}
 
 	public List<StorageFileInfo> getFileInfos() {
 		return fileInfos;
 	}
 
-	public void setFileInfos(List<StorageFileInfo> fileInfos) {
+	public StorageFileInfoListing setFileInfos(List<StorageFileInfo> fileInfos) {
 		this.fileInfos = fileInfos;
+		return this;
 	}
 
 	@Override

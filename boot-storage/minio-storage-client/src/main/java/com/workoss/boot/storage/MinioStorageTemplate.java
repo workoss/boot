@@ -23,7 +23,7 @@ import org.springframework.beans.factory.InitializingBean;
  *
  * @author workoss
  */
-public class MinioStorageTemplate extends BaseStorageTemplate implements InitializingBean, DisposableBean {
+public final class MinioStorageTemplate extends BaseStorageTemplate implements InitializingBean, DisposableBean {
 
 	@Override
 	public void destroy() throws Exception {

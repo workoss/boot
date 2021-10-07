@@ -119,6 +119,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.80</aws-java-sdk.version>
+		<awssdk.version>2.17.52</awssdk.version>
 
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -549,6 +550,14 @@
 						<artifactId>commons-logging</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${awssdk.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 
 

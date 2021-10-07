@@ -425,49 +425,7 @@ public abstract class AbstractS3Client implements StorageClient {
 	}
 
 	@Override
-	public StorageFileInfo downloadWithSign(String key, Consumer<StorageProgressEvent> consumer) {
-		key = formatKey(key, false);
-		AmazonS3 amazonS3 = getClient(key, "downloadObject");
-		try {
-			Date expireDate = new Date(System.currentTimeMillis() + 5 * 60 * 1000);
-			PresignedUrlDownloadRequest request = new PresignedUrlDownloadRequest(
-					generatePresignedUrl(key, expireDate));
-			if (consumer != null) {
-				ProgressListener progressListener = progressEvent -> consumer
-						.accept(new StorageProgressEvent(progressEvent.getBytes(), progressEvent.getEventType().name(),
-								progressEvent.getBytesTransferred()));
-				request.setGeneralProgressListener(progressListener);
-			}
-			PresignedUrlDownloadResult result = amazonS3.download(request);
-			if (result == null) {
-				return null;
-			}
-			StorageFileInfo storageFileInfo = new StorageFileInfo();
-			storageFileInfo.setKey(key);
-			storageFileInfo.setBucketName(config.getBucketName());
-			storageFileInfo.setHost(formatHost());
-			ObjectMetadata metadata = result.getS3Object().getObjectMetadata();
-			if (metadata != null) {
-				storageFileInfo.setLastModified(
-						metadata.getLastModified() != null ? metadata.getLastModified().getTime() : null);
-				storageFileInfo.setMetaData(metadata.getRawMetadata());
-				storageFileInfo.setETag(metadata.getETag());
-			}
-			return storageFileInfo;
-		}
-		catch (AmazonS3Exception e) {
-			throw new StorageException(e.getErrorCode(), e.getMessage());
-		}
-		catch (Exception e) {
-			throw new StorageException("0002", e);
-		}
-		finally {
-			amazonS3.shutdown();
-		}
-	}
-
-	@Override
-	public InputStream downloadStream(String key, Consumer<StorageProgressEvent> consumer) {
+	public StorageFileInfo downloadStream(String key, Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		AmazonS3 amazonS3 = getClient(key, "downloadObject");
 		try {
@@ -482,7 +440,15 @@ public abstract class AbstractS3Client implements StorageClient {
 			if (s3Object == null) {
 				return null;
 			}
-			return s3Object.getObjectContent();
+			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName()).setKey(key)
+					.setHost(formatHost()).setContent(s3Object.getObjectContent());
+			ObjectMetadata objectMetadata = s3Object.getObjectMetadata();
+			if (objectMetadata != null) {
+				storageFileInfo.setSize(objectMetadata.getContentLength()).setMetaData(objectMetadata.getRawMetadata())
+						.setETag(objectMetadata.getETag()).setLastModified(objectMetadata.getLastModified() == null
+								? null : objectMetadata.getLastModified().getTime());
+			}
+			return storageFileInfo;
 		}
 		catch (AmazonS3Exception e) {
 			throw new StorageException(e.getErrorCode(), e.getMessage());
@@ -497,7 +463,11 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	@Override
 	public byte[] download(String key, Consumer<StorageProgressEvent> consumer) {
-		try (InputStream inputStream = downloadStream(key, consumer)) {
+		StorageFileInfo storageFileInfo = downloadStream(key, consumer);
+		if (storageFileInfo == null || storageFileInfo.getContent() == null) {
+			return null;
+		}
+		try (InputStream inputStream = storageFileInfo.getContent()) {
 			return IOUtils.toByteArray(inputStream);
 		}
 		catch (AmazonS3Exception e) {

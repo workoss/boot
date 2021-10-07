@@ -51,72 +51,81 @@ public class StorageFileInfo {
 		return bucketName;
 	}
 
-	public void setBucketName(String bucketName) {
+	public StorageFileInfo setBucketName(String bucketName) {
 		this.bucketName = bucketName;
+		return this;
 	}
 
 	public String getKey() {
 		return key;
 	}
 
-	public void setKey(String key) {
+	public StorageFileInfo setKey(String key) {
 		this.key = key;
+		return this;
 	}
 
 	public String getHost() {
 		return host;
 	}
 
-	public void setHost(String host) {
+	public StorageFileInfo setHost(String host) {
 		this.host = host;
+		return this;
 	}
 
 	public Map<String, Object> getMetaData() {
 		return metaData;
 	}
 
-	public void setMetaData(Map<String, Object> metaData) {
+	public StorageFileInfo setMetaData(Map<String, Object> metaData) {
 		this.metaData = metaData;
+		return this;
 	}
 
 	public InputStream getContent() {
 		return content;
 	}
 
-	public void setContent(InputStream content) {
+	public StorageFileInfo setContent(InputStream content) {
 		this.content = content;
+		return this;
 	}
 
 	public String geteETag() {
 		return eTag;
 	}
 
-	public void setETag(String eTag) {
+	public StorageFileInfo setETag(String eTag) {
 		this.eTag = eTag;
+		return this;
 	}
 
 	public Long getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(Long lastModified) {
+	public StorageFileInfo setLastModified(Long lastModified) {
 		this.lastModified = lastModified;
+		return this;
 	}
 
 	public Long getSize() {
 		return size;
 	}
 
-	public void setSize(Long size) {
+	public StorageFileInfo setSize(Long size) {
 		this.size = size;
+		return this;
 	}
 
 	public String getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public StorageFileInfo setOwner(String owner) {
 		this.owner = owner;
+		return this;
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 	}
 
 	public GlobalResponseHandler(List<HttpMessageWriter<?>> writers, RequestedContentTypeResolver resolver,
-								 ReactiveAdapterRegistry registry) {
+			ReactiveAdapterRegistry registry) {
 		super(writers, resolver, registry);
 		initMethodParameter();
 	}
@@ -76,8 +76,7 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 			response.getHeaders().add(HttpHeaders.DATE, DateUtils.getCurrentDateTime("yyyy-MM-dd HH:mm:ss.SSS"));
 			return Mono.empty();
 		});
-		HttpStatus responseStatus = Optional.of(exchange.getResponse())
-				.map(ServerHttpResponse::getStatusCode)
+		HttpStatus responseStatus = Optional.of(exchange.getResponse()).map(ServerHttpResponse::getStatusCode)
 				.orElse(HttpStatus.NOT_FOUND);
 		if (HttpStatus.OK.compareTo(responseStatus) != 0) {
 			return writeBody(result.getReturnValue(), result.getReturnTypeSource(), exchange);
@@ -88,11 +87,13 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 			body = ((Mono<Object>) returnValue).map((Function<Object, Object>) this::wrapResultInfo)
 					.defaultIfEmpty(ResultInfo.success());
 			// 处理返回结果为 Flux 的情况
-		} else if (returnValue instanceof Flux) {
-			body = ((Flux<Object>) returnValue).collectList()
-					.map((Function<Object, Object>) this::wrapResultInfo).defaultIfEmpty(ResultInfo.success());
+		}
+		else if (returnValue instanceof Flux) {
+			body = ((Flux<Object>) returnValue).collectList().map((Function<Object, Object>) this::wrapResultInfo)
+					.defaultIfEmpty(ResultInfo.success());
 			// 处理结果为其它类型
-		} else {
+		}
+		else {
 			body = wrapResultInfo(returnValue);
 		}
 		return writeBody(body, METHOD_PARAMETER_MONO_COMMON_RESULT, exchange);
@@ -111,7 +112,8 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 			// 方法的返回值
 			METHOD_PARAMETER_MONO_COMMON_RESULT = new MethodParameter(
 					GlobalResponseHandler.class.getDeclaredMethod("methodForParams"), -1);
-		} catch (NoSuchMethodException e) {
+		}
+		catch (NoSuchMethodException e) {
 			log.error("[GLOBAL][获取 METHOD_PARAMETER_MONO_COMMON_RESULT 时，找不都方法");
 			throw new RuntimeException(e);
 		}

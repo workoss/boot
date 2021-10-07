@@ -104,7 +104,7 @@ public class SqlInterceptor implements Interceptor {
 		if (dbType != null) {
 			ProviderUtil.setDbType(dbType.name());
 		}
-		if (parameter == null){
+		if (parameter == null) {
 			parameter = new MapperMethod.ParamMap<>();
 		}
 		for (ParamHandler paramHandler : paramHandlers) {

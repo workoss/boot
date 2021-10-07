@@ -47,9 +47,10 @@ public class DefaultParamHandler implements ParamHandler {
 				return;
 			}
 			parameter = new MapperMethod.ParamMap<>();
-			((Map<String,Object>)parameter).put("_dbType", dbType);
+			((Map<String, Object>) parameter).put("_dbType", dbType);
 			for (String fieldName : fieldNames) {
-				((Map<String,Object>)parameter).put(fieldName, ReflectUtils.getPropertyByInvokeMethod(parameter, fieldName));
+				((Map<String, Object>) parameter).put(fieldName,
+						ReflectUtils.getPropertyByInvokeMethod(parameter, fieldName));
 			}
 		}
 	}

@@ -24,7 +24,7 @@ import org.springframework.beans.factory.InitializingBean;
  *
  * @author workoss
  */
-public class AwsStorageTemplate extends BaseStorageTemplate implements InitializingBean, DisposableBean {
+public final class AwsStorageTemplate extends BaseStorageTemplate implements InitializingBean, DisposableBean {
 
 	@Override
 	public void destroy() throws Exception {

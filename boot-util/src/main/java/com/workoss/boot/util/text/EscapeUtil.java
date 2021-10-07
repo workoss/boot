@@ -15,7 +15,7 @@
  */
 package com.workoss.boot.util.text;
 
-import com.workoss.boot.util.ExceptionUtils;
+import com.workoss.boot.util.exception.ExceptionUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

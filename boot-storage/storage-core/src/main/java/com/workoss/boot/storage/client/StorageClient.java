@@ -127,20 +127,12 @@ public interface StorageClient {
 			@Nullable Map<String, String> userMetaData, @Nullable Consumer<StorageProgressEvent> consumer);
 
 	/**
-	 * 下载 sts 不能使用
-	 * @param key 文件key
-	 * @param consumer 事件监听
-	 * @return 文件对象
-	 */
-	StorageFileInfo downloadWithSign(@NonNull String key, @Nullable Consumer<StorageProgressEvent> consumer);
-
-	/**
 	 * 获取文件流
 	 * @param key 文件
 	 * @param consumer 消费者
 	 * @return 流
 	 */
-	InputStream downloadStream(@NonNull String key, @Nullable Consumer<StorageProgressEvent> consumer);
+	StorageFileInfo downloadStream(@NonNull String key, @Nullable Consumer<StorageProgressEvent> consumer);
 
 	/**
 	 * 下载 二进制

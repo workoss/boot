@@ -69,7 +69,7 @@ public class LocalDateTimeDeserializer extends com.fasterxml.jackson.datatype.js
 			return DateUtils.parse(string, patterns);
 		}
 		catch (DateTimeException e) {
-			//ignore
+			// ignore
 		}
 		return null;
 	}

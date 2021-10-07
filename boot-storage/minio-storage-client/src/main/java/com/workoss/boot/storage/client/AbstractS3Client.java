@@ -28,12 +28,14 @@ import com.workoss.boot.util.DateUtils;
 import com.workoss.boot.util.StreamUtils;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
+import com.workoss.boot.util.collection.Pair;
 import io.minio.*;
 import io.minio.credentials.Provider;
 import io.minio.credentials.StaticProvider;
 import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import io.minio.messages.Owner;
+import okhttp3.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +67,7 @@ public abstract class AbstractS3Client implements StorageClient {
 	protected StorageClientConfig config;
 
 	protected static Cache<String, StorageStsToken> STS_TOKEN_CACHE = CacheBuilder.newBuilder()
-			.expireAfterWrite(12, TimeUnit.MINUTES).maximumSize(200)
-			.removalListener(notification -> {
+			.expireAfterWrite(12, TimeUnit.MINUTES).maximumSize(200).removalListener(notification -> {
 				log.debug("【STORAGE】STS_TOKEN_CACHE KEY：{} cause:{}", notification.getKey(), notification.getCause());
 			}).build();
 
@@ -294,18 +295,26 @@ public abstract class AbstractS3Client implements StorageClient {
 	}
 
 	@Override
-	public StorageFileInfo downloadWithSign(String key, Consumer<StorageProgressEvent> consumer) {
-		throw new RuntimeException("not support");
-	}
-
-	@Override
-	public InputStream downloadStream(String key, Consumer<StorageProgressEvent> consumer) {
+	public StorageFileInfo downloadStream(String key, Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		MinioClient minioClient = getClient(key, "downloadObject");
 		try {
 			GetObjectResponse objectResponse = minioClient
 					.getObject(GetObjectArgs.builder().bucket(config.getBucketName()).object(key).build());
-			return objectResponse;
+			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName()).setKey(key)
+					.setHost(formatHost()).setContent(objectResponse);
+			Headers headers = objectResponse.headers();
+			if (headers != null && headers.toMultimap() != null) {
+				Map<String, Object> metadata = headers.toMultimap().entrySet().stream().map(stringListEntry -> {
+					List<String> value = stringListEntry.getValue();
+					if (value != null && value.size() >= 1) {
+						return Pair.of(stringListEntry.getKey(), value.get(0));
+					}
+					return Pair.of(stringListEntry.getKey(), null);
+				}).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+				storageFileInfo.setMetaData(metadata);
+			}
+			return storageFileInfo;
 		}
 		catch (Exception e) {
 			throw new StorageException("0002", e);
@@ -314,7 +323,11 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	@Override
 	public byte[] download(String key, Consumer<StorageProgressEvent> consumer) {
-		try (InputStream inputStream = downloadStream(key, consumer)) {
+		StorageFileInfo storageFileInfo = downloadStream(key, consumer);
+		if (storageFileInfo == null || storageFileInfo.getContent() == null) {
+			return null;
+		}
+		try (InputStream inputStream = storageFileInfo.getContent()) {
 			return StreamUtils.copyToByteArray(inputStream);
 		}
 		catch (Exception e) {

@@ -32,7 +32,9 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
 	public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
 	private static final ConcurrentHashMap<String, Pattern> PATTERN_MAP = new ConcurrentHashMap<>(16);
+
 	public static String EMPTY = "";
 
 	public static boolean isEmpty(CharSequence cs) {

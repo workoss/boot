@@ -1,0 +1,5 @@
+com.workoss.boot.storage.client.S3Client
+com.workoss.boot.storage.client.OSSClient
+com.workoss.boot.storage.client.COSClient
+com.workoss.boot.storage.client.OBSClient
+com.workoss.boot.storage.client.QiniuClient

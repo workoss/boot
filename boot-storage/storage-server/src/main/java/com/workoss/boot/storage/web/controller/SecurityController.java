@@ -55,7 +55,10 @@ public class SecurityController {
 
 	private final UploadSignToVOMapper uploadSignToVOMapper;
 
-	public SecurityController(SecurityService securityService, STSTokenParamToStorageModelMapper stsTokenToStorageModelMapper, STSTokenToVOMapper stsTokenToVOMapper, UploadSignParamToStorageModelMapper uploadSignParamToStorageModelMapper, UploadSignToVOMapper uploadSignToVOMapper) {
+	public SecurityController(SecurityService securityService,
+			STSTokenParamToStorageModelMapper stsTokenToStorageModelMapper, STSTokenToVOMapper stsTokenToVOMapper,
+			UploadSignParamToStorageModelMapper uploadSignParamToStorageModelMapper,
+			UploadSignToVOMapper uploadSignToVOMapper) {
 		this.securityService = securityService;
 		this.stsTokenToStorageModelMapper = stsTokenToStorageModelMapper;
 		this.stsTokenToVOMapper = stsTokenToVOMapper;

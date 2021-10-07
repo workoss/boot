@@ -24,8 +24,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.workoss.boot</groupId>
+			<artifactId>aws2-storage-client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.workoss.boot</groupId>
 			<artifactId>aws-storage-client</artifactId>
 			<version>${project.version}</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.workoss.boot</groupId>

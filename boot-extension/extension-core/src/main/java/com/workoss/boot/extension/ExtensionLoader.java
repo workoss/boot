@@ -15,7 +15,7 @@
  */
 package com.workoss.boot.extension;
 
-import com.workoss.boot.util.ExceptionUtils;
+import com.workoss.boot.util.exception.ExceptionUtils;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
 import com.workoss.boot.util.reflect.ClassLoaderUtils;

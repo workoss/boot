@@ -59,29 +59,27 @@ public class BaseProvider implements ProviderMethodResolver {
 		String finalDbType = dbType;
 		return EntityClassFinderFactory.getClassFinder(context)
 				.map(entityClassFinder -> entityClassFinder.findTableColumnInfo(context))
-				.map(classTableColumnInfoOptional -> classTableColumnInfoOptional.orElseThrow(() -> new RuntimeException("没有找到tableColumnInfo")))
+				.map(classTableColumnInfoOptional -> classTableColumnInfoOptional
+						.orElseThrow(() -> new RuntimeException("没有找到tableColumnInfo")))
 				.map(classTableColumnInfo -> {
-					//校验 是否需要主键
+					// 校验 是否需要主键
 					boolean checkIdFalse = (params.containsKey("id") || params.containsKey("ids"))
 							&& classTableColumnInfo.getIdColumn() == null;
 					if (checkIdFalse) {
 						throw new RuntimeException(context.getMapperMethod().getName() + " 执行的entity没有id或者设置主键");
 					}
-					return ProviderUtil.getScript(finalDbType, context.getMapperMethod().getName(), classTableColumnInfo);
-				})
-				.map(sqlStr -> {
+					return ProviderUtil.getScript(finalDbType, context.getMapperMethod().getName(),
+							classTableColumnInfo);
+				}).map(sqlStr -> {
 					SQL_MAP.put(key, sqlStr);
 					log.debug("mybatis dao:{} 生成sql:{}", key, sqlStr);
 					return sqlStr;
-				})
-				.orElseThrow(() -> new RuntimeException(key + " 获取sql失败"));
+				}).orElseThrow(() -> new RuntimeException(key + " 获取sql失败"));
 	}
-
 
 	private String getSqlKey(String dbType, ProviderContext context) {
 		return new StringJoiner(".").add(dbType).add(context.getMapperType().getName())
 				.add(context.getMapperMethod().getName()).toString();
 	}
-
 
 }

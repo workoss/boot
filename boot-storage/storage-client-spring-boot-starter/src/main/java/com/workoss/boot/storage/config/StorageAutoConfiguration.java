@@ -16,6 +16,7 @@
 package com.workoss.boot.storage.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.workoss.boot.storage.Aws2StorageTemplate;
 import com.workoss.boot.storage.AwsStorageTemplate;
 import com.workoss.boot.storage.MinioStorageTemplate;
 import com.workoss.boot.storage.StorageTemplate;
@@ -47,19 +48,27 @@ import javax.servlet.http.HttpServletRequest;
 		matchIfMissing = true)
 public class StorageAutoConfiguration {
 
-	@ConditionalOnClass(name = { "com.workoss.boot.storage.AwsStorageTemplate" })
+	@ConditionalOnClass(name = { "com.workoss.boot.storage.Aws2StorageTemplate",
+			"software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient" })
 	@Bean
 	StorageTemplate storageTemplate(MultiStorageClientConfigProperties configProperties) {
+		StorageTemplate storageTemplate = new Aws2StorageTemplate();
+		storageTemplate.setMultiStorageClientConfig(configProperties);
+		return storageTemplate;
+	}
+
+	@ConditionalOnClass(
+			name = { "com.workoss.boot.storage.AwsStorageTemplate", "org.apache.http.impl.client.HttpClients" })
+	@Bean
+	StorageTemplate awsStorageTemplate(MultiStorageClientConfigProperties configProperties) {
 		StorageTemplate storageTemplate = new AwsStorageTemplate();
 		storageTemplate.setMultiStorageClientConfig(configProperties);
 		return storageTemplate;
 	}
 
-	protected
-
-	@ConditionalOnClass(
-			name = { "com.workoss.boot.storage.MinioStorageTemplate" }) @Bean StorageTemplate minioStorageTemplate(
-					MultiStorageClientConfigProperties configProperties) {
+	@ConditionalOnClass(name = { "com.workoss.boot.storage.MinioStorageTemplate", "okhttp3.OkHttpClient" })
+	@Bean
+	StorageTemplate minioStorageTemplate(MultiStorageClientConfigProperties configProperties) {
 		StorageTemplate storageTemplate = new MinioStorageTemplate();
 		storageTemplate.setMultiStorageClientConfig(configProperties);
 		return storageTemplate;
