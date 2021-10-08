@@ -22,7 +22,6 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * @author workoss
  */
 @SuppressWarnings("unused")
-public class HttpUtil implements Closeable {
+public class HttpUtil implements AutoCloseable {
 
 	private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
 
@@ -74,7 +73,7 @@ public class HttpUtil implements Closeable {
 	}
 
 	public static String executePost(@NonNull String url, @Nullable String jsonParam,
-			@Nullable Map<String, String> headers) {
+									 @Nullable Map<String, String> headers) {
 		long startTime = System.currentTimeMillis();
 		if (StringUtils.isBlank(jsonParam)) {
 			jsonParam = StringUtils.EMPTY;
@@ -93,8 +92,7 @@ public class HttpUtil implements Closeable {
 				return respBody;
 			}
 			throw new RuntimeException("status:" + response.code() + "\nbody:" + respBody);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("execute post request exception, url:{}, cost time(ms):{}, exception:", url,
 					(System.currentTimeMillis() - startTime), e);
 			throw new RuntimeException(e);
@@ -102,23 +100,17 @@ public class HttpUtil implements Closeable {
 	}
 
 	public static boolean checkUrlIsValid(String url, int timeoutMills) {
-		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(timeoutMills, TimeUnit.SECONDS)
-				.callTimeout(timeoutMills, TimeUnit.SECONDS).readTimeout(timeoutMills, TimeUnit.SECONDS)
-				.writeTimeout(timeoutMills, TimeUnit.SECONDS).build();
+		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(timeoutMills, TimeUnit.MILLISECONDS)
+				.callTimeout(timeoutMills, TimeUnit.MILLISECONDS).readTimeout(timeoutMills, TimeUnit.MILLISECONDS)
+				.writeTimeout(timeoutMills, TimeUnit.MILLISECONDS).build();
 		Request request = new Request.Builder().url(url).build();
 		try (Response response = client.newCall(request).execute()) {
 			log.info("【OKHTTP】checkUrlIsValid:{} statusCode:{}", url, response.code());
 			return true;
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			log.warn("【OKHTTP】checkUrlIsValid:{} ERROR:{}", url, e.getMessage());
 		}
 		return false;
-	}
-
-	public static void main(String[] args) {
-		boolean check = checkUrlIsValid("https://oss-cn-shenzhen.aliyuncs.com", 200);
-		System.out.println(check);
 	}
 
 	@Override

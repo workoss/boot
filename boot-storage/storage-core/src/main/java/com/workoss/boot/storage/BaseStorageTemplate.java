@@ -101,7 +101,6 @@ abstract class BaseStorageTemplate implements StorageTemplate {
 									storageClientConfigEntry.getKey(), storageClientConfigEntry.getValue());
 						}
 						initNumMap.put(storageClientConfigEntry.getValue().getStorageType(), num == null ? 1 : num + 1);
-
 					});
 		}
 		StorageClientConfig storageClientConfig = multiStorageClientConfig.getDefaultClient();

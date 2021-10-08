@@ -25,6 +25,7 @@ import com.workoss.boot.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -63,7 +64,7 @@ public class OSSClient extends AbstractS3Client {
 	}
 
 	private void checkEndpointUrl(String endpoint) {
-		new Thread(() -> initAvaiableEndpointUrl(endpoint), String.join("-", "STORAGE", type().name())).start();
+		CompletableFuture.runAsync(() -> initAvaiableEndpointUrl(endpoint)).join();
 	}
 
 	private void initAvaiableEndpointUrl(String endpoint) {
