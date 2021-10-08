@@ -25,7 +25,6 @@ import com.workoss.boot.storage.interceptor.CustomEndpointExecutionInterceptor;
 import com.workoss.boot.storage.model.*;
 import com.workoss.boot.storage.util.HttpUtil;
 import com.workoss.boot.storage.util.StorageUtil;
-import com.workoss.boot.util.Lazy;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
 import org.slf4j.Logger;
@@ -39,6 +38,7 @@ import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
 import software.amazon.awssdk.core.internal.util.Mimetype;
+import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
@@ -70,10 +70,7 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	protected StorageClientConfig config;
 
-	private static final Lazy<CustomEndpointExecutionInterceptor> ENDPOINT_INTERCEPTOR_LAZY = Lazy
-			.of(() -> new CustomEndpointExecutionInterceptor());
-
-	private static S3AsyncClientBuilder S3_ASYNC_CLIENT_BUILDER;
+	private static S3AsyncClientBuilder S3_CLIENT_BUILDER;
 
 	protected static Cache<String, StorageStsToken> STS_TOKEN_CACHE = Caffeine.newBuilder()
 			.expireAfterWrite(12, TimeUnit.MINUTES).maximumSize(200)
@@ -86,54 +83,53 @@ public abstract class AbstractS3Client implements StorageClient {
 		this.config = config;
 		// 各客户端初始化
 		this.initConfig(config);
-
-		if (!useStsToken()) {
-			this.S3_ASYNC_CLIENT_BUILDER = initS3AsyncClientBuilder();
-		}
+		this.S3_CLIENT_BUILDER = initS3ClientBuilder();
 	}
 
 	/**
 	 * 客户端初始化配置
+	 *
 	 * @param config 配置信息
 	 */
 	protected abstract void initConfig(StorageClientConfig config);
 
 	/**
 	 * 创建s3客户端
-	 * @param config config
+	 *
+	 * @param config   config
 	 * @param stsToken stsToken
 	 * @return s3客户端
 	 */
 	protected abstract S3AsyncClient createClient(StorageClientConfig config, StorageStsToken stsToken);
 
 	protected S3AsyncClient createS3Client(StorageClientConfig config, String endpoint, StorageStsToken stsToken) {
-
 		AwsCredentials credentials = null;
 		if (stsToken == null) {
 			credentials = AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey());
-		}
-		else {
+		} else {
 			credentials = AwsSessionCredentials.create(stsToken.getAccessKey(), stsToken.getSecretKey(),
 					stsToken.getStsToken());
 		}
-		S3AsyncClientBuilder s3AsyncClientBuilder = S3_ASYNC_CLIENT_BUILDER == null ? initS3AsyncClientBuilder()
-				: S3_ASYNC_CLIENT_BUILDER;
-		return s3AsyncClientBuilder.credentialsProvider(StaticCredentialsProvider.create(credentials))
+		return (S3_CLIENT_BUILDER != null ? S3_CLIENT_BUILDER : initS3ClientBuilder())
+				.credentialsProvider(StaticCredentialsProvider.create(credentials))
 				.endpointOverride(URI.create(endpoint)).build();
 	}
 
-	protected S3AsyncClientBuilder initS3AsyncClientBuilder() {
-		return S3AsyncClient.builder().overrideConfiguration(builder -> {
-			builder.addExecutionInterceptor(ENDPOINT_INTERCEPTOR_LAZY.get());
-		}).serviceConfiguration(builder -> {
-			builder.pathStyleAccessEnabled(false);
-		}).region(Region.of(type().name()));
+	protected S3AsyncClientBuilder initS3ClientBuilder() {
+		return S3AsyncClient.builder()
+				.httpClientBuilder(NettyNioAsyncHttpClient.builder())
+				.overrideConfiguration(builder -> {
+					builder.addExecutionInterceptor(new CustomEndpointExecutionInterceptor());
+				}).serviceConfiguration(builder -> {
+					builder.pathStyleAccessEnabled(false);
+				}).region(Region.of(type().name().toLowerCase()));
 	}
 
 	/**
 	 * 生成stsToken
+	 *
 	 * @param config 配置
-	 * @param key 文件key
+	 * @param key    文件key
 	 * @param action 操作
 	 * @return stsToken
 	 */
@@ -141,14 +137,15 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 生成h5签名
-	 * @param config 配置
-	 * @param key 文件key
-	 * @param mimeType 文件类型
+	 *
+	 * @param config              配置
+	 * @param key                 文件key
+	 * @param mimeType            文件类型
 	 * @param successActionStatus 200 可以nul
 	 * @return 签名
 	 */
 	protected abstract StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
-			String successActionStatus);
+														  String successActionStatus);
 
 	protected S3AsyncClient getClient(String key, String action) {
 		if (!useStsToken()) {
@@ -191,11 +188,9 @@ public abstract class AbstractS3Client implements StorageClient {
 							bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
 					.collect(Collectors.toList());
 
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -212,15 +207,13 @@ public abstract class AbstractS3Client implements StorageClient {
 							listBucketsResponse.owner() == null ? null : listBucketsResponse.owner().id(),
 							bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
 					.findFirst().orElse(null);
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			AwsErrorDetails awsErrorDetails = s3Exception.awsErrorDetails();
 			if (awsErrorDetails != null) {
 				throw new StorageException(awsErrorDetails.errorCode(), awsErrorDetails.errorMessage());
 			}
 			throw new StorageException(s3Exception.requestId(), s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -231,11 +224,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			HeadBucketRequest headBucketRequest = HeadBucketRequest.builder().bucket(config.getBucketName()).build();
 			HeadBucketResponse headBucketResponse = s3AsyncClient.headBucket(headBucketRequest).get();
 			return true;
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -248,11 +239,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.build();
 			HeadObjectResponse headObjectResponse = s3AsyncClient.headObject(headObjectRequest).get();
 
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 		return false;
@@ -279,11 +268,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.setSize(response.contentLength());
 			return storageFileInfo;
 
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -332,38 +319,35 @@ public abstract class AbstractS3Client implements StorageClient {
 			}
 			return listing;
 
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, File file, Map<String, String> userMetaData,
-			Consumer<StorageProgressEvent> consumer) {
+									 Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, file, null, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, InputStream inputStream, String contentType,
-			Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
+									 Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, inputStream, contentType, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, byte[] bytes, String contentType, Map<String, String> userMetaData,
-			Consumer<StorageProgressEvent> consumer) {
+									 Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, bytes, contentType, userMetaData, consumer);
 	}
 
 	StorageFileInfo putObjectCommon(String key, Object in, String contentType, Map<String, String> userMetaData,
-			Consumer<StorageProgressEvent> consumer) {
+									Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "putObject")) {
-
 			PutObjectRequest.Builder requestBuilder = PutObjectRequest.builder().bucket(config.getBucketName())
 					.key(key);
 			AsyncRequestBody asyncRequestBody = null;
@@ -373,11 +357,9 @@ public abstract class AbstractS3Client implements StorageClient {
 				if (StringUtils.isBlank(contentType)) {
 					contentType = Mimetype.getInstance().getMimetype(file);
 				}
-			}
-			else if (in instanceof InputStream) {
+			} else if (in instanceof InputStream) {
 				asyncRequestBody = AsyncRequestBody.fromBytes(IoUtils.toByteArray((InputStream) in));
-			}
-			else if (in instanceof byte[]) {
+			} else if (in instanceof byte[]) {
 				asyncRequestBody = AsyncRequestBody.fromBytes((byte[]) in);
 			}
 			if (asyncRequestBody == null) {
@@ -385,6 +367,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			}
 			if (userMetaData == null) {
 				userMetaData = new HashMap<>(1);
+			}
+			if (StringUtils.isEmpty(contentType)) {
+				requestBuilder.contentType(contentType);
 			}
 			userMetaData.put("upclient", "storage");
 			requestBuilder.metadata(userMetaData);
@@ -394,11 +379,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName()).setKey(key)
 					.setHost(formatHost()).setETag(putObjectResponse.eTag());
 			return storageFileInfo;
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof StorageException) {
 				StorageException e1 = (StorageException) e;
 				throw new StorageException(e1.getErrcode(), e1.getErrmsg());
@@ -426,11 +409,9 @@ public abstract class AbstractS3Client implements StorageClient {
 					.setLastModified(response.lastModified() == null ? null : response.lastModified().toEpochMilli())
 					.setSize(response.contentLength());
 			return storageFileInfo;
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -444,11 +425,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			ResponseBytes<GetObjectResponse> getObjectResponseResponseBytes = s3AsyncClient
 					.getObject(getObjectRequest, AsyncResponseTransformer.toBytes()).get();
 			return getObjectResponseResponseBytes.asByteArray();
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -462,18 +441,16 @@ public abstract class AbstractS3Client implements StorageClient {
 			GetObjectResponse getObjectResponse = s3AsyncClient
 					.getObject(getObjectRequest, AsyncResponseTransformer.toFile(destFile)).get();
 			return destFile;
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
 
 	@Override
 	public StorageFileInfo copyObject(String sourceKeyWithoutBasePath, String destinationKeyWithoutBasePath,
-			Map<String, String> userMetaData) {
+									  Map<String, String> userMetaData) {
 		try (S3AsyncClient s3AsyncClient = getClient(sourceKeyWithoutBasePath, "copyObject")) {
 			if (userMetaData == null) {
 				userMetaData = new HashMap<>(8);
@@ -487,11 +464,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			return new StorageFileInfo().setBucketName(config.getBucketName()).setKey(destinationKeyWithoutBasePath)
 					.setHost(formatHost()).setETag(copyObjectResult.eTag())
 					.setLastModified(copyObjectResult.lastModified().toEpochMilli());
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -503,11 +478,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(config.getBucketName())
 					.key(key).build();
 			DeleteObjectResponse deleteObjectResponse = s3AsyncClient.deleteObject(deleteObjectRequest).get();
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -533,11 +506,9 @@ public abstract class AbstractS3Client implements StorageClient {
 			PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
 
 			return presignedGetObjectRequest.url();
-		}
-		catch (S3Exception s3Exception) {
+		} catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -569,7 +540,7 @@ public abstract class AbstractS3Client implements StorageClient {
 	}
 
 	protected StorageSignature requestSign(StorageClientConfig config, String key, String mimeType,
-			String successActionStatus) {
+										   String successActionStatus) {
 		return StorageUtil.requestSign(HttpUtil::doPostJson, config, key, mimeType, successActionStatus);
 	}
 

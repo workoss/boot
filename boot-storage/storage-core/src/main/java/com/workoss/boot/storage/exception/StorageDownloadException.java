@@ -27,6 +27,10 @@ public class StorageDownloadException extends StorageException {
 		super(s);
 	}
 
+	public StorageDownloadException(String errcode, String errorMsg) {
+		super(errcode, errorMsg);
+	}
+
 	public StorageDownloadException(String s, Throwable throwable) {
 		super(s, throwable);
 	}
