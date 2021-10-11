@@ -13,9 +13,9 @@
 
 	<scm>
 		<url>https://github.com/workoss/boot</url>
-		<connection>scm:git:https://github.com/workoss/boot.git</connection>
-		<developerConnection>scm:git:https://github.com/workoss/boot.git</developerConnection>
-		<tag>v1.1.0-RC1</tag>
+		<connection>scm:git:git://github.com/workoss/boot.git</connection>
+		<developerConnection>scm:git:git@github.com:workoss/boot.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
@@ -31,7 +31,8 @@
 	<licenses>
 		<license>
 			<name>The Apache Software License,Version 2.0</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
@@ -1033,6 +1034,7 @@
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<arguments>-Prelease</arguments>
 							<arguments>-DskipTests</arguments>
+							<scmCommentPrefix>[ci skip]</scmCommentPrefix>
 						</configuration>
 					</plugin>
 					<plugin>

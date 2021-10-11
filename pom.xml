@@ -26,9 +26,9 @@
 
 	<scm>
 		<url>https://github.com/workoss/boot</url>
-		<connection>scm:git:https://github.com/workoss/boot.git</connection>
-		<developerConnection>scm:git:https://github.com/workoss/boot.git</developerConnection>
-		<tag>v1.1.0-RC1</tag>
+		<connection>scm:git:git://github.com/workoss/boot.git</connection>
+		<developerConnection>scm:git:git@github.com:workoss/boot.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
