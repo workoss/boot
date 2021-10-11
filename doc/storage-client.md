@@ -24,9 +24,10 @@ storage 对象存储模块
 
 * storage-server: 对象stsToken授权服务+web签名服务
 * storage-core: 对象存储API客户端
-* aws-storage-client aws实现客户端
-* minio-storage-client minio实现客户端
-* storage-client-spring-boot-starter: 对象存储的spring-boot-starter组件，方便spring-boot 项目引入
+* aws-storage-client aws实现客户端 依赖apache httpclient4
+* aws2-storage-client aws2实现客户端 依赖netty
+* minio-storage-client minio实现客户端 依赖okhttp3
+* storage-client-spring-boot-starter: 对象存储的spring-boot-starter组件，方便spring-boot 项目引入，默认依赖aws2-storage-client
 
 ### 开发环境要求
 
