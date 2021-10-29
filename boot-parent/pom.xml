@@ -93,7 +93,7 @@
 
 		<r2dbc-bom.version>Arabba-SR11</r2dbc-bom.version>
 
-		<protobuf-bom.version>3.19.0</protobuf-bom.version>
+		<protobuf-bom.version>3.19.1</protobuf-bom.version>
 		<protostuff.version>1.7.4</protostuff.version>
 		<liquibase.version>4.5.0</liquibase.version>
 
@@ -106,7 +106,7 @@
 		<mockito-core.version>4.0.0</mockito-core.version>
 
 		<debezium.version>1.7.0.Final</debezium.version>
-		<byte-buddy.version>1.11.21</byte-buddy.version>
+		<byte-buddy.version>1.11.22</byte-buddy.version>
 		<scalecube-cluster.version>2.6.11</scalecube-cluster.version>
 		<cloudevents.version>2.2.0</cloudevents.version>
 		<picocli.version>4.6.1</picocli.version>
@@ -120,8 +120,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.98</aws-java-sdk.version>
-		<awssdk.version>2.17.68</awssdk.version>
-
+		<awssdk.version>2.17.70</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
