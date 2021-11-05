@@ -95,7 +95,7 @@
 
 		<protobuf-bom.version>3.19.1</protobuf-bom.version>
 		<protostuff.version>1.7.4</protostuff.version>
-		<liquibase.version>4.5.0</liquibase.version>
+		<liquibase.version>4.6.1</liquibase.version>
 
 		<caffeine.version>2.9.2</caffeine.version>
 
