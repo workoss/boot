@@ -106,7 +106,7 @@
 		<mockito-core.version>4.0.0</mockito-core.version>
 
 		<debezium.version>1.7.1.Final</debezium.version>
-		<byte-buddy.version>1.11.22</byte-buddy.version>
+		<byte-buddy.version>1.12.0</byte-buddy.version>
 		<scalecube-cluster.version>2.6.12</scalecube-cluster.version>
 		<cloudevents.version>2.2.0</cloudevents.version>
 		<picocli.version>4.6.2</picocli.version>
@@ -119,9 +119,8 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.104</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.105</aws-java-sdk.version>
 		<awssdk.version>2.17.76</awssdk.version>
-
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
