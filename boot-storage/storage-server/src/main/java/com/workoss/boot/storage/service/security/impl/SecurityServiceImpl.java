@@ -26,11 +26,11 @@ import com.workoss.boot.storage.repository.account.dao.StorageAccountRepository;
 import com.workoss.boot.storage.repository.account.entity.StorageAccountEntity;
 import com.workoss.boot.storage.service.security.SecurityService;
 import com.workoss.boot.storage.service.token.TokenHandlerFactory;
-import com.workoss.boot.storage.util.MimeTypeUtil;
 import com.workoss.boot.storage.util.ReactorUtil;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.context.MapContext;
 import com.workoss.boot.util.json.JsonMapper;
+import com.workoss.boot.util.web.MediaTypeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -92,7 +92,7 @@ public class SecurityServiceImpl implements SecurityService {
 			if (context.isEmpty()) {
 				return Mono.error(new StorageException("00001"));
 			}
-			String finalMimeType = StringUtils.isBlank(mimeType) ? MimeTypeUtil.getMediaType(key) : mimeType;
+			String finalMimeType = StringUtils.isBlank(mimeType) ? MediaTypeFactory.getMediaType(key) : mimeType;
 			// 判断host是否为空
 			return tokenHandlerFactory.getHandler(storage.getStorageType())
 					.generateUploadSign(context, storage.getBucketName(), key, finalMimeType, successActionStatus)
@@ -114,7 +114,7 @@ public class SecurityServiceImpl implements SecurityService {
 			if (context.isEmpty()) {
 				return Mono.error(new StorageException("00001"));
 			}
-			String finalMimeType = StringUtils.isBlank(mimeType) ? MimeTypeUtil.getMediaType(key) : mimeType;
+			String finalMimeType = StringUtils.isBlank(mimeType) ? MediaTypeFactory.getMediaType(key) : mimeType;
 			// 判断host是否为空
 			return tokenHandlerFactory.getHandler(storage.getStorageType())
 					.generateUploadStsSign(context, storage.getBucketName(), key, finalMimeType, successActionStatus)

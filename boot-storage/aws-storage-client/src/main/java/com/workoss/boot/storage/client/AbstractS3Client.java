@@ -357,8 +357,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			PutObjectRequest putObjectRequest = null;
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			if (StringUtils.isBlank(contentType)) {
-				// TODO getMimeType
-				// contentType = StorageUtil.getMimeType(key);
+				 contentType = StorageUtil.getMimeType(key);
 			}
 			if (StringUtils.isNotBlank(contentType)) {
 				objectMetadata.setContentType(contentType);

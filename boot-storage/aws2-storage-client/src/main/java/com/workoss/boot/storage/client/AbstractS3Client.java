@@ -354,13 +354,13 @@ public abstract class AbstractS3Client implements StorageClient {
 			if (in instanceof File) {
 				File file = (File) in;
 				asyncRequestBody = AsyncRequestBody.fromFile(file);
-				if (StringUtils.isBlank(contentType)) {
-					contentType = Mimetype.getInstance().getMimetype(file);
-				}
 			} else if (in instanceof InputStream) {
 				asyncRequestBody = AsyncRequestBody.fromBytes(IoUtils.toByteArray((InputStream) in));
 			} else if (in instanceof byte[]) {
 				asyncRequestBody = AsyncRequestBody.fromBytes((byte[]) in);
+			}
+			if (StringUtils.isBlank(contentType)) {
+				contentType = StorageUtil.getMimeType(key);
 			}
 			if (asyncRequestBody == null) {
 				throw new StorageException("0003", "不支持的形式");
@@ -368,7 +368,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			if (userMetaData == null) {
 				userMetaData = new HashMap<>(1);
 			}
-			if (StringUtils.isEmpty(contentType)) {
+			if (StringUtils.isNotBlank(contentType)) {
 				requestBuilder.contentType(contentType);
 			}
 			userMetaData.put("upclient", "storage");

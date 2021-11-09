@@ -23,7 +23,9 @@ import com.workoss.boot.storage.model.StorageStsToken;
 import com.workoss.boot.util.Assert;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.json.JsonMapper;
+import com.workoss.boot.util.web.MediaTypeFactory;
 
+import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,18 @@ public class StorageUtil {
 	public static final String DOUBLE_SLASH = "//";
 
 	private StorageUtil() {
+	}
+
+	public static String getMimeType(File file) {
+		String path = null;
+		if (file != null) {
+			path = file.toPath().getFileName().toString();
+		}
+		return getMimeType(path);
+	}
+
+	public static String getMimeType(String path) {
+		return MediaTypeFactory.getMediaType(path, "application/octet-stream");
 	}
 
 	public static String replaceEndSlash(String url) {
@@ -114,7 +128,7 @@ public class StorageUtil {
 	}
 
 	public static StorageStsToken requestSTSToken(StorageHttpFunction httpFunc, StorageClientConfig config, String key,
-			String action) {
+												  String action) {
 		String url = formatTokenUrl(config.getTokenUrl()) + "/security/ststoken";
 		String paramJson = StorageUtil.buildStsTokenParam(config, key, action);
 		return request(url, paramJson, httpFunc, jsonNode -> {
@@ -132,7 +146,7 @@ public class StorageUtil {
 	}
 
 	public static StorageSignature requestSign(StorageHttpFunction httpFunc, StorageClientConfig config, String key,
-			String mimeType, String successActionStatus) {
+											   String mimeType, String successActionStatus) {
 		String url = formatTokenUrl(config.getTokenUrl()) + "/security/stssign";
 		String paramJson = StorageUtil.buildSignatureParam(config, key, mimeType, successActionStatus);
 		return request(url, paramJson, httpFunc, jsonNode -> {
@@ -152,7 +166,7 @@ public class StorageUtil {
 	}
 
 	public static <T> T request(String url, String body, StorageHttpFunction httpFunc,
-			Function<JsonNode, T> resultFun) {
+								Function<JsonNode, T> resultFun) {
 		Map<String, String> header = new HashMap<>();
 		header.put("X-SDK-CLIENT", "storage");
 		String resp = httpFunc.apply(url, body, header);
@@ -186,7 +200,7 @@ public class StorageUtil {
 	}
 
 	public static String buildSignatureParam(StorageClientConfig config, String key, String mimeType,
-			String successActionStatus) {
+											 String successActionStatus) {
 		String paramJson = "{\"tenentId\": \"%s\", \"storageType\": \"%s\", \"bucketName\": \"%s\", \"key\": \"%s\", \"mimeType\": \"%s\", \"successActionStatus\": \"%s\"}";
 		return String.format(paramJson, (config.getTenentId() == null ? StringUtils.EMPTY : config.getTenentId()),
 				(config.getStorageType() == null ? StringUtils.EMPTY : config.getStorageType().name()),

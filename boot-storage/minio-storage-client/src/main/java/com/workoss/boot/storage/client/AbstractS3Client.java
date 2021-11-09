@@ -325,6 +325,10 @@ public abstract class AbstractS3Client implements StorageClient {
 				inputStream = new ByteArrayInputStream((byte[]) in);
 			}
 			builder.stream(inputStream, inputStream.available(), -1);
+			if (StringUtils.isBlank(contentType)){
+				contentType = StorageUtil.getMimeType(key);
+			}
+
 			if (StringUtils.isNotBlank(contentType)) {
 				builder.contentType(contentType);
 			}
