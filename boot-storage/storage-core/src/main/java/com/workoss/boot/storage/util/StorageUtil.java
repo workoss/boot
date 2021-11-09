@@ -36,6 +36,7 @@ import java.util.function.Function;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class StorageUtil {
 
 	public static final String DOT = ".";
