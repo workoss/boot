@@ -79,7 +79,7 @@
 		<aspectj.version>1.9.7</aspectj.version>
 
 		<spring.version>5.3.13</spring.version>
-		<spring-boot.version>2.6.0</spring-boot.version>
+		<spring-boot.version>2.6.1</spring-boot.version>
 		<spring-cloud-dependencies.version>2020.0.4</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.6.0</spring-security-bom.version>
 		<spring-boot-admin.version>2.5.4</spring-boot-admin.version>
@@ -114,14 +114,13 @@
 
 		<springdoc-openapi.version>1.5.12</springdoc-openapi.version>
 		<druid.version>1.2.8</druid.version>
-		<h2.version>1.4.200</h2.version>
+		<h2.version>2.0.202</h2.version>
 		<rocksdbjni.version>6.26.1</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.120</aws-java-sdk.version>
-		<awssdk.version>2.17.90</awssdk.version>
-
+		<awssdk.version>2.17.91</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
