@@ -64,7 +64,7 @@
 		<com.sun.xml.bind.version>2.3.3</com.sun.xml.bind.version>
 
 		<slf4j.version>1.7.32</slf4j.version>
-		<log4j2.version>2.15.0</log4j2.version>
+		<log4j2.version>2.16.0</log4j2.version>
 
 		<jackson-bom.version>2.13.0</jackson-bom.version>
 		<netty-bom.version>4.1.72.Final</netty-bom.version>
