@@ -107,12 +107,13 @@
 
 		<debezium.version>1.7.2.Final</debezium.version>
 		<byte-buddy.version>1.12.4</byte-buddy.version>
+
 		<scalecube-cluster.version>2.6.12</scalecube-cluster.version>
 		<cloudevents.version>2.2.0</cloudevents.version>
 		<picocli.version>4.6.2</picocli.version>
 		<feign-bom.version>11.7</feign-bom.version>
 
-		<springdoc-openapi.version>1.6.0</springdoc-openapi.version>
+		<springdoc-openapi.version>1.6.1</springdoc-openapi.version>
 		<druid.version>1.2.8</druid.version>
 		<h2.version>2.0.202</h2.version>
 		<rocksdbjni.version>6.26.1</rocksdbjni.version>
