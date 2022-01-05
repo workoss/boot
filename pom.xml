@@ -16,7 +16,7 @@
 		<!--		<module>boot-http</module>-->
 	</modules>
 	<properties>
-		<maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
+		<maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.29</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.1</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
