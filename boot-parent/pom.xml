@@ -93,7 +93,7 @@
 
 		<r2dbc-bom.version>Arabba-SR11</r2dbc-bom.version>
 
-		<protobuf-bom.version>3.19.2</protobuf-bom.version>
+		<protobuf-bom.version>3.19.3</protobuf-bom.version>
 		<protostuff.version>1.7.4</protostuff.version>
 		<liquibase.version>4.7.0</liquibase.version>
 
@@ -119,7 +119,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.137</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.138</aws-java-sdk.version>
 		<awssdk.version>2.17.108</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
