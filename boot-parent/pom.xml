@@ -67,9 +67,9 @@
 		<log4j2.version>2.17.1</log4j2.version>
 
 		<jackson-bom.version>2.13.1</jackson-bom.version>
-		<netty-bom.version>4.1.72.Final</netty-bom.version>
+		<netty-bom.version>4.1.73.Final</netty-bom.version>
 		<asm.version>9.2</asm.version>
-		<reactor-bom.version>2020.0.14</reactor-bom.version>
+		<reactor-bom.version>2020.0.15</reactor-bom.version>
 		<rsocket-bom.version>1.1.1</rsocket-bom.version>
 
 
@@ -120,14 +120,14 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.138</aws-java-sdk.version>
-		<awssdk.version>2.17.108</awssdk.version>
+		<awssdk.version>2.17.109</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-		<maven-jar-plugin.version>3.2.1</maven-jar-plugin.version>
+		<maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 		<maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
 		<maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
