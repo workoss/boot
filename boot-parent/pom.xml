@@ -91,7 +91,7 @@
 
 		<HikariCP.version>4.0.3</HikariCP.version>
 
-		<r2dbc-bom.version>Arabba-SR11</r2dbc-bom.version>
+		<r2dbc-bom.version>Arabba-SR12</r2dbc-bom.version>
 
 		<protobuf-bom.version>3.19.3</protobuf-bom.version>
 		<protostuff.version>1.7.4</protostuff.version>
