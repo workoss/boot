@@ -17,7 +17,7 @@
 	</modules>
 	<properties>
 		<maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
-		<spring-javaformat-maven-plugin.version>0.0.29</spring-javaformat-maven-plugin.version>
+		<spring-javaformat-maven-plugin.version>0.0.30</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.1</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.9.0</versions-maven-plugin.version>
 		<flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
