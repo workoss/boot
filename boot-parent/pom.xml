@@ -63,11 +63,11 @@
 		<jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
 		<com.sun.xml.bind.version>2.3.3</com.sun.xml.bind.version>
 
-		<slf4j.version>1.7.35</slf4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
 		<log4j2.version>2.17.1</log4j2.version>
 
 		<jackson-bom.version>2.13.1</jackson-bom.version>
-		<netty-bom.version>4.1.73.Final</netty-bom.version>
+		<netty-bom.version>4.1.74.Final</netty-bom.version>
 		<asm.version>9.2</asm.version>
 		<reactor-bom.version>2020.0.15</reactor-bom.version>
 		<rsocket-bom.version>1.1.1</rsocket-bom.version>
@@ -120,7 +120,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.153</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.154</aws-java-sdk.version>
 		<awssdk.version>2.17.125</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
