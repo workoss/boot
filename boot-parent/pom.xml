@@ -110,7 +110,7 @@
 		<byte-buddy.version>1.12.7</byte-buddy.version>
 		<scalecube-cluster.version>2.6.12</scalecube-cluster.version>
 		<cloudevents.version>2.3.0</cloudevents.version>
-		<picocli.version>4.6.2</picocli.version>
+		<picocli.version>4.6.3</picocli.version>
 		<feign-bom.version>11.8</feign-bom.version>
 
 		<springdoc-openapi.version>1.6.6</springdoc-openapi.version>
