@@ -66,7 +66,7 @@
 		<slf4j.version>1.7.36</slf4j.version>
 		<log4j2.version>2.17.2</log4j2.version>
 
-		<jackson-bom.version>2.13.1</jackson-bom.version>
+		<jackson-bom.version>2.13.2</jackson-bom.version>
 		<netty-bom.version>4.1.74.Final</netty-bom.version>
 		<asm.version>9.2</asm.version>
 		<reactor-bom.version>2020.0.16</reactor-bom.version>
@@ -120,9 +120,8 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.171</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.172</aws-java-sdk.version>
 		<awssdk.version>2.17.143</awssdk.version>
-
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
