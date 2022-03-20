@@ -98,7 +98,7 @@
 		<protostuff.version>1.8.0</protostuff.version>
 		<liquibase.version>4.9.0</liquibase.version>
 
-		<caffeine.version>2.9.2</caffeine.version>
+		<caffeine.version>3.0.6</caffeine.version>
 
 		<lombok.version>1.18.22</lombok.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
