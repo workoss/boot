@@ -116,11 +116,11 @@
 		<springdoc-openapi.version>1.6.6</springdoc-openapi.version>
 		<druid.version>1.2.8</druid.version>
 		<h2.version>2.1.210</h2.version>
-		<rocksdbjni.version>6.28.2</rocksdbjni.version>
+		<rocksdbjni.version>7.0.3</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.184</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.186</aws-java-sdk.version>
 		<awssdk.version>2.17.157</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
