@@ -70,7 +70,7 @@
 		<netty-bom.version>4.1.75.Final</netty-bom.version>
 		<asm.version>9.2</asm.version>
 		<reactor-bom.version>2020.0.17</reactor-bom.version>
-		<rsocket-bom.version>1.1.1</rsocket-bom.version>
+		<rsocket-bom.version>1.1.2</rsocket-bom.version>
 
 
 		<hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
