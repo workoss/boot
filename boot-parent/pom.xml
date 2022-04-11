@@ -114,13 +114,13 @@
 		<feign-bom.version>11.8</feign-bom.version>
 
 		<springdoc-openapi.version>1.6.7</springdoc-openapi.version>
-		<druid.version>1.2.8</druid.version>
-		<h2.version>2.1.210</h2.version>
+		<druid.version>1.2.9</druid.version>
+		<h2.version>2.1.212</h2.version>
 		<rocksdbjni.version>7.0.4</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.195</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.196</aws-java-sdk.version>
 		<awssdk.version>2.17.167</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
