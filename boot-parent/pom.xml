@@ -69,7 +69,7 @@
 		<jackson-bom.version>2.13.2.20220328</jackson-bom.version>
 		<netty-bom.version>4.1.75.Final</netty-bom.version>
 		<asm.version>9.3</asm.version>
-		<reactor-bom.version>2020.0.17</reactor-bom.version>
+		<reactor-bom.version>2020.0.18</reactor-bom.version>
 		<rsocket-bom.version>1.1.2</rsocket-bom.version>
 
 
