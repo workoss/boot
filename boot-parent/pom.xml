@@ -100,7 +100,7 @@
 
 		<caffeine.version>2.9.2</caffeine.version>
 
-		<lombok.version>1.18.22</lombok.version>
+		<lombok.version>1.18.24</lombok.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.8.2</junit-jupiter.version>
