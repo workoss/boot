@@ -106,7 +106,7 @@
 		<junit-jupiter.version>5.8.2</junit-jupiter.version>
 		<mockito-core.version>4.5.1</mockito-core.version>
 
-		<debezium.version>1.9.0.Final</debezium.version>
+		<debezium.version>1.9.1.Final</debezium.version>
 		<byte-buddy.version>1.12.9</byte-buddy.version>
 		<scalecube-cluster.version>2.6.12</scalecube-cluster.version>
 		<cloudevents.version>2.3.0</cloudevents.version>
@@ -120,7 +120,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.202</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.204</aws-java-sdk.version>
 		<awssdk.version>2.17.173</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -148,7 +148,7 @@
 		<git-commit-id-maven-plugin.version>4.9.9</git-commit-id-maven-plugin.version>
 		<versions-maven-plugin.version>2.10.0</versions-maven-plugin.version>
 		<license-maven-plugin.version>4.1</license-maven-plugin.version>
-		<nexus-staging-maven-plugin.version>1.6.12</nexus-staging-maven-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
 	</properties>
 
