@@ -67,7 +67,7 @@
 		<log4j2.version>2.17.2</log4j2.version>
 
 		<jackson-bom.version>2.13.2.20220328</jackson-bom.version>
-		<netty-bom.version>4.1.76.Final</netty-bom.version>
+		<netty-bom.version>4.1.77.Final</netty-bom.version>
 		<asm.version>9.3</asm.version>
 		<reactor-bom.version>2020.0.18</reactor-bom.version>
 		<rsocket-bom.version>1.1.2</rsocket-bom.version>
