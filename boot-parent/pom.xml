@@ -72,9 +72,7 @@
 		<reactor-bom.version>2020.0.19</reactor-bom.version>
 		<rsocket-bom.version>1.1.2</rsocket-bom.version>
 
-
 		<hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
-
 
 		<aspectj.version>1.9.9.1</aspectj.version>
 
@@ -121,7 +119,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.223</aws-java-sdk.version>
-		<awssdk.version>2.17.192</awssdk.version>
+		<awssdk.version>2.17.194</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
