@@ -92,7 +92,7 @@
 
 		<r2dbc-bom.version>Borca-SR1</r2dbc-bom.version>
 
-		<protobuf-bom.version>3.21.0</protobuf-bom.version>
+		<protobuf-bom.version>3.21.1</protobuf-bom.version>
 		<protostuff.version>1.8.0</protostuff.version>
 		<liquibase.version>4.11.0</liquibase.version>
 
@@ -111,14 +111,14 @@
 		<picocli.version>4.6.3</picocli.version>
 		<feign-bom.version>11.8</feign-bom.version>
 
-		<springdoc-openapi.version>1.6.8</springdoc-openapi.version>
+		<springdoc-openapi.version>1.6.9</springdoc-openapi.version>
 		<druid.version>1.2.10</druid.version>
 		<h2.version>2.1.212</h2.version>
 		<rocksdbjni.version>7.2.2</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.228</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.230</aws-java-sdk.version>
 		<awssdk.version>2.17.201</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
