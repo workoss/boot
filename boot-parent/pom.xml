@@ -99,10 +99,10 @@
 		<caffeine.version>2.9.2</caffeine.version>
 
 		<lombok.version>1.18.24</lombok.version>
-		<mapstruct.version>1.4.2.Final</mapstruct.version>
+		<mapstruct.version>1.5.0.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.8.2</junit-jupiter.version>
-		<mockito-core.version>4.6.0</mockito-core.version>
+		<mockito-core.version>4.6.1</mockito-core.version>
 
 		<debezium.version>1.9.3.Final</debezium.version>
 		<byte-buddy.version>1.12.10</byte-buddy.version>
@@ -118,7 +118,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.232</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.233</aws-java-sdk.version>
 		<awssdk.version>2.17.204</awssdk.version>
 
 		<maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
