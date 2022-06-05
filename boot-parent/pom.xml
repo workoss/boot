@@ -99,7 +99,7 @@
 		<caffeine.version>2.9.2</caffeine.version>
 
 		<lombok.version>1.18.24</lombok.version>
-		<mapstruct.version>1.5.0.Final</mapstruct.version>
+		<mapstruct.version>1.5.1.Final</mapstruct.version>
 
 		<junit-jupiter.version>5.8.2</junit-jupiter.version>
 		<mockito-core.version>4.6.1</mockito-core.version>
