@@ -90,7 +90,7 @@
 
 		<HikariCP.version>4.0.3</HikariCP.version>
 
-		<r2dbc-bom.version>Borca-SR1</r2dbc-bom.version>
+		<r2dbc-bom.version>Borca-SR2</r2dbc-bom.version>
 
 		<protobuf-bom.version>3.21.5</protobuf-bom.version>
 		<protostuff.version>1.8.0</protostuff.version>
