@@ -78,7 +78,7 @@
 
 		<spring.version>5.3.22</spring.version>
 		<spring-boot.version>2.7.3</spring-boot.version>
-		<spring-cloud-dependencies.version>2021.0.3</spring-cloud-dependencies.version>
+		<spring-cloud-dependencies.version>2021.0.4</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.7.3</spring-security-bom.version>
 
 		<spring-boot-admin.version>2.7.4</spring-boot-admin.version>
@@ -107,7 +107,7 @@
 		<debezium.version>1.9.5.Final</debezium.version>
 		<byte-buddy.version>1.12.14</byte-buddy.version>
 		<scalecube-cluster.version>2.6.12</scalecube-cluster.version>
-		<cloudevents.version>2.3.0</cloudevents.version>
+		<cloudevents.version>2.4.0</cloudevents.version>
 		<picocli.version>4.6.3</picocli.version>
 		<feign-bom.version>11.9.1</feign-bom.version>
 
@@ -119,7 +119,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.297</aws-java-sdk.version>
-		<awssdk.version>2.17.267</awssdk.version>
+		<awssdk.version>2.17.268</awssdk.version>
 
 		<maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
