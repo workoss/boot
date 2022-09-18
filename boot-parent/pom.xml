@@ -63,7 +63,7 @@
 		<jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
 		<com.sun.xml.bind.version>2.3.3</com.sun.xml.bind.version>
 
-		<slf4j.version>2.0.0</slf4j.version>
+		<slf4j.version>2.0.1</slf4j.version>
 		<log4j2.version>2.18.0</log4j2.version>
 
 		<jackson-bom.version>2.13.4</jackson-bom.version>
@@ -81,7 +81,7 @@
 		<spring-cloud-dependencies.version>2021.0.4</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.7.3</spring-security-bom.version>
 
-		<spring-boot-admin.version>2.7.4</spring-boot-admin.version>
+		<spring-boot-admin.version>2.7.5</spring-boot-admin.version>
 		<spring-data-bom.version>2021.2.2</spring-data-bom.version>
 
 		<mybatis.version>3.5.10</mybatis.version>
@@ -119,7 +119,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.303</aws-java-sdk.version>
-		<awssdk.version>2.17.274</awssdk.version>
+		<awssdk.version>2.17.275</awssdk.version>
 
 		<maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
