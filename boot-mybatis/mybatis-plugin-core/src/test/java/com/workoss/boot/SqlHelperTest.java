@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.workoss.boot;
 
 import com.workoss.boot.plugin.mybatis.SqlHelper;
+import org.springframework.util.SerializationUtils;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
@@ -48,6 +49,7 @@ public class SqlHelperTest {
 //		System.out.println(serializedLambda.getImplClass());
 
 		Function<DemoEntity, List<DemoEntity>> selectList = demoDao::selectList;
+
 		Method write1 = selectList.getClass().getDeclaredMethod("writeReplace");
 		write1.setAccessible(true);
 		SerializedLambda serializedLambda1 = (SerializedLambda) write1.invoke(selectList);

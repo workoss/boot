@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,32 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.storage.web.vo;
+package com.workoss.boot.storage.web.controller.vo;
 
+import com.workoss.boot.storage.model.ThirdPlatformType;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 /**
- * 生成stsToken参数
+ * 返回STS token 临时
  *
  * @author workoss
  */
 @SuppressWarnings("ALL")
 @Data
-public class STSTokenParam extends StorageParam {
+public class STSTokenVO {
 
-	private String bucketName;
-
-	/**
-	 * 动作
-	 */
-	private String action;
+	private ThirdPlatformType storageType;
 
 	/**
-	 * 文件key
+	 * accessKey accessId
 	 */
-	@NotBlank(message = "{security.ststoken.key.notblank}")
-	private String key;
+	private String accessKey;
+
+	/**
+	 * secretKey
+	 */
+	private String secretKey;
+
+	/**
+	 * sts token
+	 */
+	private String stsToken;
+
+	/**
+	 * 过期时间
+	 */
+	@DateTimeFormat(pattern = "")
+	private LocalDateTime expiration;
+
+	/**
+	 * endpoint
+	 */
+	private String endpoint;
 
 }

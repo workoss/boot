@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class SecurityServiceImpl implements SecurityService {
 
 	private static final Cache<String, Signal<? extends MapContext<String, String>>> ACCOUNT_CACHE = Caffeine
 			.newBuilder().initialCapacity(4).maximumSize(50).expireAfterWrite(Duration.ofHours(1))
-			.removalListener((key, value, cause) -> log.debug("[popeye]ACCOUNT_CACHE KEY：{} cause:{}", key, cause))
+			.removalListener((key, value, cause) -> log.debug("[BOOT] ACCOUNT_CACHE KEY：{} cause:{}", key, cause))
 			.build();
 
 	public SecurityServiceImpl(StorageAccountRepository storageAccountRepository,
@@ -80,7 +80,7 @@ public class SecurityServiceImpl implements SecurityService {
 								MapContext.class);
 						context.put("policy", accountEntity.getPolicyTemplate());
 						return Mono.just(context);
-					}).doOnSuccess(context -> log.debug("[popeye]ACCOUNT_CACHE KEY：{} LOAD FROM DB",
+					}).doOnSuccess(context -> log.debug("[BOOT] ACCOUNT_CACHE KEY：{} LOAD FROM DB",
 							storage.getStorageType()));
 		});
 	}

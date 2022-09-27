@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,49 +13,64 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.storage.web.vo;
+package com.workoss.boot.storage.web.controller.vo;
 
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 /**
- * 返回STS token 临时
+ * 签名返回
  *
  * @author workoss
  */
-@SuppressWarnings("ALL")
 @Data
-public class STSTokenVO {
+public class UploadSignVO {
 
 	private ThirdPlatformType storageType;
 
 	/**
-	 * accessKey accessId
+	 * 临时accessKey
 	 */
 	private String accessKey;
 
 	/**
-	 * secretKey
-	 */
-	private String secretKey;
-
-	/**
-	 * sts token
+	 * 临时token
 	 */
 	private String stsToken;
 
 	/**
-	 * 过期时间
+	 * 策略
 	 */
-	@DateTimeFormat(pattern = "")
-	private LocalDateTime expiration;
+	private String policy;
 
 	/**
-	 * endpoint
+	 * 签名
 	 */
-	private String endpoint;
+	private String signature;
+
+	/**
+	 * 存储key
+	 */
+	private String key;
+
+	/**
+	 * 域名
+	 */
+	private String host;
+
+	/**
+	 * 过期日期
+	 */
+	private Long expire;
+
+	/**
+	 * key类型
+	 */
+	private String mimeType;
+
+	/**
+	 * 返回状态
+	 */
+	private String successActionStatus;
 
 }

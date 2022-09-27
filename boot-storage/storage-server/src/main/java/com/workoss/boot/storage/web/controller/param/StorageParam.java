@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.storage.web.vo;
+package com.workoss.boot.storage.web.controller.param;
 
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import lombok.Data;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import com.workoss.boot.storage.mapper.web.UploadSignParamToStorageModelMapper;
 import com.workoss.boot.storage.mapper.web.UploadSignToVOMapper;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.service.security.SecurityService;
-import com.workoss.boot.storage.web.vo.STSTokenParam;
-import com.workoss.boot.storage.web.vo.STSTokenVO;
-import com.workoss.boot.storage.web.vo.UploadSignParam;
-import com.workoss.boot.storage.web.vo.UploadSignVO;
+import com.workoss.boot.storage.web.controller.param.STSTokenParam;
+import com.workoss.boot.storage.web.controller.vo.STSTokenVO;
+import com.workoss.boot.storage.web.controller.param.UploadSignParam;
+import com.workoss.boot.storage.web.controller.vo.UploadSignVO;
 import com.workoss.boot.util.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;

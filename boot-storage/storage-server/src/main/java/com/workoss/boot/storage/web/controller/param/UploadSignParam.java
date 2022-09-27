@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,64 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.storage.web.vo;
+package com.workoss.boot.storage.web.controller.param;
 
-import com.workoss.boot.storage.model.ThirdPlatformType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotBlank;
 
 /**
- * 签名返回
+ * web 签名请求参数
  *
  * @author workoss
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class UploadSignVO {
+public class UploadSignParam extends StorageParam {
 
-	private ThirdPlatformType storageType;
+	@NotBlank(message = "{security.uploadsign.bucketName.notblank}")
+	private String bucketName;
 
-	/**
-	 * 临时accessKey
-	 */
-	private String accessKey;
-
-	/**
-	 * 临时token
-	 */
-	private String stsToken;
-
-	/**
-	 * 策略
-	 */
-	private String policy;
-
-	/**
-	 * 签名
-	 */
-	private String signature;
-
-	/**
-	 * 存储key
-	 */
+	@NotBlank(message = "{security.uploadsign.key.notblank}")
 	private String key;
 
-	/**
-	 * 域名
-	 */
-	private String host;
-
-	/**
-	 * 过期日期
-	 */
-	private Long expire;
-
-	/**
-	 * key类型
-	 */
 	private String mimeType;
 
-	/**
-	 * 返回状态
-	 */
 	private String successActionStatus;
 
 }

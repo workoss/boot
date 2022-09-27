@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.storage.web.vo;
+package com.workoss.boot.storage.web.controller.param;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 
 /**
- * web 签名请求参数
+ * 生成stsToken参数
  *
  * @author workoss
  */
-@EqualsAndHashCode(callSuper = true)
+@SuppressWarnings("ALL")
 @Data
-public class UploadSignParam extends StorageParam {
+public class STSTokenParam extends StorageParam {
 
-	@NotBlank(message = "{security.uploadsign.bucketName.notblank}")
 	private String bucketName;
 
-	@NotBlank(message = "{security.uploadsign.key.notblank}")
+	/**
+	 * 动作
+	 */
+	private String action;
+
+	/**
+	 * 文件key
+	 */
+	@NotBlank(message = "{security.ststoken.key.notblank}")
 	private String key;
-
-	private String mimeType;
-
-	private String successActionStatus;
 
 }

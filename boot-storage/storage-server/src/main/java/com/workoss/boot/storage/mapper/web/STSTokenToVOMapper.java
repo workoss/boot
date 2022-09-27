@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.workoss.boot.storage.mapper.web;
 
 import com.workoss.boot.storage.mapper.BeanMapper;
 import com.workoss.boot.storage.model.STSToken;
-import com.workoss.boot.storage.web.vo.STSTokenVO;
+import com.workoss.boot.storage.web.controller.vo.STSTokenVO;
 import org.mapstruct.Mapper;
 
 /**

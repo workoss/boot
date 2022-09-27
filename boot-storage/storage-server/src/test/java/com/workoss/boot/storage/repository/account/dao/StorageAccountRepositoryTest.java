@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.workoss.boot.storage.repository.account.dao;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.samskivert.mustache.Mustache;
 import com.workoss.boot.storage.BaseSpringTest;
 import com.workoss.boot.storage.model.AccountState;
@@ -31,16 +30,13 @@ import com.workoss.boot.util.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
-import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.CriteriaDefinition;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.r2dbc.core.DatabaseClient;
-import org.springframework.transaction.annotation.Transactional;
-import reactor.cache.CacheFlux;
-import reactor.cache.CacheMono;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Signal;
 import reactor.test.StepVerifier;
@@ -108,6 +104,7 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 
 	@Test
 	void testQuery() {
+
 		PageRequest pageRequest = PageRequest.of(0, 1);
 
 		// Criteria criteria = Criteria.empty();

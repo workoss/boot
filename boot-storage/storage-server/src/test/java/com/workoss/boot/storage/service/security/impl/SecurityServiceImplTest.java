@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 workoss (https://www.workoss.com)
+ * Copyright 2019-2022 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,10 @@ import com.workoss.boot.storage.BaseSpringTest;
 import com.workoss.boot.storage.model.BaseStorageModel;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.service.security.SecurityService;
-import com.workoss.boot.storage.web.vo.STSTokenVO;
+import com.workoss.boot.storage.web.controller.vo.STSTokenVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.ConfigurableConversionService;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SecurityServiceImplTest extends BaseSpringTest {
 
