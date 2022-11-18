@@ -118,7 +118,7 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.343</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.345</aws-java-sdk.version>
 		<awssdk.version>2.18.18</awssdk.version>
 
 
