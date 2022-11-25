@@ -85,7 +85,7 @@
 		<spring-data-bom.version>2021.2.5</spring-data-bom.version>
 
 		<mybatis.version>3.5.11</mybatis.version>
-		<mybatis-spring.version>2.0.7</mybatis-spring.version>
+		<mybatis-spring.version>3.0.0</mybatis-spring.version>
 		<mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
 
 		<HikariCP.version>4.0.3</HikariCP.version>
