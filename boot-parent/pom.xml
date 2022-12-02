@@ -118,9 +118,8 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.350</aws-java-sdk.version>
+		<aws-java-sdk.version>1.12.352</aws-java-sdk.version>
 		<awssdk.version>2.18.27</awssdk.version>
-
 
 		<maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
