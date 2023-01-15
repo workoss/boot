@@ -82,7 +82,7 @@
 		<spring-security-bom.version>5.7.5</spring-security-bom.version>
 
 		<spring-boot-admin.version>2.7.10</spring-boot-admin.version>
-		<spring-data-bom.version>2021.2.5</spring-data-bom.version>
+		<spring-data-bom.version>2022.0.1</spring-data-bom.version>
 
 		<mybatis.version>3.5.11</mybatis.version>
 		<mybatis-spring.version>3.0.1</mybatis-spring.version>
