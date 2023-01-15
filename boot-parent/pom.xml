@@ -107,7 +107,7 @@
 		<debezium.version>2.1.1.Final</debezium.version>
 		<byte-buddy.version>1.12.22</byte-buddy.version>
 		<scalecube-cluster.version>2.6.14</scalecube-cluster.version>
-		<cloudevents.version>2.4.0</cloudevents.version>
+		<cloudevents.version>2.4.1</cloudevents.version>
 		<picocli.version>4.7.0</picocli.version>
 		<feign-bom.version>12.1</feign-bom.version>
 
