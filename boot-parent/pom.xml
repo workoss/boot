@@ -104,7 +104,7 @@
 		<junit-jupiter.version>5.9.2</junit-jupiter.version>
 		<mockito-core.version>5.0.0</mockito-core.version>
 
-		<debezium.version>2.1.1.Final</debezium.version>
+		<debezium.version>2.1.2.Final</debezium.version>
 		<byte-buddy.version>1.12.22</byte-buddy.version>
 		<scalecube-cluster.version>2.6.14</scalecube-cluster.version>
 		<cloudevents.version>2.4.1</cloudevents.version>
