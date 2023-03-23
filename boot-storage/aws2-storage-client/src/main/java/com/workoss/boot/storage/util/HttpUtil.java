@@ -81,8 +81,11 @@ public final class HttpUtil implements AutoCloseable {
 	}
 
 	static NettyNioAsyncHttpClient.Builder createHttpClientBuilder(Duration timeout) {
-		return NettyNioAsyncHttpClient.builder().protocol(Protocol.HTTP1_1).connectionTimeout(timeout)
-				.readTimeout(timeout).writeTimeout(timeout);
+		return NettyNioAsyncHttpClient.builder()
+			.protocol(Protocol.HTTP1_1)
+			.connectionTimeout(timeout)
+			.readTimeout(timeout)
+			.writeTimeout(timeout);
 	}
 
 	static SdkAsyncHttpClient getHttpClient(Duration timeout) {
@@ -184,8 +187,9 @@ public final class HttpUtil implements AutoCloseable {
 		SdkAsyncHttpResponseHandler sdkAsyncHttpResponseHandler = new SdkAsyncHttpResponseHandler() {
 			@Override
 			public void onHeaders(SdkHttpResponse response) {
-				responseBuilder.headers(response.headers()).statusCode(response.statusCode())
-						.statusText(response.statusText().orElse(null));
+				responseBuilder.headers(response.headers())
+					.statusCode(response.statusCode())
+					.statusText(response.statusText().orElse(null));
 			}
 
 			@Override
@@ -210,15 +214,18 @@ public final class HttpUtil implements AutoCloseable {
 
 		request = getRequestWithContentLength(request, contentPublisher);
 
-		AsyncExecuteRequest executeRequest = AsyncExecuteRequest.builder().request(request)
-				.requestContentPublisher(contentPublisher).responseHandler(sdkAsyncHttpResponseHandler).build();
+		AsyncExecuteRequest executeRequest = AsyncExecuteRequest.builder()
+			.request(request)
+			.requestContentPublisher(contentPublisher)
+			.responseHandler(sdkAsyncHttpResponseHandler)
+			.build();
 
 		try {
 			CompletableFuture<Void> execute = getHttpClient(timeout).execute(executeRequest);
 			ByteArrayOutputStream byteArrayOutputStream = streamFuture.get(1, TimeUnit.MINUTES);
 			return responseBuilder
-					.content(AbortableInputStream.create(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())))
-					.build();
+				.content(AbortableInputStream.create(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())))
+				.build();
 		}
 		catch (InterruptedException e) {
 			throw new StorageException("500", ExceptionUtils.toShortString(e, 2));
@@ -241,8 +248,9 @@ public final class HttpUtil implements AutoCloseable {
 	private static SdkHttpFullRequest getRequestWithContentLength(SdkHttpFullRequest request,
 			SdkHttpContentPublisher requestProvider) {
 		if (shouldSetContentLength(request, requestProvider)) {
-			return request.toBuilder().putHeader(CONTENT_LENGTH, String.valueOf(requestProvider.contentLength().get()))
-					.build();
+			return request.toBuilder()
+				.putHeader(CONTENT_LENGTH, String.valueOf(requestProvider.contentLength().get()))
+				.build();
 		}
 		return request;
 	}

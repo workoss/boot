@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot-parent</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>2023.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>boot-parent</name>
@@ -51,17 +52,17 @@
 	</developers>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
 
-		<jakarta.jakartaee-bom.version>9.1.0</jakarta.jakartaee-bom.version>
+		<jakarta.jakartaee-bom.version>8.0.0</jakarta.jakartaee-bom.version>
 		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
 		<jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
-		<com.sun.xml.bind.version>2.3.3</com.sun.xml.bind.version>
+		<com.sun.xml.bind.version>4.0.2</com.sun.xml.bind.version>
 
 		<slf4j.version>2.0.7</slf4j.version>
 		<log4j2.version>2.20.0</log4j2.version>
@@ -72,23 +73,23 @@
 		<reactor-bom.version>2022.0.5</reactor-bom.version>
 		<rsocket-bom.version>1.1.3</rsocket-bom.version>
 
-		<hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
 
 		<aspectj.version>1.9.19</aspectj.version>
 
-		<spring.version>5.3.23</spring.version>
-		<spring-boot.version>2.7.6</spring-boot.version>
-		<spring-cloud-dependencies.version>2021.0.4</spring-cloud-dependencies.version>
-		<spring-security-bom.version>5.7.5</spring-security-bom.version>
+		<spring.version>5.3.26</spring.version>
+		<spring-boot.version>2.7.10</spring-boot.version>
+		<spring-cloud-dependencies.version>2021.0.6</spring-cloud-dependencies.version>
+		<spring-security-bom.version>5.8.2</spring-security-bom.version>
 
 		<spring-boot-admin.version>2.7.10</spring-boot-admin.version>
 		<spring-data-bom.version>2022.0.4</spring-data-bom.version>
 
 		<mybatis.version>3.5.13</mybatis.version>
-		<mybatis-spring.version>3.0.1</mybatis-spring.version>
-		<mybatis-spring-boot-starter.version>3.0.0</mybatis-spring-boot-starter.version>
+		<mybatis-spring.version>2.1.0</mybatis-spring.version>
+		<mybatis-spring-boot-starter.version>2.3.0</mybatis-spring-boot-starter.version>
 
-		<HikariCP.version>4.0.3</HikariCP.version>
+		<HikariCP.version>5.0.1</HikariCP.version>
 
 		<r2dbc-bom.version>Borca-SR2</r2dbc-bom.version>
 
@@ -96,7 +97,7 @@
 		<protostuff.version>1.8.0</protostuff.version>
 		<liquibase.version>4.20.0</liquibase.version>
 
-		<caffeine.version>2.9.2</caffeine.version>
+		<caffeine.version>3.1.5</caffeine.version>
 
 		<lombok.version>1.18.26</lombok.version>
 		<mapstruct.version>1.5.3.Final</mapstruct.version>
@@ -111,7 +112,7 @@
 		<picocli.version>4.7.1</picocli.version>
 		<feign-bom.version>12.2</feign-bom.version>
 
-		<springdoc-openapi.version>1.6.15</springdoc-openapi.version>
+		<springdoc-openapi.version>2.0.4</springdoc-openapi.version>
 		<druid.version>1.2.16</druid.version>
 		<h2.version>2.1.214</h2.version>
 		<rocksdbjni.version>7.10.2</rocksdbjni.version>
@@ -140,29 +141,24 @@
 		<maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
 		<maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
 		<maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
-		<maven-site-plugin.version>3.12.1</maven-site-plugin.version>
+		<maven-site-plugin.version>4.0.0-M6</maven-site-plugin.version>
 		<flatten-maven-plugin.version>1.4.0</flatten-maven-plugin.version>
-		<spring-javaformat-maven-plugin.version>0.0.35</spring-javaformat-maven-plugin.version>
-		<git-commit-id-maven-plugin.version>4.9.9</git-commit-id-maven-plugin.version>
+		<spring-javaformat-maven-plugin.version>0.0.38</spring-javaformat-maven-plugin.version>
+		<git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
 		<versions-maven-plugin.version>2.15.0</versions-maven-plugin.version>
-		<license-maven-plugin.version>4.1</license-maven-plugin.version>
+		<license-maven-plugin.version>4.2.rc3</license-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-			<!--			<dependency>-->
-			<!--				<groupId>jakarta.platform</groupId>-->
-			<!--				<artifactId>jakarta.jakartaee-bom</artifactId>-->
-			<!--				<version>${jakarta.jakartaee-bom.version}</version>-->
-			<!--				<type>pom</type>-->
-			<!--				<scope>import</scope>-->
-			<!--			</dependency>-->
 			<dependency>
-				<groupId>jakarta.servlet</groupId>
-				<artifactId>jakarta.servlet-api</artifactId>
-				<version>${jakarta.servlet-api.version}</version>
+				<groupId>jakarta.platform</groupId>
+				<artifactId>jakarta.jakartaee-bom</artifactId>
+				<version>${jakarta.jakartaee-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 
 			<dependency>
@@ -946,7 +942,8 @@
 						<!-- 指定构建过程中，是否打印详细信息。缺失则默认为false -->
 						<verbose>false</verbose>
 						<!-- 指定git信息文件的输出路径 -->
-						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+						<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+						</generateGitPropertiesFilename>
 						<!-- <generateGitPropertiesFilename>${project.basedir}/git.json</generateGitPropertiesFilename> -->
 						<!-- 指定git信息文件的输出格式。缺失则默认为properties -->
 						<format>properties</format>

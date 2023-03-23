@@ -54,8 +54,13 @@ public class ExtensionLoaderFactory {
 	 */
 	public static <T> T getFirstExtension(Class<T> clazz, String alias, ExtensionLoaderListener<T> listener) {
 		ExtensionLoader<ExtensionFactory> factoryExtensionLoader = getExtensionFactory();
-		ExtensionClass<ExtensionFactory> extensionClass = factoryExtensionLoader.getAllExtensions().entrySet().stream()
-				.sorted(Comparator.comparingInt(t -> t.getValue().getOrder())).findFirst().get().getValue();
+		ExtensionClass<ExtensionFactory> extensionClass = factoryExtensionLoader.getAllExtensions()
+			.entrySet()
+			.stream()
+			.sorted(Comparator.comparingInt(t -> t.getValue().getOrder()))
+			.findFirst()
+			.get()
+			.getValue();
 		return extensionClass.getExtInstance().getExtension(clazz, alias, listener);
 	}
 
@@ -69,9 +74,12 @@ public class ExtensionLoaderFactory {
 	 */
 	public static <T> T getMixExtension(Class<T> clazz, String alias, ExtensionLoaderListener<T> listener) {
 		ExtensionLoader<ExtensionFactory> factoryExtensionLoader = getExtensionFactory();
-		List<ExtensionClass<ExtensionFactory>> extensionClassList = factoryExtensionLoader.getAllExtensions().entrySet()
-				.stream().sorted(Comparator.comparingInt(t -> t.getValue().getOrder())).map(Map.Entry::getValue)
-				.collect(Collectors.toList());
+		List<ExtensionClass<ExtensionFactory>> extensionClassList = factoryExtensionLoader.getAllExtensions()
+			.entrySet()
+			.stream()
+			.sorted(Comparator.comparingInt(t -> t.getValue().getOrder()))
+			.map(Map.Entry::getValue)
+			.collect(Collectors.toList());
 		for (ExtensionClass<ExtensionFactory> extensionFactoryExtensionClass : extensionClassList) {
 			try {
 				T t = getExtension(extensionFactoryExtensionClass.getExtInstance(), clazz, alias, listener);
@@ -103,7 +111,7 @@ public class ExtensionLoaderFactory {
 
 	protected static ExtensionLoader<ExtensionFactory> getExtensionFactory() {
 		ExtensionLoader<ExtensionFactory> extensionLoader = ExtensionLoaderUtil
-				.getExtensionLoader(ExtensionFactory.class, null);
+			.getExtensionLoader(ExtensionFactory.class, null);
 		if (extensionLoader == null) {
 			throw new ExtensionException("no such class:ExtensionFactory extension");
 		}

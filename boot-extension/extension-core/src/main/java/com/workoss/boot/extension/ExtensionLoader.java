@@ -324,7 +324,7 @@ public class ExtensionLoader<T> {
 				if (CollectionUtils.isNotEmpty(rejection)) {
 					ExtensionClass<T> finalExtensionClass = extensionClass;
 					boolean aliasExclu = Arrays.stream(rejection)
-							.anyMatch(rej -> rej.equals(finalExtensionClass.getAlias()));
+						.anyMatch(rej -> rej.equals(finalExtensionClass.getAlias()));
 					if (aliasExclu) {
 						if (LOGGER.isInfoEnabled()) {
 							LOGGER.info("Extension of extensible {} with alias {}: {} has been reject by old {}",

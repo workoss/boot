@@ -4,7 +4,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>2023.1.1-SNAPSHOT</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-dependencies</module>
@@ -17,8 +17,8 @@
 	</modules>
 	<properties>
 		<maven-release-plugin.version>3.0.0</maven-release-plugin.version>
-		<spring-javaformat-maven-plugin.version>0.0.35</spring-javaformat-maven-plugin.version>
-		<license-maven-plugin.version>4.1</license-maven-plugin.version>
+		<spring-javaformat-maven-plugin.version>0.0.38</spring-javaformat-maven-plugin.version>
+		<license-maven-plugin.version>4.2.rc3</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.15.0</versions-maven-plugin.version>
 		<flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
 		<maven.deploy.skip>true</maven.deploy.skip>

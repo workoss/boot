@@ -40,14 +40,16 @@ public class ReactorUtil {
 	}
 
 	public static <K, V> Mono<V> createCacheMono(Cache<K, Signal<? extends V>> cache, K key, Mono<V> defaultValue) {
-		return CacheMono.lookup(ReactorUtil.reader(cache), key).onCacheMissResume(defaultValue)
-				.andWriteWith(ReactorUtil.writer(cache));
+		return CacheMono.lookup(ReactorUtil.reader(cache), key)
+			.onCacheMissResume(defaultValue)
+			.andWriteWith(ReactorUtil.writer(cache));
 	}
 
 	public static <K, V> Mono<V> createCacheMono(Cache<K, Signal<? extends V>> cache, K key,
 			Function<K, Mono<V>> valueConvert) {
-		return CacheMono.lookup(ReactorUtil.reader(cache), key).onCacheMissResume(valueConvert.apply(key))
-				.andWriteWith(ReactorUtil.writer(cache));
+		return CacheMono.lookup(ReactorUtil.reader(cache), key)
+			.onCacheMissResume(valueConvert.apply(key))
+			.andWriteWith(ReactorUtil.writer(cache));
 	}
 
 }

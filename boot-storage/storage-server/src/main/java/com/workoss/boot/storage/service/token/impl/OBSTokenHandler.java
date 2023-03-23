@@ -86,7 +86,7 @@ public class OBSTokenHandler extends AbstractTokenHandler {
 				+ "    {{#successActionStatus}}{\"success_action_status\":\"{{successActionStatus}}\"},{{/successActionStatus}}\n"
 				+ "    [\"content-length-range\", 0, {{maxUploadSize}}]]\n" + "}";
 		return Mono
-				.just(generateWebSign(policyTemplate, context, null, bucketName, key, mimeType, successActionStatus));
+			.just(generateWebSign(policyTemplate, context, null, bucketName, key, mimeType, successActionStatus));
 	}
 
 	@Override
@@ -109,17 +109,20 @@ public class OBSTokenHandler extends AbstractTokenHandler {
 			final String action) {
 		String policy = renderSecurityTokenPolicy(context, bucketName, key, action);
 		ICredential auth = new GlobalCredentials().withAk(context.get("access_key")).withSk(context.get("secret_key"));
-		IamClient client = IamClient.newBuilder().withCredential(auth)
-				.withRegion(IamRegion.valueOf(context.get("region"))).build();
+		IamClient client = IamClient.newBuilder()
+			.withCredential(auth)
+			.withRegion(IamRegion.valueOf(context.get("region")))
+			.build();
 		CreateTemporaryAccessKeyByAgencyRequest request = new CreateTemporaryAccessKeyByAgencyRequest();
 		CreateTemporaryAccessKeyByAgencyRequestBody body = new CreateTemporaryAccessKeyByAgencyRequestBody();
 		ServicePolicy policyIdentity = JsonMapper.parseObject(policy, ServicePolicy.class);
 		AssumeroleSessionuser sessionUserAssumeRole = new AssumeroleSessionuser();
 		sessionUserAssumeRole.withName(context.get("session_name", "popeye"));
 		IdentityAssumerole assumeRoleIdentity = new IdentityAssumerole();
-		assumeRoleIdentity.withAgencyName(context.get("agency_name")).withDomainName(context.get("domain_name"))
-				.withDurationSeconds(Integer.parseInt(context.get("token_duration_seconds", "1200")))
-				.withSessionUser(sessionUserAssumeRole);
+		assumeRoleIdentity.withAgencyName(context.get("agency_name"))
+			.withDomainName(context.get("domain_name"))
+			.withDurationSeconds(Integer.parseInt(context.get("token_duration_seconds", "1200")))
+			.withSessionUser(sessionUserAssumeRole);
 		List<AgencyAuthIdentity.MethodsEnum> listIdentityMethods = new ArrayList<>();
 		listIdentityMethods.add(AgencyAuthIdentity.MethodsEnum.fromValue("assume_role"));
 		AgencyAuthIdentity identityAuth = new AgencyAuthIdentity();

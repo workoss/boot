@@ -76,7 +76,8 @@ public class SqlInterceptor implements Interceptor {
 	private boolean checkExists(ParamHandler paramHandler) {
 		String key = paramHandlers.getClass().getSimpleName();
 		Optional<ParamHandler> handlerOptional = paramHandlers.stream()
-				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName())).findFirst();
+			.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName()))
+			.findFirst();
 		if (handlerOptional.isPresent()) {
 			log.warn("[MYBATIS] ParamHandler:{} 新增已经存在，不能重复增加", paramHandler.getClass().getName());
 			return true;
@@ -120,16 +121,16 @@ public class SqlInterceptor implements Interceptor {
 		Object result = null;
 		try {
 			switch (sqlCommandType) {
-			case SELECT:
-				context.putInput("sqlParam", SqlHelper.getLocalSqlParam());
-				result = SelectSqlActionExecutor.INSTANCE.execute(invocation, context);
-				break;
-			case UPDATE:
-				result = UpdateSqlActionExecutor.INSTANCE.execute(invocation, context);
-				break;
-			default:
-				result = invocation.proceed();
-				break;
+				case SELECT:
+					context.putInput("sqlParam", SqlHelper.getLocalSqlParam());
+					result = SelectSqlActionExecutor.INSTANCE.execute(invocation, context);
+					break;
+				case UPDATE:
+					result = UpdateSqlActionExecutor.INSTANCE.execute(invocation, context);
+					break;
+				default:
+					result = invocation.proceed();
+					break;
 			}
 			return result;
 		}

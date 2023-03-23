@@ -99,8 +99,10 @@ public class ReflectUtils {
 			AbstractMethodAccess methodAccess = getMethodAccessCache(clazz);
 			String[] methodNames = methodAccess.getMethodNames();
 			if (methodNames != null && methodNames.length > 0) {
-				map = Arrays.stream(methodNames).distinct().filter(name -> !isClassDefaultMethod(name))
-						.collect(Collectors.toMap(name -> name, name -> true));
+				map = Arrays.stream(methodNames)
+					.distinct()
+					.filter(name -> !isClassDefaultMethod(name))
+					.collect(Collectors.toMap(name -> name, name -> true));
 			}
 			classMethodCache.put(clazz.getName(), map);
 		}
@@ -186,7 +188,7 @@ public class ReflectUtils {
 			throw new RuntimeException("object fieldName not null");
 		}
 		for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass
-				.getSuperclass()) {
+			.getSuperclass()) {
 			try {
 				Field field = superClass.getDeclaredField(fieldName);
 				makeAccessible(field);

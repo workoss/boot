@@ -37,10 +37,10 @@ public final class CustomEndpointExecutionInterceptor implements ExecutionInterc
 	public SdkHttpRequest modifyHttpRequest(Context.ModifyHttpRequest context,
 			ExecutionAttributes executionAttributes) {
 		boolean endpointOverridden = Boolean.TRUE
-				.equals(executionAttributes.getAttribute(SdkExecutionAttribute.ENDPOINT_OVERRIDDEN));
+			.equals(executionAttributes.getAttribute(SdkExecutionAttribute.ENDPOINT_OVERRIDDEN));
 		String bucketName = context.request().getValueForField("Bucket", String.class).orElse(null);
 		S3Configuration serviceConfiguration = (S3Configuration) executionAttributes
-				.getAttribute(AwsSignerExecutionAttribute.SERVICE_CONFIG);
+			.getAttribute(AwsSignerExecutionAttribute.SERVICE_CONFIG);
 
 		Region region = executionAttributes.getAttribute(AwsSignerExecutionAttribute.SIGNING_REGION);
 

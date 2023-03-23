@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.workoss.boot.plugin.mybatis.util.ObjectUtil;
  *
  * @author workoss
  */
-public class JakartaClassFinderMatcher implements ClassFinderMatcher {
+public class JavaxClassFinderMatcher implements ClassFinderMatcher {
 
 	@Override
 	public int order() {
@@ -31,12 +31,12 @@ public class JakartaClassFinderMatcher implements ClassFinderMatcher {
 
 	@Override
 	public boolean match() {
-		return ObjectUtil.isPresent("jakarta.persistence.Table", null);
+		return ObjectUtil.isPresent("javax.persistence.Table", null);
 	}
 
 	@Override
 	public EntityClassFinder instance() {
-		return new JakartaEntityClassFinder();
+		return new JavaxEntityClassFinder();
 	}
 
 }

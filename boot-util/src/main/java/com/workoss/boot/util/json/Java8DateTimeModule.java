@@ -38,14 +38,14 @@ public class Java8DateTimeModule {
 		LocalDateDeserializer localDateDeserializer = new LocalDateDeserializer();
 		LocalTimeDeserializer localTimeDeserializer = new LocalTimeDeserializer();
 		return new JavaTimeModule().addDeserializer(LocalDateTime.class, localDateTimeDeserializer)
-				.addSerializer(LocalDateTime.class,
-						new LocalDateTimeSerializer(
-								DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_TIME_PATTERN)))
-				.addDeserializer(LocalDate.class, localDateDeserializer)
-				.addSerializer(LocalDate.class,
-						new LocalDateSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_PATTERN)))
-				.addDeserializer(LocalTime.class, localTimeDeserializer).addSerializer(LocalTime.class,
-						new LocalTimeSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_TIME_PATTERN)));
+			.addSerializer(LocalDateTime.class,
+					new LocalDateTimeSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_TIME_PATTERN)))
+			.addDeserializer(LocalDate.class, localDateDeserializer)
+			.addSerializer(LocalDate.class,
+					new LocalDateSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_PATTERN)))
+			.addDeserializer(LocalTime.class, localTimeDeserializer)
+			.addSerializer(LocalTime.class,
+					new LocalTimeSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_TIME_PATTERN)));
 	}
 
 }

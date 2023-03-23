@@ -156,7 +156,7 @@ public class MybatisUtil {
 		// count查询返回值int
 		List<ResultMap> resultMaps = new ArrayList<ResultMap>();
 		ResultMap resultMap = new ResultMap.Builder(ms.getConfiguration(), ms.getId(), Long.class, EMPTY_RESULTMAPPING)
-				.build();
+			.build();
 		resultMaps.add(resultMap);
 		builder.resultMaps(resultMaps);
 		builder.resultSetType(ms.getResultSetType());

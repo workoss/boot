@@ -211,8 +211,8 @@ public class STSTokenTest {
 			stsToken.setStsToken(credentials.getSecurityToken());
 			stsToken.setAccessKey(credentials.getAccessKeyId());
 			stsToken.setSecretKey(credentials.getAccessKeySecret());
-			stsToken.setExpiration(
-					DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
+			stsToken
+				.setExpiration(DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
 		}
 		catch (ServerException e) {
 			e.printStackTrace();

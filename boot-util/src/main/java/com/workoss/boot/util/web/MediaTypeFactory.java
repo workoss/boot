@@ -35,7 +35,9 @@ import java.util.Locale;
  * @author workoss
  */
 public class MediaTypeFactory {
+
 	private static final String MIME_TYPES_FILE_NAME = "/com/workoss/boot/util/web/mime.types";
+
 	private static final MultiValueMap<String, String> fileExtensionToMediaTypes = parseMimeTypes();
 
 	private MediaTypeFactory() {
@@ -59,7 +61,8 @@ public class MediaTypeFactory {
 				}
 			}
 			return result;
-		} catch (IOException ex) {
+		}
+		catch (IOException ex) {
 			throw new IllegalStateException("Could not read " + MIME_TYPES_FILE_NAME, ex);
 		}
 	}
@@ -85,4 +88,5 @@ public class MediaTypeFactory {
 		}
 		return (mediaTypes != null ? mediaTypes : Collections.emptyList());
 	}
+
 }

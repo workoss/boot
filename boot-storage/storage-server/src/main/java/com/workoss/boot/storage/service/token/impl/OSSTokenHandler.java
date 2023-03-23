@@ -80,7 +80,7 @@ public class OSSTokenHandler extends AbstractTokenHandler {
 			String mimeType, String successActionStatus) {
 		String policyTemplate = "{\"expiration\":\"{{expiration}}\",\"conditions\":[{\"bucket\":\"{{bucketName}}\"},{\"key\":\"{{key}}\"},{{#mimeType}}{\"content-type\":\"{{mimeType}}\"},{{/mimeType}}[\"content-length-range\", 0, {{maxUploadSize}}]]}";
 		return Mono
-				.just(generateWebSign(policyTemplate, context, null, bucketName, key, mimeType, successActionStatus));
+			.just(generateWebSign(policyTemplate, context, null, bucketName, key, mimeType, successActionStatus));
 	}
 
 	@Override
@@ -112,8 +112,8 @@ public class OSSTokenHandler extends AbstractTokenHandler {
 			stsToken.setStsToken(credentials.getSecurityToken());
 			stsToken.setAccessKey(credentials.getAccessKeyId());
 			stsToken.setSecretKey(credentials.getAccessKeySecret());
-			stsToken.setExpiration(
-					DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
+			stsToken
+				.setExpiration(DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
 			// 放入域名
 			stsToken.setEndpoint(getDomain(context, bucketName));
 			return Mono.just(stsToken);

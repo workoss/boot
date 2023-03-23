@@ -21,6 +21,7 @@ import java.lang.annotation.*;
 
 /**
  * NonNullApi
+ *
  * @author workoss
  */
 @Target(ElementType.PACKAGE)

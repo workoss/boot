@@ -288,11 +288,13 @@ public class StringUtils {
 	public static String getFilenameExtension(String path) {
 		if (path == null) {
 			return null;
-		} else {
+		}
+		else {
 			int extIndex = path.lastIndexOf(46);
 			if (extIndex == -1) {
 				return null;
-			} else {
+			}
+			else {
 				int folderIndex = path.lastIndexOf("/");
 				return folderIndex > extIndex ? null : path.substring(extIndex + 1);
 			}

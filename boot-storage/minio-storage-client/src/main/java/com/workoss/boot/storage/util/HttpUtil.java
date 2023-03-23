@@ -65,15 +65,17 @@ public class HttpUtil implements AutoCloseable {
 				return httpClient;
 			}
 			httpClient = new OkHttpClient.Builder().connectTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS)
-					.callTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS).readTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS)
-					.writeTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS).hostnameVerifier((hostname, session) -> true)
-					.build();
+				.callTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS)
+				.readTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS)
+				.writeTimeout(DEFAUL_TTIME_OUT, TimeUnit.SECONDS)
+				.hostnameVerifier((hostname, session) -> true)
+				.build();
 		}
 		return httpClient;
 	}
 
 	public static String executePost(@NonNull String url, @Nullable String jsonParam,
-									 @Nullable Map<String, String> headers) {
+			@Nullable Map<String, String> headers) {
 		long startTime = System.currentTimeMillis();
 		if (StringUtils.isBlank(jsonParam)) {
 			jsonParam = StringUtils.EMPTY;
@@ -92,7 +94,8 @@ public class HttpUtil implements AutoCloseable {
 				return respBody;
 			}
 			throw new RuntimeException("status:" + response.code() + "\nbody:" + respBody);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			log.error("execute post request exception, url:{}, cost time(ms):{}, exception:", url,
 					(System.currentTimeMillis() - startTime), e);
 			throw new RuntimeException(e);
@@ -101,13 +104,16 @@ public class HttpUtil implements AutoCloseable {
 
 	public static boolean checkUrlIsValid(String url, int timeoutMills) {
 		OkHttpClient client = new OkHttpClient.Builder().connectTimeout(timeoutMills, TimeUnit.MILLISECONDS)
-				.callTimeout(timeoutMills, TimeUnit.MILLISECONDS).readTimeout(timeoutMills, TimeUnit.MILLISECONDS)
-				.writeTimeout(timeoutMills, TimeUnit.MILLISECONDS).build();
+			.callTimeout(timeoutMills, TimeUnit.MILLISECONDS)
+			.readTimeout(timeoutMills, TimeUnit.MILLISECONDS)
+			.writeTimeout(timeoutMills, TimeUnit.MILLISECONDS)
+			.build();
 		Request request = new Request.Builder().url(url).build();
 		try (Response response = client.newCall(request).execute()) {
 			log.info("【OKHTTP】checkUrlIsValid:{} statusCode:{}", url, response.code());
 			return true;
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			log.warn("【OKHTTP】checkUrlIsValid:{} ERROR:{}", url, e.getMessage());
 		}
 		return false;

@@ -85,23 +85,24 @@ abstract class BaseStorageTemplate implements StorageTemplate {
 		Map<StorageType, Integer> initNumMap = new HashMap<StorageType, Integer>(4);
 		if (multiStorageClientConfig != null && multiStorageClientConfig.isEnabled()) {
 			log.info("【storage】multiStorageClientConfig init start");
-			Optional.ofNullable(multiStorageClientConfig.getClientConfigs()).orElse(new HashMap<>(16)).entrySet()
-					.stream()
-					.filter(storageClientConfigEntry -> storageClientMap
-							.containsKey(storageClientConfigEntry.getValue().getStorageType()))
-					.forEach(storageClientConfigEntry -> {
-						Integer num = initNumMap.get(storageClientConfigEntry.getValue().getStorageType());
-						if (num == null) {
-							addStorageClient(storageClientMap.get(storageClientConfigEntry.getValue().getStorageType()),
-									storageClientConfigEntry.getKey(), storageClientConfigEntry.getValue());
-						}
-						else {
-							addStorageClient(
-									loadStorageClient().get(storageClientConfigEntry.getValue().getStorageType()),
-									storageClientConfigEntry.getKey(), storageClientConfigEntry.getValue());
-						}
-						initNumMap.put(storageClientConfigEntry.getValue().getStorageType(), num == null ? 1 : num + 1);
-					});
+			Optional.ofNullable(multiStorageClientConfig.getClientConfigs())
+				.orElse(new HashMap<>(16))
+				.entrySet()
+				.stream()
+				.filter(storageClientConfigEntry -> storageClientMap
+					.containsKey(storageClientConfigEntry.getValue().getStorageType()))
+				.forEach(storageClientConfigEntry -> {
+					Integer num = initNumMap.get(storageClientConfigEntry.getValue().getStorageType());
+					if (num == null) {
+						addStorageClient(storageClientMap.get(storageClientConfigEntry.getValue().getStorageType()),
+								storageClientConfigEntry.getKey(), storageClientConfigEntry.getValue());
+					}
+					else {
+						addStorageClient(loadStorageClient().get(storageClientConfigEntry.getValue().getStorageType()),
+								storageClientConfigEntry.getKey(), storageClientConfigEntry.getValue());
+					}
+					initNumMap.put(storageClientConfigEntry.getValue().getStorageType(), num == null ? 1 : num + 1);
+				});
 		}
 		StorageClientConfig storageClientConfig = multiStorageClientConfig.getDefaultClient();
 		if (storageClientConfig != null) {

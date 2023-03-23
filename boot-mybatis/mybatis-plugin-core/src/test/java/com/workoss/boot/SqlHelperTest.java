@@ -38,15 +38,17 @@ public class SqlHelperTest {
 
 		List<DemoEntity> entityList = SqlHelper.page(1, 10, false).execute(sqlParam -> demoDao.selectList(demoEntity));
 
-//		Function3<String, String, Integer, List<DemoEntity>> selectSome = demoDao::selectSome;
-//		Method write = selectSome.getClass().getDeclaredMethod("writeReplace");
-//		write.setAccessible(true);
-//		SerializedLambda serializedLambda = (SerializedLambda) write.invoke(selectSome);
-//		System.out.println(serializedLambda.toString());
-//		System.out.println(serializedLambda.getImplMethodName());
-//		System.out.println(serializedLambda.getImplMethodKind());
-//		System.out.println(serializedLambda.getImplMethodSignature());
-//		System.out.println(serializedLambda.getImplClass());
+		// Function3<String, String, Integer, List<DemoEntity>> selectSome =
+		// demoDao::selectSome;
+		// Method write = selectSome.getClass().getDeclaredMethod("writeReplace");
+		// write.setAccessible(true);
+		// SerializedLambda serializedLambda = (SerializedLambda)
+		// write.invoke(selectSome);
+		// System.out.println(serializedLambda.toString());
+		// System.out.println(serializedLambda.getImplMethodName());
+		// System.out.println(serializedLambda.getImplMethodKind());
+		// System.out.println(serializedLambda.getImplMethodSignature());
+		// System.out.println(serializedLambda.getImplClass());
 
 		Function<DemoEntity, List<DemoEntity>> selectList = demoDao::selectList;
 

@@ -67,7 +67,7 @@ public class JsonMapper {
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		// 判断是否存在 LocalDateTime 若是有 增加序列号 反序列化
 		boolean existsJsr310 = ClassUtils
-				.isPresent("com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer", null);
+			.isPresent("com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer", null);
 		if (existsJsr310) {
 			mapper.registerModule(new Java8DateTimeModule().getModule());
 		}

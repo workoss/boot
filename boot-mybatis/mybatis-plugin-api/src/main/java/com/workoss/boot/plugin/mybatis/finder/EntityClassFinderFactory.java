@@ -35,13 +35,17 @@ public class EntityClassFinderFactory {
 				classFinderMatchers.add(next);
 			}
 		}
-		return classFinderMatchers.stream().sorted(Comparator.comparingInt(ClassFinderMatcher::order))
-				.map(ClassFinderMatcher::instance).collect(Collectors.toList());
+		return classFinderMatchers.stream()
+			.sorted(Comparator.comparingInt(ClassFinderMatcher::order))
+			.map(ClassFinderMatcher::instance)
+			.collect(Collectors.toList());
 	}
 
 	public static Optional<EntityClassFinder> getClassFinder(ProviderContext context) {
-		return CLASS_FINDER_LAZY.get().stream().filter(entityClassFinder -> entityClassFinder.match(context))
-				.findFirst();
+		return CLASS_FINDER_LAZY.get()
+			.stream()
+			.filter(entityClassFinder -> entityClassFinder.match(context))
+			.findFirst();
 	}
 
 }

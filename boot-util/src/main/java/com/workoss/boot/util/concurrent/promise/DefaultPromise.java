@@ -67,7 +67,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 	 * 返回结果result的原子更新器
 	 */
 	private static final AtomicReferenceFieldUpdater<DefaultPromise, Object> RESULT_UPDATER = AtomicReferenceFieldUpdater
-			.newUpdater(DefaultPromise.class, Object.class, "result");
+		.newUpdater(DefaultPromise.class, Object.class, "result");
 
 	/**
 	 * 返回结果

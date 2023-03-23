@@ -21,6 +21,7 @@ import java.lang.annotation.*;
 
 /**
  * 表示不能null
+ *
  * @author workoss
  */
 @Target({ ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD })

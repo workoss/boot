@@ -76,12 +76,12 @@ public class WebConfig {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
 
 		return builder -> builder.timeZone(timeZone)
-				.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter))
-				.serializerByType(LocalDate.class, new LocalDateSerializer(dateFormatter))
-				.serializerByType(LocalTime.class, new LocalTimeSerializer(timeFormatter))
-				.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter))
-				.deserializerByType(LocalDate.class, new LocalDateDeserializer(dateFormatter))
-				.deserializerByType(LocalTime.class, new LocalTimeDeserializer(timeFormatter));
+			.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter))
+			.serializerByType(LocalDate.class, new LocalDateSerializer(dateFormatter))
+			.serializerByType(LocalTime.class, new LocalTimeSerializer(timeFormatter))
+			.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter))
+			.deserializerByType(LocalDate.class, new LocalDateDeserializer(dateFormatter))
+			.deserializerByType(LocalTime.class, new LocalTimeDeserializer(timeFormatter));
 	}
 
 	@Order(Ordered.HIGHEST_PRECEDENCE)

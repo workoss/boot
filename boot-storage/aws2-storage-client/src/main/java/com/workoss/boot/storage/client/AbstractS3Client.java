@@ -73,10 +73,12 @@ public abstract class AbstractS3Client implements StorageClient {
 	private static S3AsyncClientBuilder S3_CLIENT_BUILDER;
 
 	protected static Cache<String, StorageStsToken> STS_TOKEN_CACHE = Caffeine.newBuilder()
-			.expireAfterWrite(12, TimeUnit.MINUTES).maximumSize(200)
-			.removalListener((String key, StorageStsToken value, RemovalCause cause) -> {
-				log.debug("【STORAGE】STS_TOKEN_CACHE KEY：{} cause:{}", key, cause);
-			}).build();
+		.expireAfterWrite(12, TimeUnit.MINUTES)
+		.maximumSize(200)
+		.removalListener((String key, StorageStsToken value, RemovalCause cause) -> {
+			log.debug("【STORAGE】STS_TOKEN_CACHE KEY：{} cause:{}", key, cause);
+		})
+		.build();
 
 	@Override
 	public void init(StorageClientConfig config) {
@@ -88,15 +90,13 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 客户端初始化配置
-	 *
 	 * @param config 配置信息
 	 */
 	protected abstract void initConfig(StorageClientConfig config);
 
 	/**
 	 * 创建s3客户端
-	 *
-	 * @param config   config
+	 * @param config config
 	 * @param stsToken stsToken
 	 * @return s3客户端
 	 */
@@ -106,30 +106,33 @@ public abstract class AbstractS3Client implements StorageClient {
 		AwsCredentials credentials = null;
 		if (stsToken == null) {
 			credentials = AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey());
-		} else {
+		}
+		else {
 			credentials = AwsSessionCredentials.create(stsToken.getAccessKey(), stsToken.getSecretKey(),
 					stsToken.getStsToken());
 		}
 		return (S3_CLIENT_BUILDER != null ? S3_CLIENT_BUILDER : initS3ClientBuilder())
-				.credentialsProvider(StaticCredentialsProvider.create(credentials))
-				.endpointOverride(URI.create(endpoint)).build();
+			.credentialsProvider(StaticCredentialsProvider.create(credentials))
+			.endpointOverride(URI.create(endpoint))
+			.build();
 	}
 
 	protected S3AsyncClientBuilder initS3ClientBuilder() {
 		return S3AsyncClient.builder()
-				.httpClientBuilder(NettyNioAsyncHttpClient.builder())
-				.overrideConfiguration(builder -> {
-					builder.addExecutionInterceptor(new CustomEndpointExecutionInterceptor());
-				}).serviceConfiguration(builder -> {
-					builder.pathStyleAccessEnabled(false);
-				}).region(Region.of(type().name().toLowerCase()));
+			.httpClientBuilder(NettyNioAsyncHttpClient.builder())
+			.overrideConfiguration(builder -> {
+				builder.addExecutionInterceptor(new CustomEndpointExecutionInterceptor());
+			})
+			.serviceConfiguration(builder -> {
+				builder.pathStyleAccessEnabled(false);
+			})
+			.region(Region.of(type().name().toLowerCase()));
 	}
 
 	/**
 	 * 生成stsToken
-	 *
 	 * @param config 配置
-	 * @param key    文件key
+	 * @param key 文件key
 	 * @param action 操作
 	 * @return stsToken
 	 */
@@ -137,15 +140,14 @@ public abstract class AbstractS3Client implements StorageClient {
 
 	/**
 	 * 生成h5签名
-	 *
-	 * @param config              配置
-	 * @param key                 文件key
-	 * @param mimeType            文件类型
+	 * @param config 配置
+	 * @param key 文件key
+	 * @param mimeType 文件类型
 	 * @param successActionStatus 200 可以nul
 	 * @return 签名
 	 */
 	protected abstract StorageSignature generateSignagure(StorageClientConfig config, String key, String mimeType,
-														  String successActionStatus);
+			String successActionStatus);
 
 	protected S3AsyncClient getClient(String key, String action) {
 		if (!useStsToken()) {
@@ -182,15 +184,18 @@ public abstract class AbstractS3Client implements StorageClient {
 			if (!listBucketsResponse.hasBuckets()) {
 				return Collections.EMPTY_LIST;
 			}
-			return listBucketsResponse.buckets().stream()
-					.map(bucket -> new StorageBucketInfo(bucket.name(),
-							listBucketsResponse.owner() == null ? null : listBucketsResponse.owner().id(),
-							bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
-					.collect(Collectors.toList());
+			return listBucketsResponse.buckets()
+				.stream()
+				.map(bucket -> new StorageBucketInfo(bucket.name(),
+						listBucketsResponse.owner() == null ? null : listBucketsResponse.owner().id(),
+						bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
+				.collect(Collectors.toList());
 
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -202,18 +207,23 @@ public abstract class AbstractS3Client implements StorageClient {
 			if (!listBucketsResponse.hasBuckets()) {
 				return null;
 			}
-			return listBucketsResponse.buckets().stream().filter(bucket -> config.getBucketName().equals(bucket.name()))
-					.map(bucket -> new StorageBucketInfo(bucket.name(),
-							listBucketsResponse.owner() == null ? null : listBucketsResponse.owner().id(),
-							bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
-					.findFirst().orElse(null);
-		} catch (S3Exception s3Exception) {
+			return listBucketsResponse.buckets()
+				.stream()
+				.filter(bucket -> config.getBucketName().equals(bucket.name()))
+				.map(bucket -> new StorageBucketInfo(bucket.name(),
+						listBucketsResponse.owner() == null ? null : listBucketsResponse.owner().id(),
+						bucket.creationDate() == null ? null : Date.from(bucket.creationDate())))
+				.findFirst()
+				.orElse(null);
+		}
+		catch (S3Exception s3Exception) {
 			AwsErrorDetails awsErrorDetails = s3Exception.awsErrorDetails();
 			if (awsErrorDetails != null) {
 				throw new StorageException(awsErrorDetails.errorCode(), awsErrorDetails.errorMessage());
 			}
 			throw new StorageException(s3Exception.requestId(), s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -224,9 +234,11 @@ public abstract class AbstractS3Client implements StorageClient {
 			HeadBucketRequest headBucketRequest = HeadBucketRequest.builder().bucket(config.getBucketName()).build();
 			HeadBucketResponse headBucketResponse = s3AsyncClient.headBucket(headBucketRequest).get();
 			return true;
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -235,13 +247,17 @@ public abstract class AbstractS3Client implements StorageClient {
 	public boolean doesObjectExist(String key) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "doesObjectExist")) {
-			HeadObjectRequest headObjectRequest = HeadObjectRequest.builder().bucket(config.getBucketName()).key(key)
-					.build();
+			HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 			HeadObjectResponse headObjectResponse = s3AsyncClient.headObject(headObjectRequest).get();
 
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 		return false;
@@ -251,26 +267,32 @@ public abstract class AbstractS3Client implements StorageClient {
 	public StorageFileInfo getObject(String key) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "getObject")) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(config.getBucketName()).key(key)
-					.build();
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 
 			ResponseBytes<GetObjectResponse> responseBytes = s3AsyncClient
-					.getObject(getObjectRequest, AsyncResponseTransformer.toBytes()).get();
+				.getObject(getObjectRequest, AsyncResponseTransformer.toBytes())
+				.get();
 			GetObjectResponse response = responseBytes.response();
-			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName()).setKey(key)
-					.setHost(formatHost());
+			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName())
+				.setKey(key)
+				.setHost(formatHost());
 			Map<String, String> metaData = response.metadata();
 			if (response.hasMetadata()) {
 				storageFileInfo.setMetaData(new HashMap<>(response.metadata()));
 			}
 			storageFileInfo.setETag(response.eTag())
-					.setLastModified(response.lastModified() == null ? null : response.lastModified().toEpochMilli())
-					.setSize(response.contentLength());
+				.setLastModified(response.lastModified() == null ? null : response.lastModified().toEpochMilli())
+				.setSize(response.contentLength());
 			return storageFileInfo;
 
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -279,8 +301,10 @@ public abstract class AbstractS3Client implements StorageClient {
 	public StorageFileInfoListing listObjects(String key, String delimiter, String nextToken, Integer maxKeys) {
 		key = formatKey(key, true);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "listObjects")) {
-			ListObjectsV2Request.Builder requestBuilder = ListObjectsV2Request.builder().bucket(config.getBucketName())
-					.prefix(key).delimiter(delimiter);
+			ListObjectsV2Request.Builder requestBuilder = ListObjectsV2Request.builder()
+				.bucket(config.getBucketName())
+				.prefix(key)
+				.delimiter(delimiter);
 			if (maxKeys != null) {
 				requestBuilder.maxKeys(maxKeys);
 			}
@@ -290,7 +314,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			ListObjectsV2Response objectListing = s3AsyncClient.listObjectsV2(requestBuilder.build()).get();
 
 			StorageFileInfoListing listing = new StorageFileInfoListing()
-					.setNextToken(objectListing.nextContinuationToken());
+				.setNextToken(objectListing.nextContinuationToken());
 			listing.setMaxKeys(objectListing.maxKeys());
 			listing.setEncodingType(objectListing.encodingTypeAsString());
 			listing.setPrefix(objectListing.prefix());
@@ -311,7 +335,7 @@ public abstract class AbstractS3Client implements StorageClient {
 				storageFileInfo.setKey(summary.key());
 				storageFileInfo.setBucketName(config.getBucketName());
 				storageFileInfo
-						.setLastModified(summary.lastModified() != null ? summary.lastModified().toEpochMilli() : null);
+					.setLastModified(summary.lastModified() != null ? summary.lastModified().toEpochMilli() : null);
 				storageFileInfo.setETag(summary.eTag());
 				storageFileInfo.setSize(summary.size());
 				storageFileInfo.setOwner(summary.owner() != null ? summary.owner().id() : null);
@@ -319,44 +343,49 @@ public abstract class AbstractS3Client implements StorageClient {
 			}
 			return listing;
 
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, File file, Map<String, String> userMetaData,
-									 Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, file, null, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, InputStream inputStream, String contentType,
-									 Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
+			Map<String, String> userMetaData, Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, inputStream, contentType, userMetaData, consumer);
 	}
 
 	@Override
 	public StorageFileInfo putObject(String key, byte[] bytes, String contentType, Map<String, String> userMetaData,
-									 Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		return putObjectCommon(key, bytes, contentType, userMetaData, consumer);
 	}
 
 	StorageFileInfo putObjectCommon(String key, Object in, String contentType, Map<String, String> userMetaData,
-									Consumer<StorageProgressEvent> consumer) {
+			Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "putObject")) {
-			PutObjectRequest.Builder requestBuilder = PutObjectRequest.builder().bucket(config.getBucketName())
-					.key(key);
+			PutObjectRequest.Builder requestBuilder = PutObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key);
 			AsyncRequestBody asyncRequestBody = null;
 			if (in instanceof File) {
 				File file = (File) in;
 				asyncRequestBody = AsyncRequestBody.fromFile(file);
-			} else if (in instanceof InputStream) {
+			}
+			else if (in instanceof InputStream) {
 				asyncRequestBody = AsyncRequestBody.fromBytes(IoUtils.toByteArray((InputStream) in));
-			} else if (in instanceof byte[]) {
+			}
+			else if (in instanceof byte[]) {
 				asyncRequestBody = AsyncRequestBody.fromBytes((byte[]) in);
 			}
 			if (StringUtils.isBlank(contentType)) {
@@ -375,13 +404,17 @@ public abstract class AbstractS3Client implements StorageClient {
 			requestBuilder.metadata(userMetaData);
 
 			PutObjectResponse putObjectResponse = s3AsyncClient.putObject(requestBuilder.build(), asyncRequestBody)
-					.get();
-			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName()).setKey(key)
-					.setHost(formatHost()).setETag(putObjectResponse.eTag());
+				.get();
+			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName())
+				.setKey(key)
+				.setHost(formatHost())
+				.setETag(putObjectResponse.eTag());
 			return storageFileInfo;
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			if (e instanceof StorageException) {
 				StorageException e1 = (StorageException) e;
 				throw new StorageException(e1.getErrcode(), e1.getErrmsg());
@@ -394,24 +427,31 @@ public abstract class AbstractS3Client implements StorageClient {
 	public StorageFileInfo downloadStream(String key, Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "downloadObject")) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(config.getBucketName()).key(key)
-					.build();
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 			ResponseBytes<GetObjectResponse> getObjectResponseResponseBytes = s3AsyncClient
-					.getObject(getObjectRequest, AsyncResponseTransformer.toBytes()).get();
-			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName()).setKey(key)
-					.setHost(formatHost()).setContent(getObjectResponseResponseBytes.asInputStream());
+				.getObject(getObjectRequest, AsyncResponseTransformer.toBytes())
+				.get();
+			StorageFileInfo storageFileInfo = new StorageFileInfo().setBucketName(config.getBucketName())
+				.setKey(key)
+				.setHost(formatHost())
+				.setContent(getObjectResponseResponseBytes.asInputStream());
 			GetObjectResponse response = getObjectResponseResponseBytes.response();
 			Map<String, String> metaData = response.metadata();
 			if (response.hasMetadata()) {
 				storageFileInfo.setMetaData(new HashMap<>(response.metadata()));
 			}
 			storageFileInfo.setETag(response.eTag())
-					.setLastModified(response.lastModified() == null ? null : response.lastModified().toEpochMilli())
-					.setSize(response.contentLength());
+				.setLastModified(response.lastModified() == null ? null : response.lastModified().toEpochMilli())
+				.setSize(response.contentLength());
 			return storageFileInfo;
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -420,14 +460,19 @@ public abstract class AbstractS3Client implements StorageClient {
 	public byte[] download(String key, Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "downloadObject")) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(config.getBucketName()).key(key)
-					.build();
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 			ResponseBytes<GetObjectResponse> getObjectResponseResponseBytes = s3AsyncClient
-					.getObject(getObjectRequest, AsyncResponseTransformer.toBytes()).get();
+				.getObject(getObjectRequest, AsyncResponseTransformer.toBytes())
+				.get();
 			return getObjectResponseResponseBytes.asByteArray();
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
@@ -436,37 +481,50 @@ public abstract class AbstractS3Client implements StorageClient {
 	public File download(String key, File destFile, Consumer<StorageProgressEvent> consumer) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "downloadObject")) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(config.getBucketName()).key(key)
-					.build();
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 			GetObjectResponse getObjectResponse = s3AsyncClient
-					.getObject(getObjectRequest, AsyncResponseTransformer.toFile(destFile)).get();
+				.getObject(getObjectRequest, AsyncResponseTransformer.toFile(destFile))
+				.get();
 			return destFile;
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageDownloadException("0002", e);
 		}
 	}
 
 	@Override
 	public StorageFileInfo copyObject(String sourceKeyWithoutBasePath, String destinationKeyWithoutBasePath,
-									  Map<String, String> userMetaData) {
+			Map<String, String> userMetaData) {
 		try (S3AsyncClient s3AsyncClient = getClient(sourceKeyWithoutBasePath, "copyObject")) {
 			if (userMetaData == null) {
 				userMetaData = new HashMap<>(8);
 			}
 			userMetaData.put("upclient", "storage");
-			CopyObjectRequest request = CopyObjectRequest.builder().sourceBucket(config.getBucketName())
-					.sourceKey(sourceKeyWithoutBasePath).destinationBucket(config.getBucketName())
-					.destinationKey(destinationKeyWithoutBasePath).metadata(userMetaData).build();
+			CopyObjectRequest request = CopyObjectRequest.builder()
+				.sourceBucket(config.getBucketName())
+				.sourceKey(sourceKeyWithoutBasePath)
+				.destinationBucket(config.getBucketName())
+				.destinationKey(destinationKeyWithoutBasePath)
+				.metadata(userMetaData)
+				.build();
 			CopyObjectResponse copyObjectResponse = s3AsyncClient.copyObject(request).get();
 			CopyObjectResult copyObjectResult = copyObjectResponse.copyObjectResult();
-			return new StorageFileInfo().setBucketName(config.getBucketName()).setKey(destinationKeyWithoutBasePath)
-					.setHost(formatHost()).setETag(copyObjectResult.eTag())
-					.setLastModified(copyObjectResult.lastModified().toEpochMilli());
-		} catch (S3Exception s3Exception) {
+			return new StorageFileInfo().setBucketName(config.getBucketName())
+				.setKey(destinationKeyWithoutBasePath)
+				.setHost(formatHost())
+				.setETag(copyObjectResult.eTag())
+				.setLastModified(copyObjectResult.lastModified().toEpochMilli());
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -475,12 +533,16 @@ public abstract class AbstractS3Client implements StorageClient {
 	public void deleteObject(String key) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "deleteObject")) {
-			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(config.getBucketName())
-					.key(key).build();
+			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 			DeleteObjectResponse deleteObjectResponse = s3AsyncClient.deleteObject(deleteObjectRequest).get();
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -495,20 +557,26 @@ public abstract class AbstractS3Client implements StorageClient {
 	public URL generatePresignedUrl(String key, Date expiration) {
 		key = formatKey(key, false);
 		try (S3AsyncClient s3AsyncClient = getClient(key, "generatePresignedUrl")) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(config.getBucketName()).key(key)
-					.build();
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(config.getBucketName())
+				.key(key)
+				.build();
 
 			GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
-					.getObjectRequest(getObjectRequest).signatureDuration(Duration.ofMinutes(15)).build();
+				.getObjectRequest(getObjectRequest)
+				.signatureDuration(Duration.ofMinutes(15))
+				.build();
 			S3Presigner s3Presigner = S3Presigner.builder()
-					// .credentialsProvider()
-					.build();
+				// .credentialsProvider()
+				.build();
 			PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
 
 			return presignedGetObjectRequest.url();
-		} catch (S3Exception s3Exception) {
+		}
+		catch (S3Exception s3Exception) {
 			throw throwS3Exception(s3Exception);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new StorageException("0002", e);
 		}
 	}
@@ -540,7 +608,7 @@ public abstract class AbstractS3Client implements StorageClient {
 	}
 
 	protected StorageSignature requestSign(StorageClientConfig config, String key, String mimeType,
-										   String successActionStatus) {
+			String successActionStatus) {
 		return StorageUtil.requestSign(HttpUtil::doPostJson, config, key, mimeType, successActionStatus);
 	}
 

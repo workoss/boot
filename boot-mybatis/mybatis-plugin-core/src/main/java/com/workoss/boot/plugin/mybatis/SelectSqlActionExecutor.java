@@ -67,7 +67,8 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 	private boolean checkExists(SqlHandler sqlHandler) {
 		String key = sqlHandler.getClass().getSimpleName();
 		Optional<SqlHandler> handlerOptional = sqlHandlers.stream()
-				.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName())).findFirst();
+			.filter(handler -> key.equalsIgnoreCase(handler.getClass().getSimpleName()))
+			.findFirst();
 		if (handlerOptional.isPresent()) {
 			log.warn("[MYBATIS] QuerySqlHandler:{} 新增已经存在，不能重复增加", sqlHandler.getClass().getName());
 			return true;
@@ -147,9 +148,11 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 				}
 				return BeanCopierUtil.copy(paramObj, SqlParam.class);
 			}
-			Optional<SqlParam> optional = paraMap.entrySet().stream()
-					.filter(entry -> entry.getValue() instanceof SqlParam).map(entry -> (SqlParam) entry.getValue())
-					.findFirst();
+			Optional<SqlParam> optional = paraMap.entrySet()
+				.stream()
+				.filter(entry -> entry.getValue() instanceof SqlParam)
+				.map(entry -> (SqlParam) entry.getValue())
+				.findFirst();
 			return optional.isPresent() ? optional.get() : null;
 		}
 		return null;

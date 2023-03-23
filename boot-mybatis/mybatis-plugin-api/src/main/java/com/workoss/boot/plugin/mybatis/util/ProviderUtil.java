@@ -58,7 +58,7 @@ public class ProviderUtil {
 	private static Lazy<Configuration> configurationLazy = Lazy.of(() -> new Configuration());
 
 	private static Lazy<PathMatcher> subPatternLazy = Lazy
-			.of(() -> FileSystems.getDefault().getPathMatcher("glob:**/*.xml"));
+		.of(() -> FileSystems.getDefault().getPathMatcher("glob:**/*.xml"));
 
 	public static String getDbType() {
 		return DB_TYPE_LOCAL.get();
@@ -95,8 +95,12 @@ public class ProviderUtil {
 		Configuration configuration = configurationLazy.get();
 		SqlSource sqlSource = languageDriver.createSqlSource(configuration, script, Map.class);
 		Map<String, Object> paramter = Collections.singletonMap("tableColumnInfo", tableColumnInfo);
-		return sqlSource.getBoundSql(paramter).getSql().replaceAll("@\\{", "{").replaceAll("\r\n", "")
-				.replaceAll("\n", "").replaceAll("\\s+", " ");
+		return sqlSource.getBoundSql(paramter)
+			.getSql()
+			.replaceAll("@\\{", "{")
+			.replaceAll("\r\n", "")
+			.replaceAll("\n", "")
+			.replaceAll("\\s+", " ");
 	}
 
 	public static String getScriptTemplate(String dbType, String methodName) {
@@ -127,16 +131,17 @@ public class ProviderUtil {
 	private static void readTemplateFromResource(URL url) {
 		try {
 			Files.find(Paths.get(url.toURI()), 2, (path, basicFileAttributes) -> basicFileAttributes.isRegularFile())
-					.filter(path -> subPatternLazy.get().matches(path)).forEach(path -> {
-						String dbType = path.getParent().getFileName().toString();
-						String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
-						try (FileInputStream fileInputStream = new FileInputStream(path.toFile())) {
-							readAndAddCache(dbType, methodName, fileInputStream);
-						}
-						catch (Exception e) {
+				.filter(path -> subPatternLazy.get().matches(path))
+				.forEach(path -> {
+					String dbType = path.getParent().getFileName().toString();
+					String methodName = path.getFileName().toString().replaceAll(TEMPLATE_SUFFIX, "");
+					try (FileInputStream fileInputStream = new FileInputStream(path.toFile())) {
+						readAndAddCache(dbType, methodName, fileInputStream);
+					}
+					catch (Exception e) {
 
-						}
-					});
+					}
+				});
 		}
 		catch (Exception e) {
 

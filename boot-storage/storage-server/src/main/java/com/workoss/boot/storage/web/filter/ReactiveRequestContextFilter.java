@@ -33,7 +33,7 @@ public class ReactiveRequestContextFilter implements WebFilter {
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 		return chain.filter(exchange)
-				.contextWrite(context -> context.put(ReactiveRequestContextHolder.CONTEXT_KEY, exchange.getRequest()));
+			.contextWrite(context -> context.put(ReactiveRequestContextHolder.CONTEXT_KEY, exchange.getRequest()));
 	}
 
 }

@@ -363,46 +363,46 @@ public abstract class AbstractFieldAccess {
 				mv.visitVarInsn(ALOAD, 3);
 
 				switch (fieldType.getSort()) {
-				case Type.BOOLEAN:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
-					break;
-				case Type.BYTE:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
-					break;
-				case Type.CHAR:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
-					break;
-				case Type.SHORT:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S", false);
-					break;
-				case Type.INT:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
-					break;
-				case Type.FLOAT:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F", false);
-					break;
-				case Type.LONG:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
-					break;
-				case Type.DOUBLE:
-					mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
-					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D", false);
-					break;
-				case Type.ARRAY:
-					mv.visitTypeInsn(CHECKCAST, fieldType.getDescriptor());
-					break;
-				case Type.OBJECT:
-					mv.visitTypeInsn(CHECKCAST, fieldType.getInternalName());
-					break;
-				default:
-					break;
+					case Type.BOOLEAN:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
+						break;
+					case Type.BYTE:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
+						break;
+					case Type.CHAR:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
+						break;
+					case Type.SHORT:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S", false);
+						break;
+					case Type.INT:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
+						break;
+					case Type.FLOAT:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F", false);
+						break;
+					case Type.LONG:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
+						break;
+					case Type.DOUBLE:
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D", false);
+						break;
+					case Type.ARRAY:
+						mv.visitTypeInsn(CHECKCAST, fieldType.getDescriptor());
+						break;
+					case Type.OBJECT:
+						mv.visitTypeInsn(CHECKCAST, fieldType.getInternalName());
+						break;
+					default:
+						break;
 				}
 
 				mv.visitFieldInsn(PUTFIELD, field.getDeclaringClass().getName().replace('.', '/'), field.getName(),
@@ -446,33 +446,35 @@ public abstract class AbstractFieldAccess {
 
 				Type fieldType = Type.getType(field.getType());
 				switch (fieldType.getSort()) {
-				case Type.BOOLEAN:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", false);
-					break;
-				case Type.BYTE:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false);
-					break;
-				case Type.CHAR:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;",
-							false);
-					break;
-				case Type.SHORT:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false);
-					break;
-				case Type.INT:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-					break;
-				case Type.FLOAT:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false);
-					break;
-				case Type.LONG:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false);
-					break;
-				case Type.DOUBLE:
-					mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false);
-					break;
-				default:
-					break;
+					case Type.BOOLEAN:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;",
+								false);
+						break;
+					case Type.BYTE:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false);
+						break;
+					case Type.CHAR:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;",
+								false);
+						break;
+					case Type.SHORT:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false);
+						break;
+					case Type.INT:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;",
+								false);
+						break;
+					case Type.FLOAT:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false);
+						break;
+					case Type.LONG:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false);
+						break;
+					case Type.DOUBLE:
+						mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false);
+						break;
+					default:
+						break;
 				}
 
 				mv.visitInsn(ARETURN);
@@ -546,44 +548,44 @@ public abstract class AbstractFieldAccess {
 		final String typeNameInternal = primitiveType.getDescriptor();
 		final int loadValueInstruction;
 		switch (primitiveType.getSort()) {
-		case Type.BOOLEAN:
-			setterMethodName = "setBoolean";
-			loadValueInstruction = ILOAD;
-			break;
-		case Type.BYTE:
-			setterMethodName = "setByte";
-			loadValueInstruction = ILOAD;
-			break;
-		case Type.CHAR:
-			setterMethodName = "setChar";
-			loadValueInstruction = ILOAD;
-			break;
-		case Type.SHORT:
-			setterMethodName = "setShort";
-			loadValueInstruction = ILOAD;
-			break;
-		case Type.INT:
-			setterMethodName = "setInt";
-			loadValueInstruction = ILOAD;
-			break;
-		case Type.FLOAT:
-			setterMethodName = "setFloat";
-			loadValueInstruction = FLOAD;
-			break;
-		case Type.LONG:
-			setterMethodName = "setLong";
-			loadValueInstruction = LLOAD;
-			maxLocals++; // (LLOAD and DLOAD actually load two slots)
-			break;
-		case Type.DOUBLE:
-			setterMethodName = "setDouble";
-			loadValueInstruction = DLOAD;
-			maxLocals++; // (LLOAD and DLOAD actually load two slots)
-			break;
-		default:
-			setterMethodName = "set";
-			loadValueInstruction = ALOAD;
-			break;
+			case Type.BOOLEAN:
+				setterMethodName = "setBoolean";
+				loadValueInstruction = ILOAD;
+				break;
+			case Type.BYTE:
+				setterMethodName = "setByte";
+				loadValueInstruction = ILOAD;
+				break;
+			case Type.CHAR:
+				setterMethodName = "setChar";
+				loadValueInstruction = ILOAD;
+				break;
+			case Type.SHORT:
+				setterMethodName = "setShort";
+				loadValueInstruction = ILOAD;
+				break;
+			case Type.INT:
+				setterMethodName = "setInt";
+				loadValueInstruction = ILOAD;
+				break;
+			case Type.FLOAT:
+				setterMethodName = "setFloat";
+				loadValueInstruction = FLOAD;
+				break;
+			case Type.LONG:
+				setterMethodName = "setLong";
+				loadValueInstruction = LLOAD;
+				maxLocals++; // (LLOAD and DLOAD actually load two slots)
+				break;
+			case Type.DOUBLE:
+				setterMethodName = "setDouble";
+				loadValueInstruction = DLOAD;
+				maxLocals++; // (LLOAD and DLOAD actually load two slots)
+				break;
+			default:
+				setterMethodName = "set";
+				loadValueInstruction = ALOAD;
+				break;
 		}
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, setterMethodName,
 				"(Ljava/lang/Object;I" + typeNameInternal + ")V", null, null);
@@ -642,42 +644,42 @@ public abstract class AbstractFieldAccess {
 		final String typeNameInternal = primitiveType.getDescriptor();
 		final int returnValueInstruction;
 		switch (primitiveType.getSort()) {
-		case Type.BOOLEAN:
-			getterMethodName = "getBoolean";
-			returnValueInstruction = IRETURN;
-			break;
-		case Type.BYTE:
-			getterMethodName = "getByte";
-			returnValueInstruction = IRETURN;
-			break;
-		case Type.CHAR:
-			getterMethodName = "getChar";
-			returnValueInstruction = IRETURN;
-			break;
-		case Type.SHORT:
-			getterMethodName = "getShort";
-			returnValueInstruction = IRETURN;
-			break;
-		case Type.INT:
-			getterMethodName = "getInt";
-			returnValueInstruction = IRETURN;
-			break;
-		case Type.FLOAT:
-			getterMethodName = "getFloat";
-			returnValueInstruction = FRETURN;
-			break;
-		case Type.LONG:
-			getterMethodName = "getLong";
-			returnValueInstruction = LRETURN;
-			break;
-		case Type.DOUBLE:
-			getterMethodName = "getDouble";
-			returnValueInstruction = DRETURN;
-			break;
-		default:
-			getterMethodName = "get";
-			returnValueInstruction = ARETURN;
-			break;
+			case Type.BOOLEAN:
+				getterMethodName = "getBoolean";
+				returnValueInstruction = IRETURN;
+				break;
+			case Type.BYTE:
+				getterMethodName = "getByte";
+				returnValueInstruction = IRETURN;
+				break;
+			case Type.CHAR:
+				getterMethodName = "getChar";
+				returnValueInstruction = IRETURN;
+				break;
+			case Type.SHORT:
+				getterMethodName = "getShort";
+				returnValueInstruction = IRETURN;
+				break;
+			case Type.INT:
+				getterMethodName = "getInt";
+				returnValueInstruction = IRETURN;
+				break;
+			case Type.FLOAT:
+				getterMethodName = "getFloat";
+				returnValueInstruction = FRETURN;
+				break;
+			case Type.LONG:
+				getterMethodName = "getLong";
+				returnValueInstruction = LRETURN;
+				break;
+			case Type.DOUBLE:
+				getterMethodName = "getDouble";
+				returnValueInstruction = DRETURN;
+				break;
+			default:
+				getterMethodName = "get";
+				returnValueInstruction = ARETURN;
+				break;
 		}
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, getterMethodName, "(Ljava/lang/Object;I)" + typeNameInternal,
 				null, null);

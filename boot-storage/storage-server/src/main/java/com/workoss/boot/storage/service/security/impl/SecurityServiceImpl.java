@@ -55,9 +55,12 @@ public class SecurityServiceImpl implements SecurityService {
 	private final TokenHandlerFactory tokenHandlerFactory;
 
 	private static final Cache<String, Signal<? extends MapContext<String, String>>> ACCOUNT_CACHE = Caffeine
-			.newBuilder().initialCapacity(4).maximumSize(50).expireAfterWrite(Duration.ofHours(1))
-			.removalListener((key, value, cause) -> log.debug("[BOOT] ACCOUNT_CACHE KEY：{} cause:{}", key, cause))
-			.build();
+		.newBuilder()
+		.initialCapacity(4)
+		.maximumSize(50)
+		.expireAfterWrite(Duration.ofHours(1))
+		.removalListener((key, value, cause) -> log.debug("[BOOT] ACCOUNT_CACHE KEY：{} cause:{}", key, cause))
+		.build();
 
 	public SecurityServiceImpl(StorageAccountRepository storageAccountRepository,
 			TokenHandlerFactory tokenHandlerFactory) {
@@ -70,18 +73,21 @@ public class SecurityServiceImpl implements SecurityService {
 			PageRequest pageRequest = PageRequest.of(0, 1,
 					Sort.by(Sort.Order.desc("modifyTime"), Sort.Order.desc("id")));
 			return storageAccountRepository
-					.findByAccountTypeAndStateAndTenantId(storage.getStorageType(), AccountState.ON,
-							storage.getTenentId(), pageRequest)
-					.defaultIfEmpty(new StorageAccountEntity()).last().flatMap(accountEntity -> {
-						if (StringUtils.isBlank(accountEntity.getAccessKey())) {
-							return Mono.just(MapContext.EMPTY);
-						}
-						MapContext<String, String> context = JsonMapper.parseObject(accountEntity.getConfig(),
-								MapContext.class);
-						context.put("policy", accountEntity.getPolicyTemplate());
-						return Mono.just(context);
-					}).doOnSuccess(context -> log.debug("[BOOT] ACCOUNT_CACHE KEY：{} LOAD FROM DB",
-							storage.getStorageType()));
+				.findByAccountTypeAndStateAndTenantId(storage.getStorageType(), AccountState.ON, storage.getTenentId(),
+						pageRequest)
+				.defaultIfEmpty(new StorageAccountEntity())
+				.last()
+				.flatMap(accountEntity -> {
+					if (StringUtils.isBlank(accountEntity.getAccessKey())) {
+						return Mono.just(MapContext.EMPTY);
+					}
+					MapContext<String, String> context = JsonMapper.parseObject(accountEntity.getConfig(),
+							MapContext.class);
+					context.put("policy", accountEntity.getPolicyTemplate());
+					return Mono.just(context);
+				})
+				.doOnSuccess(
+						context -> log.debug("[BOOT] ACCOUNT_CACHE KEY：{} LOAD FROM DB", storage.getStorageType()));
 		});
 	}
 
@@ -95,15 +101,15 @@ public class SecurityServiceImpl implements SecurityService {
 			String finalMimeType = StringUtils.isBlank(mimeType) ? MediaTypeFactory.getMediaType(key) : mimeType;
 			// 判断host是否为空
 			return tokenHandlerFactory.getHandler(storage.getStorageType())
-					.generateUploadSign(context, storage.getBucketName(), key, finalMimeType, successActionStatus)
-					.flatMap(uploadSign -> {
-						uploadSign.setStorageType(storage.getStorageType());
-						uploadSign.setTenentId(storage.getTenentId());
-						uploadSign.setBucketName(storage.getBucketName());
-						uploadSign.setMimeType(finalMimeType);
-						uploadSign.setSuccessActionStatus(successActionStatus);
-						return Mono.just(uploadSign);
-					});
+				.generateUploadSign(context, storage.getBucketName(), key, finalMimeType, successActionStatus)
+				.flatMap(uploadSign -> {
+					uploadSign.setStorageType(storage.getStorageType());
+					uploadSign.setTenentId(storage.getTenentId());
+					uploadSign.setBucketName(storage.getBucketName());
+					uploadSign.setMimeType(finalMimeType);
+					uploadSign.setSuccessActionStatus(successActionStatus);
+					return Mono.just(uploadSign);
+				});
 		});
 	}
 
@@ -117,16 +123,16 @@ public class SecurityServiceImpl implements SecurityService {
 			String finalMimeType = StringUtils.isBlank(mimeType) ? MediaTypeFactory.getMediaType(key) : mimeType;
 			// 判断host是否为空
 			return tokenHandlerFactory.getHandler(storage.getStorageType())
-					.generateUploadStsSign(context, storage.getBucketName(), key, finalMimeType, successActionStatus)
-					.flatMap(uploadSign -> {
-						uploadSign.setStorageType(storage.getStorageType());
-						uploadSign.setTenentId(storage.getTenentId());
-						uploadSign.setBucketName(storage.getBucketName());
-						uploadSign.setMimeType(finalMimeType);
-						uploadSign.setSuccessActionStatus(
-								StringUtils.isBlank(successActionStatus) ? null : successActionStatus);
-						return Mono.just(uploadSign);
-					});
+				.generateUploadStsSign(context, storage.getBucketName(), key, finalMimeType, successActionStatus)
+				.flatMap(uploadSign -> {
+					uploadSign.setStorageType(storage.getStorageType());
+					uploadSign.setTenentId(storage.getTenentId());
+					uploadSign.setBucketName(storage.getBucketName());
+					uploadSign.setMimeType(finalMimeType);
+					uploadSign
+						.setSuccessActionStatus(StringUtils.isBlank(successActionStatus) ? null : successActionStatus);
+					return Mono.just(uploadSign);
+				});
 		});
 	}
 
@@ -138,12 +144,13 @@ public class SecurityServiceImpl implements SecurityService {
 				return Mono.error(new StorageException("00001"));
 			}
 			return tokenHandlerFactory.getHandler(storage.getStorageType())
-					.generateStsToken(context, storage.getBucketName(), key, action).flatMap(stsToken -> {
-						stsToken.setStorageType(storage.getStorageType());
-						stsToken.setTenentId(storage.getTenentId());
-						stsToken.setBucketName(storage.getBucketName());
-						return Mono.just(stsToken);
-					});
+				.generateStsToken(context, storage.getBucketName(), key, action)
+				.flatMap(stsToken -> {
+					stsToken.setStorageType(storage.getStorageType());
+					stsToken.setTenentId(storage.getTenentId());
+					stsToken.setBucketName(storage.getBucketName());
+					return Mono.just(stsToken);
+				});
 		});
 	}
 

@@ -62,20 +62,25 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 	private Mustache.Compiler compiler;
 
 	private static final Cache<String, Signal<? extends StorageAccountEntity>> ACCOUNT_CACHE = Caffeine.newBuilder()
-			.initialCapacity(4).maximumSize(50).expireAfterWrite(Duration.ofSeconds(6))
-			.removalListener((key, value, cause) -> {
-				log.debug("【popeye】ACCOUNT_CACHE KEY：{} cause:{}", key, cause);
-			}).build();
+		.initialCapacity(4)
+		.maximumSize(50)
+		.expireAfterWrite(Duration.ofSeconds(6))
+		.removalListener((key, value, cause) -> {
+			log.debug("【popeye】ACCOUNT_CACHE KEY：{} cause:{}", key, cause);
+		})
+		.build();
 
 	protected Mono<StorageAccountEntity> getConfig(BaseStorageModel storage) {
 		return ReactorUtil.createCacheMono(ACCOUNT_CACHE, storage.getStorageType().name(), (k) -> {
 			System.out.println("====" + k);
 			PageRequest pageRequest = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "createTime"));
 			return storageAccountRepository
-					.findByAccountTypeAndState(storage.getStorageType(), AccountState.OFF, pageRequest)
-					.defaultIfEmpty(new StorageAccountEntity()).last().doOnSuccess(storageAccountEntity -> {
-						log.info("【popeye】ACCOUNT_CACHE KEY：{} LOAD FROM DB", k);
-					});
+				.findByAccountTypeAndState(storage.getStorageType(), AccountState.OFF, pageRequest)
+				.defaultIfEmpty(new StorageAccountEntity())
+				.last()
+				.doOnSuccess(storageAccountEntity -> {
+					log.info("【popeye】ACCOUNT_CACHE KEY：{} LOAD FROM DB", k);
+				});
 		});
 	}
 
@@ -115,12 +120,16 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 		defaultEntity.setModifyTime(DateUtils.getCurrentDateTime());
 
 		storageAccountRepository.findByAccountTypeAndState(ThirdPlatformType.OBS, AccountState.OFF, pageRequest)
-				// r2dbcEntityTemplate.select(StorageAccountEntity.class)
-				// .matching(Query.query(criteria).sort(Sort.by(Sort.Direction.DESC,"createTime")).limit(1).offset(0)).all()
-				.log().defaultIfEmpty(defaultEntity).last().flatMap(storageAccountEntity -> {
-					System.err.println("--" + storageAccountEntity.toString());
-					return Mono.just(storageAccountEntity);
-				}).subscribe();
+			// r2dbcEntityTemplate.select(StorageAccountEntity.class)
+			// .matching(Query.query(criteria).sort(Sort.by(Sort.Direction.DESC,"createTime")).limit(1).offset(0)).all()
+			.log()
+			.defaultIfEmpty(defaultEntity)
+			.last()
+			.flatMap(storageAccountEntity -> {
+				System.err.println("--" + storageAccountEntity.toString());
+				return Mono.just(storageAccountEntity);
+			})
+			.subscribe();
 	}
 
 	@Test
@@ -131,7 +140,8 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 			System.out.println(Thread.currentThread().getName() + ":" + num);
 		}).flatMapMany(num -> {
 			return r2dbcEntityTemplate.select(StorageAccountEntity.class)
-					.matching(Query.query(CriteriaDefinition.empty()).limit(10).offset(0)).all();
+				.matching(Query.query(CriteriaDefinition.empty()).limit(10).offset(0))
+				.all();
 		}).doOnNext(storageAccountEntity -> {
 			System.out.println(Thread.currentThread().getName() + ":" + storageAccountEntity.toString());
 		}).subscribe();

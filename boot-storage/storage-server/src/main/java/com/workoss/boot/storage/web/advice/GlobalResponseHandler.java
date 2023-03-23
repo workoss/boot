@@ -76,8 +76,9 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 			response.getHeaders().add(HttpHeaders.DATE, DateUtils.getCurrentDateTime("yyyy-MM-dd HH:mm:ss.SSS"));
 			return Mono.empty();
 		});
-		HttpStatus responseStatus = Optional.of(exchange.getResponse()).map(ServerHttpResponse::getStatusCode)
-				.orElse(HttpStatus.NOT_FOUND);
+		HttpStatus responseStatus = Optional.of(exchange.getResponse())
+			.map(ServerHttpResponse::getStatusCode)
+			.orElse(HttpStatus.NOT_FOUND);
 		if (HttpStatus.OK.compareTo(responseStatus) != 0) {
 			return writeBody(result.getReturnValue(), result.getReturnTypeSource(), exchange);
 		}
@@ -85,12 +86,13 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 		// 处理返回结果为 Mono 的情况
 		if (returnValue instanceof Mono) {
 			body = ((Mono<Object>) returnValue).map((Function<Object, Object>) this::wrapResultInfo)
-					.defaultIfEmpty(ResultInfo.success());
+				.defaultIfEmpty(ResultInfo.success());
 			// 处理返回结果为 Flux 的情况
 		}
 		else if (returnValue instanceof Flux) {
-			body = ((Flux<Object>) returnValue).collectList().map((Function<Object, Object>) this::wrapResultInfo)
-					.defaultIfEmpty(ResultInfo.success());
+			body = ((Flux<Object>) returnValue).collectList()
+				.map((Function<Object, Object>) this::wrapResultInfo)
+				.defaultIfEmpty(ResultInfo.success());
 			// 处理结果为其它类型
 		}
 		else {

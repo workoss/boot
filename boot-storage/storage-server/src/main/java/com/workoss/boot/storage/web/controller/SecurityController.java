@@ -75,9 +75,9 @@ public class SecurityController {
 			param.setStorageType(ThirdPlatformType.OSS);
 		}
 		return securityService
-				.generateUploadSign(uploadSignParamToStorageModelMapper.toTarget(param), param.getKey(),
-						param.getMimeType(), param.getSuccessActionStatus())
-				.flatMap(uploadSign -> Mono.justOrEmpty(uploadSignToVOMapper.toTarget(uploadSign)));
+			.generateUploadSign(uploadSignParamToStorageModelMapper.toTarget(param), param.getKey(),
+					param.getMimeType(), param.getSuccessActionStatus())
+			.flatMap(uploadSign -> Mono.justOrEmpty(uploadSignToVOMapper.toTarget(uploadSign)));
 	}
 
 	@PostMapping("/stssign")
@@ -89,9 +89,9 @@ public class SecurityController {
 			param.setStorageType(ThirdPlatformType.OSS);
 		}
 		return securityService
-				.generateUploadStsSign(uploadSignParamToStorageModelMapper.toTarget(param), param.getKey(),
-						param.getMimeType(), param.getSuccessActionStatus())
-				.flatMap(uploadSign -> Mono.justOrEmpty(uploadSignToVOMapper.toTarget(uploadSign)));
+			.generateUploadStsSign(uploadSignParamToStorageModelMapper.toTarget(param), param.getKey(),
+					param.getMimeType(), param.getSuccessActionStatus())
+			.flatMap(uploadSign -> Mono.justOrEmpty(uploadSignToVOMapper.toTarget(uploadSign)));
 	}
 
 	@PostMapping(value = "/ststoken", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -104,8 +104,8 @@ public class SecurityController {
 			param.setTenentId("default");
 		}
 		return securityService
-				.generateStsToken(stsTokenToStorageModelMapper.toTarget(param), param.getKey(), param.getAction())
-				.flatMap(stsToken -> Mono.justOrEmpty(stsTokenToVOMapper.toTarget(stsToken)));
+			.generateStsToken(stsTokenToStorageModelMapper.toTarget(param), param.getKey(), param.getAction())
+			.flatMap(stsToken -> Mono.justOrEmpty(stsTokenToVOMapper.toTarget(stsToken)));
 	}
 
 }
