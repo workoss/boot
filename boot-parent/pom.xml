@@ -139,7 +139,7 @@
 		<maven-invoker-plugin.version>3.5.1</maven-invoker-plugin.version>
 		<maven-help-plugin.version>3.4.0</maven-help-plugin.version>
 		<maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-		<maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
 		<maven-failsafe-plugin.version>3.0.0</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>4.0.0-M7</maven-site-plugin.version>
 		<flatten-maven-plugin.version>1.4.1</flatten-maven-plugin.version>
