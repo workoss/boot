@@ -82,7 +82,7 @@
 		<spring-cloud-dependencies.version>2021.0.6</spring-cloud-dependencies.version>
 		<spring-security-bom.version>5.8.2</spring-security-bom.version>
 
-		<spring-boot-admin.version>2.7.10</spring-boot-admin.version>
+		<spring-boot-admin.version>3.1.0</spring-boot-admin.version>
 		<spring-data-bom.version>2022.0.5</spring-data-bom.version>
 
 		<mybatis.version>3.5.13</mybatis.version>
