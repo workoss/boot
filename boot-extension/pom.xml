@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>boot-parent</artifactId>
 		<groupId>com.workoss.boot</groupId>
-		<version>2023.1.1-SNAPSHOT</version>
+		<version>2023.2.1-SNAPSHOT</version>
 		<relativePath>../boot-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>

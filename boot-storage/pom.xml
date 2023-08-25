@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.workoss.boot</groupId>
 		<artifactId>boot-parent</artifactId>
-		<version>2023.1.1-SNAPSHOT</version>
+		<version>2023.2.1-SNAPSHOT</version>
 		<relativePath>../boot-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -12,12 +12,12 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>storage-core</module>
-        <module>aws-storage-client</module>
+		<module>aws-storage-client</module>
 		<module>minio-storage-client</module>
 		<module>storage-server</module>
-        <module>storage-client-spring-boot-starter</module>
-        <module>aws2-storage-client</module>
-    </modules>
+		<module>storage-client-spring-boot-starter</module>
+		<module>aws2-storage-client</module>
+	</modules>
 
 
 </project>

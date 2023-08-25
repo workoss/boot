@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,15 @@
 package com.workoss.boot.util.model;
 
 import java.beans.Transient;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 结果消息
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class ResultInfo {
 
 	/**
@@ -32,20 +35,20 @@ public class ResultInfo {
 	/**
 	 * 异常消息
 	 */
-	private String message;
+	private String msg;
 
 	/**
 	 * 其他数据
 	 */
-	private Object data;
+	private Object result;
 
 	public ResultInfo() {
 	}
 
-	public ResultInfo(String code, String message, Object data) {
+	public ResultInfo(String code, String msg, Object result) {
 		this.code = code;
-		this.message = message;
-		this.data = data;
+		this.msg = msg;
+		this.result = result;
 	}
 
 	public String getCode() {
@@ -57,21 +60,21 @@ public class ResultInfo {
 		return this;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getMsg() {
+		return msg;
 	}
 
-	public ResultInfo message(String message) {
-		this.message = message;
+	public ResultInfo msg(String msg) {
+		this.msg = msg;
 		return this;
 	}
 
-	public Object getData() {
-		return data;
+	public Object getResult() {
+		return result;
 	}
 
-	public ResultInfo data(Object data) {
-		this.data = data;
+	public ResultInfo result(Object result) {
+		this.result = result;
 		return this;
 	}
 
@@ -80,20 +83,27 @@ public class ResultInfo {
 		return ResultCode.SUCCESS.getCode().equals(this.code);
 	}
 
-	public static ResultInfo success() {
-		return success(null);
+	public static ResultInfo success(String key, Object value) {
+		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
+				Collections.singletonMap(key, value));
 	}
 
-	public static ResultInfo success(Object data) {
-		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), data);
+	public static ResultInfo success(Object result) {
+		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
 	}
 
-	public static ResultInfo result(String code, String message) {
-		return result(code, message, null);
+	public static ResultInfo result(String code, String msg) {
+		return result(code, msg, null);
 	}
 
-	public static ResultInfo result(String code, String message, Object data) {
-		return new ResultInfo(code, message, data);
+	public static ResultInfo result(String code, String msg, Object result) {
+		if (result instanceof String) {
+			return new ResultInfo(code, msg, Collections.singletonMap("message", result));
+		}
+		else if (result instanceof List) {
+			return new ResultInfo(code, msg, Collections.singletonMap("list", result));
+		}
+		return new ResultInfo(code, msg, result);
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.model.ResultCode;
 import com.workoss.boot.util.model.ResultInfo;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
-import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 /**
@@ -87,12 +87,12 @@ public class GlobalExceptionHandlerAdvice {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler({ StorageException.class })
 	public ResultInfo serviceException(StorageException exception) {
-		String errMsg = exception.getErrmsg();
+		String errMsg = exception.getMsg();
 		if (StringUtils.isBlank(errMsg)) {
-			errMsg = messageSource.getMessage(exception.getErrcode(), null, LocaleContextHolder.getLocale());
+			errMsg = messageSource.getMessage(exception.getCode(), null, LocaleContextHolder.getLocale());
 		}
-		log.warn("服务异常: errCode:{} errMsg:{}", exception.getErrcode(), errMsg);
-		return ResultInfo.result(exception.getErrcode(), errMsg);
+		log.warn("服务异常: errCode:{} errMsg:{}", exception.getCode(), errMsg);
+		return ResultInfo.result(exception.getCode(), errMsg);
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

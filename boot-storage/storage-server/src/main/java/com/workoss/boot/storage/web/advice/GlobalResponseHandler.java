@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.springframework.core.ReactiveAdapterRegistry;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.codec.HttpMessageWriter;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -76,23 +77,23 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 			response.getHeaders().add(HttpHeaders.DATE, DateUtils.getCurrentDateTime("yyyy-MM-dd HH:mm:ss.SSS"));
 			return Mono.empty();
 		});
-		HttpStatus responseStatus = Optional.of(exchange.getResponse())
+		HttpStatusCode responseStatus = Optional.of(exchange.getResponse())
 			.map(ServerHttpResponse::getStatusCode)
 			.orElse(HttpStatus.NOT_FOUND);
-		if (HttpStatus.OK.compareTo(responseStatus) != 0) {
+		if (!responseStatus.is2xxSuccessful()) {
 			return writeBody(result.getReturnValue(), result.getReturnTypeSource(), exchange);
 		}
 		Object body;
 		// 处理返回结果为 Mono 的情况
 		if (returnValue instanceof Mono) {
 			body = ((Mono<Object>) returnValue).map((Function<Object, Object>) this::wrapResultInfo)
-				.defaultIfEmpty(ResultInfo.success());
+				.defaultIfEmpty(ResultInfo.success(null));
 			// 处理返回结果为 Flux 的情况
 		}
 		else if (returnValue instanceof Flux) {
 			body = ((Flux<Object>) returnValue).collectList()
 				.map((Function<Object, Object>) this::wrapResultInfo)
-				.defaultIfEmpty(ResultInfo.success());
+				.defaultIfEmpty(ResultInfo.success(null));
 			// 处理结果为其它类型
 		}
 		else {

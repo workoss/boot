@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.ResolvedType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.workoss.boot.util.Assert;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.*;
@@ -65,6 +67,12 @@ public class JsonMapper {
 		mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
 		// 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		// long(雪花算法ID) js丢失精度
+		SimpleModule bigNumberModule = new SimpleModule();
+		bigNumberModule.addSerializer(Long.class, BigNumberSerializer.INSTANCE);
+		bigNumberModule.addSerializer(Long.TYPE, BigNumberSerializer.INSTANCE);
+		bigNumberModule.addSerializer(BigInteger.class, BigNumberSerializer.INSTANCE);
+		mapper.registerModule(bigNumberModule);
 		// 判断是否存在 LocalDateTime 若是有 增加序列号 反序列化
 		boolean existsJsr310 = ClassUtils
 			.isPresent("com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer", null);

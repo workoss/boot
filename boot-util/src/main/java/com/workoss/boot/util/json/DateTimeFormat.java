@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * DateTime 格式化
- *
  * @author workoss
  */
 public class DateTimeFormat extends SimpleDateFormat {
@@ -32,7 +30,7 @@ public class DateTimeFormat extends SimpleDateFormat {
 	private String[] patterns = new String[0];
 
 	public DateTimeFormat(String... patterns) {
-		super("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		super(DateUtils.DEFAULT_DATE_TIME_PATTERN);
 		if (CollectionUtils.isNotEmpty(patterns)) {
 			this.patterns = patterns;
 		}

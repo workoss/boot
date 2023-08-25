@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.workoss.boot.storage.StorageTemplate;
 import com.workoss.boot.storage.health.StorageClientEndpoint;
 import com.workoss.boot.storage.health.StorageHealthIndicator;
 import com.workoss.boot.storage.web.filter.StorageServiceFilter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,7 +34,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 对象存储自动化配置
@@ -98,8 +98,7 @@ public class StorageAutoConfiguration {
 	@Bean
 	FilterRegistrationBean storageFilterRegistrationBean(StorageTemplate storageTemplate, ObjectMapper objectMapper) {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-		registrationBean.addUrlPatterns("/storage/signservice/*");
-		registrationBean.addUrlPatterns("/storage/signService/*");
+		registrationBean.addUrlPatterns("/storage/signservice/*","/storage/signService/*");
 		registrationBean.setName("storageFilter");
 		registrationBean.setFilter(new StorageServiceFilter(storageTemplate, objectMapper));
 		return registrationBean;

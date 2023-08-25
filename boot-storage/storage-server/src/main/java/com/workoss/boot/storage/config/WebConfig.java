@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.workoss.boot.storage.web.advice.GlobalResponseHandler;
 import com.workoss.boot.storage.web.filter.ReactiveRequestContextFilter;
 import com.workoss.boot.util.DateUtils;
+import jakarta.validation.Validator;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.MessageSource;
@@ -41,7 +42,6 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.accept.RequestedContentTypeResolver;
 
-import javax.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

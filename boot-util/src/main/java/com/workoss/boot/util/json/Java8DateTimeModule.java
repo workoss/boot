@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * java8 日期模块
- *
  * @author workoss
  */
 public class Java8DateTimeModule {

@@ -5,7 +5,7 @@
 
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot-parent</artifactId>
-	<version>2023.1.1-SNAPSHOT</version>
+	<version>2023.2.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>boot-parent</name>
@@ -42,8 +42,6 @@
 			<id>workoss</id>
 			<name>workoss</name>
 			<email>workoss@icloud.com</email>
-			<!-- <organization>Pivotal Software, Inc.</organization>
-			 <organizationUrl>https://www.spring.io</organizationUrl>-->
 			<roles>
 				<role>developer</role>
 				<role>admin</role>
@@ -52,17 +50,12 @@
 	</developers>
 
 	<properties>
-		<java.version>11</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>17</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<jakarta.jakartaee-bom.version>8.0.0</jakarta.jakartaee-bom.version>
-		<jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version>
-		<jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
-		<com.sun.xml.bind.version>4.0.2</com.sun.xml.bind.version>
+		<jakarta.jakartaee-bom.version>10.0.0</jakarta.jakartaee-bom.version>
 
 		<slf4j.version>2.0.7</slf4j.version>
 		<log4j2.version>2.20.0</log4j2.version>
@@ -73,17 +66,17 @@
 		<reactor-bom.version>2022.0.9</reactor-bom.version>
 		<rsocket-bom.version>1.1.4</rsocket-bom.version>
 
-		<hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 
 		<aspectj.version>1.9.20</aspectj.version>
 
-		<spring.version>5.3.26</spring.version>
-		<spring-boot.version>2.7.10</spring-boot.version>
-		<spring-cloud-dependencies.version>2021.0.6</spring-cloud-dependencies.version>
+		<spring.version>6.0.11</spring.version>
+		<spring-boot.version>3.1.2</spring-boot.version>
+		<spring-cloud-dependencies.version>2022.0.4</spring-cloud-dependencies.version>
+		<spring-data-bom.version>2023.0.3</spring-data-bom.version>
 		<spring-security-bom.version>6.1.2</spring-security-bom.version>
 
 		<spring-boot-admin.version>3.1.0</spring-boot-admin.version>
-		<spring-data-bom.version>2022.0.5</spring-data-bom.version>
 
 		<mybatis.version>3.5.13</mybatis.version>
 		<mybatis-spring.version>2.1.0</mybatis-spring.version>
@@ -113,6 +106,7 @@
 		<feign-bom.version>12.4</feign-bom.version>
 
 		<springdoc-openapi.version>2.0.4</springdoc-openapi.version>
+		<swagger.version>2.2.15</swagger.version>
 		<druid.version>1.2.18</druid.version>
 		<h2.version>2.2.220</h2.version>
 		<rocksdbjni.version>8.3.2</rocksdbjni.version>
@@ -161,21 +155,6 @@
 				<scope>import</scope>
 			</dependency>
 
-			<dependency>
-				<groupId>jakarta.xml.bind</groupId>
-				<artifactId>jakarta.xml.bind-api</artifactId>
-				<version>${jakarta.xml.bind-api.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-impl</artifactId>
-				<version>${com.sun.xml.bind.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>${com.sun.xml.bind.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -525,6 +504,12 @@
 			</dependency>
 
 			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-annotations-jakarta</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
 				<version>${h2.version}</version>
@@ -687,8 +672,8 @@
 							<!--<compilerArg>-parameters</compilerArg>-->
 							<!--							<arg>&#45;&#45;add-modules</arg>-->
 							<!--							<arg>jdk.unsupported</arg>-->
-							<compilerArg>-Amapstruct.suppressGeneratorTimestamp=false </compilerArg>
-							<compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=false </compilerArg>
+							<compilerArg>-Amapstruct.suppressGeneratorTimestamp=false</compilerArg>
+							<compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=false</compilerArg>
 						</compilerArgs>
 					</configuration>
 				</plugin>
@@ -828,7 +813,7 @@
 					<version>${maven-war-plugin.version}</version>
 					<configuration>                 <!--如果想在没有web.xml文件的情况下构建WAR，请设置为false。-->
 						<failOnMissingWebXml>false</failOnMissingWebXml>
-						<!--<packagingExcludes>                     %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                 </packagingExcludes>-->
+						<!--<packagingExcludes>                    %regex[WEB-INF/lib/ffmpeg-*-android-*.jar]                </packagingExcludes>-->
 					</configuration>
 				</plugin>
 

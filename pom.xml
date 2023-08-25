@@ -4,7 +4,7 @@
 	<groupId>com.workoss.boot</groupId>
 	<artifactId>boot</artifactId>
 	<packaging>pom</packaging>
-	<version>2023.1.1-SNAPSHOT</version>
+	<version>2023.2.1-SNAPSHOT</version>
 	<modules>
 		<module>boot-parent</module>
 		<module>boot-dependencies</module>
@@ -13,7 +13,7 @@
 		<module>boot-mybatis</module>
 		<module>boot-extension</module>
 		<module>boot-storage</module>
-		<!--		<module>boot-http</module>-->
+		<module>boot-starter</module>
 	</modules>
 	<properties>
 		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>

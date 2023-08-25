@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2022 workoss (https://www.workoss.com)
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,44 +22,44 @@ package com.workoss.boot.util.exception;
  */
 public class BootException extends RuntimeException {
 
-	private String errcode;
+	private String code;
 
-	private String errmsg;
+	private String msg;
 
 	public BootException() {
 	}
 
-	public BootException(String errcode) {
-		super("errcode:" + errcode);
-		this.errcode = errcode;
+	public BootException(String code) {
+		super("code:" + code);
+		this.code = code;
 	}
 
-	public BootException(String errcode, String errmsg) {
-		super("errcode:" + errcode + ",errmsg:" + errmsg);
-		this.errcode = errcode;
-		this.errmsg = errmsg;
+	public BootException(String code, String msg) {
+		super("code:" + code + ",msg:" + msg);
+		this.code = code;
+		this.msg = msg;
 	}
 
 	public BootException(Throwable throwable) {
-		super("errmsg:" + throwable.getMessage(), throwable);
+		super("msg:" + throwable.getMessage(), throwable);
 	}
 
-	public BootException(String errcode, Throwable throwable) {
-		super("errcode:" + errcode, throwable);
-		this.errcode = errcode;
+	public BootException(String code, Throwable throwable) {
+		super("code:" + code, throwable);
+		this.code = code;
 	}
 
-	public String getErrcode() {
-		return this.errcode;
+	public String getCode() {
+		return this.code;
 	}
 
-	public String getErrmsg() {
-		return this.errmsg;
+	public String getMsg() {
+		return this.msg;
 	}
 
 	@Override
 	public String toString() {
-		return "{\"errcode\":\"" + this.errcode + "\",\"errmsg\":\"" + this.errmsg + "\"}";
+		return "{\"code\":\"" + this.code + "\",\"msg\":\"" + this.msg + "\"}";
 	}
 
 }
