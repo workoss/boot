@@ -111,8 +111,16 @@ public class JsonMapper {
 		return build().readTree(bytes);
 	}
 
+	public static JsonNode parse(InputStream inputStream) {
+		return build().readTree(inputStream);
+	}
+
 	public static <T> T parseObject(String json, Class<T> tClass) {
 		return build().fromJson(json, tClass);
+	}
+
+	public static <T> T parseObject(InputStream inputStream, Class<T> tClass) {
+		return build().fromJson(inputStream, tClass);
 	}
 
 	public static <T> T parseObject(byte[] bytes, Class<T> tClass) {
@@ -214,6 +222,17 @@ public class JsonMapper {
 			throw new RuntimeException("没有找到目标类");
 		}
 		return (T) mapper.convertValue(jsonNode, tClass);
+	}
+
+	public <T> T fromJson(InputStream inputStream, Class<T> clazz) {
+		Assert.notNull(inputStream, "inputStream not null");
+		Assert.notNull(clazz, "clazz not null");
+		try {
+			return mapper.readValue(inputStream, clazz);
+		}
+		catch (IOException e) {
+			throw new BootException(e);
+		}
 	}
 
 	public <T> T fromJson(byte[] bytes, Class<T> clazz) {

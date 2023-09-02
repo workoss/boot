@@ -16,8 +16,10 @@
 package com.workoss.boot.autoconfigure;
 
 import com.workoss.boot.service.DistributedTemplate;
+import com.workoss.boot.util.id.SnowflakeUtil;
 import io.lettuce.core.api.async.RedisAsyncCommands;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -27,6 +29,7 @@ import org.springframework.boot.task.TaskExecutorCustomizer;
 import org.springframework.boot.task.TaskSchedulerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -68,6 +71,12 @@ public class ServiceConfig {
 			log.debug("[TASK_SCHEDULER] custom threadGroupName:{} poolSize:{}",
 					taskScheduler.getThreadGroup().getName(), taskScheduler.getPoolSize());
 		};
+	}
+
+	@Order(2)
+	@Bean
+	public CommandLineRunner idGenerateRunner(){
+		return args -> SnowflakeUtil.nextId();
 	}
 
 	@Configuration

@@ -15,7 +15,7 @@
  */
 package com.workoss.boot.util;
 
-import com.workoss.boot.util.model.IEnum;
+import com.workoss.boot.model.IEnum;
 
 import java.util.Arrays;
 import java.util.Objects;

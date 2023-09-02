@@ -16,6 +16,8 @@
 package com.workoss.boot.plugin.mybatis;
 
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Invocation;
 
 /**
@@ -32,6 +34,12 @@ public class UpdateSqlActionExecutor implements SqlActionExecutor {
 
 	@Override
 	public Object execute(Invocation invocation, SqlContext context) throws Throwable {
+		Executor executor = (Executor) invocation.getTarget();
+		Object[] args = invocation.getArgs();
+		MappedStatement mappedStatement = (MappedStatement) args[0];
+		Object parameter = args[1];
+		// TODO
+
 		return invocation.proceed();
 	}
 

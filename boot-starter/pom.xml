@@ -16,6 +16,7 @@
 
     <modules>
         <module>quick-web-spring-boot-starter</module>
+        <module>ip-spring-boot-starter</module>
     </modules>
 
 </project>

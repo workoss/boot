@@ -381,15 +381,15 @@ public abstract class AbstractS3Client implements StorageClient {
 			if (StringUtils.isNotBlank(contentType)) {
 				objectMetadata.setContentType(contentType);
 			}
-			if (in instanceof File) {
-				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, (File) in);
+			if (in instanceof File file) {
+				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, file);
 			}
-			else if (in instanceof InputStream) {
+			else if (in instanceof InputStream inputStream) {
 				// 根据文件名称 放入objectMetaData
-				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, (InputStream) in, objectMetadata);
+				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, inputStream, objectMetadata);
 			}
-			else if (in instanceof byte[]) {
-				InputStream is = new ByteArrayInputStream((byte[]) in);
+			else if (in instanceof byte[] bytes) {
+				InputStream is = new ByteArrayInputStream(bytes);
 				putObjectRequest = new PutObjectRequest(config.getBucketName(), key, is, objectMetadata);
 			}
 

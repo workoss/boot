@@ -16,12 +16,13 @@
 package com.workoss.boot.web.advice;
 
 import com.workoss.boot.exception.QuickException;
+import com.workoss.boot.model.ResultCode;
+import com.workoss.boot.model.ResultInfo;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.exception.ExceptionUtils;
-import com.workoss.boot.util.model.ResultCode;
-import com.workoss.boot.util.model.ResultInfo;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -83,31 +84,33 @@ public class GlobalExceptionHandlerAdvice {
 		return ResultInfo.result("-1", exception.getMessage());
 	}
 
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.OK)
 	@ExceptionHandler(QuickException.class)
 	public ResultInfo serviceException(QuickException exception) {
 		String errmsg = exception.getMsg();
 		if (!ResultCode.SUCCESS.getCode().equalsIgnoreCase(exception.getCode()) && exception.getCover()) {
-			Locale locale = LocaleContextHolder.getLocale();
-			errmsg = messageSource.getMessage(exception.getCode(), null, errmsg, locale);
+			errmsg = messageSource.getMessage(exception.getCode(), null, errmsg, LocaleContextHolder.getLocale());
 		}
-		log.warn("[GLOBAL_EXCEPTION] 业务异常:{}", errmsg == null ? StringUtils.EMPTY : errmsg,
-				ExceptionUtils.toShortString(exception, 2));
+		if (StringUtils.isBlank(errmsg)) {
+			errmsg = "QuickException";
+		}
+		log.warn("[GLOBAL_EXCEPTION] 业务异常:{}", errmsg);
 		return ResultInfo.result(exception.getCode(), errmsg);
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(Exception.class)
-	public ResultInfo serviceException(Exception exception) {
-		log.warn("[GLOBAL_EXCEPTION]服务异常:", ExceptionUtils.toShortString(exception, 2));
-		return ResultInfo.result("-2", exception.getMessage());
+	@ExceptionHandler(MyBatisSystemException.class)
+	public ResultInfo mybatisException(MyBatisSystemException exception) {
+		log.error("[GLOBAL_EXCEPTION] 数据异常:", exception);
+		return ResultInfo.result("-3", messageSource.getMessage("-3", null, "数据异常", LocaleContextHolder.getLocale()));
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(Throwable.class)
-	public ResultInfo serviceException(Throwable throwable) {
-		log.warn("[GLOBAL_EXCEPTION] 服务异常:", ExceptionUtils.toShortString(throwable, 2));
-		return ResultInfo.result("-2", throwable.getMessage());
+	@ExceptionHandler({ Throwable.class })
+	public ResultInfo serviceException(Throwable exception) {
+		String msg = ExceptionUtils.toString(exception);
+		log.warn("[GLOBAL_EXCEPTION] 服务异常:{}", msg);
+		return ResultInfo.result("-2", messageSource.getMessage("-2", null, msg, LocaleContextHolder.getLocale()));
 	}
 
 }

@@ -26,23 +26,23 @@ import java.util.ArrayList;
  */
 public class PageResult<E> extends ArrayList<E> implements Closeable {
 
-	private int offset = 0;
+	private Long offset = 0L;
 
 	private int limit = 10;
 
-	private int count = -1;
+	private Long count = -1L;
 
-	private int pageNo = 1;
+	private Long pageNo = 1L;
 
 	private String sortBy;
 
 	private boolean shouldCount = false;
 
-	public int getOffset() {
+	public Long getOffset() {
 		return offset;
 	}
 
-	public void setOffset(int offset) {
+	public void setOffset(Long offset) {
 		this.offset = offset;
 	}
 
@@ -54,22 +54,22 @@ public class PageResult<E> extends ArrayList<E> implements Closeable {
 		this.limit = limit;
 	}
 
-	public int getCount() {
+	public Long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(Long count) {
 		this.count = count;
 	}
 
-	public int getPageNo() {
+	public Long getPageNo() {
 		if (this.limit > 0) {
 			return this.offset / this.limit + 1;
 		}
-		return 1;
+		return 1L;
 	}
 
-	public void setPageNo(int pageNo) {
+	public void setPageNo(Long pageNo) {
 		this.pageNo = pageNo;
 	}
 

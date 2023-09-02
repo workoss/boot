@@ -39,7 +39,7 @@ public class ExtendsionApplicationContextListener implements ApplicationListener
 		if (applicationContext.getParent() == null) {
 			SpringExtensionFactory.clearContexts();
 		}
-		if (applicationContextEvent instanceof ContextRefreshedEvent && applicationContext.getParent() != null) {
+		if (applicationContext.getParent() != null && applicationContextEvent instanceof ContextRefreshedEvent ) {
 			log.info("ExtendsionApplicationContextListener add context, {}", applicationContextEvent);
 			SpringExtensionFactory.addApplicationContext(applicationContext);
 		}

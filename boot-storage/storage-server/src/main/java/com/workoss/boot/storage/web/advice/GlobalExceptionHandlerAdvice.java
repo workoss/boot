@@ -15,10 +15,10 @@
  */
 package com.workoss.boot.storage.web.advice;
 
+import com.workoss.boot.model.ResultCode;
+import com.workoss.boot.model.ResultInfo;
 import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.util.StringUtils;
-import com.workoss.boot.util.model.ResultCode;
-import com.workoss.boot.util.model.ResultInfo;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;

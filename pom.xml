@@ -14,7 +14,8 @@
 		<module>boot-extension</module>
 		<module>boot-storage</module>
 		<module>boot-starter</module>
-	</modules>
+        <module>boot-domain</module>
+    </modules>
 	<properties>
 		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.39</spring-javaformat-maven-plugin.version>

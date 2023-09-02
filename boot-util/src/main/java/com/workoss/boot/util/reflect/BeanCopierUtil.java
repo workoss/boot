@@ -173,8 +173,7 @@ public class BeanCopierUtil {
 
 		@Override
 		public Object convert(Object value, Class targetClazz, Object methodName) {
-			if (value instanceof List) {
-				List values = (List) value;
+			if (value instanceof List values) {
 				List retList = new ArrayList<>(values.size());
 				for (final Object source : values) {
 					retList.add(BeanCopierUtil.convert(source, targetClazz));

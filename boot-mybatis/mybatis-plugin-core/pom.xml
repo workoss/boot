@@ -19,6 +19,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.workoss.boot</groupId>
+			<artifactId>boot-domain</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.workoss.boot</groupId>
 			<artifactId>mybatis-plugin-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -36,6 +42,7 @@
 			<artifactId>boot-util</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

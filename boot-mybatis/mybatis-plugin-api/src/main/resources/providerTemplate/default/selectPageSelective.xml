@@ -8,8 +8,8 @@
 	<![CDATA[ <where> ]]>
 	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator="">
 		<![CDATA[
-             <if test="${columnInfo.propertyName} != null">
-              and ${columnInfo.columnName} = #@{${columnInfo.propertyName}}
+             <if test="record.${columnInfo.propertyName} != null">
+              and ${columnInfo.columnName} = #@{record.${columnInfo.propertyName}}
             </if>
         ]]>
 	</foreach>

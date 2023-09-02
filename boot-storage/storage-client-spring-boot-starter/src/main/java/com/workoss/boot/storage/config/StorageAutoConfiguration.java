@@ -34,7 +34,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 /**
  * 对象存储自动化配置
  *
@@ -98,7 +97,7 @@ public class StorageAutoConfiguration {
 	@Bean
 	FilterRegistrationBean storageFilterRegistrationBean(StorageTemplate storageTemplate, ObjectMapper objectMapper) {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-		registrationBean.addUrlPatterns("/storage/signservice/*","/storage/signService/*");
+		registrationBean.addUrlPatterns("/storage/signservice/*", "/storage/signService/*");
 		registrationBean.setName("storageFilter");
 		registrationBean.setFilter(new StorageServiceFilter(storageTemplate, objectMapper));
 		return registrationBean;

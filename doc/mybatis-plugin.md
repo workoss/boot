@@ -89,20 +89,20 @@ List<TempDistrictEntity> list =tempDistrictDao.selectSelective(districtEntity);
 TempDistrictEntity districtEntity = new TempDistrictEntity();
 List<TempDistrictEntity> list = SqlHelper.page(1,10,false)
         .sort("id asc")
-        .execute(sqlParam -> tempDistrictDao.selectSelective(districtEntity));
+        .execute(sqlRequest -> tempDistrictDao.selectSelective(districtEntity));
 ```
 
 3. 动态排序（不分页）
 ```java
 TempDistrictEntity districtEntity = new TempDistrictEntity();
 List<TempDistrictEntity> list = SqlHelper.sort("id asc")
-        .execute(sqlParam -> tempDistrictDao.selectSelective(districtEntity));
+        .execute(sqlRequest -> tempDistrictDao.selectSelective(districtEntity));
 ```
 
 4. 执行完可以对返回结果mapper
 ```java
 List<MtStoreListEntity> storeListEntities =  SqlHelper.page(1,10,true)
                 .sort("store_id desc")
-                .executeAndMapper(sqlParam -> tempDistrictDao.selectPageSelective(selectEntity))
+                .executeAndMapper(sqlRequest -> tempDistrictDao.selectPageSelective(selectEntity))
                 .mapper(tempDistrictEntityMapper::toTargetList);
 ```

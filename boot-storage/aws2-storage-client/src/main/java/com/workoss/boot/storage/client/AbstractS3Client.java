@@ -378,15 +378,14 @@ public abstract class AbstractS3Client implements StorageClient {
 				.bucket(config.getBucketName())
 				.key(key);
 			AsyncRequestBody asyncRequestBody = null;
-			if (in instanceof File) {
-				File file = (File) in;
+			if (in instanceof File file) {
 				asyncRequestBody = AsyncRequestBody.fromFile(file);
 			}
-			else if (in instanceof InputStream) {
+			else if (in instanceof InputStream inputStream) {
 				asyncRequestBody = AsyncRequestBody.fromBytes(IoUtils.toByteArray((InputStream) in));
 			}
-			else if (in instanceof byte[]) {
-				asyncRequestBody = AsyncRequestBody.fromBytes((byte[]) in);
+			else if (in instanceof byte[] bytes) {
+				asyncRequestBody = AsyncRequestBody.fromBytes(bytes);
 			}
 			if (StringUtils.isBlank(contentType)) {
 				contentType = StorageUtil.getMimeType(key);
@@ -415,8 +414,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			throw throwS3Exception(s3Exception);
 		}
 		catch (Exception e) {
-			if (e instanceof StorageException) {
-				StorageException e1 = (StorageException) e;
+			if (e instanceof StorageException e1) {
 				throw new StorageException(e1.getCode(), e1.getMsg());
 			}
 			throw new StorageException("0002", e);

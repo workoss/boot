@@ -15,12 +15,14 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
+import com.workoss.boot.model.Sqlable;
 import com.workoss.boot.util.Assert;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
 import com.workoss.boot.util.reflect.ReflectUtils;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * SqlHelper
@@ -30,7 +32,7 @@ import java.util.function.Function;
 @SuppressWarnings("ALL")
 public class SqlHelper {
 
-	protected static final FastThreadLocal<SqlParam> LOCAL_SQL_PARAM = new FastThreadLocal<>();
+	protected static final FastThreadLocal<Sqlable> LOCAL_SQL_PARAM = new FastThreadLocal<>();
 
 	public static PageBuilder page() {
 		return page(null);
@@ -45,8 +47,8 @@ public class SqlHelper {
 			throw new RuntimeException("please input object");
 		}
 		PageBuilder pageBuilder = null;
-		if (pageObject instanceof SqlParam) {
-			pageBuilder = new PageBuilder((SqlParam) pageObject);
+		if (pageObject instanceof Sqlable sqlParam) {
+			pageBuilder = new PageBuilder(sqlParam);
 			return pageBuilder;
 		}
 		pageBuilder = new PageBuilder();
@@ -55,20 +57,20 @@ public class SqlHelper {
 		pageBuilder.sort((String) ReflectUtils.getPropertyByInvokeMethod(pageObject, "sortBy"));
 		if (limit != null) {
 			int limitNum = Integer.parseInt(limit.toString());
-			Integer offsetNum = null;
+			Long offsetNum = null;
 			if (offset == null) {
 				Object pageNo = ReflectUtils.getPropertyByInvokeMethod(pageObject, "pageNo");
-				offsetNum = (pageNo == null ? 0 : ((Integer.parseInt(pageNo.toString()) - 1) * limitNum));
+				offsetNum = (pageNo == null ? 0L : ((Integer.parseInt(pageNo.toString()) - 1) * limitNum));
 			}
 			else {
-				offsetNum = Integer.parseInt(offset.toString());
+				offsetNum = Long.parseLong(offset.toString());
 			}
 			pageBuilder.page(offsetNum, limitNum);
 		}
 		return pageBuilder;
 	}
 
-	public static PageBuilder page(int pageNo, int limit, boolean shouldCount) {
+	public static PageBuilder page(long pageNo, int limit, boolean shouldCount) {
 		return new PageBuilder().page((pageNo - 1) * limit, limit).shouldCount(shouldCount);
 	}
 
@@ -77,7 +79,7 @@ public class SqlHelper {
 		return new SortBuilder().sort(sortBy);
 	}
 
-	public static SqlParam getLocalSqlParam() {
+	public static Sqlable getLocalSqlParam() {
 		return LOCAL_SQL_PARAM.get();
 	}
 
@@ -85,11 +87,8 @@ public class SqlHelper {
 		LOCAL_SQL_PARAM.set(null);
 	}
 
-	protected static void start(SqlParam sqlParam) {
-		if (StringUtils.isNotBlank(sqlParam.getSortBy())) {
-			sqlParam.setSortBy(StringUtils.underscoreName(sqlParam.getSortBy()));
-		}
-		LOCAL_SQL_PARAM.set(sqlParam);
+	protected static void start(Sqlable sqlRequest) {
+		LOCAL_SQL_PARAM.set(sqlRequest);
 	}
 
 	public static class PageBuilder {
@@ -100,11 +99,11 @@ public class SqlHelper {
 			this.sqlParamBuilder = new SqlParamBuilder();
 		}
 
-		public PageBuilder(SqlParam sqlParam) {
-			this.sqlParamBuilder = new SqlParamBuilder(sqlParam);
+		public PageBuilder(Sqlable sqlable) {
+			this.sqlParamBuilder = new SqlParamBuilder(sqlable);
 		}
 
-		public PageBuilder page(int offset, int limit) {
+		public PageBuilder page(Long offset, int limit) {
 			sqlParamBuilder.page(offset, limit);
 			return this;
 		}
@@ -120,22 +119,38 @@ public class SqlHelper {
 		}
 
 		public void start() {
-			execute(null);
+			execute((Function<Sqlable, ? extends Object>) null);
 		}
 
-		public <S> S execute(Function<SqlParam, S> mapper) {
-			SqlParam sqlParam = sqlParamBuilder.build();
-			if (sqlParam.getLimit() <= 0 || sqlParam.getOffset() < 0) {
+		public <S> S execute(Function<Sqlable, S> mapper) {
+			Sqlable sqlRequest = sqlParamBuilder.build();
+			if (sqlRequest.getLimit() <= 0 || sqlRequest.getOffset() < 0) {
 				throw new RuntimeException("分页参数 limit >0 offset>=0");
 			}
-			SqlHelper.start(sqlParam);
+			SqlHelper.start(sqlRequest);
 			if (mapper == null) {
 				return null;
 			}
-			return mapper.apply(sqlParam);
+			return mapper.apply(sqlRequest);
 		}
 
-		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<SqlParam, S> daoMapper) {
+		public <S> S execute(Supplier<S> mapper) {
+			Sqlable sqlRequest = sqlParamBuilder.build();
+			if (sqlRequest.getLimit() <= 0 || sqlRequest.getOffset() < 0) {
+				throw new RuntimeException("分页参数 limit >0 offset>=0");
+			}
+			SqlHelper.start(sqlRequest);
+			if (mapper == null) {
+				return null;
+			}
+			return mapper.get();
+		}
+
+		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<Sqlable, S> daoMapper) {
+			return new BeanMapperBuilder(execute(daoMapper));
+		}
+
+		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Supplier<S> daoMapper) {
 			return new BeanMapperBuilder(execute(daoMapper));
 		}
 
@@ -174,19 +189,31 @@ public class SqlHelper {
 		}
 
 		public void start() {
-			execute(null);
+			execute((Function<Sqlable, ? extends Object>) null);
 		}
 
-		public <T> T execute(Function<SqlParam, T> mapper) {
-			SqlParam sqlParam = sqlParamBuilder.build();
-			SqlHelper.start(sqlParam);
+		public <T> T execute(Function<Sqlable, T> mapper) {
+			Sqlable sqlRequest = sqlParamBuilder.build();
+			SqlHelper.start(sqlRequest);
 			if (mapper == null) {
 				return null;
 			}
-			return mapper.apply(sqlParam);
+			return mapper.apply(sqlRequest);
 		}
 
-		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<SqlParam, S> daoMapper) {
+		public <T> T execute(Supplier<T> mapper) {
+			SqlHelper.start(sqlParamBuilder.build());
+			if (mapper == null) {
+				return null;
+			}
+			return mapper.get();
+		}
+
+		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Function<Sqlable, S> daoMapper) {
+			return new BeanMapperBuilder(execute(daoMapper));
+		}
+
+		public <S, T> BeanMapperBuilder<S, T> executeAndMapper(Supplier<S> daoMapper) {
 			return new BeanMapperBuilder(execute(daoMapper));
 		}
 
@@ -194,60 +221,68 @@ public class SqlHelper {
 
 	static class SqlParamBuilder {
 
-		private SqlParam sqlParam;
+		private SqlRequest sqlRequest;
 
 		public SqlParamBuilder() {
-			if (sqlParam == null) {
-				this.sqlParam = new SqlParam();
+			if (sqlRequest == null) {
+				this.sqlRequest = SqlRequest.of();
 			}
 		}
 
-		public SqlParamBuilder(SqlParam sqlParam) {
-			this.sqlParam = sqlParam;
+		public SqlParamBuilder(Sqlable sqlable) {
+			if (sqlRequest == null) {
+				this.sqlRequest = SqlRequest.of();
+			}
+			if (sqlable == null) {
+				return;
+			}
+			sqlRequest.setLimit(sqlable.getLimit());
+			sqlRequest.setOffset(sqlable.getOffset());
+			sqlRequest.setSortBy(sqlable.getSortBy());
+			sqlRequest.setShouldCount(sqlable.getShouldCount());
+			sqlRequest.setShouldPage(sqlable.getShouldPage());
 		}
 
-		public SqlParamBuilder param(SqlParam param) {
-			this.sqlParam = param;
+		public SqlParamBuilder page(Long offset, Integer limit) {
+			sqlRequest.setOffset(offset);
+			sqlRequest.setLimit(limit);
+			sqlRequest.setShouldPage(true);
 			return this;
 		}
 
-		public SqlParamBuilder page(int offset, int limit) {
-			sqlParam.setOffset(offset);
-			sqlParam.setLimit(limit);
-			sqlParam.setShouldPage(true);
+		public SqlParamBuilder offset(Long offset) {
+			sqlRequest.setOffset(offset);
 			return this;
 		}
 
-		public SqlParamBuilder offset(int offset) {
-			sqlParam.setOffset(offset);
-			return this;
-		}
-
-		public SqlParamBuilder limit(int limit) {
-			sqlParam.setLimit(limit);
+		public SqlParamBuilder limit(Integer limit) {
+			sqlRequest.setLimit(limit);
 			return this;
 		}
 
 		public SqlParamBuilder shouldCount(boolean shouldCount) {
-			sqlParam.setShouldCount(shouldCount);
+			sqlRequest.setShouldCount(shouldCount);
 			if (shouldCount) {
-				this.sqlParam.setShouldPage(true);
+				this.sqlRequest.setShouldPage(true);
 			}
 			return this;
 		}
 
 		public SqlParamBuilder shouldPage(boolean shouldPage) {
-			sqlParam.setShouldPage(shouldPage);
+			sqlRequest.setShouldPage(shouldPage);
 			return this;
 		}
 
 		public SqlParamBuilder sort(String sortBy) {
-			sqlParam.setSortBy(sortBy);
+			sqlRequest.setSortBy(sortBy);
 			return this;
 		}
 
-		public SqlParam build() {
-			return sqlParam;
+		public SqlRequest build() {
+			if (StringUtils.isNotBlank(sqlRequest.getSortBy())) {
+				sqlRequest.setSortBy(StringUtils.underscoreName(sqlRequest.getSortBy()));
+			}
+			return sqlRequest;
 		}
 
 	}

@@ -42,9 +42,8 @@ class JakartaEntityClassFinder extends GenericEntityClassFinder {
 					String columnName = ObjectUtil.underscoreName(field.getName());
 					Annotation[] annotations = field.getAnnotations();
 					for (Annotation annotation : annotations) {
-						if (annotation instanceof Column) {
+						if (annotation instanceof Column column) {
 							// 自定义列名称
-							Column column = (Column) annotation;
 							if (!ObjectUtil.isBlank(column.name())) {
 								columnName = column.name();
 							}

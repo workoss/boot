@@ -15,8 +15,8 @@
  */
 package com.workoss.boot.storage.web.advice;
 
+import com.workoss.boot.model.ResultInfo;
 import com.workoss.boot.util.DateUtils;
-import com.workoss.boot.util.model.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ReactiveAdapterRegistry;
@@ -85,13 +85,13 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 		}
 		Object body;
 		// 处理返回结果为 Mono 的情况
-		if (returnValue instanceof Mono) {
-			body = ((Mono<Object>) returnValue).map((Function<Object, Object>) this::wrapResultInfo)
+		if (returnValue instanceof Mono returnMono) {
+			body = returnMono.map((Function<Object, Object>) this::wrapResultInfo)
 				.defaultIfEmpty(ResultInfo.success(null));
 			// 处理返回结果为 Flux 的情况
 		}
-		else if (returnValue instanceof Flux) {
-			body = ((Flux<Object>) returnValue).collectList()
+		else if (returnValue instanceof Flux returnFlux) {
+			body = returnFlux.collectList()
 				.map((Function<Object, Object>) this::wrapResultInfo)
 				.defaultIfEmpty(ResultInfo.success(null));
 			// 处理结果为其它类型

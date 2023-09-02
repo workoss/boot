@@ -138,8 +138,7 @@ public class ClassUtils {
 			return null;
 		}
 		Type type = clazz.getGenericSuperclass();
-		if (type instanceof ParameterizedType) {
-			ParameterizedType ptype = ((ParameterizedType) type);
+		if (type instanceof ParameterizedType ptype) {
 			Type[] args = ptype.getActualTypeArguments();
 			return (Class<?>) args[0];
 		}

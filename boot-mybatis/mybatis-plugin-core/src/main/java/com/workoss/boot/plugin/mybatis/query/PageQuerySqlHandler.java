@@ -20,7 +20,7 @@ import com.alibaba.druid.sql.PagerUtils;
 import com.workoss.boot.plugin.mybatis.MybatisUtil;
 import com.workoss.boot.plugin.mybatis.PageResult;
 import com.workoss.boot.plugin.mybatis.SqlHandler;
-import com.workoss.boot.plugin.mybatis.SqlParam;
+import com.workoss.boot.plugin.mybatis.SqlRequest;
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -41,17 +41,17 @@ public class PageQuerySqlHandler implements SqlHandler {
 
 	@Override
 	public void handler(SqlContext context) {
-		SqlParam sqlParam = (SqlParam) context.getInput("sqlParam");
+		SqlRequest sqlRequest = (SqlRequest) context.getInput("sqlParam");
 		DbType dbType = (DbType) context.getInput("dbType");
-		if (!sqlParam.getShouldPage()) {
+		if (!sqlRequest.getShouldPage()) {
 			return;
 		}
 		PageResult pageResult = new PageResult();
-		pageResult.setOffset(sqlParam.getOffset());
-		pageResult.setLimit(sqlParam.getLimit());
-		pageResult.setSortBy(sqlParam.getSortBy());
+		pageResult.setOffset(sqlRequest.getOffset());
+		pageResult.setLimit(sqlRequest.getLimit());
+		pageResult.setSortBy(sqlRequest.getSortBy());
 		MappedStatement mappedStatement = (MappedStatement) context.getInput("mappedStatement");
-		if (sqlParam.getShouldCount()) {
+		if (sqlRequest.getShouldCount()) {
 			Executor executor = (Executor) context.getInput("executor");
 			Object parameter = context.getOutputOrInput("parameter");
 			ResultHandler resultHandler = (ResultHandler) context.getInput("resultHandler");
@@ -59,7 +59,7 @@ public class PageQuerySqlHandler implements SqlHandler {
 			BoundSql originBoundSql = (BoundSql) context.getInput("boundSql");
 			Long count = MybatisUtil.count(dbType, executor, mappedStatement, parameter, rowBounds, resultHandler,
 					originBoundSql);
-			pageResult.setCount(count.intValue());
+			pageResult.setCount(count);
 			context.putOutput("result", pageResult);
 			if (count <= 0) {
 				return;
@@ -68,7 +68,7 @@ public class PageQuerySqlHandler implements SqlHandler {
 		context.putOutput("change", true);
 		BoundSql boundSql = (BoundSql) context.getOutputOrInput("boundSql");
 		String sql = boundSql.getSql();
-		String pageSql = PagerUtils.limit(sql, dbType, sqlParam.getOffset(), sqlParam.getLimit());
+		String pageSql = PagerUtils.limit(sql, dbType, sqlRequest.getOffset().intValue(), sqlRequest.getLimit());
 		boundSql = MybatisUtil.newBoundSql(mappedStatement, pageSql, boundSql);
 		context.putOutput("boundSql", boundSql);
 	}

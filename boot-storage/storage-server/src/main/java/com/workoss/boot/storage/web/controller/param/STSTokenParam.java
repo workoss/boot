@@ -18,7 +18,6 @@ package com.workoss.boot.storage.web.controller.param;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-
 /**
  * 生成stsToken参数
  *

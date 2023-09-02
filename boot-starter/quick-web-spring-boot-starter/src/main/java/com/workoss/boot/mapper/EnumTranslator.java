@@ -15,8 +15,8 @@
  */
 package com.workoss.boot.mapper;
 
+import com.workoss.boot.model.IEnum;
 import com.workoss.boot.util.EnumUtil;
-import com.workoss.boot.util.model.IEnum;
 import org.mapstruct.Named;
 import org.mapstruct.TargetType;
 

@@ -74,8 +74,8 @@ public class SpringExtensionFactory implements ExtensionFactory {
 		if (!CONTEXTS.contains(context)) {
 			CONTEXTS.add(context);
 		}
-		if (context instanceof ConfigurableApplicationContext) {
-			((ConfigurableApplicationContext) context).registerShutdownHook();
+		if (context instanceof ConfigurableApplicationContext configurableApplicationContext) {
+			configurableApplicationContext.registerShutdownHook();
 		}
 	}
 

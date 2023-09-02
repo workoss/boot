@@ -134,8 +134,7 @@ public class AsyncRuntime {
 		 * @param daemon 是否守护线程，true的话随主线程退出而退出，false的话则要主动退出
 		 */
 		public NamedThreadFactory(String secondPrefix, boolean daemon) {
-			SecurityManager s = System.getSecurityManager();
-			group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+			group = Thread.currentThread().getThreadGroup();
 			namePrefix = firstPrefix + secondPrefix + "-" + POOL_COUNT.getAndIncrement() + "-T";
 			isDaemon = daemon;
 		}

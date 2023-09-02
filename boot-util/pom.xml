@@ -23,6 +23,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.workoss.boot</groupId>
+            <artifactId>boot-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <optional>true</optional>

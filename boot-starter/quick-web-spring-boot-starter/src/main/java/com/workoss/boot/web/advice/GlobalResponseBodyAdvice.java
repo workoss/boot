@@ -18,7 +18,7 @@ package com.workoss.boot.web.advice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workoss.boot.exception.QuickException;
-import com.workoss.boot.util.model.ResultInfo;
+import com.workoss.boot.model.ResultInfo;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -45,7 +45,7 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
 		String methodName = returnType.getMethod().getDeclaringClass().getName();
-		return !methodName.contains("org.springframework.boot.actuate")
+		return !methodName.contains("org.springframework.boot.actuate") && !methodName.contains("org.springdoc")
 				&& !returnType.getGenericParameterType().equals(ResultInfo.class);
 	}
 

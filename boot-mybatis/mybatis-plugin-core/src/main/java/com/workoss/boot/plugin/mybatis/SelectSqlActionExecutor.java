@@ -15,6 +15,7 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
+import com.workoss.boot.model.Sqlable;
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
 import com.workoss.boot.util.reflect.BeanCopierUtil;
 import org.apache.ibatis.cache.CacheKey;
@@ -94,11 +95,11 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 			cacheKey = (CacheKey) args[4];
 			boundSql = (BoundSql) args[5];
 		}
-		SqlParam sqlParam = (SqlParam) context.getInput("sqlParam");
-		if (sqlParam == null && mappedStatement.getId().contains(PAGE_SQL_ID)) {
-			sqlParam = initSqlParam(parameter);
+		Sqlable sqlRequest = (Sqlable) context.getInput("sqlParam");
+		if (sqlRequest == null && mappedStatement.getId().contains(PAGE_SQL_ID)) {
+			sqlRequest = initSqlParam(parameter);
 		}
-		if (sqlParam == null) {
+		if (sqlRequest == null) {
 			return invocation.proceed();
 		}
 		context.putInput("executor", executor);
@@ -135,23 +136,23 @@ public class SelectSqlActionExecutor implements SqlActionExecutor {
 				(CacheKey) context.getOutputOrInput("cacheKey"), (BoundSql) context.getOutputOrInput("boundSql"));
 	}
 
-	private SqlParam initSqlParam(Object parameterObject) {
-		if (parameterObject instanceof SqlParam) {
-			return (SqlParam) parameterObject;
+	private Sqlable initSqlParam(Object parameterObject) {
+		if (parameterObject instanceof Sqlable sqlable) {
+			return sqlable;
 		}
 		if (parameterObject instanceof Map) {
 			Map<String, Object> paraMap = (Map<String, Object>) parameterObject;
 			if (paraMap.containsKey(PAGE_PARAM)) {
 				Object paramObj = paraMap.get(PAGE_PARAM);
-				if (paramObj instanceof SqlParam) {
-					return (SqlParam) parameterObject;
+				if (paramObj instanceof Sqlable sqlable) {
+					return sqlable;
 				}
-				return BeanCopierUtil.copy(paramObj, SqlParam.class);
+				return BeanCopierUtil.copy(paramObj, SqlRequest.class);
 			}
-			Optional<SqlParam> optional = paraMap.entrySet()
+			Optional<Sqlable> optional = paraMap.entrySet()
 				.stream()
-				.filter(entry -> entry.getValue() instanceof SqlParam)
-				.map(entry -> (SqlParam) entry.getValue())
+				.filter(entry -> entry.getValue() instanceof Sqlable)
+				.map(entry -> (Sqlable) entry.getValue())
 				.findFirst();
 			return optional.isPresent() ? optional.get() : null;
 		}

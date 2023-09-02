@@ -20,6 +20,8 @@ import com.workoss.boot.annotation.lang.Nullable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 对象工具类
@@ -141,32 +143,32 @@ public class ObjectUtil {
 			return 0;
 		}
 		if (obj.getClass().isArray()) {
-			if (obj instanceof Object[]) {
-				return nullSafeHashCode((Object[]) obj);
+			if (obj instanceof Object[] objects) {
+				return nullSafeHashCode(objects);
 			}
-			if (obj instanceof boolean[]) {
-				return nullSafeHashCode((boolean[]) obj);
+			if (obj instanceof boolean[] booleans) {
+				return nullSafeHashCode(booleans);
 			}
-			if (obj instanceof byte[]) {
-				return nullSafeHashCode((byte[]) obj);
+			if (obj instanceof byte[] bytes) {
+				return nullSafeHashCode(bytes);
 			}
-			if (obj instanceof char[]) {
-				return nullSafeHashCode((char[]) obj);
+			if (obj instanceof char[] chars) {
+				return nullSafeHashCode(chars);
 			}
-			if (obj instanceof double[]) {
-				return nullSafeHashCode((double[]) obj);
+			if (obj instanceof double[] doubles) {
+				return nullSafeHashCode(doubles);
 			}
-			if (obj instanceof float[]) {
-				return nullSafeHashCode((float[]) obj);
+			if (obj instanceof float[] floats) {
+				return nullSafeHashCode(floats);
 			}
-			if (obj instanceof int[]) {
-				return nullSafeHashCode((int[]) obj);
+			if (obj instanceof int[] ints) {
+				return nullSafeHashCode(ints);
 			}
-			if (obj instanceof long[]) {
-				return nullSafeHashCode((long[]) obj);
+			if (obj instanceof long[] longs) {
+				return nullSafeHashCode(longs);
 			}
-			if (obj instanceof short[]) {
-				return nullSafeHashCode((short[]) obj);
+			if (obj instanceof short[] shorts) {
+				return nullSafeHashCode(shorts);
 			}
 		}
 		return obj.hashCode();
@@ -188,32 +190,32 @@ public class ObjectUtil {
 	}
 
 	private static boolean arrayEquals(Object o1, Object o2) {
-		if (o1 instanceof Object[] && o2 instanceof Object[]) {
-			return Arrays.equals((Object[]) o1, (Object[]) o2);
+		if (o1 instanceof Object[] o3 && o2 instanceof Object[] o4) {
+			return Arrays.equals(o3, o4);
 		}
-		if (o1 instanceof boolean[] && o2 instanceof boolean[]) {
-			return Arrays.equals((boolean[]) o1, (boolean[]) o2);
+		if (o1 instanceof boolean[] o3 && o2 instanceof boolean[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof byte[] && o2 instanceof byte[]) {
-			return Arrays.equals((byte[]) o1, (byte[]) o2);
+		if (o1 instanceof byte[] o3 && o2 instanceof byte[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof char[] && o2 instanceof char[]) {
-			return Arrays.equals((char[]) o1, (char[]) o2);
+		if (o1 instanceof char[] o3 && o2 instanceof char[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof double[] && o2 instanceof double[]) {
-			return Arrays.equals((double[]) o1, (double[]) o2);
+		if (o1 instanceof double[] o3 && o2 instanceof double[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof float[] && o2 instanceof float[]) {
-			return Arrays.equals((float[]) o1, (float[]) o2);
+		if (o1 instanceof float[] o3 && o2 instanceof float[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof int[] && o2 instanceof int[]) {
-			return Arrays.equals((int[]) o1, (int[]) o2);
+		if (o1 instanceof int[] o3 && o2 instanceof int[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof long[] && o2 instanceof long[]) {
-			return Arrays.equals((long[]) o1, (long[]) o2);
+		if (o1 instanceof long[] o3 && o2 instanceof long[] o4) {
+			return Arrays.equals(o3,o4);
 		}
-		if (o1 instanceof short[] && o2 instanceof short[]) {
-			return Arrays.equals((short[]) o1, (short[]) o2);
+		if (o1 instanceof short[] o3 && o2 instanceof short[] o4) {
+			return Arrays.equals(o3,o4);
 		}
 		return false;
 	}

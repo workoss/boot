@@ -19,7 +19,7 @@ import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.builder.SQLBuilderFactory;
 import com.workoss.boot.plugin.mybatis.MybatisUtil;
 import com.workoss.boot.plugin.mybatis.SqlHandler;
-import com.workoss.boot.plugin.mybatis.SqlParam;
+import com.workoss.boot.plugin.mybatis.SqlRequest;
 import com.workoss.boot.plugin.mybatis.context.SqlContext;
 import com.workoss.boot.util.StringUtils;
 import org.apache.ibatis.mapping.BoundSql;
@@ -50,9 +50,9 @@ public class SortQuerySqlHandler implements SqlHandler {
 			log.debug("sql have order by ，ignore orderBy");
 			return;
 		}
-		SqlParam sqlParam = (SqlParam) context.getInput("sqlParam");
+		SqlRequest sqlRequest = (SqlRequest) context.getInput("sqlParam");
 		DbType dbType = (DbType) context.getInput("dbType");
-		String orderBy = sqlParam.getSortBy();
+		String orderBy = sqlRequest.getSortBy();
 		if (StringUtils.isBlank(orderBy)) {
 			return;
 		}

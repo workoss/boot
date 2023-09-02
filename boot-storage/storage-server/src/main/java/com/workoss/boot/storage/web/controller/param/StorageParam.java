@@ -19,7 +19,6 @@ import com.workoss.boot.storage.model.ThirdPlatformType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-
 /**
  * 公共参数，用于查询到db中ak/sk配置信息
  *

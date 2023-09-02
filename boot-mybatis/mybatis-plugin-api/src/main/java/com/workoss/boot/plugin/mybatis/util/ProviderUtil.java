@@ -83,6 +83,9 @@ public class ProviderUtil {
 		if (dbType == null) {
 			dbType = context.getDatabaseId();
 		}
+		if (dbType == null) {
+			dbType = "mysql";
+		}
 		return dbType;
 	}
 
