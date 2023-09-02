@@ -99,7 +99,7 @@
 		<mockito-core.version>5.5.0</mockito-core.version>
 
 		<debezium.version>2.3.2.Final</debezium.version>
-		<byte-buddy.version>1.14.6</byte-buddy.version>
+		<byte-buddy.version>1.14.7</byte-buddy.version>
 		<scalecube-cluster.version>2.6.17</scalecube-cluster.version>
 		<cloudevents.version>2.5.0</cloudevents.version>
 		<picocli.version>4.7.4</picocli.version>
