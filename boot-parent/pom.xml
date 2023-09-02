@@ -86,7 +86,7 @@
 
 		<r2dbc-bom.version>Borca-SR2</r2dbc-bom.version>
 
-		<protobuf-bom.version>3.24.1</protobuf-bom.version>
+		<protobuf-bom.version>3.24.2</protobuf-bom.version>
 		<protostuff.version>1.8.0</protostuff.version>
 		<liquibase.version>4.23.1</liquibase.version>
 
