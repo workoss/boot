@@ -363,4 +363,30 @@ public class JsonMapper {
 		return mapper;
 	}
 
+
+	public static boolean isJson(String text){
+		if (text == null){
+			return false;
+		}
+		text = text.trim();
+		if (text.startsWith("{") && text.endsWith("}")){
+			return true;
+		}
+		if (text.startsWith("[") && text.endsWith("]")){
+			return true;
+		}
+
+		return false;
+	}
+
+	public static <T>T getNodeValue(JsonNode node,String property,Function<JsonNode,T> transFunc){
+		if (node == null || node.hasNonNull(property)){
+			return null;
+		}
+		if (transFunc == null){
+			return null;
+		}
+		return transFunc.apply(node);
+	}
+
 }

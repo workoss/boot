@@ -15,6 +15,8 @@
  */
 package com.workoss.boot.autoconfigure;
 
+import com.workoss.boot.mapper.EnumAutoTranslator;
+import com.workoss.boot.mapper.EnumTranslator;
 import com.workoss.boot.service.DistributedTemplate;
 import com.workoss.boot.util.id.SnowflakeUtil;
 import io.lettuce.core.api.async.RedisAsyncCommands;
@@ -71,6 +73,16 @@ public class ServiceConfig {
 			log.debug("[TASK_SCHEDULER] custom threadGroupName:{} poolSize:{}",
 					taskScheduler.getThreadGroup().getName(), taskScheduler.getPoolSize());
 		};
+	}
+
+	@Bean
+	public EnumAutoTranslator enumAutoTranslator() {
+		return new EnumAutoTranslator();
+	}
+
+	@Bean
+	public EnumTranslator enumTranslator() {
+		return new EnumTranslator();
 	}
 
 	@Order(2)

@@ -16,21 +16,26 @@
 package com.workoss.boot.model;
 
 /**
- * @author workoss
- * @param <M> 编码
+ * 基础枚举接口
+ *
+ * @param <M> code
+ * @param <N> desc
+ * @param <E> 枚举
  */
-public interface IEnum<M, N> {
+public interface IEnum<M, N, E extends Enum<E>> {
 
-	/**
-	 * 获取编码
-	 * @return
-	 */
-	M getCode();
+    /**
+     * 获取编码
+     *
+     * @return
+     */
+    M getCode();
 
-	/**
-	 * 获取文本
-	 * @return
-	 */
-	N getDesc();
+    /**
+     * 获取文本
+     *
+     * @return
+     */
+    N getDesc();
 
 }

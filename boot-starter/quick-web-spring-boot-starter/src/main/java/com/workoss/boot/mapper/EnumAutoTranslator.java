@@ -19,6 +19,8 @@ import com.workoss.boot.model.IEnum;
 import com.workoss.boot.util.EnumUtil;
 import org.mapstruct.TargetType;
 
+import java.util.Objects;
+
 /**
  * mapstruct 枚举类自动转换
  *
@@ -26,12 +28,21 @@ import org.mapstruct.TargetType;
  */
 public class EnumAutoTranslator {
 
-	public <M, N> M resolveCode(IEnum<M, N> iEnum) {
-		return EnumUtil.getCode(iEnum);
-	}
+    public <M, N, E extends Enum<E>> M resolveCode(IEnum<M, N, E> iEnum) {
+        return EnumUtil.getCode(iEnum);
+    }
 
-	public <T extends IEnum<?, String>> T resolve(Object code, @TargetType Class<T> tClass) {
-		return EnumUtil.getByCode(tClass, code);
-	}
+    public <T extends IEnum<?, String, ?>> T resolve(Object code, @TargetType Class<T> tClass) {
+        if (code == null) {
+            return null;
+        }
+        if (Objects.equals(code.getClass(), tClass)) {
+            return (T) code;
+        }
+        if (code instanceof IEnum sourceEnum) {
+            return EnumUtil.getByCode(tClass, sourceEnum.getCode());
+        }
+        return EnumUtil.getByCode(tClass, code);
+    }
 
 }

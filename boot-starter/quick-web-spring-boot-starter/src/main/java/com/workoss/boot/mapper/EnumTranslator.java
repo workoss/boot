@@ -26,19 +26,19 @@ import org.mapstruct.TargetType;
 @Named("enum")
 public class EnumTranslator {
 
-	@Named("getCode")
-	public <M, N> M resolveCode(IEnum<M, N> iEnum) {
-		return EnumUtil.getCode(iEnum);
-	}
+    @Named("getCode")
+    public <M, N, E extends Enum<E>> M resolveCode(IEnum<M, N, E> iEnum) {
+        return EnumUtil.getCode(iEnum);
+    }
 
-	@Named("getDesc")
-	public <M, N> N resolveDesc(IEnum<M, N> iEnum) {
-		return EnumUtil.getDesc(iEnum);
-	}
+    @Named("getDesc")
+    public <M, N, E extends Enum<E>> N resolveDesc(IEnum<M, N, E> iEnum) {
+        return EnumUtil.getDesc(iEnum);
+    }
 
-	@Named("codeToEnum")
-	public static <T extends IEnum<?, String>> T resolve(Object code, @TargetType Class<T> tClass) {
-		return EnumUtil.getByCode(tClass, code);
-	}
+    @Named("codeToEnum")
+    public static <T extends IEnum<?, String, ?>> T resolve(Object code, @TargetType Class<T> tClass) {
+        return EnumUtil.getByCode(tClass, code);
+    }
 
 }
