@@ -103,6 +103,10 @@ public class JsonMapper {
 		return build().toJson(object);
 	}
 
+	public static byte[] toJSONBytes(Object object) {
+		return build().toJsonBytes(object);
+	}
+
 	public static JsonNode parse(String json) {
 		return build().readTree(json);
 	}
@@ -150,6 +154,15 @@ public class JsonMapper {
 	public String toJson(Object object) {
 		try {
 			return mapper.writeValueAsString(object);
+		}
+		catch (IOException e) {
+			throw new BootException(e);
+		}
+	}
+
+	public byte[] toJsonBytes(Object object) {
+		try {
+			return mapper.writeValueAsBytes(object);
 		}
 		catch (IOException e) {
 			throw new BootException(e);
