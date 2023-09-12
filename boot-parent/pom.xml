@@ -63,7 +63,7 @@
 		<jackson-bom.version>2.15.2</jackson-bom.version>
 		<netty-bom.version>4.1.97.Final</netty-bom.version>
 		<asm.version>9.5</asm.version>
-		<reactor-bom.version>2022.0.9</reactor-bom.version>
+		<reactor-bom.version>2022.0.11</reactor-bom.version>
 		<rsocket-bom.version>1.1.4</rsocket-bom.version>
 
 		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
