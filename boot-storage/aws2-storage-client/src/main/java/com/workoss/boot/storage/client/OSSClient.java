@@ -102,7 +102,8 @@ public class OSSClient extends AbstractS3Client {
 		if (StringUtils.isNotBlank(config.getTokenUrl())) {
 			return requestSign(config, key, mimeType, successActionStatus);
 		}
-		//{"expiration":"2021-02-24T07:08:34.148Z","conditions":[{"x-obs-acl":"public-read"},{"bucket":"workoss"},{"key":"22.txt"},["content-length-range",0, MAX_UPLOAD_SIZE]]}
+		// {"expiration":"2021-02-24T07:08:34.148Z","conditions":[{"x-obs-acl":"public-read"},{"bucket":"workoss"},{"key":"22.txt"},["content-length-range",0,
+		// MAX_UPLOAD_SIZE]]}
 		// 本地生成签名
 		LocalDateTime expireTime = DateUtils.plusSeconds(DateUtils.getCurrentDateTime(), 1200 - 5 * 60);
 
@@ -122,7 +123,7 @@ public class OSSClient extends AbstractS3Client {
 		if (StringUtils.isNotBlank(successActionStatus)) {
 			conditions.add(Collections.singletonMap("success_action_status", successActionStatus));
 		}
-		conditions.add(Arrays.asList("content-length-range",1L, 10485760000L));
+		conditions.add(Arrays.asList("content-length-range", 1L, 10485760000L));
 		policyContext.put("conditions", conditions);
 
 		String finalMimeType = mimeType;

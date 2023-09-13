@@ -1,20 +1,20 @@
 <script><![CDATA[<script>]]>
 	insert into ${tableColumnInfo.tableName}
 	<![CDATA[<trim prefix="(" suffix=")" suffixOverrides=",">]]>
-	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator="">
 		<![CDATA[
             <if test="record.${columnInfo.propertyName} != null">
-               ${columnInfo.columnName}
+               ${columnInfo.columnName},
             </if>
         ]]>
 	</foreach>
 	<![CDATA[</trim>]]>
 	 values
 	<![CDATA[<trim prefix="(" suffix=")" suffixOverrides=",">]]>
-	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator=",">
+	<foreach collection="tableColumnInfo.columnInfos" item="columnInfo" index="index" open="" close="" separator="">
 		<![CDATA[
             <if test="record.${columnInfo.propertyName} != null">
-              #@{record.${columnInfo.propertyName}}
+              #@{record.${columnInfo.propertyName}},
             </if>
         ]]>
 	</foreach>

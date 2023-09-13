@@ -24,18 +24,16 @@ package com.workoss.boot.model;
  */
 public interface IEnum<M, N, E extends Enum<E>> {
 
-    /**
-     * 获取编码
-     *
-     * @return
-     */
-    M getCode();
+	/**
+	 * 获取编码
+	 * @return
+	 */
+	M getCode();
 
-    /**
-     * 获取文本
-     *
-     * @return
-     */
-    N getDesc();
+	/**
+	 * 获取文本
+	 * @return
+	 */
+	N getDesc();
 
 }

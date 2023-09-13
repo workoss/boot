@@ -87,7 +87,7 @@ public class ServiceConfig {
 
 	@Order(2)
 	@Bean
-	public CommandLineRunner idGenerateRunner(){
+	public CommandLineRunner idGenerateRunner() {
 		return args -> SnowflakeUtil.nextId();
 	}
 

@@ -194,28 +194,28 @@ public class ObjectUtil {
 			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof boolean[] o3 && o2 instanceof boolean[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof byte[] o3 && o2 instanceof byte[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof char[] o3 && o2 instanceof char[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof double[] o3 && o2 instanceof double[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof float[] o3 && o2 instanceof float[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof int[] o3 && o2 instanceof int[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof long[] o3 && o2 instanceof long[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		if (o1 instanceof short[] o3 && o2 instanceof short[] o4) {
-			return Arrays.equals(o3,o4);
+			return Arrays.equals(o3, o4);
 		}
 		return false;
 	}

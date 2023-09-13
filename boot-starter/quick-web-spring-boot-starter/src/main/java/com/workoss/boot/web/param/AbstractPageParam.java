@@ -32,7 +32,7 @@ public abstract class AbstractPageParam {
 	 * 偏移量
 	 */
 	@Schema(name = "offset", description = "分页偏移量 优先", example = "0")
-	private Long offset;
+	private Long offset = 0L;
 
 	/**
 	 * 每页大小

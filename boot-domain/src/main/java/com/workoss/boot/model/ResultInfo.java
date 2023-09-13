@@ -27,84 +27,86 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ResultInfo {
 
-    /**
-     * 错误编码
-     */
-    private String code = ResultCode.SUCCESS.getCode();
+	/**
+	 * 错误编码
+	 */
+	private String code = ResultCode.SUCCESS.getCode();
 
-    /**
-     * 异常消息
-     */
-    private String msg;
+	/**
+	 * 异常消息
+	 */
+	private String msg;
 
-    /**
-     * 其他数据
-     */
-    private Object result;
+	/**
+	 * 其他数据
+	 */
+	private Object result;
 
-    public ResultInfo() {
-    }
+	public ResultInfo() {
+	}
 
-    public ResultInfo(String code, String msg, Object result) {
-        this.code = code;
-        this.msg = msg;
-        this.result = result;
-    }
+	public ResultInfo(String code, String msg, Object result) {
+		this.code = code;
+		this.msg = msg;
+		this.result = result;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public ResultInfo code(String code) {
-        this.code = code;
-        return this;
-    }
+	public ResultInfo code(String code) {
+		this.code = code;
+		return this;
+	}
 
-    public String getMsg() {
-        return msg;
-    }
+	public String getMsg() {
+		return msg;
+	}
 
-    public ResultInfo msg(String msg) {
-        this.msg = msg;
-        return this;
-    }
+	public ResultInfo msg(String msg) {
+		this.msg = msg;
+		return this;
+	}
 
-    public Object getResult() {
-        return result;
-    }
+	public Object getResult() {
+		return result;
+	}
 
-    public ResultInfo result(Object result) {
-        this.result = result;
-        return this;
-    }
+	public ResultInfo result(Object result) {
+		this.result = result;
+		return this;
+	}
 
-    @Transient
-    public boolean isSuccess() {
-        return ResultCode.SUCCESS.getCode().equals(this.code);
-    }
+	@Transient
+	public boolean isSuccess() {
+		return ResultCode.SUCCESS.getCode().equals(this.code);
+	}
 
-    public static ResultInfo success(String key, Object value) {
-        return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
-                Collections.singletonMap(key, value));
-    }
+	public static ResultInfo success(String key, Object value) {
+		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
+				Collections.singletonMap(key, value));
+	}
 
-    public static ResultInfo success(Object result) {
-        return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
-    }
+	public static ResultInfo success(Object result) {
+		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
+	}
 
-    public static ResultInfo result(String code, String msg) {
-        return result(code, msg, null);
-    }
+	public static ResultInfo result(String code, String msg) {
+		return result(code, msg, null);
+	}
 
-    public static ResultInfo result(String code, String msg, Object result) {
-        if (result == null) {
-            new ResultInfo(code, msg, result);
-        }
-        if (result instanceof String) {
-            return new ResultInfo(code, msg, Collections.singletonMap("message", result));
-        } else if (result instanceof List) {
-            return new ResultInfo(code, msg, Collections.singletonMap("list", result));
-        }
-        return new ResultInfo(code, msg, result);
-    }
+	public static ResultInfo result(String code, String msg, Object result) {
+		if (result == null) {
+			new ResultInfo(code, msg, result);
+		}
+		if (result instanceof String) {
+			return new ResultInfo(code, msg, Collections.singletonMap("message", result));
+		}
+		else if (result instanceof List) {
+			return new ResultInfo(code, msg, Collections.singletonMap("list", result));
+		}
+		return new ResultInfo(code, msg, result);
+	}
+
 }
