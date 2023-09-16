@@ -33,7 +33,7 @@ editor在线 https://editor.gorules.io
 
 3. 使用示例
 
-[测试代码](../boot-extension/rule-engine/src/test/java/com/workoss/boot/engine/EvaluateResultTest.java)
+[测试代码](../boot-extension/rule-engine/src/test/java/com/workoss/boot/engine/RuleEngineTest.java)
 
 ```java
 public class RuleEngineTest {
