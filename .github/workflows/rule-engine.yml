@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   build:
-    name: cargo +${{ matrix.rust }} build
+    name: cargo windows-x86_64 ${{ matrix.channel }} build
     strategy:
       fail-fast: true
       matrix:
