@@ -45,7 +45,9 @@ jobs:
         env:
           RUSTFLAGS: -Ctarget-feature=+crt-static
       - name: Copy
-        run: cp -f target/x86_64-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
+        run: |
+          cd boot-extension/rule-engine
+          cp  ./target/x86_64-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
       - name: Setup Ossutil
         # You may pin to the exact commit or the version.
         # uses: manyuanrong/setup-ossutil@b74103470b3890349167a84773d33158511cf11d
@@ -55,4 +57,6 @@ jobs:
           access-key-id: ${{ env.ACCESS_KEY }}
           access-key-secret: ${{ env.SECRET_KEY }}
       - name: Upload
-        run: ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static
+        run: |
+          cd boot-extension/rule-engine
+          ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static
