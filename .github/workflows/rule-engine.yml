@@ -32,16 +32,16 @@ jobs:
       packages: write
     environment: rule-engine
     steps:
-      - uses: actions/checkout@v3
-      - name: In rule-engine
+      - uses: actions/checkout@v3       
+      - name: Install Rust
+        run: rustup update ${{ matrix.channel }} && rustup default ${{ matrix.channel }}
+      - name: Build
         run: |
           echo $PWD 
           cd boot-extension/rule-engine
           echo $PWD
-      - name: Install Rust
-        run: rustup update ${{ matrix.channel }} && rustup default ${{ matrix.channel }}
-      - name: Build
-        run: rustup target add x86_64-pc-windows-gnu && cargo build --release --target x86_64-pc-windows-gnu
+          rustup target add x86_64-pc-windows-gnu 
+          cargo build --release --target x86_64-pc-windows-gnu
       - name: Copy
         run: cp -f target/x86_64-pc-windows-gnu/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
       - name: Setup Ossutil
