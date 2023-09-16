@@ -34,7 +34,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: In rule-engine
-        run: cd boot-extension/rule-engine
+        run: |
+          echo $PWD 
+          cd boot-extension/rule-engine
+          echo $PWD
       - name: Install Rust
         run: rustup update ${{ matrix.channel }} && rustup default ${{ matrix.channel }}
       - name: Build
@@ -49,5 +52,5 @@ jobs:
           endpoint: https://oss-cn-shenzhen.aliyuncs.com
           access-key-id: ${{ env.ACCESS_KEY }}
           access-key-secret: ${{ env.SECRET_KEY }}
-      - name: Upload     
+      - name: Upload
         run: ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static
