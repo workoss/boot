@@ -13,6 +13,7 @@
 	<modules>
 		<module>extension-core</module>
 		<module>extension-spring</module>
-	</modules>
+        <module>rule-engine</module>
+    </modules>
 
 </project>

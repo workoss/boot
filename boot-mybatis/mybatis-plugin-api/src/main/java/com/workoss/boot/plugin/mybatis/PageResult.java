@@ -24,6 +24,7 @@ import java.util.ArrayList;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class PageResult<E> extends ArrayList<E> implements Closeable {
 
 	private Long offset = 0L;

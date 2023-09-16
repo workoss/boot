@@ -15,11 +15,11 @@
  */
 package com.workoss.boot.util.reflect;
 
+import com.workoss.boot.annotation.lang.Nullable;
+import com.workoss.boot.util.Assert;
 import com.workoss.boot.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 import java.io.Closeable;
 import java.io.Externalizable;

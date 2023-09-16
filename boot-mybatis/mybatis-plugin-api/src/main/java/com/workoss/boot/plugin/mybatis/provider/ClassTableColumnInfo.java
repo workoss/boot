@@ -23,6 +23,7 @@ import java.util.List;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class ClassTableColumnInfo {
 
 	private String tableName;

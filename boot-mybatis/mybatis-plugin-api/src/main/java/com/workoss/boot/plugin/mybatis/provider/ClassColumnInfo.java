@@ -20,12 +20,13 @@ package com.workoss.boot.plugin.mybatis.provider;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class ClassColumnInfo {
 
 	/**
 	 * 属性类型
 	 */
-	private Class propertyType;
+	private Class<?> propertyType;
 
 	/**
 	 * 属性名称
@@ -37,17 +38,17 @@ public class ClassColumnInfo {
 	 */
 	private String columnName;
 
-	public ClassColumnInfo(Class propertyType, String propertyName, String columnName) {
+	public ClassColumnInfo(Class<?> propertyType, String propertyName, String columnName) {
 		this.propertyType = propertyType;
 		this.propertyName = propertyName;
 		this.columnName = columnName;
 	}
 
-	public Class getPropertyType() {
+	public Class<?> getPropertyType() {
 		return propertyType;
 	}
 
-	public ClassColumnInfo propertyType(Class propertyType) {
+	public ClassColumnInfo propertyType(Class<?> propertyType) {
 		this.propertyType = propertyType;
 		return this;
 	}

@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author workoss
  */
+@SuppressWarnings("unused")
 public class BaseProvider implements ProviderMethodResolver {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseProvider.class);
@@ -47,16 +48,11 @@ public class BaseProvider implements ProviderMethodResolver {
 
 	public CharSequence dynamicSql(Map<String, Object> params, ProviderContext context) {
 		String dbType = ProviderUtil.getDbType(context, params);
-		if (dbType == null) {
-			log.warn("[MYBATIS]没有拦截器放入dbType,默认切换到default/mysql");
-			dbType = "default";
-		}
 		String key = getSqlKey(dbType, context);
 		String sql = SQL_MAP.get(key);
 		if (sql != null) {
 			return sql;
 		}
-		String finalDbType = dbType;
 		return EntityClassFinderFactory.getClassFinder(context)
 			.map(entityClassFinder -> entityClassFinder.findTableColumnInfo(context))
 			.map(classTableColumnInfoOptional -> classTableColumnInfoOptional
@@ -68,7 +64,7 @@ public class BaseProvider implements ProviderMethodResolver {
 				if (checkIdFalse) {
 					throw new RuntimeException(context.getMapperMethod().getName() + " 执行的entity没有id或者设置主键");
 				}
-				return ProviderUtil.getScript(finalDbType, context.getMapperMethod().getName(), classTableColumnInfo);
+				return ProviderUtil.getScript(dbType, context.getMapperMethod().getName(), classTableColumnInfo);
 			})
 			.map(sqlStr -> {
 				SQL_MAP.put(key, sqlStr);

@@ -22,7 +22,7 @@ public interface ClassFinderMatcher {
 
 	/**
 	 * 排序
-	 * @return
+	 * @return 排序
 	 */
 	int order();
 

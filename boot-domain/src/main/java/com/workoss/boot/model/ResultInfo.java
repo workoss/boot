@@ -15,6 +15,8 @@
  */
 package com.workoss.boot.model;
 
+import lombok.Getter;
+
 import java.beans.Transient;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
  *
  * @author workoss
  */
+@Getter
 @SuppressWarnings("unused")
 public class ResultInfo {
 
@@ -40,19 +43,15 @@ public class ResultInfo {
 	/**
 	 * 其他数据
 	 */
-	private Object result;
+	private Object data;
 
 	public ResultInfo() {
 	}
 
-	public ResultInfo(String code, String msg, Object result) {
+	public ResultInfo(String code, String msg, Object data) {
 		this.code = code;
 		this.msg = msg;
-		this.result = result;
-	}
-
-	public String getCode() {
-		return code;
+		this.data = data;
 	}
 
 	public ResultInfo code(String code) {
@@ -60,21 +59,13 @@ public class ResultInfo {
 		return this;
 	}
 
-	public String getMsg() {
-		return msg;
-	}
-
 	public ResultInfo msg(String msg) {
 		this.msg = msg;
 		return this;
 	}
 
-	public Object getResult() {
-		return result;
-	}
-
-	public ResultInfo result(Object result) {
-		this.result = result;
+	public ResultInfo data(Object data) {
+		this.data = data;
 		return this;
 	}
 
@@ -84,29 +75,29 @@ public class ResultInfo {
 	}
 
 	public static ResultInfo success(String key, Object value) {
-		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
+		return data(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
 				Collections.singletonMap(key, value));
 	}
 
 	public static ResultInfo success(Object result) {
-		return result(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
+		return data(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
 	}
 
-	public static ResultInfo result(String code, String msg) {
-		return result(code, msg, null);
+	public static ResultInfo data(String code, String msg) {
+		return data(code, msg, null);
 	}
 
-	public static ResultInfo result(String code, String msg, Object result) {
-		if (result == null) {
-			new ResultInfo(code, msg, result);
+	public static ResultInfo data(String code, String msg, Object data) {
+		if (data == null) {
+			new ResultInfo(code, msg, null);
 		}
-		if (result instanceof String) {
-			return new ResultInfo(code, msg, Collections.singletonMap("message", result));
+		if (data instanceof String) {
+			return new ResultInfo(code, msg, Collections.singletonMap("message", data));
 		}
-		else if (result instanceof List) {
-			return new ResultInfo(code, msg, Collections.singletonMap("list", result));
+		else if (data instanceof List) {
+			return new ResultInfo(code, msg, Collections.singletonMap("list", data));
 		}
-		return new ResultInfo(code, msg, result);
+		return new ResultInfo(code, msg, data);
 	}
 
 }

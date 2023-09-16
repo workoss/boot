@@ -1,0 +1,21 @@
+
+
+[target.x86_64-unknown-linux-gnu]
+image = "ghcr.io/cross-rs/x86_64-unknown-linux-gnu:edge"
+
+[target.aarch64-unknown-linux-gnu]
+image = "ghcr.io/cross-rs/aarch64-unknown-linux-gnu:edge"
+
+#[target.aarch64-apple-darwin]
+#image = "ghcr.io/cross-rs/aarch64-apple-darwin:edge"
+
+[target.x86_64-pc-windows-gnu]
+image = "ghcr.io/cross-rs/x86_64-pc-windows-gnu:edge"
+
+#[target.x86_64-pc-windows-msvc]
+#rustflags = ["-C", "target-feature=+crt-static"]
+
+#[target.x86_64-unknown-linux-gnu]
+#image = "x86_64-unknown-linux-gnu-sde-cross"
+#[target.x86_64-apple-darwin]
+#image = "x86_64-apple-darwin-cross"

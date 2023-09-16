@@ -41,66 +41,67 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandlerAdvice {
 
-	private final MessageSource messageSource;
+    private final MessageSource messageSource;
 
-	public GlobalExceptionHandlerAdvice(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
+    public GlobalExceptionHandlerAdvice(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ MethodArgumentNotValidException.class })
-	public ResultInfo validationErrorHandler(MethodArgumentNotValidException exception) {
-		String errorInfo = exception.getBindingResult().getAllErrors().stream().map(error -> {
-			log.warn("[VALID]参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
-			return error.getDefaultMessage();
-		}).collect(Collectors.joining(";"));
-		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), errorInfo);
-	}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResultInfo validationErrorHandler(MethodArgumentNotValidException exception) {
+        String errorInfo = exception.getBindingResult().getAllErrors().stream()
+                .map(error -> {
+                    log.warn("[VALID]参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
+                    return error.getDefaultMessage();
+                }).collect(Collectors.joining(";"));
+        return ResultInfo.data(ResultCode.VALID_ERROR.getCode(), errorInfo);
+    }
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ ConstraintViolationException.class })
-	public ResultInfo validationErrorHandler(ConstraintViolationException exception) {
-		String errorInfo = exception.getConstraintViolations().stream().map(error -> {
-			log.warn("[VALID]参数校验异常 {}:{}", error.getPropertyPath(), error.getMessage());
-			return error.getMessage();
-		}).collect(Collectors.joining(";"));
-		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), errorInfo);
-	}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResultInfo validationErrorHandler(ConstraintViolationException exception) {
+        String errorInfo = exception.getConstraintViolations().stream().map(error -> {
+            log.warn("[VALID]参数校验异常 {}:{}", error.getPropertyPath(), error.getMessage());
+            return error.getMessage();
+        }).collect(Collectors.joining(";"));
+        return ResultInfo.data(ResultCode.VALID_ERROR.getCode(), errorInfo);
+    }
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ WebExchangeBindException.class })
-	public ResultInfo validationErrorHandler(WebExchangeBindException exception) {
-		String errorInfo = exception.getBindingResult().getAllErrors().stream().map(error -> {
-			log.warn("[VALID]参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
-			return error.getDefaultMessage();
-		}).collect(Collectors.joining(";"));
-		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), errorInfo);
-	}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({WebExchangeBindException.class})
+    public ResultInfo validationErrorHandler(WebExchangeBindException exception) {
+        String errorInfo = exception.getBindingResult().getAllErrors().stream().map(error -> {
+            log.warn("[VALID]参数校验异常 {}:{}", error.getObjectName(), error.getDefaultMessage());
+            return error.getDefaultMessage();
+        }).collect(Collectors.joining(";"));
+        return ResultInfo.data(ResultCode.VALID_ERROR.getCode(), errorInfo);
+    }
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler({ IllegalArgumentException.class })
-	public ResultInfo defaultException(IllegalArgumentException exception) {
-		log.warn("[VALID]参数校验异常 {}", exception.getMessage());
-		return ResultInfo.result(ResultCode.VALID_ERROR.getCode(), exception.getMessage());
-	}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResultInfo defaultException(IllegalArgumentException exception) {
+        log.warn("[VALID]参数校验异常 {}", exception.getMessage());
+        return ResultInfo.data(ResultCode.VALID_ERROR.getCode(), exception.getMessage());
+    }
 
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ StorageException.class })
-	public ResultInfo serviceException(StorageException exception) {
-		String errMsg = exception.getMsg();
-		if (StringUtils.isBlank(errMsg)) {
-			errMsg = messageSource.getMessage(exception.getCode(), null, LocaleContextHolder.getLocale());
-		}
-		log.warn("服务异常: errCode:{} errMsg:{}", exception.getCode(), errMsg);
-		return ResultInfo.result(exception.getCode(), errMsg);
-	}
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({StorageException.class})
+    public ResultInfo serviceException(StorageException exception) {
+        String errMsg = exception.getMsg();
+        if (StringUtils.isBlank(errMsg)) {
+            errMsg = messageSource.getMessage(exception.getCode(), null, LocaleContextHolder.getLocale());
+        }
+        log.warn("服务异常: errCode:{} errMsg:{}", exception.getCode(), errMsg);
+        return ResultInfo.data(exception.getCode(), errMsg);
+    }
 
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ Throwable.class })
-	public ResultInfo otherServiceException(Throwable throwable) {
-		log.error("服务异常:", throwable);
-		return ResultInfo.result(ResultCode.SERVER_ERROR.getCode(),
-				throwable.getMessage() != null ? throwable.getMessage() : ResultCode.SERVER_ERROR.getMessage());
-	}
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({Throwable.class})
+    public ResultInfo otherServiceException(Throwable throwable) {
+        log.error("服务异常:", throwable);
+        return ResultInfo.data(ResultCode.SERVER_ERROR.getCode(),
+                throwable.getMessage() != null ? throwable.getMessage() : ResultCode.SERVER_ERROR.getMessage());
+    }
 
 }

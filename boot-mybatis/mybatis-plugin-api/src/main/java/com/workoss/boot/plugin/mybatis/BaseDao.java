@@ -28,6 +28,7 @@ import java.util.Map;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public interface BaseDao<T, ID> {
 
 	/**
@@ -40,7 +41,7 @@ public interface BaseDao<T, ID> {
 
 	/**
 	 * 执行修改
-	 * @param sql
+	 * @param sql sql语句
 	 * @return 执行成功行数
 	 */
 	@UpdateProvider(type = BaseProvider.class, method = "executeUpdate")

@@ -22,6 +22,7 @@ import com.workoss.boot.model.Sqlable;
  *
  * @author workoss
  */
+@SuppressWarnings("ALL")
 public class SqlRequest implements Sqlable {
 
 	private Long offset = 0L;

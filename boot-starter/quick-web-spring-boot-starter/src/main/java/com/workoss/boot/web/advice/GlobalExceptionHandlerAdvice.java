@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
@@ -54,7 +53,7 @@ public class GlobalExceptionHandlerAdvice {
 			return error.getDefaultMessage();
 		}).collect(Collectors.joining(";"));
 
-		return ResultInfo.result("-1", errorInfo);
+		return ResultInfo.data("-1", errorInfo);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -64,7 +63,7 @@ public class GlobalExceptionHandlerAdvice {
 			log.warn("[GLOBAL_EXCEPTION] 参数校验异常: {}:{}", error.getPropertyPath(), error.getMessage());
 			return error.getMessage();
 		}).collect(Collectors.joining(""));
-		return ResultInfo.result("-1", errorInfo);
+		return ResultInfo.data("-1", errorInfo);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -74,14 +73,14 @@ public class GlobalExceptionHandlerAdvice {
 			log.warn("[GLOBAL_EXCEPTION] 参数异常: {}:{}", error.getArguments(), error.getDefaultMessage());
 			return error.getDefaultMessage();
 		}).collect(Collectors.joining(""));
-		return ResultInfo.result("-1", errorInfo);
+		return ResultInfo.data("-1", errorInfo);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResultInfo defaultException(IllegalArgumentException exception) {
 		log.error("[GLOBAL_EXCEPTION] 参数异常:", exception);
-		return ResultInfo.result("-1", exception.getMessage());
+		return ResultInfo.data("-1", exception.getMessage());
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -95,14 +94,14 @@ public class GlobalExceptionHandlerAdvice {
 			errmsg = "QuickException";
 		}
 		log.warn("[GLOBAL_EXCEPTION] 业务异常:{}", errmsg);
-		return ResultInfo.result(exception.getCode(), errmsg);
+		return ResultInfo.data(exception.getCode(), errmsg);
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(MyBatisSystemException.class)
 	public ResultInfo mybatisException(MyBatisSystemException exception) {
 		log.error("[GLOBAL_EXCEPTION] 数据异常:", exception);
-		return ResultInfo.result("-3", messageSource.getMessage("-3", null, "数据异常", LocaleContextHolder.getLocale()));
+		return ResultInfo.data("-3", messageSource.getMessage("-3", null, "数据异常", LocaleContextHolder.getLocale()));
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -110,7 +109,7 @@ public class GlobalExceptionHandlerAdvice {
 	public ResultInfo serviceException(Throwable exception) {
 		String msg = ExceptionUtils.toString(exception);
 		log.warn("[GLOBAL_EXCEPTION] 服务异常:{}", msg);
-		return ResultInfo.result("-2", messageSource.getMessage("-2", null, msg, LocaleContextHolder.getLocale()));
+		return ResultInfo.data("-2", messageSource.getMessage("-2", null, msg, LocaleContextHolder.getLocale()));
 	}
 
 }
