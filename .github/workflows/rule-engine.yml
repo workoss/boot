@@ -37,7 +37,9 @@ jobs:
         run: rustup update ${{ matrix.channel }} && rustup default ${{ matrix.channel }}
       - name: Build
         run: |
+          echo $PWD 
           cd boot-extension/rule-engine
+          echo $PWD
           rustup target add x86_64-pc-windows-msvc 
           cargo build --release --target x86_64-pc-windows-msvc
         env:
@@ -51,12 +53,11 @@ jobs:
         # uses: manyuanrong/setup-ossutil@b74103470b3890349167a84773d33158511cf11d
         uses: yizhoumo/setup-ossutil@v1
         with:
-          endpoint: https://oss-cn-shenzhen.aliyuncs.com
-          access-key-id: ${{ env.ACCESS_KEY }}
-          access-key-secret: ${{ env.SECRET_KEY }}
+          endpoint: oss-cn-shenzhen.aliyuncs.com
+          access-key-id: ${{ secrets.ACCESS_KEY }}
+          access-key-secret: ${{ secrets.SECRET_KEY }}
           ossutil-version: 'latest'
       - name: Upload
         run: |
           cd boot-extension/rule-engine
-          echo $PWD
           ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static
