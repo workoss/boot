@@ -10,7 +10,6 @@ editor在线 https://editor.gorules.io
 ![编辑器示例图片](./img/jdm_editor.png)
 
 
-
 ## quick start
 
 1. 全局可以导入
@@ -54,6 +53,10 @@ public class RuleEngineTest {
         System.out.println(validate);
     }
 } 
+```
+执行结果
+```json
+{"performance":"241.714µs","result":{"fees":{"flat":150}}}
 ```
 
 ## 具体使用
