@@ -60,4 +60,4 @@ jobs:
       - name: Upload
         run: |
           cd boot-extension/rule-engine
-          ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static
+          ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static/zen_engine-windows-x86_64.dll

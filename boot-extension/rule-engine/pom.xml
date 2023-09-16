@@ -52,6 +52,7 @@
                         <nonFilteredFileExtension>dylib</nonFilteredFileExtension>
                         <nonFilteredFileExtension>lib</nonFilteredFileExtension>
                         <nonFilteredFileExtension>so</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>dll</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
@@ -79,7 +80,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <classifier>osx-64</classifier>
+                            <classifier>osx-aarch64</classifier>
                             <includes>
                                 <include>*osx-aarch_64.dylib</include>
                                 <include>**/*.class</include>
@@ -95,7 +96,7 @@
                         <configuration>
                             <classifier>windows-x86_64</classifier>
                             <includes>
-                                <include>*windows-x86_64.so</include>
+                                <include>*windows-x86_64.dll</include>
                                 <include>**/*.class</include>
                             </includes>
                         </configuration>

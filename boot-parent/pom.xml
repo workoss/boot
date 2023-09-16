@@ -559,11 +559,6 @@
 
 	<repositories>
 		<repository>
-			<id>spring-libs-release-local</id>
-			<name>Spring libs-release-local</name>
-			<url>https://repo.spring.io/libs-release-local</url>
-		</repository>
-		<repository>
 			<id>aliyunmaven</id>
 			<name>阿里云公共仓库</name>
 			<url>https://maven.aliyun.com/repository/public</url>
