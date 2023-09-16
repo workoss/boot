@@ -4,10 +4,15 @@ name: rule-engine rust
 on:
   workflow_dispatch:
     inputs:
-      os:
-      - windows
-      - macos
-      - linux
+      osInput:
+        description: '编译系统'
+        required: true
+        default: 'windows'
+        type: choice
+        options:
+          - windows
+          - macos
+          - linux
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
