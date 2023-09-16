@@ -8,6 +8,8 @@
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Github reposize](https://img.shields.io/github/repo-size/workoss/boot)](https://github.com/workoss/boot)
 
+已经全面升级到java17，暂未全面支持native
+
 ## 模块
 
 * boot-parent
@@ -29,6 +31,10 @@ boot模块管理，其他项目可以导入pom使用
 * **boot-extension**
 
 插件化依赖的jar，参考了dubbo的SPI机制，也提供了支持spring的
+
+* **rule-engine**
+
+规则引擎，zen-engine的java构建，具体请参考 [rule-engine文档](./doc/rule-engine.md)
 
 * **mybatis-plugin**
 
