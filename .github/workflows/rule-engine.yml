@@ -49,4 +49,5 @@ jobs:
           endpoint: https://oss-cn-shenzhen.aliyuncs.com
           access-key-id: ${{ env.ACCESS_KEY }}
           access-key-secret: ${{ env.SECRET_KEY }}
+      - name: Upload     
         run: ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static
