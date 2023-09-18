@@ -67,12 +67,11 @@ jobs:
           cargo build --release --target ${{ matrix.arch }}-pc-windows-msvc
         env:
           RUSTFLAGS: -Ctarget-feature=+crt-static
-      - name: windows Copy
+      - name: Copy
         run: |
           cd boot-extension/rule-engine
           cp  ./target/x86_64-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
-      - name: windows Upload
-        if: ${{ inputs.osName == 'windows' }
+      - name: Upload
         run: |
           cd boot-extension/rule-engine
           ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static/${{ inputs.rustChannel }}/zen_engine-windows-x86_64.dll
@@ -114,7 +113,7 @@ jobs:
           echo $PWD
           rustup target add ${{ matrix.arch }}-unknown-linux-gnu
           cargo build --release --target ${{ matrix.arch }}-unknown-linux-gnu
-      - name: Copy To Resource
+      - name: Copy
         run: |
           cd boot-extension/rule-engine
           cp -f target/${{ matrix.arch }}-unknown-linux-gnu/release/libzen_engine.so ./src/main/resources/libzen_engine-linux-${{ matrix.arch }}.so
@@ -160,7 +159,7 @@ jobs:
           echo $PWD
           rustup target add ${{ matrix.arch }}-apple-darwin
           cargo build --release --target ${{ matrix.arch }}-apple-darwin
-      - name: Copy To Resource
+      - name: Copy
         run: |
           cd boot-extension/rule-engine
           cp -f target/${{ matrix.arch }}-apple-darwin/release/libzen_engine.dylib ./src/main/resources/libzen_engine-osx-${{ matrix.arch }}.dylib
