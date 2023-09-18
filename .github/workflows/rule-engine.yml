@@ -34,9 +34,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        arch:
+        target:
           - x86_64
-          - aarch64
     runs-on: ${{ inputs.osName }}-latest
     permissions:
       contents: read
@@ -70,11 +69,11 @@ jobs:
       - name: Copy
         run: |
           cd boot-extension/rule-engine
-          cp  ./target/x86_64-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
+          cp  ./target/${{ matrix.arch }}-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-${{ matrix.arch }}.dll
       - name: Upload
         run: |
           cd boot-extension/rule-engine
-          ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static/${{ inputs.rustChannel }}/zen_engine-windows-x86_64.dll
+          ossutil cp ./src/main/resources/zen_engine-windows-${{ matrix.arch }}.dll oss://workoss/static/${{ inputs.rustChannel }}/zen_engine-windows-${{ matrix.arch }}.dll
 
   ubuntu-build:
     name: linux-${{ matrix.arch }} ${{ inputs.rustChannel }} build
