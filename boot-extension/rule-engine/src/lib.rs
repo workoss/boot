@@ -1,6 +1,6 @@
-#![feature(lazy_cell)]
 
-use std::sync::LazyLock;
+
+use std::sync::OnceLock;
 
 use jni::JNIEnv;
 use jni::objects::{JByteArray, JClass};
@@ -10,10 +10,17 @@ use zen_engine::{DecisionEngine, EvaluationOptions};
 use zen_engine::loader::NoopLoader;
 use zen_engine::model::DecisionContent;
 
-static ENGINE_LAZY: LazyLock<DecisionEngine<NoopLoader>> = LazyLock::new(|| {
-    println!("initializing");
-    DecisionEngine::default()
-});
+static RULE_ENGINE_LAZY: OnceLock<DecisionEngine<NoopLoader>> = OnceLock::new();
+
+/*
+ * 初始化懒加载获取 决策引擎
+ */
+fn get_rule_engine() -> &'static DecisionEngine<NoopLoader> {
+    RULE_ENGINE_LAZY.get_or_init(|| {
+        println!("initializing");
+        DecisionEngine::default()
+    })
+}
 
 /*
  * Class:     com_workoss_boot_engine_ZenEngineLoader
@@ -30,6 +37,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
     trace: jboolean,
     max_depth: jint,
 ) -> JByteArray<'local> {
+
     let decision = env.convert_byte_array(decision).unwrap();
     let input = env.convert_byte_array(input).unwrap();
     let decision_result: error::Result<DecisionContent> = serde_json::from_slice(decision.as_slice());
@@ -43,9 +51,10 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
         trace: Some(trace.eq(&1)),
         max_depth: Some(max_depth as u8),
     };
-    let decision = ENGINE_LAZY.create_decision(decision_result.unwrap().into());
+    let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
+
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
-    let result = decision.evaluate_with_opts(&input_content, options).await;
+    let result = decision_engine.evaluate_with_opts(&input_content, options).await;
     if result.is_err() {
         env.throw_new("com/workoss/boot/engine/RuleEngineException",
                       result.err().unwrap().to_string())
@@ -68,14 +77,15 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
     decision: JByteArray<'local>,
 ) -> jboolean {
     let decision = env.convert_byte_array(&decision).unwrap();
-    let result: Result<DecisionContent, Error> = serde_json::from_slice(decision.as_slice());
-    if result.is_err() {
+    let decision_result: Result<DecisionContent, Error> = serde_json::from_slice(decision.as_slice());
+    if decision_result.is_err() {
         env.throw_new("com/workoss/boot/engine/RuleEngineException",
-                      result.err().unwrap().to_string())
+                      decision_result.err().unwrap().to_string())
             .unwrap();
         return 0;
     }
-    let valid_result = ENGINE_LAZY.create_decision(result.unwrap().into()).validate();
+    let valid_result = get_rule_engine().create_decision(decision_result.unwrap().into()).validate();
+
     if valid_result.is_err() {
         env.throw_new("com/workoss/boot/engine/RuleEngineException",
                       valid_result.err().unwrap().to_string())

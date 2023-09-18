@@ -4,51 +4,52 @@ name: rule-engine rust
 on:
   workflow_dispatch:
     inputs:
-      osInput:
+      osName:
         description: '编译系统'
         required: true
         default: 'windows'
         type: choice
         options:
           - windows
+          - ubuntu
           - macos
-          - linux
+      rustChannel:
+        description: 'rust通道'
+        required: true
+        default: 'stable'
+        type: choice
+        options:
+          - stable
+          - nightly
+
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
   RUSTUP_MAX_RETRIES: 10
 
 jobs:
-  build:
-    name: cargo windows-x86_64 ${{ matrix.channel }} build
+  windows-build:
+    name: windows-${{ matrix.arch }} ${{ inputs.rustChannel }} build
+    if: ${{ inputs.osName == 'windows'}}
     strategy:
       fail-fast: true
       matrix:
-        channel:
-          - nightly
-    runs-on: windows-latest
+        arch:
+          - x86_64
+          - aarch64
+    runs-on: ${{ inputs.osName }}-latest
     permissions:
       contents: read
       packages: write
     environment: rule-engine
     steps:
       - uses: actions/checkout@v3
+        name: checkout code
       - name: Install Rust
-        run: rustup update ${{ matrix.channel }} && rustup default ${{ matrix.channel }}
-      - name: Build
         run: |
-          echo $PWD 
-          cd boot-extension/rule-engine
-          echo $PWD
-          rustup target add x86_64-pc-windows-msvc 
-          cargo build --release --target x86_64-pc-windows-msvc
-        env:
-          RUSTFLAGS: -Ctarget-feature=+crt-static
-      - name: Copy
-        run: |
-          cd boot-extension/rule-engine
-          cp  ./target/x86_64-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
-      - name: Setup Ossutil
+          rustup update ${{ inputs.rustChannel }}
+          rustup default ${{ inputs.rustChannel }}
+      - name: Install Ossutil
         # You may pin to the exact commit or the version.
         # uses: manyuanrong/setup-ossutil@b74103470b3890349167a84773d33158511cf11d
         uses: yizhoumo/setup-ossutil@v1
@@ -57,7 +58,113 @@ jobs:
           access-key-id: ${{ secrets.ACCESS_KEY }}
           access-key-secret: ${{ secrets.SECRET_KEY }}
           ossutil-version: 'latest'
+      - name: rust build
+        run: |
+          echo $PWD 
+          cd boot-extension/rule-engine
+          echo $PWD
+          rustup target add ${{ matrix.arch }}-pc-windows-msvc 
+          cargo build --release --target ${{ matrix.arch }}-pc-windows-msvc
+        env:
+          RUSTFLAGS: -Ctarget-feature=+crt-static
+      - name: windows Copy
+        run: |
+          cd boot-extension/rule-engine
+          cp  ./target/x86_64-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-x86_64.dll
+      - name: windows Upload
+        if: ${{ inputs.osName == 'windows' }
+        run: |
+          cd boot-extension/rule-engine
+          ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static/${{ inputs.rustChannel }}/zen_engine-windows-x86_64.dll
+
+  ubuntu-build:
+    name: linux-${{ matrix.arch }} ${{ inputs.rustChannel }} build
+    if: ${{ inputs.osName == 'ubuntu'}}
+    strategy:
+      fail-fast: true
+      matrix:
+        arch:
+          - x86_64
+          - aarch64
+    runs-on: ${{ inputs.osName }}-latest
+    permissions:
+      contents: read
+      packages: write
+    environment: rule-engine
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout code
+      - name: Install Rust
+        run: |
+          rustup update ${{ inputs.rustChannel }}
+          rustup default ${{ inputs.rustChannel }}
+      - name: Install Ossutil
+        # You may pin to the exact commit or the version.
+        # uses: manyuanrong/setup-ossutil@b74103470b3890349167a84773d33158511cf11d
+        uses: yizhoumo/setup-ossutil@v1
+        with:
+          endpoint: oss-cn-shenzhen.aliyuncs.com
+          access-key-id: ${{ secrets.ACCESS_KEY }}
+          access-key-secret: ${{ secrets.SECRET_KEY }}
+          ossutil-version: 'latest'
+      - name: rust build
+        run: |
+          echo $PWD 
+          cd boot-extension/rule-engine
+          echo $PWD
+          rustup target add ${{ matrix.arch }}-unknown-linux-gnu
+          cargo build --release --target ${{ matrix.arch }}-unknown-linux-gnu
+      - name: Copy To Resource
+        run: |
+          cd boot-extension/rule-engine
+          cp -f target/${{ matrix.arch }}-unknown-linux-gnu/release/libzen_engine.so ./src/main/resources/libzen_engine-linux-${{ matrix.arch }}.so
       - name: Upload
         run: |
           cd boot-extension/rule-engine
-          ossutil cp ./src/main/resources/zen_engine-windows-x86_64.dll oss://workoss/static/zen_engine-windows-x86_64.dll
+          ossutil cp ./src/main/resources/libzen_engine-linux-${{ matrix.arch }}.so oss://workoss/static/${{ inputs.rustChannel }}/libzen_engine-linux-${{ matrix.arch }}.so
+     
+  macos-build:
+    name: osx-${{ matrix.arch }} ${{ inputs.rustChannel }} build
+    if: ${{ inputs.osName == 'macos'}}
+    strategy:
+      fail-fast: true
+      matrix:
+        arch:
+          - x86_64
+          - aarch64
+    runs-on: ${{ inputs.osName }}-latest
+    permissions:
+      contents: read
+      packages: write
+    environment: rule-engine
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout code
+      - name: Install Rust
+        run: |
+          rustup update ${{ inputs.rustChannel }}
+          rustup default ${{ inputs.rustChannel }}
+      - name: Install Ossutil
+        # You may pin to the exact commit or the version.
+        # uses: manyuanrong/setup-ossutil@b74103470b3890349167a84773d33158511cf11d
+        uses: yizhoumo/setup-ossutil@v1
+        with:
+          endpoint: oss-cn-shenzhen.aliyuncs.com
+          access-key-id: ${{ secrets.ACCESS_KEY }}
+          access-key-secret: ${{ secrets.SECRET_KEY }}
+          ossutil-version: 'latest'
+      - name: rust build
+        run: |
+          echo $PWD 
+          cd boot-extension/rule-engine
+          echo $PWD
+          rustup target add ${{ matrix.arch }}-apple-darwin
+          cargo build --release --target ${{ matrix.arch }}-apple-darwin
+      - name: Copy To Resource
+        run: |
+          cd boot-extension/rule-engine
+          cp -f target/${{ matrix.arch }}-apple-darwin/release/libzen_engine.dylib ./src/main/resources/libzen_engine-osx-${{ matrix.arch }}.dylib
+      - name: Upload
+        run: |
+          cd boot-extension/rule-engine
+          ossutil cp ./src/main/resources/libzen_engine-osx-${{ matrix.arch }}.dylib oss://workoss/static/${{ inputs.rustChannel }}/libzen_engine-osx-${{ matrix.arch }}.dylib              
