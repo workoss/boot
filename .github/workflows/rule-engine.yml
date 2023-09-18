@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        target:
+        arch:
           - x86_64
     runs-on: ${{ inputs.osName }}-latest
     permissions:
