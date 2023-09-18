@@ -33,8 +33,6 @@ editor在线 https://editor.gorules.io
 
 3. 使用示例
 
-[测试代码](../boot-extension/rule-engine/src/test/java/com/workoss/boot/engine/RuleEngineTest.java)
-
 ```java
 public class RuleEngineTest {
 
@@ -58,6 +56,9 @@ public class RuleEngineTest {
 ```json
 {"performance":"241.714µs","result":{"fees":{"flat":150}}}
 ```
+
+> 更多请查看[测试代码](../boot-extension/rule-engine/src/test/java/com/workoss/boot/engine/RuleEngineTest.java)
+
 
 ## 具体使用
 
