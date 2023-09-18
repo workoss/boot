@@ -10,6 +10,8 @@ import lombok.Data;
 @Data
 public class EvaluateTraceData {
 
+    private JsonNode log;
+
     private Integer index;
 
     @JsonAlias({"reference_map"})

@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 use jni::JNIEnv;
 use jni::objects::{JByteArray, JClass};
 use jni::sys::{jboolean, jint};
-use serde_json::{Error, error, json};
+use serde_json::{Error, error, Value};
 use zen_engine::{DecisionEngine, EvaluationOptions};
 use zen_engine::loader::NoopLoader;
 use zen_engine::model::DecisionContent;
@@ -30,8 +30,8 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
     trace: jboolean,
     max_depth: jint,
 ) -> JByteArray<'local> {
-    let decision = env.convert_byte_array(&decision).unwrap();
-    let input = env.convert_byte_array(&input).unwrap();
+    let decision = env.convert_byte_array(decision).unwrap();
+    let input = env.convert_byte_array(input).unwrap();
     let decision_result: error::Result<DecisionContent> = serde_json::from_slice(decision.as_slice());
     if decision_result.is_err() {
         env.throw_new("com/workoss/boot/engine/RuleEngineException",
@@ -39,13 +39,13 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
             .unwrap();
         return JByteArray::default();
     }
-    let decision_content: DecisionContent = serde_json::from_slice(decision.as_slice()).unwrap();
     let options: EvaluationOptions = EvaluationOptions {
         trace: Some(trace.eq(&1)),
         max_depth: Some(max_depth as u8),
     };
-    let decision = ENGINE_LAZY.create_decision(decision_content.into());
-    let result = decision.evaluate_with_opts(&json!(input), options).await;
+    let decision = ENGINE_LAZY.create_decision(decision_result.unwrap().into());
+    let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
+    let result = decision.evaluate_with_opts(&input_content, options).await;
     if result.is_err() {
         env.throw_new("com/workoss/boot/engine/RuleEngineException",
                       result.err().unwrap().to_string())
@@ -84,3 +84,5 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
     }
     return 1;
 }
+
+

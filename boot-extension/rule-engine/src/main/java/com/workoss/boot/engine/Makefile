@@ -4,7 +4,4 @@ java_run: lib
 
 .PHONY: lib
 
-javah:
-	javah ZenRuleEngine
-
 
