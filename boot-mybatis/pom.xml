@@ -14,5 +14,5 @@
 		<module>mybatis-plugin-api</module>
 		<module>mybatis-plugin-core</module>
 		<module>mybatis-plugin-jakarta</module>
-	</modules>
+    </modules>
 </project>

@@ -74,6 +74,9 @@
 		<spring-cloud-dependencies.version>2022.0.4</spring-cloud-dependencies.version>
 		<spring-data-bom.version>2023.0.4</spring-data-bom.version>
 		<spring-security-bom.version>6.1.4</spring-security-bom.version>
+		<spring-modulith.version>1.0.1</spring-modulith.version>
+
+		<jmolecules.version>2023.0.0</jmolecules.version>
 
 		<spring-boot-admin.version>3.1.7</spring-boot-admin.version>
 
@@ -293,6 +296,21 @@
 				<artifactId>spring-boot-starter-test</artifactId>
 				<version>${spring-boot.version}</version>
 				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmolecules</groupId>
+				<artifactId>jmolecules-bom</artifactId>
+				<version>${jmolecules.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.modulith</groupId>
+				<artifactId>spring-modulith-bom</artifactId>
+				<version>${spring-modulith.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 
 

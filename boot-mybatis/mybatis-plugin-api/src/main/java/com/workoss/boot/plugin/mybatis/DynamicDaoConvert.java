@@ -15,36 +15,28 @@
  */
 package com.workoss.boot.plugin.mybatis;
 
-import com.workoss.boot.plugin.mybatis.provider.BaseProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
-
 import java.util.List;
 import java.util.Map;
 
 /**
- * baseDao
- *
  * @author workoss
  */
-@SuppressWarnings("ALL")
-public interface BaseDao<T, ID> {
+public interface DynamicDaoConvert<S> {
+    /**
+     * 参数转换成map
+     *
+     * @param s 对象
+     * @return
+     */
+    Map<String, Object> convertParam(S s);
 
-	/**
-	 * 执行查询
-	 * @param sql sql
-	 * @return 执行结果
-	 */
-	@SelectProvider(type = BaseProvider.class, method = "executeQuery")
-	List<Map<String, Object>> executeQuery(@Param("sql") String sql);
+    /**
+     * 转换结果
+     *
+     * @param result 返回值
+     * @return list对象
+     */
+    List<S> convertResult(List<Map<String, Object>> result);
 
-	/**
-	 * 执行修改
-	 * @param sql sql语句
-	 * @return 执行成功行数
-	 */
-	@UpdateProvider(type = BaseProvider.class, method = "executeUpdate")
-	int executeUpdate(@Param("sql") String sql);
 
 }

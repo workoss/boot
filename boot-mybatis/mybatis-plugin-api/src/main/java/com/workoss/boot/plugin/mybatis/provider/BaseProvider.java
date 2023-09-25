@@ -39,11 +39,17 @@ public class BaseProvider implements ProviderMethodResolver {
 	private static final ConcurrentHashMap<String, String> SQL_MAP = new ConcurrentHashMap<>();
 
 	public CharSequence executeQuery(Map<String, Object> params, ProviderContext context) {
-		return new StringJoiner(" ").add("<script>").add("${sql}").add("</script>").toString();
+		String inputSql = ((String) params.get("sql"))
+				.replaceAll("<script>","")
+				.replaceAll("</script>","");
+		return new StringJoiner(" ").add("<script>").add(inputSql).add("</script>").toString();
 	}
 
 	public CharSequence executeUpdate(Map<String, Object> params, ProviderContext context) {
-		return new StringJoiner(" ").add("<script>").add("${sql}").add("</script>").toString();
+		String inputSql = ((String) params.get("sql"))
+				.replaceAll("<script>","")
+				.replaceAll("</script>","");
+		return new StringJoiner(" ").add("<script>").add(inputSql).add("</script>").toString();
 	}
 
 	public CharSequence dynamicSql(Map<String, Object> params, ProviderContext context) {

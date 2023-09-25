@@ -1,2 +1,3 @@
+com.workoss.boot.autoconfigure.DaoConfig
 com.workoss.boot.autoconfigure.ServiceConfig
 com.workoss.boot.autoconfigure.WebConfig
