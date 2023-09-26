@@ -90,3 +90,12 @@ public class RuleEngineTest {
     </extension>
 </extensions>
 ```
+
+### 其他使用 
+
+表达式直接使用，可以用来公式计算，也可以使用常见的一些[zen函数](https://gorules.io/docs/rules-engine/expression-language/)
+
+```java
+String input = "{\"goods\":{\"price\": 0.2,\"quantity\": "+(i+1)+"}}";
+JsonNode result = engine.runExpr(expression, JsonMapper.parse(input));
+```
