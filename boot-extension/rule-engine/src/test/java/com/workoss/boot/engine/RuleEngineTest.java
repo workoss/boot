@@ -95,7 +95,7 @@ public class RuleEngineTest {
 		// System.out.println(evaluate);
 		for (int i = 0; i < 10000; i++) {
 			input = "{\"goods\":{\"price\": 0.2,\"quantity\": " + (i + 1) + "}}";
-			JsonNode result = engine.runExpression(expression, JsonMapper.parse(input));
+			JsonNode result = engine.runExprWithRule(expression, JsonMapper.parse(input));
 			System.out.println(result);
 		}
 

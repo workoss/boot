@@ -88,9 +88,7 @@ public class ResultInfo {
     }
 
     public static ResultInfo data(String code, String msg, Object data) {
-        if (data == null) {
-            return new ResultInfo(code, msg, null);
-        } else if (data instanceof String message) {
+        if (data instanceof String message) {
             return new ResultInfo(code, msg, Collections.singletonMap("message", message));
         } else if (data instanceof List list) {
             return new ResultInfo(code, msg, Collections.singletonMap("list", list));
