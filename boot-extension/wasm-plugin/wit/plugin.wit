@@ -1,0 +1,10 @@
+package workoss:plugin
+
+interface logger {
+    log: func(msg: string) -> string
+}
+
+world plugin {
+    import logger
+    export run: func(input: list<u8>, context: option<list<u8>>) -> result<list<u8>,string>
+}

@@ -25,6 +25,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration;
 import org.springframework.boot.task.TaskExecutorCustomizer;
@@ -75,11 +76,13 @@ public class ServiceConfig {
 		};
 	}
 
+	@ConditionalOnMissingBean
 	@Bean
 	public EnumAutoTranslator enumAutoTranslator() {
 		return new EnumAutoTranslator();
 	}
 
+	@ConditionalOnMissingBean
 	@Bean
 	public EnumTranslator enumTranslator() {
 		return new EnumTranslator();

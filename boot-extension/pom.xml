@@ -14,6 +14,8 @@
         <module>extension-core</module>
         <module>extension-spring</module>
         <module>rule-engine</module>
+        <module>cedar-java</module>
+        <module>wasm-plugin</module>
     </modules>
 
 </project>

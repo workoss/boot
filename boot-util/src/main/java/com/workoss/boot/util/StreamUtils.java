@@ -18,7 +18,12 @@ package com.workoss.boot.util;
 import com.workoss.boot.annotation.lang.NonNull;
 
 import java.io.*;
+import java.nio.channels.Channels;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author workoss
@@ -40,11 +45,35 @@ public class StreamUtils {
 		try {
 			closeable.close();
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		catch (IOException ignored) {}
 	}
 
+
+	public static List<String> readLines(InputStream input, String charsetName) {
+		return readLines(input, Charset.forName(charsetName));
+	}
+
+	public static List<String> readLines(InputStream input, Charset charset)  {
+		return readLines(new InputStreamReader(input, charset));
+	}
+
+	public static List<String> readLines(Reader reader)  {
+		return toBufferedReader(reader).lines().collect(Collectors.toList());
+	}
+
+	public static BufferedReader toBufferedReader(Reader reader) {
+		return reader instanceof BufferedReader ? (BufferedReader)reader : new BufferedReader(reader);
+	}
+
+	public static void write(final String data, final OutputStream output, final Charset charset) throws IOException {
+		if (data != null) {
+			// Use Charset#encode(String), since calling String#getBytes(Charset) might result in
+			// NegativeArraySizeException or OutOfMemoryError.
+			// The underlying OutputStream should not be closed, so the channel is not closed.
+			Charset writeCharset = charset == null? StandardCharsets.UTF_8: charset;
+			Channels.newChannel(output).write(writeCharset.encode(data));
+		}
+	}
 	/**
 	 * Copy the contents of the given InputStream into a new byte array.
 	 * <p>

@@ -49,27 +49,43 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
             .unwrap();
         return JByteArray::default();
     }
-    let options: EvaluationOptions = EvaluationOptions {
-        trace: Some(trace.eq(&1)),
-        max_depth: Some(max_depth as u8),
-    };
-    let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
 
-    let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
-    let result = decision_engine
-        .evaluate_with_opts(&input_content, options)
-        .await;
-    if result.is_err() {
-        env.throw_new(
-            "com/workoss/boot/engine/RuleEngineException",
-            result.err().unwrap().to_string(),
-        )
-            .unwrap();
-        return JByteArray::default();
-    }
-    let response = result.unwrap();
-    env.byte_array_from_slice(serde_json::to_vec(&response).unwrap().as_slice())
-        .unwrap()
+    let job_handler = tokio::spawn(async move {
+        let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
+        let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
+        futures::executor::block_on(decision_engine.evaluate_with_opts(
+            &input_content,
+            EvaluationOptions {
+                trace: Some(trace.eq(&1)),
+                max_depth: Some(max_depth as u8),
+            },
+        ))
+    });
+    return match job_handler.await {
+        Ok(response_result) => {
+            match response_result {
+                Ok(respone) => {
+                    env.byte_array_from_slice(serde_json::to_vec(&respone).unwrap().as_slice()).unwrap()
+                },
+                Err(error) => {
+                    env.throw_new(
+                        "com/workoss/boot/engine/RuleEngineException",
+                        error.to_string(),
+                    )
+                        .unwrap();
+                    JByteArray::default()
+                }
+            }
+        }
+        Err(_) => {
+            env.throw_new(
+                "com/workoss/boot/engine/RuleEngineException",
+                "hook time out",
+            )
+                .unwrap();
+            JByteArray::default()
+        }
+    };
 }
 
 /*
@@ -94,19 +110,19 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
             .unwrap();
         return 0;
     }
-    let valid_result = get_rule_engine()
+    return match get_rule_engine()
         .create_decision(decision_result.unwrap().into())
-        .validate();
-
-    if valid_result.is_err() {
-        env.throw_new(
-            "com/workoss/boot/engine/RuleEngineException",
-            valid_result.err().unwrap().to_string(),
-        )
-            .unwrap();
-        return 0;
-    }
-    return 1;
+        .validate() {
+        Ok(_) => 1,
+        Err(error) => {
+            env.throw_new(
+                "com/workoss/boot/engine/RuleEngineException",
+                error.to_string(),
+            )
+                .unwrap();
+            return 0;
+        }
+    };
 }
 
 #[tokio::main]
@@ -121,19 +137,37 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
     let input = env.convert_byte_array(input).unwrap();
     let expression_content = String::from_utf8(expression).unwrap();
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
-    let iso = Isolate::default();
-    iso.inject_env(&input_content);
-    let result = iso.run_standard(&expression_content);
-    if result.is_err() {
-        env.throw_new(
-            "com/workoss/boot/engine/RuleEngineException",
-            result.err().unwrap().to_string(),
-        ).unwrap();
-        return JByteArray::default();
-    }
-    let response = result.unwrap();
-    env.byte_array_from_slice(serde_json::to_vec(&response).unwrap().as_slice())
-        .unwrap()
+
+    let join_handle = tokio::spawn(async move {
+        let iso = Isolate::default();
+        iso.inject_env(&input_content);
+        return  iso.run_standard(&expression_content);
+    });
+
+    return match join_handle.await {
+        Ok(value_result) => {
+            match value_result {
+                Ok(response) => {
+                    env.byte_array_from_slice(serde_json::to_vec(&response).unwrap().as_slice())
+                        .unwrap()
+                }
+                Err(error) => {
+                    env.throw_new(
+                        "com/workoss/boot/engine/RuleEngineException",
+                        error.to_string(),
+                    ).unwrap();
+                    JByteArray::default()
+                }
+            }
+        },
+        Err(_) => {
+            env.throw_new(
+                "com/workoss/boot/engine/RuleEngineException",
+                "hook time out",
+            ).unwrap();
+            JByteArray::default()
+        }
+    };
 }
 
 #[cfg(test)]

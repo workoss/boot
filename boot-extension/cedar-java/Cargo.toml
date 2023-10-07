@@ -1,0 +1,27 @@
+[package]
+
+edition = "2021"
+name = "cedar-java-ffi"
+
+version = "2.0.0"
+
+[dependencies]
+cedar-policy = {version = "2.4"}# Need latest version from github
+serde = {version = "1.0", features = ["derive", "rc"]}
+serde_json = "1.0"
+
+# JNI Support
+jni = "0.21"
+jni_fn = "0.1"
+
+# Dynamic linked library, used for linked to java process at runtime.
+[lib]
+crate_type = ["cdylib"]
+
+[profile.release]
+codegen-units = 1
+lto = true #Link time opt链接过程优化，size减少大概50%
+opt-level = 'z'
+overflow-checks = true #运行期 溢出类型检查
+panic = "abort"
+strip = "debuginfo" #  -C strip flag 去除不必要的标头和调试信息，size减少大概30%
