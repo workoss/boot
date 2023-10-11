@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>com.aliyun</groupId>
 			<artifactId>aliyun-java-sdk-sts</artifactId>
-			<version>3.1.1</version>
+			<version>3.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun</groupId>
