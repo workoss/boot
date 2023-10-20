@@ -22,3 +22,11 @@ cargo-component-bindings = {git = "https://github.com/bytecodealliance/cargo-com
 cedar-policy = "2.4.0"
 serde = {version = "1.0.188", features = ["derive"]}
 serde_json = "^1.0.107"
+
+[profile.release]
+codegen-units = 1 
+lto = true #Link time opt链接过程优化，size减少大概50%
+opt-level = 'z' 
+overflow-checks = true #运行期 溢出类型检查
+panic = "abort" 
+strip = "debuginfo" #  -C strip flag 去除不必要的标头和调试信息，size减少大概30%

@@ -16,6 +16,7 @@
 package com.workoss.boot.util;
 
 import com.workoss.boot.annotation.lang.NonNull;
+import com.workoss.boot.util.exception.BootException;
 
 import java.io.*;
 import java.nio.channels.Channels;
@@ -38,6 +39,23 @@ public class StreamUtils {
 
 	public static final byte[] EMPTY_CONTENT = new byte[0];
 
+	public static String readFile(InputStream inputStream) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			StringBuffer stringBuffer = new StringBuffer();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				stringBuffer.append(line);
+			}
+			return stringBuffer.toString();
+		}
+		catch (IOException e) {
+			throw new BootException(e);
+		}
+		finally {
+			nonClosing(inputStream);
+		}
+	}
+
 	public static void close(Closeable closeable) {
 		if (closeable == null) {
 			return;
@@ -45,35 +63,38 @@ public class StreamUtils {
 		try {
 			closeable.close();
 		}
-		catch (IOException ignored) {}
+		catch (IOException ignored) {
+		}
 	}
-
 
 	public static List<String> readLines(InputStream input, String charsetName) {
 		return readLines(input, Charset.forName(charsetName));
 	}
 
-	public static List<String> readLines(InputStream input, Charset charset)  {
+	public static List<String> readLines(InputStream input, Charset charset) {
 		return readLines(new InputStreamReader(input, charset));
 	}
 
-	public static List<String> readLines(Reader reader)  {
+	public static List<String> readLines(Reader reader) {
 		return toBufferedReader(reader).lines().collect(Collectors.toList());
 	}
 
 	public static BufferedReader toBufferedReader(Reader reader) {
-		return reader instanceof BufferedReader ? (BufferedReader)reader : new BufferedReader(reader);
+		return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
 	}
 
 	public static void write(final String data, final OutputStream output, final Charset charset) throws IOException {
 		if (data != null) {
-			// Use Charset#encode(String), since calling String#getBytes(Charset) might result in
+			// Use Charset#encode(String), since calling String#getBytes(Charset) might
+			// result in
 			// NegativeArraySizeException or OutOfMemoryError.
-			// The underlying OutputStream should not be closed, so the channel is not closed.
-			Charset writeCharset = charset == null? StandardCharsets.UTF_8: charset;
+			// The underlying OutputStream should not be closed, so the channel is not
+			// closed.
+			Charset writeCharset = charset == null ? StandardCharsets.UTF_8 : charset;
 			Channels.newChannel(output).write(writeCharset.encode(data));
 		}
 	}
+
 	/**
 	 * Copy the contents of the given InputStream into a new byte array.
 	 * <p>

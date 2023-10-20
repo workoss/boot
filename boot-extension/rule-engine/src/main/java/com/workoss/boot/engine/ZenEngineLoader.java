@@ -20,32 +20,29 @@ package com.workoss.boot.engine;
  */
 public class ZenEngineLoader {
 
-    /**
-     * zen 规则引擎执行
-     *
-     * @param decision json 规则集
-     * @param input    入参 json
-     * @param trace    是否trace
-     * @param maxDepth trace
-     * @return json 字符串
-     */
-    static native byte[] evaluate(byte[] decision, byte[] input, boolean trace, int maxDepth);
+	/**
+	 * zen 规则引擎执行
+	 * @param decision json 规则集
+	 * @param input 入参 json
+	 * @param trace 是否trace
+	 * @param maxDepth trace
+	 * @return json 字符串
+	 */
+	static native byte[] evaluate(byte[] decision, byte[] input, boolean trace, int maxDepth);
 
-    /**
-     * 校验 json规则
-     *
-     * @param decision json 规则集
-     * @return true/false
-     */
-    static native boolean validate(byte[] decision);
+	/**
+	 * 校验 json规则
+	 * @param decision json 规则集
+	 * @return true/false
+	 */
+	static native boolean validate(byte[] decision);
 
-    /**
-     * 执行表达式
-     *
-     * @param expression 表达式
-     * @param input      入参
-     * @return 表达式结果
-     */
-    static native byte[] expression(byte[] expression, byte[] input);
+	/**
+	 * 执行表达式
+	 * @param expression 表达式
+	 * @param input 入参
+	 * @return 表达式结果
+	 */
+	static native byte[] expression(byte[] expression, byte[] input);
 
 }

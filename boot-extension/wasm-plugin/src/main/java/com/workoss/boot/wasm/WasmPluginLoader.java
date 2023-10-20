@@ -19,13 +19,13 @@ package com.workoss.boot.wasm;
  * @author workoss
  */
 public class WasmPluginLoader {
-    /**
-     * plugin 执行
-     *
-     * @param input
-     * @param context
-     * @return
-     */
-    static native byte[] run(byte[] pluginFile, byte[] input, byte[] context);
+
+	/**
+	 * plugin 执行
+	 * @param input
+	 * @param context
+	 * @return
+	 */
+	static native byte[] run(byte[] pluginFile, byte[] input, byte[] context);
 
 }

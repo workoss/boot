@@ -81,8 +81,8 @@
 		<spring-boot-admin.version>3.1.7</spring-boot-admin.version>
 
 		<mybatis.version>3.5.13</mybatis.version>
-		<mybatis-spring.version>2.1.0</mybatis-spring.version>
-		<mybatis-spring-boot-starter.version>2.3.0</mybatis-spring-boot-starter.version>
+		<mybatis-spring.version>3.0.2</mybatis-spring.version>
+		<mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
 
 		<HikariCP.version>5.0.1</HikariCP.version>
 
@@ -107,7 +107,7 @@
 		<picocli.version>4.7.5</picocli.version>
 		<feign-bom.version>12.5</feign-bom.version>
 
-		<springdoc-openapi.version>2.0.4</springdoc-openapi.version>
+		<springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 		<swagger.version>2.2.17</swagger.version>
 		<druid.version>1.2.20</druid.version>
 		<h2.version>2.2.224</h2.version>

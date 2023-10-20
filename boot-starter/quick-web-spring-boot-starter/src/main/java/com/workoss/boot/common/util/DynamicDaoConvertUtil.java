@@ -27,31 +27,33 @@ import java.util.Map;
  */
 public final class DynamicDaoConvertUtil {
 
-    private DynamicDaoConvertUtil(){}
+	private DynamicDaoConvertUtil() {
+	}
 
-    public static <T> DynamicDaoConvert<T> convertFunction(Class<T> tClass) {
-        return new DynamicDaoConvert<>() {
-            @Override
-            public Map<String, Object> convertParam(T t) {
-                if (t == null) {
-                    return Collections.emptyMap();
-                }
-                if (tClass.isAssignableFrom(Map.class)) {
-                    return (Map<String, Object>) t;
-                }
-                return JsonMapper.parseObject(JsonMapper.toJSONBytes(t), Map.class);
-            }
+	public static <T> DynamicDaoConvert<T> convertFunction(Class<T> tClass) {
+		return new DynamicDaoConvert<>() {
+			@Override
+			public Map<String, Object> convertParam(T t) {
+				if (t == null) {
+					return Collections.emptyMap();
+				}
+				if (tClass.isAssignableFrom(Map.class)) {
+					return (Map<String, Object>) t;
+				}
+				return JsonMapper.parseObject(JsonMapper.toJSONBytes(t), Map.class);
+			}
 
-            @Override
-            public List<T> convertResult(List<Map<String, Object>> result) {
-                if (result == null || result.isEmpty()) {
-                    return Collections.emptyList();
-                }
-                if (tClass.isAssignableFrom(Map.class)) {
-                    return (List<T>) result;
-                }
-                return JsonMapper.parseArray(JsonMapper.toJSONBytes(result), tClass);
-            }
-        };
-    }
+			@Override
+			public List<T> convertResult(List<Map<String, Object>> result) {
+				if (result == null || result.isEmpty()) {
+					return Collections.emptyList();
+				}
+				if (tClass.isAssignableFrom(Map.class)) {
+					return (List<T>) result;
+				}
+				return JsonMapper.parseArray(JsonMapper.toJSONBytes(result), tClass);
+			}
+		};
+	}
+
 }

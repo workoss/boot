@@ -64,6 +64,23 @@
 			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
+				<artifactId>rule-engine</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>cedar-java</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>modulith-mybatis-spring-boot-starter</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
 				<artifactId>storage-client-spring-boot-starter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -79,15 +96,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
-				<artifactId>rule-engine</artifactId>
+				<artifactId>policy-spring-boot-starter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>com.workoss.boot</groupId>
-				<artifactId>modulith-mybatis-spring-boot-starter</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+
 
 		</dependencies>
 	</dependencyManagement>

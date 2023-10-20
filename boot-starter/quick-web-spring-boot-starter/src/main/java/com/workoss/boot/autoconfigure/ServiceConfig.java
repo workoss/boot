@@ -17,26 +17,15 @@ package com.workoss.boot.autoconfigure;
 
 import com.workoss.boot.mapper.EnumAutoTranslator;
 import com.workoss.boot.mapper.EnumTranslator;
-import com.workoss.boot.service.DistributedTemplate;
 import com.workoss.boot.util.id.SnowflakeUtil;
-import io.lettuce.core.api.async.RedisAsyncCommands;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
-import org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration;
 import org.springframework.boot.task.TaskExecutorCustomizer;
 import org.springframework.boot.task.TaskSchedulerCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * 服务配置
@@ -92,31 +81,6 @@ public class ServiceConfig {
 	@Bean
 	public CommandLineRunner idGenerateRunner() {
 		return args -> SnowflakeUtil.nextId();
-	}
-
-	@Configuration
-	@ConditionalOnClass({ RedisTemplate.class, RedisAsyncCommands.class, })
-	@AutoConfigureAfter({ RedisAutoConfiguration.class, RedisReactiveAutoConfiguration.class })
-	public static class DistributedConfig {
-
-		@Bean
-		public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-			RedisTemplate<String, Object> template = new RedisTemplate<>();
-			template.setConnectionFactory(redisConnectionFactory);
-			StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-			template.setKeySerializer(stringRedisSerializer);
-			template.setHashKeySerializer(stringRedisSerializer);
-			Jackson2JsonRedisSerializer jsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-			template.setValueSerializer(jsonRedisSerializer);
-			template.setHashValueSerializer(jsonRedisSerializer);
-			return template;
-		}
-
-		@Bean
-		public DistributedTemplate distributedTemplate(RedisTemplate redisTemplate) {
-			return new DistributedTemplate(redisTemplate);
-		}
-
 	}
 
 }

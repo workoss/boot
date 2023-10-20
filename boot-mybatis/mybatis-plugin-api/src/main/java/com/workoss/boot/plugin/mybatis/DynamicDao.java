@@ -32,41 +32,41 @@ import java.util.Optional;
  * @author workoss
  */
 public interface DynamicDao {
-    /**
-     * 执行动态sql 查询
-     * SELECT id,listener_id as listenerId,serialized_event as serializedEvent FROM EVENT_PUBLICATION <where> <if test="params.id!=null"> id = #{params.id,jdbcType=VARCHAR} </if> </where>
-     *
-     * @param sql    sql
-     * @param params map动态参数
-     * @return map list
-     */
-    @SelectProvider(type = BaseProvider.class, method = "executeQuery")
-    List<Map<String, Object>> executeQuery(@Param("sql") String sql, @Param("params") Map<String, Object> params);
 
-    /**
-     * 执行变更sql
-     *
-     * @param sql    sql
-     * @param params map 动态参数
-     * @return 变更条数
-     */
-    @UpdateProvider(type = BaseProvider.class, method = "executeUpdate")
-    int executeUpdate(@Param("sql") String sql, Map<String, Object> params);
+	/**
+	 * 执行动态sql 查询 SELECT id,listener_id as listenerId,serialized_event as serializedEvent
+	 * FROM EVENT_PUBLICATION <where> <if test="params.id!=null"> id =
+	 * #{params.id,jdbcType=VARCHAR} </if> </where>
+	 * @param sql sql
+	 * @param params map动态参数
+	 * @return map list
+	 */
+	@SelectProvider(type = BaseProvider.class, method = "executeQuery")
+	List<Map<String, Object>> executeQuery(@Param("sql") String sql, @Param("params") Map<String, Object> params);
 
-    /**
-     * 执行查询
-     *
-     * @param sql     sql
-     * @param params  入参
-     * @param convert 转换器
-     * @param <T>     泛型
-     * @return list 泛型
-     */
-    default <T> List<T> executeSelect(@NonNull @Param("sql") String sql, @NonNull T params, @NonNull DynamicDaoConvert<T> convert) {
-        Map<String, Object> paramsMap = convert.convertParam(params);
-        return Optional.ofNullable(executeQuery(sql, paramsMap))
-                .map(convert::convertResult)
-                .orElse(Collections.emptyList());
-    }
+	/**
+	 * 执行变更sql
+	 * @param sql sql
+	 * @param params map 动态参数
+	 * @return 变更条数
+	 */
+	@UpdateProvider(type = BaseProvider.class, method = "executeUpdate")
+	int executeUpdate(@Param("sql") String sql, Map<String, Object> params);
+
+	/**
+	 * 执行查询
+	 * @param sql sql
+	 * @param params 入参
+	 * @param convert 转换器
+	 * @param <T> 泛型
+	 * @return list 泛型
+	 */
+	default <T> List<T> executeSelect(@NonNull @Param("sql") String sql, @NonNull T params,
+			@NonNull DynamicDaoConvert<T> convert) {
+		Map<String, Object> paramsMap = convert.convertParam(params);
+		return Optional.ofNullable(executeQuery(sql, paramsMap))
+			.map(convert::convertResult)
+			.orElse(Collections.emptyList());
+	}
 
 }

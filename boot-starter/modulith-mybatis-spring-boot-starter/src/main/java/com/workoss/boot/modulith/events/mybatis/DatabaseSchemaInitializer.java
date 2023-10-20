@@ -25,37 +25,38 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
-
 /**
  * @author workoss
  */
 class DatabaseSchemaInitializer implements InitializingBean {
 
-    private final DatabaseType databaseType;
-    private final ResourceLoader resourceLoader;
+	private final DatabaseType databaseType;
 
-    private final DynamicDao dynamicDao;
+	private final ResourceLoader resourceLoader;
 
-    public DatabaseSchemaInitializer(DatabaseType databaseType, ResourceLoader resourceLoader, DynamicDao dynamicDao) {
-        this.databaseType = databaseType;
-        this.resourceLoader = resourceLoader;
-        this.dynamicDao = dynamicDao;
-    }
+	private final DynamicDao dynamicDao;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        String schemaResourceFilename = this.databaseType.getSchemaResourceFilename();
-        Resource schemaDdlResource = this.resourceLoader.getResource("classpath:" + schemaResourceFilename);
-        String schemaDdl = asString(schemaDdlResource);
-        dynamicDao.executeUpdate(schemaDdl, null);
-    }
+	public DatabaseSchemaInitializer(DatabaseType databaseType, ResourceLoader resourceLoader, DynamicDao dynamicDao) {
+		this.databaseType = databaseType;
+		this.resourceLoader = resourceLoader;
+		this.dynamicDao = dynamicDao;
+	}
 
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		String schemaResourceFilename = this.databaseType.getSchemaResourceFilename();
+		Resource schemaDdlResource = this.resourceLoader.getResource("classpath:" + schemaResourceFilename);
+		String schemaDdl = asString(schemaDdlResource);
+		dynamicDao.executeUpdate(schemaDdl, null);
+	}
 
-    private static String asString(Resource resource) {
-        try {
-            return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
-        } catch (IOException var2) {
-            throw new UncheckedIOException(var2);
-        }
-    }
+	private static String asString(Resource resource) {
+		try {
+			return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+		}
+		catch (IOException var2) {
+			throw new UncheckedIOException(var2);
+		}
+	}
+
 }

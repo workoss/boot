@@ -30,70 +30,71 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ResultInfo {
 
-    /**
-     * 错误编码
-     */
-    private String code = ResultCode.SUCCESS.getCode();
+	/**
+	 * 错误编码
+	 */
+	private String code = ResultCode.SUCCESS.getCode();
 
-    /**
-     * 异常消息
-     */
-    private String msg;
+	/**
+	 * 异常消息
+	 */
+	private String msg;
 
-    /**
-     * 其他数据
-     */
-    private Object data;
+	/**
+	 * 其他数据
+	 */
+	private Object data;
 
-    public ResultInfo() {
-    }
+	public ResultInfo() {
+	}
 
-    public ResultInfo(String code, String msg, Object data) {
-        this.code = code;
-        this.msg = msg;
-        this.data = data;
-    }
+	public ResultInfo(String code, String msg, Object data) {
+		this.code = code;
+		this.msg = msg;
+		this.data = data;
+	}
 
-    public ResultInfo code(String code) {
-        this.code = code;
-        return this;
-    }
+	public ResultInfo code(String code) {
+		this.code = code;
+		return this;
+	}
 
-    public ResultInfo msg(String msg) {
-        this.msg = msg;
-        return this;
-    }
+	public ResultInfo msg(String msg) {
+		this.msg = msg;
+		return this;
+	}
 
-    public ResultInfo data(Object data) {
-        this.data = data;
-        return this;
-    }
+	public ResultInfo data(Object data) {
+		this.data = data;
+		return this;
+	}
 
-    @Transient
-    public boolean isSuccess() {
-        return ResultCode.SUCCESS.getCode().equals(this.code);
-    }
+	@Transient
+	public boolean isSuccess() {
+		return ResultCode.SUCCESS.getCode().equals(this.code);
+	}
 
-    public static ResultInfo success(String key, Object value) {
-        return data(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
-                Collections.singletonMap(key, value));
-    }
+	public static ResultInfo success(String key, Object value) {
+		return data(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(),
+				Collections.singletonMap(key, value));
+	}
 
-    public static ResultInfo success(Object result) {
-        return data(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
-    }
+	public static ResultInfo success(Object result) {
+		return data(ResultCode.SUCCESS.getCode(), ResultCode.SUCCESS.getMessage(), result);
+	}
 
-    public static ResultInfo data(String code, String msg) {
-        return data(code, msg, null);
-    }
+	public static ResultInfo data(String code, String msg) {
+		return data(code, msg, null);
+	}
 
-    public static ResultInfo data(String code, String msg, Object data) {
-        if (data instanceof String message) {
-            return new ResultInfo(code, msg, Collections.singletonMap("message", message));
-        } else if (data instanceof List list) {
-            return new ResultInfo(code, msg, Collections.singletonMap("list", list));
-        }
-        return new ResultInfo(code, msg, data);
-    }
+	public static ResultInfo data(String code, String msg, Object data) {
+		if (data instanceof String message) {
+			return new ResultInfo(code, msg, Collections.singletonMap("message", message));
+		}
+		else if (data instanceof List list) {
+			return new ResultInfo(code, msg, Collections.singletonMap("list", list));
+		}
+		return new ResultInfo(code, msg, data);
+	}
 
 }

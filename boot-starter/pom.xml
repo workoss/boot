@@ -17,6 +17,8 @@
         <module>quick-web-spring-boot-starter</module>
         <module>ip-spring-boot-starter</module>
         <module>modulith-mybatis-spring-boot-starter</module>
+        <module>policy-spring-boot-starter</module>
+        <module>lock-spring-boot-starter</module>
     </modules>
 
 </project>

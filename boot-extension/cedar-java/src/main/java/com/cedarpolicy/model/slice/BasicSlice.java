@@ -1,11 +1,11 @@
 /*
- * Copyright 2022-2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.cedarpolicy.model.slice;
 
 import com.cedarpolicy.serializer.JsonEUID;
@@ -24,111 +23,101 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * A basic implementation of the Slice interface that holds the policies, attributes, and parents
- * maps in memory.
+ * A basic implementation of the Slice interface that holds the policies, attributes, and
+ * parents maps in memory.
  */
 public class BasicSlice implements Slice {
-    private final Map<String, String> policies;
-    private final Map<String, Map<String, Value>> attributes;
-    private final Map<String, List<String>> parents;
 
-    private final Set<Entity> entities;
+	private final Map<String, String> policies;
 
-    @JsonProperty("template_policies")
-    private final Map<String, String> templatePolicies;
+	private final Map<String, Map<String, Value>> attributes;
 
-    @JsonProperty("template_instantiations")
-    private final List<TemplateInstantiation> templateInstantiations;
+	private final Map<String, List<String>> parents;
 
-    /**
-     * Construct a Slice from Entity and Policy objects.
-     *
-     * @param policies Set of policies.
-     * @param entities Set of entities.
-     * @param templates Set of policy templates.
-     * @param templateInstantiations List of TemplateInstantiations.
-     */
-    public BasicSlice(
-            Set<Policy> policies,
-            Set<Entity> entities,
-            Set<Policy> templates,
-            List<TemplateInstantiation> templateInstantiations) {   
-        // Copy of previous constructor. We can't call the previous constructor because fields are
-        // final
-        this.policies = new HashMap<>();
-        for (Policy p : policies) {
-            this.policies.put(p.policyID, p.policySrc);
-        }
-        HashMap<String, Map<String, Value>> attributes = new HashMap<>();
-        HashMap<String, List<String>> parents = new HashMap<>();
+	private final Set<Entity> entities;
 
-        for (Entity entity : entities) {
-            attributes.put(entity.getEUID().toString(), entity.attrs);
-            List<String> parentList = new ArrayList<String>(entity.getParents().stream().map(euid -> euid.toString()).collect(Collectors.toList()));
-            parents.put(entity.getEUID().toString(), parentList);
-        }
+	@JsonProperty("template_policies")
+	private final Map<String, String> templatePolicies;
 
-        this.attributes = attributes;
-        this.parents = parents;
-        this.entities = entities;
+	@JsonProperty("template_instantiations")
+	private final List<TemplateInstantiation> templateInstantiations;
 
-        this.templatePolicies =
-                templates.stream().collect(Collectors.toMap(p -> p.policyID, p -> p.policySrc));
-        this.templateInstantiations = new ArrayList<TemplateInstantiation>(templateInstantiations);
-    }
+	/**
+	 * Construct a Slice from Entity and Policy objects.
+	 * @param policies Set of policies.
+	 * @param entities Set of entities.
+	 * @param templates Set of policy templates.
+	 * @param templateInstantiations List of TemplateInstantiations.
+	 */
+	public BasicSlice(Set<Policy> policies, Set<Entity> entities, Set<Policy> templates,
+			List<TemplateInstantiation> templateInstantiations) {
+		// Copy of previous constructor. We can't call the previous constructor because
+		// fields are
+		// final
+		this.policies = new HashMap<>();
+		for (Policy p : policies) {
+			this.policies.put(p.policyID, p.policySrc);
+		}
+		HashMap<String, Map<String, Value>> attributes = new HashMap<>();
+		HashMap<String, List<String>> parents = new HashMap<>();
 
+		for (Entity entity : entities) {
+			attributes.put(entity.getEUID().toString(), entity.attrs);
+			List<String> parentList = new ArrayList<String>(
+					entity.getParents().stream().map(euid -> euid.toString()).collect(Collectors.toList()));
+			parents.put(entity.getEUID().toString(), parentList);
+		}
 
-    /**
-     * Construct a Slice from Entity and Policy objects.
-     *
-     * @param policies Set of policies.
-     * @param entities Set of entities.
-     */
-    public BasicSlice(Set<Policy> policies, Set<Entity> entities) {
-        this(policies, entities, Collections.emptySet(), Collections.emptyList());
-    }
+		this.attributes = attributes;
+		this.parents = parents;
+		this.entities = entities;
 
+		this.templatePolicies = templates.stream().collect(Collectors.toMap(p -> p.policyID, p -> p.policySrc));
+		this.templateInstantiations = new ArrayList<TemplateInstantiation>(templateInstantiations);
+	}
 
+	/**
+	 * Construct a Slice from Entity and Policy objects.
+	 * @param policies Set of policies.
+	 * @param entities Set of entities.
+	 */
+	public BasicSlice(Set<Policy> policies, Set<Entity> entities) {
+		this(policies, entities, Collections.emptySet(), Collections.emptyList());
+	}
 
-    @Override
-    public Map<String, String> getPolicies() {
-        return policies;
-    }
+	@Override
+	public Map<String, String> getPolicies() {
+		return policies;
+	}
 
-    @Override
-    public Map<String, Map<String, Value>> getAttributes() {
-        return attributes;
-    }
+	@Override
+	public Map<String, Map<String, Value>> getAttributes() {
+		return attributes;
+	}
 
-    @Override
-    public Map<String, List<String>> getParents() {
-        return parents;
-    }
+	@Override
+	public Map<String, List<String>> getParents() {
+		return parents;
+	}
 
-    @Override
-    public Set<Entity> getEntities() {
-        return entities;
-    }
+	@Override
+	public Set<Entity> getEntities() {
+		return entities;
+	}
 
-    @Override
-    public Map<String, String> getTemplates() {
-        return templatePolicies;
-    }
+	@Override
+	public Map<String, String> getTemplates() {
+		return templatePolicies;
+	}
 
-    @Override
-    public List<TemplateInstantiation> getTemplateInstantiations() {
-        return templateInstantiations;
-    }
+	@Override
+	public List<TemplateInstantiation> getTemplateInstantiations() {
+		return templateInstantiations;
+	}
 
-    @Override
-    public String toString() {
-        return "BasicSlice{"
-                + "policies="
-                + policies
-                + ", attributes="
-                + attributes
-                + ", parents="
-                + parents
-                + '}';
-    }
+	@Override
+	public String toString() {
+		return "BasicSlice{" + "policies=" + policies + ", attributes=" + attributes + ", parents=" + parents + '}';
+	}
+
 }

@@ -31,7 +31,11 @@ public enum ResultCode {
 	/**
 	 * 服务异常
 	 */
-	SERVER_ERROR("-2", "服务异常");
+	SERVER_ERROR("-2", "服务异常"),
+	/**
+	 * 权限不足
+	 */
+	AUTHORIZATION_ERROR("-4", "权限不足");
 
 	private final String code;
 

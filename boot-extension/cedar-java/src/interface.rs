@@ -24,10 +24,12 @@ use jni::{
 };
 use jni_fn::jni_fn;
 use serde::{Deserialize, Serialize};
-use std::thread;
+use std::{str::FromStr, thread};
 
 const V0_AUTH_OP: &str = "AuthorizationOperation";
 const V0_VALIDATE_OP: &str = "ValidateOperation";
+const V0_PARSE_EUID_OP: &str = "ParseEntityUidOperation";
+
 
 fn call_cedar_in_thread(call_str: String, input_str: String) -> String {
     call_cedar(&call_str, &input_str)
@@ -55,7 +57,6 @@ pub fn callCedarJNI<'a>(
                 .expect("error creating Java string")
         }
     };
-
     let j_call_str = j_call_str.clone();
 
     let j_input_str: String = match env.get_string(&j_input) {
@@ -113,6 +114,7 @@ fn call_cedar(call: &str, input: &str) -> String {
     let result = match call.as_str() {
         V0_AUTH_OP => json_is_authorized(&input),
         V0_VALIDATE_OP => json_validate(&input),
+        V0_PARSE_EUID_OP => json_parse_entity_uid(&input),
         _ => InterfaceResult::fail_internally(format!("unsupported operation: {}", call)),
     };
     serde_json::to_string(&result).expect("could not serialise response")
@@ -124,9 +126,48 @@ struct JavaInterfaceCall {
     arguments: String,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct ParseEUIDCall {
+    euid: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct ParseEUIDOutput {
+    ty: String,
+    id: String,
+}
+
+/// public string-based JSON interface to be invoked by FFIs. Takes in a `ParseEUIDCall`, parses it and (if successful)
+/// returns a serialized `ParseEUIDOutput`
+pub fn json_parse_entity_uid(input: &str) -> InterfaceResult {
+    match serde_json::from_str::<ParseEUIDCall>(input) {
+        Err(e) => {
+            InterfaceResult::fail_internally(format!("error parsing call to parse EntityUID: {e:}"))
+        }
+        Ok(euid_call) => match cedar_policy::EntityUid::from_str(euid_call.euid.as_str()) {
+            Ok(euid) => match serde_json::to_string(&ParseEUIDOutput {
+                ty: euid.type_name().to_string(),
+                id: euid.id().to_string(),
+            }) {
+                Ok(s) => InterfaceResult::succeed(s),
+                Err(e) => {
+                    InterfaceResult::fail_internally(format!("error serializing EntityUID: {e:}"))
+                }
+            },
+            Err(e) => InterfaceResult::fail_internally(format!("error parsing EntityUID: {e:}")),
+        },
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn parse_entityuid() {
+        let result = call_cedar("ParseEntityUidOperation", r#"{"euid": "User::\"Alice\""} "#);
+        assert_success(result);
+    }
 
     #[test]
     fn empty_authorization_call_succeeds() {

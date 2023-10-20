@@ -1,18 +1,18 @@
 [package]
 
 edition = "2021"
-name = "cedar-java-ffi"
+name = "cedar-java"
 
 version = "2.0.0"
 
 [dependencies]
-cedar-policy = {version = "2.4"}# Need latest version from github
-serde = {version = "1.0", features = ["derive", "rc"]}
-serde_json = "1.0"
+cedar-policy = {version = "^2.4.1"}# Need latest version from github
+serde = {version = "^1.0.189", features = ["derive", "rc"]}
+serde_json = "^1.0.107"
 
 # JNI Support
-jni = "0.21"
-jni_fn = "0.1"
+jni = "^0.21.1"
+jni_fn = "^0.1.2"
 
 # Dynamic linked library, used for linked to java process at runtime.
 [lib]

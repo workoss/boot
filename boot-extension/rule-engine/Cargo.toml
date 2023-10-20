@@ -12,8 +12,8 @@ futures = "^0.3.28"
 jni = "^0.21.1"
 serde_json = "^1.0.107"
 tokio = {version = "^1.32.0", features = ["rt", "macros","rt-multi-thread"]}
-zen-engine = "^0.13.0"
-zen-expression = "0.13.0"
+zen-engine = "^0.15.0"
+zen-expression = "0.15.0"
 
 [profile.release]
 codegen-units = 1 

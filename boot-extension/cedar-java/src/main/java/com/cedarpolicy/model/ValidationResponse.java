@@ -1,11 +1,11 @@
 /*
- * Copyright 2022-2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2019-2023 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.cedarpolicy.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -23,107 +22,108 @@ import java.util.Objects;
 
 /** Result of a validation request. */
 public final class ValidationResponse {
-    private final List<Note> notes;
 
-    /**
-     * Construct a validation response.
-     *
-     * @param notes Notes.
-     */
-    @JsonCreator
-    public ValidationResponse(@JsonProperty("notes") List<Note> notes) {
-        if (notes == null) {
-            throw new NullPointerException("notes");
-        }
+	private final List<Note> notes;
 
-        this.notes = notes;
-    }
+	/**
+	 * Construct a validation response.
+	 * @param notes Notes.
+	 */
+	@JsonCreator
+	public ValidationResponse(@JsonProperty("notes") List<Note> notes) {
+		if (notes == null) {
+			throw new NullPointerException("notes");
+		}
 
-    /**
-     * Get notes from a validation response.
-     *
-     * @return The notes.
-     */
-    public List<Note> getNotes() {
-        return this.notes;
-    }
+		this.notes = notes;
+	}
 
-    /** Test equals. */
-    @Override
-    public boolean equals(final Object o) {
-        if (!(o instanceof ValidationResponse)) {
-            return false;
-        } else {
-            return notes.equals(((ValidationResponse) o).notes);
-        }
-    }
+	/**
+	 * Get notes from a validation response.
+	 * @return The notes.
+	 */
+	public List<Note> getNotes() {
+		return this.notes;
+	}
 
-    /** Hash. */
-    @Override
-    public int hashCode() {
-        return Objects.hash(notes);
-    }
+	/** Test equals. */
+	@Override
+	public boolean equals(final Object o) {
+		if (!(o instanceof ValidationResponse)) {
+			return false;
+		}
+		else {
+			return notes.equals(((ValidationResponse) o).notes);
+		}
+	}
 
-    /** Readable string representation. */
-    public String toString() {
-        return "ValidationResponse(notes=" + this.getNotes() + ")";
-    }
+	/** Hash. */
+	@Override
+	public int hashCode() {
+		return Objects.hash(notes);
+	}
 
-    /** Note for a specific policy. */
-    public static final class Note {
-        private final String policyId;
-        private final String note;
+	/** Readable string representation. */
+	public String toString() {
+		return "ValidationResponse(notes=" + this.getNotes() + ")";
+	}
 
-        /**
-         * Create note from JSON.
-         *
-         * @param policyId Policy ID to which note applies.
-         * @param note The Note.
-         */
-        @JsonCreator
-        public Note(@JsonProperty("policyId") String policyId, @JsonProperty("note") String note) {
-            this.policyId = policyId;
-            this.note = note;
-        }
+	/** Note for a specific policy. */
+	public static final class Note {
 
-        /**
-         * Get the policy ID.
-         *
-         * @return The policy ID.
-         */
-        public String getPolicyId() {
-            return this.policyId;
-        }
+		private final String policyId;
 
-        /**
-         * Get the note.
-         *
-         * @return The note.
-         */
-        public String getNote() {
-            return this.note;
-        }
+		private final String note;
 
-        /** Equals. */
-        @Override
-        public boolean equals(final Object o) {
-            if (!(o instanceof Note)) {
-                return false;
-            }
+		/**
+		 * Create note from JSON.
+		 * @param policyId Policy ID to which note applies.
+		 * @param note The Note.
+		 */
+		@JsonCreator
+		public Note(@JsonProperty("policyId") String policyId, @JsonProperty("note") String note) {
+			this.policyId = policyId;
+			this.note = note;
+		}
 
-            final Note other = (Note) o;
-            return policyId.equals(other.policyId) && note.equals(other.note);
-        }
+		/**
+		 * Get the policy ID.
+		 * @return The policy ID.
+		 */
+		public String getPolicyId() {
+			return this.policyId;
+		}
 
-        /** Hash. */
-        @Override
-        public int hashCode() {
-            return Objects.hash(policyId, note);
-        }
+		/**
+		 * Get the note.
+		 * @return The note.
+		 */
+		public String getNote() {
+			return this.note;
+		}
 
-        /** Readable string representation. */
-        public String toString() {
-            return "Note(policyId=" + policyId + ", note=" + note + ")";
-        }
-    }
+		/** Equals. */
+		@Override
+		public boolean equals(final Object o) {
+			if (!(o instanceof Note)) {
+				return false;
+			}
+
+			final Note other = (Note) o;
+			return policyId.equals(other.policyId) && note.equals(other.note);
+		}
+
+		/** Hash. */
+		@Override
+		public int hashCode() {
+			return Objects.hash(policyId, note);
+		}
+
+		/** Readable string representation. */
+		public String toString() {
+			return "Note(policyId=" + policyId + ", note=" + note + ")";
+		}
+
+	}
+
 }

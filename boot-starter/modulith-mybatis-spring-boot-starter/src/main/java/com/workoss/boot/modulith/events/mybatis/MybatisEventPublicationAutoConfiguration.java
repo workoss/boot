@@ -35,39 +35,38 @@ import java.sql.SQLException;
  * @author workoss
  */
 @AutoConfiguration
-@AutoConfigureBefore({EventPublicationAutoConfiguration.class})
+@AutoConfigureBefore({ EventPublicationAutoConfiguration.class })
 class MybatisEventPublicationAutoConfiguration implements EventPublicationConfigurationExtension {
 
-    @ConditionalOnMissingBean
-    @Bean
-    public DynamicDao dynamicDao(SqlSessionTemplate sqlSessionTemplate) {
-        try {
-            return sqlSessionTemplate.getMapper(DynamicDao.class);
-        } catch (Exception e) {
-            sqlSessionTemplate.getConfiguration().addMapper(DynamicDao.class);
-        }
-        return sqlSessionTemplate.getMapper(DynamicDao.class);
-    }
+	@ConditionalOnMissingBean
+	@Bean
+	public DynamicDao dynamicDao(SqlSessionTemplate sqlSessionTemplate) {
+		try {
+			return sqlSessionTemplate.getMapper(DynamicDao.class);
+		}
+		catch (Exception e) {
+			sqlSessionTemplate.getConfiguration().addMapper(DynamicDao.class);
+		}
+		return sqlSessionTemplate.getMapper(DynamicDao.class);
+	}
 
-    @Bean
-    DatabaseType databaseType(DataSource dataSource) throws SQLException {
-        String url = dataSource.getConnection().getMetaData().getURL();
-        return DatabaseType.from(DatabaseDriver.fromJdbcUrl(url));
-    }
+	@Bean
+	DatabaseType databaseType(DataSource dataSource) throws SQLException {
+		String url = dataSource.getConnection().getMetaData().getURL();
+		return DatabaseType.from(DatabaseDriver.fromJdbcUrl(url));
+	}
 
-    @Bean
-    MybatisEventPublicationRepository jdbcEventPublicationRepository(EventSerializer serializer, DynamicDao dynamicDao, DatabaseType databaseType) {
-        return new MybatisEventPublicationRepository(serializer, dynamicDao, databaseType);
-    }
+	@Bean
+	MybatisEventPublicationRepository jdbcEventPublicationRepository(EventSerializer serializer, DynamicDao dynamicDao,
+			DatabaseType databaseType) {
+		return new MybatisEventPublicationRepository(serializer, dynamicDao, databaseType);
+	}
 
-    @Bean
-    @ConditionalOnProperty(
-            name = {"spring.modulith.events.jdbc.schema-initialization.enabled"},
-            havingValue = "true"
-    )
-    DatabaseSchemaInitializer databaseSchemaInitializer(DynamicDao dynamicDao, ResourceLoader resourceLoader, DatabaseType databaseType) {
-        return new DatabaseSchemaInitializer(databaseType, resourceLoader, dynamicDao);
-    }
-
+	@Bean
+	@ConditionalOnProperty(name = { "spring.modulith.events.jdbc.schema-initialization.enabled" }, havingValue = "true")
+	DatabaseSchemaInitializer databaseSchemaInitializer(DynamicDao dynamicDao, ResourceLoader resourceLoader,
+			DatabaseType databaseType) {
+		return new DatabaseSchemaInitializer(databaseType, resourceLoader, dynamicDao);
+	}
 
 }

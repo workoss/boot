@@ -92,18 +92,18 @@ public class ProviderUtil {
 		if (ObjectUtil.isBlank(script)) {
 			return null;
 		}
-		return getScript(script,Collections.singletonMap("tableColumnInfo", tableColumnInfo));
+		return getScript(script, Collections.singletonMap("tableColumnInfo", tableColumnInfo));
 	}
 
-	public static String getScript(String sqlTemplate, Object parameterObject){
+	public static String getScript(String sqlTemplate, Object parameterObject) {
 		SqlSource sqlSource = XML_LANGUAGE_DRIVER_LAZY.get()
-				.createSqlSource(CONFIGURATION_LAZY.get(), sqlTemplate, Map.class);
+			.createSqlSource(CONFIGURATION_LAZY.get(), sqlTemplate, Map.class);
 		return sqlSource.getBoundSql(parameterObject)
-				.getSql()
-				.replaceAll("@\\{", "{")
-				.replaceAll("\r\n", " ")
-				.replaceAll("\n", " ")
-				.replaceAll("\\s+", " ");
+			.getSql()
+			.replaceAll("@\\{", "{")
+			.replaceAll("\r\n", " ")
+			.replaceAll("\n", " ")
+			.replaceAll("\\s+", " ");
 	}
 
 	public static String getScriptTemplate(String dbType, String methodName) {
@@ -196,7 +196,5 @@ public class ProviderUtil {
 	private static String getKey(String dbType, String methodName) {
 		return new StringJoiner("_").add(dbType).add(methodName).toString();
 	}
-
-
 
 }

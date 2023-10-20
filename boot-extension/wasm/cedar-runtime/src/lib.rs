@@ -23,8 +23,15 @@ impl Guest for Component {
         }
         let context: CedarContext =
             serde_json::from_slice(&context.unwrap()).expect("cedar context is null");
+        // let runtime = tokio::runtime::Builder::new_current_thread()
+        //     .enable_all()
+        //     .build()
+        //     .unwrap();
+        // let result = runtime.block_on(async move { call_cedar(context.call_func, input) });
 
-        call_cedar(context.call_func, input)
+        let result = call_cedar(context.call_func, input);
+        // let handle = async_std::spawn(move || call_cedar(context.call_func, input));
+        result
     }
 }
 

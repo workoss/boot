@@ -22,21 +22,19 @@ import java.util.Map;
  * @author workoss
  */
 public interface DynamicDaoConvert<S> {
-    /**
-     * 参数转换成map
-     *
-     * @param s 对象
-     * @return
-     */
-    Map<String, Object> convertParam(S s);
 
-    /**
-     * 转换结果
-     *
-     * @param result 返回值
-     * @return list对象
-     */
-    List<S> convertResult(List<Map<String, Object>> result);
+	/**
+	 * 参数转换成map
+	 * @param s 对象
+	 * @return
+	 */
+	Map<String, Object> convertParam(S s);
 
+	/**
+	 * 转换结果
+	 * @param result 返回值
+	 * @return list对象
+	 */
+	List<S> convertResult(List<Map<String, Object>> result);
 
 }

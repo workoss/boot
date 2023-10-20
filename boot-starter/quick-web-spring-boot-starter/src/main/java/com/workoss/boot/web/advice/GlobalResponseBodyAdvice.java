@@ -36,39 +36,40 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    public GlobalResponseBodyAdvice(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+	public GlobalResponseBodyAdvice(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
 
-    @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        String methodName = returnType.getMethod().getDeclaringClass().getName();
-        return !methodName.contains("org.springframework.boot.actuate") && !methodName.contains("org.springdoc")
-                && !returnType.getGenericParameterType().equals(ResultInfo.class);
-    }
+	@Override
+	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+		String methodName = returnType.getMethod().getDeclaringClass().getName();
+		return !methodName.contains("org.springframework.boot.actuate") && !methodName.contains("org.springdoc")
+				&& !returnType.getGenericParameterType().equals(ResultInfo.class);
+	}
 
-    @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
-                                  Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
-                                  ServerHttpResponse response) {
-        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        if (body == null && returnType.getGenericParameterType().equals(String.class)) {
-            return writeResponse(ResultInfo.success(null));
-        }
-        if (body instanceof String message) {
-            return writeResponse(ResultInfo.success(message));
-        }
-        return ResultInfo.success(body);
-    }
+	@Override
+	public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
+			ServerHttpResponse response) {
+		response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+		if (body == null && returnType.getGenericParameterType().equals(String.class)) {
+			return writeResponse(ResultInfo.success(null));
+		}
+		if (body instanceof String message) {
+			return writeResponse(ResultInfo.success(message));
+		}
+		return ResultInfo.success(body);
+	}
 
-    private String writeResponse(ResultInfo resultInfo) {
-        try {
-            return objectMapper.writeValueAsString(resultInfo);
-        } catch (JsonProcessingException e) {
-            throw new QuickException("-1", "resultInfo返回失败");
-        }
-    }
+	private String writeResponse(ResultInfo resultInfo) {
+		try {
+			return objectMapper.writeValueAsString(resultInfo);
+		}
+		catch (JsonProcessingException e) {
+			throw new QuickException("-1", "resultInfo返回失败");
+		}
+	}
 
 }

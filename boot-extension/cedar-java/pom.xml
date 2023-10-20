@@ -68,13 +68,16 @@
             <groupId>com.workoss.boot</groupId>
             <artifactId>wasm-plugin</artifactId>
             <version>${project.version}</version>
+            <classifier>osx-x86_64</classifier>
+            <scope>test</scope>
         </dependency>
 
 
     </dependencies>
 
-    <build>
 
+
+    <build>
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -84,6 +87,7 @@
                         <nonFilteredFileExtension>lib</nonFilteredFileExtension>
                         <nonFilteredFileExtension>so</nonFilteredFileExtension>
                         <nonFilteredFileExtension>dll</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>wasm</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
@@ -104,7 +108,7 @@
                             </includes>
                         </configuration>
                     </execution>
-                    <!--<execution>
+                    <execution>
                         <id>osx-aarch64</id>
                         <phase>package</phase>
                         <goals>
@@ -117,8 +121,8 @@
                                 <include>**/*.class</include>
                             </includes>
                         </configuration>
-                    </execution>-->
-                    <!--<execution>
+                    </execution>
+                    <execution>
                         <id>windows-x86_64</id>
                         <phase>package</phase>
                         <goals>
@@ -145,7 +149,7 @@
                                 <include>**/*.class</include>
                             </includes>
                         </configuration>
-                    </execution>-->
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

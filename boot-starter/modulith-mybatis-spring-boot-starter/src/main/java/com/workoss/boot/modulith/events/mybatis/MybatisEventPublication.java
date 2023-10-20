@@ -25,16 +25,16 @@ import java.time.Instant;
 @Data
 public class MybatisEventPublication {
 
-    private String id;
+	private String id;
 
-    Instant publicationDate;
+	Instant publicationDate;
 
-    String listenerId;
+	String listenerId;
 
-    String serializedEvent;
+	String serializedEvent;
 
-    String eventType;
+	String eventType;
 
-    Instant completionDate;
+	Instant completionDate;
 
 }
