@@ -49,6 +49,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
+				<artifactId>mybatis-plugin-jakarta</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
 				<artifactId>storage-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -97,6 +102,11 @@
 			<dependency>
 				<groupId>com.workoss.boot</groupId>
 				<artifactId>policy-spring-boot-starter</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.workoss.boot</groupId>
+				<artifactId>lock-spring-boot-starter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 

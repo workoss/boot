@@ -40,6 +40,11 @@ import java.util.Set;
  */
 public class CedarTest {
 
+	public static void main(String[] args) throws AuthException, IOException {
+		CedarTest test = new CedarTest();
+		test.testAuthorized();
+	}
+
 	@Test
 	void testAuthorized() throws AuthException, IOException {
 		AuthorizationEngine engine = new CustomBasicAuthorizationEngine();
