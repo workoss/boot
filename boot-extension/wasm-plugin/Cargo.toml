@@ -9,11 +9,11 @@ crate_type = ["cdylib"]
 
 [dependencies]
 jni = "^0.21.1"
-async-trait = "^0.1.73"
+async-trait = "^0.1.74"
 tokio = {version = "^1.33.0", features = ["full"]}
-wasmtime = {version = "14.0.1", features = ["component-model", "wat"]}
-wasmtime-wasi = {version = "14.0.1", features = ["preview2", "tokio"]}
-serde_json = "1.0.107"
+wasmtime = {version = "^14.0.4", features = ["component-model", "wat"]}
+wasmtime-wasi = {version = "^14.0.4", features = ["preview2", "tokio"]}
+serde_json = "^1.0.108"
 
 [profile.release]
 codegen-units = 1 

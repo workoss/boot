@@ -34,7 +34,7 @@
 
         <dependency>
             <groupId>com.workoss.boot</groupId>
-            <artifactId>cedar-java</artifactId>
+            <artifactId>ocr-java</artifactId>
             <version>${project.version}</version>
         </dependency>
 

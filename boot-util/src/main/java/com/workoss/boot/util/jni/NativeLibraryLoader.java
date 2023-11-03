@@ -16,6 +16,7 @@
 package com.workoss.boot.util.jni;
 
 import com.workoss.boot.util.Lazy;
+import com.workoss.boot.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,117 +33,135 @@ import java.util.Arrays;
 @SuppressWarnings("ALL")
 public class NativeLibraryLoader {
 
-	private static final Logger log = LoggerFactory.getLogger(NativeLibraryLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(NativeLibraryLoader.class);
 
-	private static final Lazy<NativeLibraryLoader> INSTANCE = Lazy.of(NativeLibraryLoader::new);
+    private static final Lazy<NativeLibraryLoader> INSTANCE = Lazy.of(NativeLibraryLoader::new);
 
-	private static boolean initialized = false;
+    private static boolean initialized = false;
 
-	private NativeLibraryLoader() {
-	}
+    private NativeLibraryLoader() {
+    }
 
-	public static NativeLibraryLoader getInstance() {
-		return INSTANCE.get();
-	}
+    public static NativeLibraryLoader getInstance() {
+        return INSTANCE.get();
+    }
 
-	public synchronized void loadLibrary(final String libName) throws IOException {
-		loadLibrary(NativeLibraryLoader.class.getClassLoader(), libName);
-	}
+    public synchronized void loadLibrary(final String libName) throws IOException {
+        loadLibrary(NativeLibraryLoader.class.getClassLoader(), null, libName);
+    }
 
-	public synchronized void loadLibrary(final ClassLoader classLoader, final String libName) throws IOException {
-		String strTmp = System.getProperty("java.io.tmpdir");
-		loadLibrary(classLoader, strTmp, libName);
-	}
+    public synchronized void loadLibrary(final ClassLoader classLoader, final String libName) throws IOException {
+        loadLibrary(classLoader, null, libName);
+    }
 
-	public synchronized void loadLibrary(final ClassLoader classLoader, final String tmpDir, final String libName)
-			throws IOException {
-		String jniLibraryName = Environment.getJniLibraryFileName(libName);
-		String fallbackJniLibraryName = Environment.getFallbackJniLibraryFileName(libName);
-		// dynamic library , static library , static library fallback
-		for (String libraryName : Arrays.asList(jniLibraryName, fallbackJniLibraryName)) {
-			try {
-				System.loadLibrary(libraryName);
-				log.info("[LIB] load {}:{} success", libName, libraryName);
-				return;
-			}
-			catch (UnsatisfiedLinkError e) {
-				log.warn("[LIB] load {}:{} error:{}", libName, libraryName, e.getMessage());
-				// ignore -
-			}
-		}
-		// jar
-		loadLibrary(classLoader, tmpDir, Environment.getJniLibraryFileName(libName),
-				Environment.getFallbackJniLibraryFileName(libName));
+    public synchronized void loadLibrary(final ClassLoader classLoader, final String prefix, final String libName) throws IOException {
+        String strTmp = System.getProperty("java.io.tmpdir");
+        loadLibrary(classLoader, strTmp, prefix, libName);
+    }
 
-	}
 
-	void loadLibrary(final ClassLoader classLoader, final String tmpDir, final String jniLibraryFileName,
-			final String fallbackJniLibraryFileName) throws IOException {
-		if (initialized) {
-			return;
-		}
-		String libraryFilePath = loadLibraryFile(classLoader, tmpDir, jniLibraryFileName, fallbackJniLibraryFileName)
-			.getAbsolutePath();
-		System.load(libraryFilePath);
-		log.info("[LIB] load {} success", libraryFilePath);
-		initialized = true;
-	}
+    public synchronized void loadLibrary(final ClassLoader classLoader, final String tmpDir, String prefix, final String libName)
+            throws IOException {
+        String jniLibraryName = Environment.getJniLibraryFileName(libName);
+        String fallbackJniLibraryName = Environment.getFallbackJniLibraryFileName(libName);
+        // dynamic library , static library , static library fallback
+        for (String libraryName : Arrays.asList(jniLibraryName, fallbackJniLibraryName)) {
+            try {
+                System.loadLibrary(libraryName);
+                log.info("[LIB] load {}:{} success", libName, libraryName);
+                return;
+            } catch (UnsatisfiedLinkError e) {
+                log.warn("[LIB] load {}:{} error:{}", libName, libraryName, e.getMessage());
+                // ignore -
+            }
+        }
+        // jar
+        loadLibrary(classLoader, tmpDir, prefix,
+                Environment.getJniLibraryFileName(libName),
+                Environment.getFallbackJniLibraryFileName(libName));
 
-	File loadLibraryFile(ClassLoader classLoader, final String tmpDir, final String jniLibraryFileName,
-			final String fallbackJniLibraryFileName) throws IOException {
-		InputStream inputStream = null;
-		String libraryFileName = jniLibraryFileName;
-		if (classLoader == null) {
-			classLoader = NativeLibraryLoader.class.getClassLoader();
-		}
-		try {
-			inputStream = classLoader.getResourceAsStream(libraryFileName);
-			if (inputStream == null) {
-				if (fallbackJniLibraryFileName == null) {
-					throw new RuntimeException(libraryFileName + " was not found inside JAR.");
-				}
-				libraryFileName = fallbackJniLibraryFileName;
-				inputStream = classLoader.getResourceAsStream(libraryFileName);
-				if (fallbackJniLibraryFileName == null) {
-					throw new RuntimeException(libraryFileName + " was not found inside JAR.");
-				}
-			}
-			File temp;
-			if (tmpDir == null || tmpDir.isEmpty()) {
-				temp = File.createTempFile(libraryFileName, Environment.getJniLibSuffix());
-			}
-			else {
-				final File parentDir = new File(tmpDir);
-				if (!parentDir.exists()) {
-					throw new RuntimeException("Directory: " + parentDir.getAbsolutePath() + " does not exist!");
-				}
-				temp = new File(parentDir, libraryFileName);
-				if (temp.exists() && !temp.delete()) {
-					throw new RuntimeException(
-							"File: " + temp.getAbsolutePath() + " already exists and cannot be removed.");
-				}
-				if (!temp.createNewFile()) {
-					throw new RuntimeException("File: " + temp.getAbsolutePath() + " could not be created.");
-				}
-			}
-			if (!temp.exists()) {
-				throw new RuntimeException("File " + temp.getAbsolutePath() + " does not exist.");
-			}
-			else {
-				temp.deleteOnExit();
-			}
-			// copy the library from the Jar file to the temp destination
-			Files.copy(inputStream, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			// return the temporary library file
-			return temp;
+    }
 
-		}
-		finally {
-			if (inputStream != null) {
-				inputStream.close();
-			}
-		}
+    void loadLibrary(final ClassLoader classLoader, final String tmpDir, final String prefix, final String jniLibraryFileName,
+                     final String fallbackJniLibraryFileName) throws IOException {
+        if (initialized) {
+            return;
+        }
+        String libraryFilePath = loadLibraryFile(classLoader, tmpDir, prefix, jniLibraryFileName, fallbackJniLibraryFileName)
+                .getAbsolutePath();
+        System.load(libraryFilePath);
+        log.info("[LIB] load {} success", libraryFilePath);
+        initialized = true;
+    }
 
-	}
+    File loadLibraryFile(ClassLoader classLoader, String tmpDir, final String prefix,
+                         final String jniLibraryFileName,
+                         final String fallbackJniLibraryFileName) throws IOException {
+        InputStream inputStream = null;
+        String libraryFileName = jniLibraryFileName;
+        if (classLoader == null) {
+            classLoader = NativeLibraryLoader.class.getClassLoader();
+        }
+        try {
+            inputStream = classLoader.getResourceAsStream(formatPath(prefix, libraryFileName));
+            if (inputStream == null) {
+                if (fallbackJniLibraryFileName == null) {
+                    throw new RuntimeException(libraryFileName + " was not found inside JAR.");
+                }
+                libraryFileName = fallbackJniLibraryFileName;
+                inputStream = classLoader.getResourceAsStream(formatPath(prefix, libraryFileName));
+                if (fallbackJniLibraryFileName == null) {
+                    throw new RuntimeException(libraryFileName + " was not found inside JAR.");
+                }
+            }
+
+            File temp;
+            if (tmpDir == null || tmpDir.isEmpty()) {
+                temp = File.createTempFile(libraryFileName, Environment.getJniLibSuffix());
+            } else {
+                if (prefix != null && prefix.length() > 0) {
+                    tmpDir = tmpDir + prefix;
+                }
+                final File parentDir = new File(tmpDir);
+                if (!parentDir.exists()) {
+                    if (prefix != null) {
+                        parentDir.mkdir();
+                    } else {
+                        throw new RuntimeException("Directory: " + parentDir.getAbsolutePath() + " does not exist!");
+                    }
+                }
+
+                temp = new File(parentDir, libraryFileName);
+                if (temp.exists() && !temp.delete()) {
+                    throw new RuntimeException(
+                            "File: " + temp.getAbsolutePath() + " already exists and cannot be removed.");
+                }
+                if (!temp.createNewFile()) {
+                    throw new RuntimeException("File: " + temp.getAbsolutePath() + " could not be created.");
+                }
+            }
+            if (!temp.exists()) {
+                throw new RuntimeException("File " + temp.getAbsolutePath() + " does not exist.");
+            } else {
+                temp.deleteOnExit();
+            }
+            // copy the library from the Jar file to the temp destination
+            Files.copy(inputStream, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            // return the temporary library file
+            return temp;
+
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    private String formatPath(String prefix, String jniname) {
+        if (StringUtils.isBlank(prefix)) {
+            return jniname;
+        }
+        return prefix + "/" + jniname;
+    }
 
 }

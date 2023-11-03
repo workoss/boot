@@ -21,7 +21,7 @@ world = "plugin"
 cargo-component-bindings = {git = "https://github.com/bytecodealliance/cargo-component"}
 cedar-policy = "^2.4.2"
 serde = {version = "^1.0.190", features = ["derive"]}
-serde_json = "^1.0.107"
+serde_json = "^1.0.108"
 
 [profile.release]
 codegen-units = 1 
