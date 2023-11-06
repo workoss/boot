@@ -84,7 +84,7 @@
 		<mybatis-spring.version>3.0.2</mybatis-spring.version>
 		<mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
 
-		<HikariCP.version>5.0.1</HikariCP.version>
+		<HikariCP.version>5.1.0</HikariCP.version>
 
 		<r2dbc-bom.version>Borca-SR2</r2dbc-bom.version>
 
