@@ -71,8 +71,11 @@ public class ProviderUtil {
 	}
 
 	public static String getDbType(ProviderContext context, Map<String, Object> paramters) {
+		String dbType = null;
 		// 优先参数中获取
-		String dbType = (String) paramters.get("_dbType");
+		if (paramters.containsKey("_dbType")){
+			dbType = (String) paramters.get("_dbType");
+		}
 		// 其次threadlocal中获取
 		if (dbType == null) {
 			dbType = getDbType();
