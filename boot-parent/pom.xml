@@ -69,7 +69,7 @@
 
 		<aspectj.version>1.9.20.1</aspectj.version>
 
-		<spring.version>6.0.13</spring.version>
+		<spring.version>6.1.0</spring.version>
 		<spring-boot.version>3.1.5</spring-boot.version>
 		<spring-cloud-dependencies.version>2022.0.4</spring-cloud-dependencies.version>
 		<spring-data-bom.version>2023.0.5</spring-data-bom.version>
