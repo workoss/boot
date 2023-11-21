@@ -57,7 +57,7 @@
 		<jakarta.jakartaee-bom.version>10.0.0</jakarta.jakartaee-bom.version>
 
 		<slf4j.version>2.0.9</slf4j.version>
-		<log4j2.version>2.21.1</log4j2.version>
+		<log4j2.version>2.22.0</log4j2.version>
 
 		<jackson-bom.version>2.16.0</jackson-bom.version>
 		<netty-bom.version>4.1.101.Final</netty-bom.version>
