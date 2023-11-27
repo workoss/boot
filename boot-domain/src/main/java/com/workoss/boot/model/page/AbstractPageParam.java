@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.workoss.boot.web.param;
+package com.workoss.boot.model.page;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 /**
@@ -25,13 +26,11 @@ import lombok.Getter;
  * @author workoss
  */
 @Getter
-@Schema(name = "分页参数", description = "基础分页入参")
 public abstract class AbstractPageParam {
 
 	/**
 	 * 偏移量
 	 */
-	@Schema(name = "offset", description = "分页偏移量 优先", example = "0")
 	private Long offset = 0L;
 
 	/**
@@ -40,19 +39,16 @@ public abstract class AbstractPageParam {
 	@NotNull(message = "分页limit不能为空")
 	@Min(value = 1, message = "分页大小为1-500")
 	@Max(value = 500, message = "分页大小为1-500")
-	@Schema(name = "limit", description = "分页每页大小", example = "10")
 	private Integer limit = 10;
 
 	/**
 	 * 第几页
 	 */
-	@Schema(name = "pageNo", description = "第几页 跟offset二选一", example = "1")
 	private Long pageNo = 1L;
 
 	/**
 	 * 排序参数
 	 */
-	@Schema(name = "sortBy", description = "分页排序", example = "id desc")
 	private String sortBy;
 
 	public void setOffset(Long offset) {

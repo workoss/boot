@@ -22,44 +22,45 @@ package com.workoss.boot.util.exception;
  */
 public class BootException extends RuntimeException {
 
-	private String code;
+    private String code;
 
-	private String msg;
+    private String msg;
 
-	public BootException() {
-	}
 
-	public BootException(String code) {
-		super("code:" + code);
-		this.code = code;
-	}
+    public BootException(String code) {
+        super("code:" + code);
+        this.code = code;
+    }
 
-	public BootException(String code, String msg) {
-		super("code:" + code + ",msg:" + msg);
-		this.code = code;
-		this.msg = msg;
-	}
+    public BootException(String code, String msg) {
+        super("code:" + code + ",msg:" + msg);
+        this.code = code;
+        this.msg = msg;
+    }
 
-	public BootException(Throwable throwable) {
-		super("msg:" + throwable.getMessage(), throwable);
-	}
+    public BootException(Throwable throwable) {
+        super("msg:" + throwable.getMessage(), throwable);
+    }
 
-	public BootException(String code, Throwable throwable) {
-		super("code:" + code, throwable);
-		this.code = code;
-	}
+    public BootException(String code, Throwable throwable) {
+        super("code:" + code, throwable);
+        this.code = code;
+    }
 
-	public String getCode() {
-		return this.code;
-	}
+    public String getCode() {
+        return this.code;
+    }
 
-	public String getMsg() {
-		return this.msg;
-	}
+    public String getMsg() {
+        return this.msg;
+    }
 
-	@Override
-	public String toString() {
-		return "{\"code\":\"" + this.code + "\",\"msg\":\"" + this.msg + "\"}";
-	}
+    @Override
+    public String toString() {
+        if (this.msg == null) {
+            return "{\"code\":\"" + this.code + "\"}";
+        }
+        return "{\"code\":\"" + this.code + "\",\"msg\":\"" + this.msg + "\"}";
+    }
 
 }

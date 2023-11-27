@@ -23,10 +23,16 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.workoss.boot.exception.ExceptionMapper;
 import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.collection.CollectionUtils;
 import com.workoss.boot.util.json.*;
 import com.workoss.boot.web.advice.GlobalExceptionHandlerAdvice;
 import com.workoss.boot.web.advice.GlobalResponseBodyAdvice;
 import com.workoss.boot.web.advice.SecurityExceptionHandlerAdvice;
+import com.workoss.boot.web.filter.RequestLogFilter;
+import com.workoss.boot.web.interceptor.QuickHandlerInterceptor;
+import com.workoss.boot.web.interceptor.QuickWebRequestInterceptor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -55,6 +61,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -62,122 +69,147 @@ import java.util.Locale;
  *
  * @author workoss
  */
-@EnableConfigurationProperties(value = { QuickWebProjectProperties.class })
+@Slf4j
+@EnableConfigurationProperties(value = {QuickWebProjectProperties.class})
 @AutoConfiguration
 @AutoConfigureBefore(ValidationAutoConfiguration.class)
 public class WebConfig {
 
-	private final MessageSource messageSource;
+    private final MessageSource messageSource;
 
-	private final Environment environment;
+    private final Environment environment;
 
-	public WebConfig(MessageSource messageSource, Environment environment) {
-		this.messageSource = messageSource;
-		this.environment = environment;
-	}
+    public WebConfig(MessageSource messageSource, Environment environment) {
+        this.messageSource = messageSource;
+        this.environment = environment;
+    }
 
-	@ConditionalOnClass({ JsonMapper.class, ObjectMapper.class })
-	@Bean
-	public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(Environment environment) {
-		String datetimePattern = environment.getProperty("spring.mvc.format.date-time",
-				DateUtils.DEFAULT_DATE_TIME_PATTERN);
-		String datePattern = environment.getProperty("spring.mvc.format.date", DateUtils.DEFAULT_DATE_PATTERN);
-		String timePattern = environment.getProperty("spring.mvc.format.time", DateUtils.DEFAULT_TIME_PATTERN);
-		String timeZone = environment.getProperty("spring.jackson.time-zone", DateUtils.DEFAULT_TIME_ZONE);
+    @ConditionalOnClass({JsonMapper.class, ObjectMapper.class})
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(Environment environment) {
+        String datetimePattern = environment.getProperty("spring.mvc.format.date-time",
+                DateUtils.DEFAULT_DATE_TIME_PATTERN);
+        String datePattern = environment.getProperty("spring.mvc.format.date", DateUtils.DEFAULT_DATE_PATTERN);
+        String timePattern = environment.getProperty("spring.mvc.format.time", DateUtils.DEFAULT_TIME_PATTERN);
+        String timeZone = environment.getProperty("spring.jackson.time-zone", DateUtils.DEFAULT_TIME_ZONE);
 
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern);
-		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
-		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(timePattern);
 
-		return builder -> {
-			builder.configure(JsonMapper.build().getMapper());
-			// JSR 310日期时间处理
-			JavaTimeModule javaTimeModule = new JavaTimeModule();
+        return builder -> {
+            builder.configure(JsonMapper.build().getMapper());
+            // JSR 310日期时间处理
+            JavaTimeModule javaTimeModule = new JavaTimeModule();
 
-			javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
-			javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+            javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
+            javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
 
-			javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
-			javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer());
+            javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
+            javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer());
 
-			javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter));
-			javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer());
+            javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter));
+            javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer());
 
-			builder.serializationInclusion(JsonInclude.Include.NON_NULL)
-				.dateFormat(new DateTimeFormat(datetimePattern))
-				.timeZone(timeZone)
-				.serializerByType(Long.class, BigNumberSerializer.INSTANCE)
-				.modules(javaTimeModule);
-		};
+            builder.serializationInclusion(JsonInclude.Include.NON_NULL)
+                    .dateFormat(new DateTimeFormat(datetimePattern))
+                    .timeZone(timeZone)
+                    .serializerByType(Long.class, BigNumberSerializer.INSTANCE)
+                    .modules(javaTimeModule);
+        };
 
-	}
+    }
 
-	@Bean
-	public LocaleResolver localeResolver() {
-		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-		localeResolver.setDefaultLocale(Locale.CHINA);
-		return localeResolver;
-	}
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
 
-	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-		interceptor.setParamName("lang");
-		return interceptor;
-	}
+        localeResolver.setDefaultLocale(Locale.CHINA);
+        return localeResolver;
+    }
 
-	@Order(Ordered.HIGHEST_PRECEDENCE)
-	@Bean
-	public WebMvcConfigurer webMvcConfigurer(LocaleChangeInterceptor interceptor) {
-		return new WebMvcConfigurer() {
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+        return interceptor;
+    }
 
-			@Override
-			public void addInterceptors(InterceptorRegistry registry) {
-				registry.addInterceptor(interceptor);
-			}
-		};
-	}
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer(LocaleChangeInterceptor interceptor,
+                                             ObjectProvider<List<QuickHandlerInterceptor>> quickHandlerInterceptorsProvider,
+                                             ObjectProvider<List<QuickWebRequestInterceptor>> quickWebRequestInterceptorsProvider) {
+        return new WebMvcConfigurer() {
 
-	@ConditionalOnMissingBean
-	@ConditionalOnProperty(value = "quick.web.response.exception-advice", matchIfMissing = true)
-	@Bean
-	public GlobalExceptionHandlerAdvice globalExceptionHandlerAdvice(MessageSource messageSource) {
-		return new GlobalExceptionHandlerAdvice(messageSource);
-	}
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(interceptor);
+                quickHandlerInterceptorsProvider.ifAvailable(list -> {
+                    list.forEach(quickHandlerInterceptor -> {
+                        registry.addInterceptor(quickHandlerInterceptor);
+                        log.atDebug().log("[QUICK] add interceptor:{}", quickHandlerInterceptor);
+                    });
+                });
 
-	@ConditionalOnMissingBean
-	@ConditionalOnProperty(value = "quick.web.response.body-advice", matchIfMissing = true)
-	@Order(Ordered.HIGHEST_PRECEDENCE)
-	@Bean
-	public GlobalResponseBodyAdvice globalResponseBodyAdvice(ObjectMapper objectMapper) {
-		return new GlobalResponseBodyAdvice(objectMapper);
-	}
+                quickWebRequestInterceptorsProvider.ifAvailable(list -> {
+                    list.forEach(quickWebRequestInterceptor -> {
+                        registry.addWebRequestInterceptor(quickWebRequestInterceptor);
+                        log.atDebug().log("[QUICK] add web interceptor:{}", quickWebRequestInterceptor);
+                    });
+                });
 
-	@ConditionalOnMissingBean
-	@ConditionalOnProperty(value = "quick.web.response.exception-advice", matchIfMissing = true)
-	@ConditionalOnClass(name = "org.springframework.security.access.AccessDeniedException")
-	@Bean
-	public SecurityExceptionHandlerAdvice securityExceptionHandlerAdvice(MessageSource messageSource) {
-		return new SecurityExceptionHandlerAdvice(messageSource);
-	}
+            }
+        };
+    }
 
-	@Order(Ordered.HIGHEST_PRECEDENCE)
-	@Bean
-	public CorsFilter corsWebFilter() {
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.setAllowedOriginPatterns(Collections.singletonList("*"));
-		config.setAllowedHeaders(Collections.singletonList("*"));
-		config.setAllowedMethods(Collections.singletonList("*"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", config);
-		return new CorsFilter(source);
-	}
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(value = "quick.web.response.exception-advice", matchIfMissing = true)
+    @Bean
+    public GlobalExceptionHandlerAdvice globalExceptionHandlerAdvice(MessageSource messageSource) {
+        return new GlobalExceptionHandlerAdvice(messageSource);
+    }
 
-	@ConditionalOnMissingBean
-	@Bean
-	public ExceptionMapper exceptionMapper(MessageSource messageSource) {
-		return new ExceptionMapper(messageSource);
-	}
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(value = "quick.web.response.body-advice", matchIfMissing = true)
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Bean
+    public GlobalResponseBodyAdvice globalResponseBodyAdvice(ObjectMapper objectMapper) {
+        return new GlobalResponseBodyAdvice(objectMapper);
+    }
+
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(value = "quick.web.response.exception-advice", matchIfMissing = true)
+    @ConditionalOnClass(name = "org.springframework.security.access.AccessDeniedException")
+    @Bean
+    public SecurityExceptionHandlerAdvice securityExceptionHandlerAdvice(MessageSource messageSource) {
+        return new SecurityExceptionHandlerAdvice(messageSource);
+    }
+
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Bean
+    public CorsFilter corsWebFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOriginPatterns(Collections.singletonList("*"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setAllowedMethods(Collections.singletonList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
+    @ConditionalOnMissingBean
+    @Bean
+    public ExceptionMapper exceptionMapper(MessageSource messageSource) {
+        return new ExceptionMapper(messageSource);
+    }
+
+
+    @ConditionalOnProperty(value = "quick.web.request.log.enabled", havingValue = "true")
+    @Bean
+    public RequestLogFilter requestLogFilter(QuickWebProjectProperties quickWebProjectProperties) {
+        return new RequestLogFilter(quickWebProjectProperties);
+    }
 
 }

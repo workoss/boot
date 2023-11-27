@@ -23,18 +23,18 @@ import java.util.List;
 /**
  * 基础对象映射
  *
- * @param <S> source
- * @param <T> target
+ * @param <M> model
+ * @param <E> entity
  * @author workoss
  */
-public interface BeanMapper<S, T> {
+public interface BeanMapper<M, E> {
 
 	/**
 	 * S -> T
 	 * @param source source
 	 * @return target
 	 */
-	T toTarget(S source);
+	E toTarget(M source);
 
 	/**
 	 * List<S> -> List<T>
@@ -42,14 +42,14 @@ public interface BeanMapper<S, T> {
 	 * @return targetList
 	 */
 	@IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
-	List<T> toTargetList(List<S> sList);
+	List<E> toTargetList(List<M> sList);
 
 	/**
 	 * T -> S
 	 * @param target target
 	 * @return source
 	 */
-	S toSource(T target);
+	M toSource(E target);
 
 	/**
 	 * List<T> -> List<S>
@@ -57,6 +57,6 @@ public interface BeanMapper<S, T> {
 	 * @return sourceList
 	 */
 	@IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
-	List<S> toSourceList(List<T> tList);
+	List<M> toSourceList(List<E> tList);
 
 }
