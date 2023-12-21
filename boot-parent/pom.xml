@@ -76,7 +76,7 @@
 		<spring-security-bom.version>6.2.1</spring-security-bom.version>
 		<spring-modulith.version>1.1.0</spring-modulith.version>
 
-		<jmolecules.version>2023.1.0</jmolecules.version>
+		<jmolecules.version>2023.1.1</jmolecules.version>
 
 		<spring-boot-admin.version>3.1.8</spring-boot-admin.version>
 
