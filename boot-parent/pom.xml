@@ -138,7 +138,7 @@
 		<maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
 		<maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>4.0.0-M13</maven-site-plugin.version>
-		<flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+		<flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.41</spring-javaformat-maven-plugin.version>
 		<git-commit-id-maven-plugin.version>7.0.0</git-commit-id-maven-plugin.version>
 		<versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
