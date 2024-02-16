@@ -19,6 +19,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 分页入参
@@ -31,12 +32,14 @@ public abstract class AbstractPageParam {
 	/**
 	 * 偏移量
 	 */
-	private Long offset = 0L;
+	@Setter
+    private Long offset = 0L;
 
 	/**
 	 * 每页大小
 	 */
-	@NotNull(message = "分页limit不能为空")
+	@Setter
+    @NotNull(message = "分页limit不能为空")
 	@Min(value = 1, message = "分页大小为1-500")
 	@Max(value = 500, message = "分页大小为1-500")
 	private Integer limit = 10;
@@ -49,25 +52,14 @@ public abstract class AbstractPageParam {
 	/**
 	 * 排序参数
 	 */
-	private String sortBy;
+	@Setter
+    private String sortBy;
 
-	public void setOffset(Long offset) {
-		this.offset = offset;
-	}
-
-	public void setLimit(Integer limit) {
-		this.limit = limit;
-	}
-
-	public void setPageNo(Long pageNo) {
+    public void setPageNo(Long pageNo) {
 		this.pageNo = pageNo;
 		if (pageNo != null && this.offset == null) {
 			this.offset = (pageNo - 1) * this.limit;
 		}
-	}
-
-	public void setSortBy(String sortBy) {
-		this.sortBy = sortBy;
 	}
 
 }

@@ -1,16 +1,16 @@
 use std::sync::OnceLock;
 
-use jni::JNIEnv;
 use jni::objects::{JByteArray, JClass};
 use jni::sys::{jboolean, jint};
+use jni::JNIEnv;
 use serde_json::{error, Error, Value};
-use zen_engine::{DecisionEngine, EvaluationOptions};
+use tokio::task::JoinError;
 use zen_engine::loader::NoopLoader;
 use zen_engine::model::DecisionContent;
-use zen_expression::isolate::Isolate;
+use zen_engine::{DecisionEngine, EvaluationOptions};
+use zen_expression::{Isolate, IsolateError};
 
 static RULE_ENGINE_LAZY: OnceLock<DecisionEngine<NoopLoader>> = OnceLock::new();
-
 
 /*
  * 初始化懒加载获取 决策引擎
@@ -46,7 +46,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
             "com/workoss/boot/engine/RuleEngineException",
             decision_result.err().unwrap().to_string(),
         )
-            .unwrap();
+        .unwrap();
         return JByteArray::default();
     }
 
@@ -60,29 +60,28 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
                 max_depth: Some(max_depth as u8),
             },
         ))
-    });
-    return match job_handler.await {
-        Ok(response_result) => {
-            match response_result {
-                Ok(respone) => {
-                    env.byte_array_from_slice(serde_json::to_vec(&respone).unwrap().as_slice()).unwrap()
-                },
-                Err(error) => {
-                    env.throw_new(
-                        "com/workoss/boot/engine/RuleEngineException",
-                        error.to_string(),
-                    )
-                        .unwrap();
-                    JByteArray::default()
-                }
+    })
+    .await;
+    return match job_handler {
+        Ok(response_result) => match response_result {
+            Ok(respone) => env
+                .byte_array_from_slice(serde_json::to_vec(&respone).unwrap().as_slice())
+                .unwrap(),
+            Err(error) => {
+                env.throw_new(
+                    "com/workoss/boot/engine/RuleEngineException",
+                    error.to_string(),
+                )
+                .unwrap();
+                JByteArray::default()
             }
-        }
+        },
         Err(_) => {
             env.throw_new(
                 "com/workoss/boot/engine/RuleEngineException",
                 "hook time out",
             )
-                .unwrap();
+            .unwrap();
             JByteArray::default()
         }
     };
@@ -107,19 +106,20 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
             "com/workoss/boot/engine/RuleEngineException",
             decision_result.err().unwrap().to_string(),
         )
-            .unwrap();
+        .unwrap();
         return 0;
     }
     return match get_rule_engine()
         .create_decision(decision_result.unwrap().into())
-        .validate() {
+        .validate()
+    {
         Ok(_) => 1,
         Err(error) => {
             env.throw_new(
                 "com/workoss/boot/engine/RuleEngineException",
                 error.to_string(),
             )
-                .unwrap();
+            .unwrap();
             return 0;
         }
     };
@@ -138,33 +138,31 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
     let expression_content = String::from_utf8(expression).unwrap();
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
 
-    let join_handle = tokio::spawn(async move {
-        let iso = Isolate::default();
-        iso.inject_env(&input_content);
-        return  iso.run_standard(&expression_content);
-    });
+    let join_handle: Result<Result<Value, IsolateError>, JoinError> = tokio::spawn(async move {
+        return Isolate::with_environment(&input_content).run_standard(&expression_content);
+    })
+    .await;
 
-    return match join_handle.await {
-        Ok(value_result) => {
-            match value_result {
-                Ok(response) => {
-                    env.byte_array_from_slice(serde_json::to_vec(&response).unwrap().as_slice())
-                        .unwrap()
-                }
-                Err(error) => {
-                    env.throw_new(
-                        "com/workoss/boot/engine/RuleEngineException",
-                        error.to_string(),
-                    ).unwrap();
-                    JByteArray::default()
-                }
+    return match join_handle {
+        Ok(value_result) => match value_result {
+            Ok(response) => env
+                .byte_array_from_slice(serde_json::to_vec(&response).unwrap().as_slice())
+                .unwrap(),
+            Err(error) => {
+                env.throw_new(
+                    "com/workoss/boot/engine/RuleEngineException",
+                    error.to_string(),
+                )
+                .unwrap();
+                JByteArray::default()
             }
         },
         Err(_) => {
             env.throw_new(
                 "com/workoss/boot/engine/RuleEngineException",
                 "hook time out",
-            ).unwrap();
+            )
+            .unwrap();
             JByteArray::default()
         }
     };
@@ -173,13 +171,13 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
 #[cfg(test)]
 mod tests {
     use serde_json::{json, Value};
-    use zen_expression::isolate::Isolate;
+    use zen_expression::Isolate;
 
     #[test]
     fn it_works() {
-        let isolate = Isolate::default();
+        let mut isolate = Isolate::new();
         let json_env: Value = json!({"a":1,"b":2,"c":3});
-        isolate.inject_env(&json_env);
+        isolate.set_environment(&json_env);
         let expr = r#"a+b+c"#;
         let value = isolate.run_standard(expr).unwrap();
         let result = serde_json::to_string(&value).unwrap();
@@ -187,4 +185,3 @@ mod tests {
         assert_eq!(json!(6), value);
     }
 }
-

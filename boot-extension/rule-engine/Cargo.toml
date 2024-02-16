@@ -1,5 +1,6 @@
 [package]
 authors = ["workoss <workoss@icloud.com>"]
+description = "rule engine desc"
 edition = "2021"
 name = "zen-engine"
 version = "0.1.0"
@@ -8,12 +9,12 @@ version = "0.1.0"
 crate_type = ["cdylib"]
 
 [dependencies]
-futures = "^0.3.28"
-jni = "^0.21.1"
-serde_json = "^1.0.107"
-tokio = {version = "^1.32.0", features = ["rt", "macros","rt-multi-thread"]}
-zen-engine = "^0.15.0"
-zen-expression = "0.15.0"
+futures = "0.3"
+jni = "0.21"
+serde_json = "1.0"
+tokio = {version = "1.36", features = ["rt", "macros", "rt-multi-thread"]}
+zen-engine = "0.18"
+zen-expression = "0.18"
 
 [profile.release]
 codegen-units = 1 

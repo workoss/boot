@@ -34,7 +34,7 @@ public class RuleEngineTest {
 	@BeforeAll
 	static void setUp() {
 		ZenRuleEngineConfig config = new ZenRuleEngineConfig();
-		config.setTrace(false);
+		config.setTrace(true);
 		config.setMaxDepth(20);
 		engine = new ZenRuleEngine(config);
 	}

@@ -6,10 +6,11 @@ use wasmtime::component::{Component, Linker};
 use wasmtime::{Engine, Store};
 use wasmtime_wasi::preview2::{DirPerms, FilePerms, Table, WasiCtx, WasiCtxBuilder, WasiView};
 use wasmtime_wasi::{ambient_authority, Dir};
+
 wasmtime::component::bindgen!({
     path: "./wit/plugin.wit",
     world: "plugin",
-    async: true,
+    async: true
 });
 
 //GLOBAL_ENGINE
@@ -20,7 +21,7 @@ fn get_wasmtime_engine() -> &'static Engine {
         let mut engine_config = wasmtime::Config::new();
         engine_config.wasm_component_model(true);
         engine_config.async_support(true);
-        engine_config.wasm_backtrace_details(wasmtime::WasmBacktraceDetails::Enable);
+        engine_config.wasm_backtrace_details(wasmtime::WasmBacktraceDetails::Disable);
         engine_config.debug_info(true);
         Engine::new(&engine_config).unwrap()
     })

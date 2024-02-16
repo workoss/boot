@@ -28,7 +28,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class QuickWebProjectProperties {
 
 	private RequestProperties request = new RequestProperties();
-
 	/**
 	 * 对response 的配置
 	 */
