@@ -143,7 +143,9 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
 
     let join_handle: Result<Result<Value, IsolateError>, JoinError> = tokio::task::spawn_blocking(move || {
-        Handle::current().block_on(Isolate::with_environment(&input_content).run_standard(&expression_content))
+        Handle::current().block_on(async {
+            Isolate::with_environment(&input_content).run_standard(&expression_content)
+        })
     }).await;
 
     return match join_handle {
