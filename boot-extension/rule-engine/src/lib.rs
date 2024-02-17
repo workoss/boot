@@ -4,6 +4,7 @@ use jni::objects::{JByteArray, JClass};
 use jni::sys::{jboolean, jint};
 use jni::JNIEnv;
 use serde_json::{error, Error, Value};
+use tokio::runtime::Handle;
 use tokio::task::JoinError;
 use zen_engine::loader::NoopLoader;
 use zen_engine::model::DecisionContent;
@@ -46,22 +47,25 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
             "com/workoss/boot/engine/RuleEngineException",
             decision_result.err().unwrap().to_string(),
         )
-        .unwrap();
+            .unwrap();
         return JByteArray::default();
     }
 
-    let job_handler = tokio::spawn(async move {
-        let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
-        let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
-        futures::executor::block_on(decision_engine.evaluate_with_opts(
-            &input_content,
-            EvaluationOptions {
-                trace: Some(trace.eq(&1)),
-                max_depth: Some(max_depth as u8),
-            },
-        ))
-    })
-    .await;
+    let job_handler = tokio::task::spawn_blocking(move || {
+        Handle::current().block_on({
+            let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
+            let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
+            decision_engine
+                .evaluate_with_opts(
+                    &input_content,
+                    EvaluationOptions {
+                        trace: Some(trace.eq(&1)),
+                        max_depth: Some(max_depth as u8),
+                    },
+                )
+        })
+    }).await;
+
     return match job_handler {
         Ok(response_result) => match response_result {
             Ok(respone) => env
@@ -72,7 +76,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
                     "com/workoss/boot/engine/RuleEngineException",
                     error.to_string(),
                 )
-                .unwrap();
+                    .unwrap();
                 JByteArray::default()
             }
         },
@@ -81,7 +85,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
                 "com/workoss/boot/engine/RuleEngineException",
                 "hook time out",
             )
-            .unwrap();
+                .unwrap();
             JByteArray::default()
         }
     };
@@ -106,7 +110,7 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
             "com/workoss/boot/engine/RuleEngineException",
             decision_result.err().unwrap().to_string(),
         )
-        .unwrap();
+            .unwrap();
         return 0;
     }
     return match get_rule_engine()
@@ -119,7 +123,7 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
                 "com/workoss/boot/engine/RuleEngineException",
                 error.to_string(),
             )
-            .unwrap();
+                .unwrap();
             return 0;
         }
     };
@@ -138,10 +142,9 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
     let expression_content = String::from_utf8(expression).unwrap();
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
 
-    let join_handle: Result<Result<Value, IsolateError>, JoinError> = tokio::spawn(async move {
-        return Isolate::with_environment(&input_content).run_standard(&expression_content);
-    })
-    .await;
+    let join_handle: Result<Result<Value, IsolateError>, JoinError> = tokio::task::spawn_blocking(move || {
+        Handle::current().block_on(Isolate::with_environment(&input_content).run_standard(&expression_content))
+    }).await;
 
     return match join_handle {
         Ok(value_result) => match value_result {
@@ -153,7 +156,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
                     "com/workoss/boot/engine/RuleEngineException",
                     error.to_string(),
                 )
-                .unwrap();
+                    .unwrap();
                 JByteArray::default()
             }
         },
@@ -162,7 +165,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
                 "com/workoss/boot/engine/RuleEngineException",
                 "hook time out",
             )
-            .unwrap();
+                .unwrap();
             JByteArray::default()
         }
     };
