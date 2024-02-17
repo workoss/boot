@@ -42,7 +42,7 @@ jobs:
       packages: write
     environment: rule-engine
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
         name: checkout code
       - name: Install Rust
         run: |
