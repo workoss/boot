@@ -83,7 +83,7 @@ jobs:
       matrix:
         arch:
           - x86_64
-#          - aarch64
+          - aarch64
     runs-on: ${{ inputs.osName }}-latest
     permissions:
       contents: read
