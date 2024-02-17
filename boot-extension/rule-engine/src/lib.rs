@@ -50,20 +50,17 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
             .unwrap();
         return JByteArray::default();
     }
-
+    let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
+    let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
     let job_handler = tokio::task::spawn_blocking(move || {
-        Handle::current().block_on({
-            let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
-            let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
-            decision_engine
+        Handle::current().block_on(decision_engine
                 .evaluate_with_opts(
                     &input_content,
                     EvaluationOptions {
                         trace: Some(trace.eq(&1)),
                         max_depth: Some(max_depth as u8),
                     },
-                )
-        })
+                ))
     }).await;
 
     return match job_handler {
