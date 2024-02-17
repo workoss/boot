@@ -19,7 +19,7 @@ export RUST_BACKTRACE=1
 #rustup target add aarch64-apple-darwin
 #cross build --release --target aarch64-apple-darwin
 #ls -la target/aarch64-apple-darwin/release
-#cp -f target/aarch64-apple-darwin/release/libzen_engine.dylib ./src/main/resources/libzen_engine-osx-aarch_64.dylib
+#cp -f target/aarch64-apple-darwin/release/libzen_engine.dylib ./src/main/resources/libzen_engine-osx-aarch64.dylib
 
 
 

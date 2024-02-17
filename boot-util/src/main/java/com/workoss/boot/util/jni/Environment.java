@@ -140,7 +140,7 @@ public class Environment {
 			return "x86_32";
 		}
 		if (value.matches("^(ia64w?|itanium64)$")) {
-			return "itanium_64";
+			return "itanium64";
 		}
 		if ("ia64n".equals(value)) {
 			return "itanium_32";
@@ -149,40 +149,40 @@ public class Environment {
 			return "sparc_32";
 		}
 		if (value.matches("^(sparcv9|sparc64)$")) {
-			return "sparc_64";
+			return "sparc64";
 		}
 		if (value.matches("^(arm|arm32)$")) {
-			return "arm_32";
+			return "arm32";
 		}
 		if (value.matches("^(arm64)$")) {
-			return "aarch_64";
+			return "aarch64";
 		}
 		if ("aarch64".equals(value)) {
-			return "aarch_64";
+			return "aarch64";
 		}
 		if (value.matches("^(mips|mips32)$")) {
-			return "mips_32";
+			return "mips32";
 		}
 		if (value.matches("^(mipsel|mips32el)$")) {
-			return "mipsel_32";
+			return "mipsel32";
 		}
 		if ("mips64".equals(value)) {
-			return "mips_64";
+			return "mips64";
 		}
 		if ("mips64el".equals(value)) {
-			return "mipsel_64";
+			return "mipsel64";
 		}
 		if (value.matches("^(ppc|ppc32)$")) {
-			return "ppc_32";
+			return "ppc32";
 		}
 		if (value.matches("^(ppcle|ppc32le)$")) {
-			return "ppcle_32";
+			return "ppcle32";
 		}
 		if ("ppc64".equals(value)) {
-			return "ppc_64";
+			return "ppc64";
 		}
 		if ("ppc64le".equals(value)) {
-			return "ppcle_64";
+			return "ppcle64";
 		}
 		if ("s390".equals(value)) {
 			return "s390_32";
@@ -200,7 +200,7 @@ public class Environment {
 			return "e2k";
 		}
 		if ("loongarch64".equals(value)) {
-			return "loongarch_64";
+			return "loongarch64";
 		}
 		return "unknown";
 	}
