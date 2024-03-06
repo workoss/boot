@@ -6,5 +6,5 @@ interface logger {
 
 world plugin {
     import logger;
-    export run: func(input: list<u8>, context: option<list<u8>>) -> result<list<u8>,string>;
+    export run: func(content: list<u8>, input: option<list<u8>>) -> result<list<u8>,string>;
 }
