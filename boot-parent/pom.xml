@@ -59,7 +59,7 @@
 		<slf4j.version>2.0.12</slf4j.version>
 		<log4j2.version>2.23.1</log4j2.version>
 
-		<jackson-bom.version>2.16.2</jackson-bom.version>
+		<jackson-bom.version>2.17.0</jackson-bom.version>
 		<netty-bom.version>4.1.107.Final</netty-bom.version>
 		<asm.version>9.6</asm.version>
 		<reactor-bom.version>2023.0.4</reactor-bom.version>
