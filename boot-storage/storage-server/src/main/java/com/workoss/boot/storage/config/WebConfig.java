@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.workoss.boot.storage.web.advice.GlobalResponseHandler;
 import com.workoss.boot.storage.web.filter.ReactiveRequestContextFilter;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import jakarta.validation.Validator;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -66,10 +66,10 @@ public class WebConfig {
 	@Bean
 	public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(Environment environment) {
 		String datetimePattern = environment.getProperty("spring.webflux.format.date-time",
-				DateUtils.DEFAULT_DATE_TIME_PATTERN);
-		String datePattern = environment.getProperty("spring.webflux.format.date", DateUtils.DEFAULT_DATE_PATTERN);
-		String timePattern = environment.getProperty("spring.webflux.format.time", DateUtils.DEFAULT_TIME_PATTERN);
-		String timeZone = environment.getProperty("spring.jackson.time-zone", DateUtils.DEFAULT_TIME_ZONE);
+				DateUtil.DEFAULT_DATE_TIME_PATTERN);
+		String datePattern = environment.getProperty("spring.webflux.format.date", DateUtil.DEFAULT_DATE_PATTERN);
+		String timePattern = environment.getProperty("spring.webflux.format.time", DateUtil.DEFAULT_TIME_PATTERN);
+		String timeZone = environment.getProperty("spring.jackson.time-zone", DateUtil.DEFAULT_TIME_ZONE);
 
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern);
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);

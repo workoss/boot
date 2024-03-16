@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.workoss.boot.util.id;
 
 import com.workoss.boot.util.Assert;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.IpUtil;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.exception.ExceptionUtils;
@@ -145,7 +144,7 @@ public class Sequence {
 		Assert.isTrue(randomSequenceLimit >= 0 && randomSequenceLimit <= SEQUENCE_MASK,
 				String.format("randomSequenceLimit can't be less than %d or greater than 0", SEQUENCE_MASK));
 		if (epochDate != null) {
-			twepoch = DateUtils.getMillis(epochDate);
+			twepoch = DateUtil.getMillis(epochDate);
 		}
 		this.workerId = workerId;
 		this.datacenterId = datacenterId;

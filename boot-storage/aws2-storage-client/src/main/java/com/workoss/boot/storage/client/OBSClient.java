@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,11 @@ import com.workoss.boot.storage.config.StorageClientConfig;
 import com.workoss.boot.storage.model.StorageSignature;
 import com.workoss.boot.storage.model.StorageStsToken;
 import com.workoss.boot.storage.model.StorageType;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.StringUtils;
-import com.workoss.boot.util.json.JsonMapper;
-import com.workoss.boot.util.security.CryptoUtil;
-import com.workoss.boot.util.text.BaseEncodeUtil;
 import com.workoss.boot.util.web.MediaTypeFactory;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -67,10 +63,10 @@ public class OBSClient extends AbstractS3Client {
 		// {"expiration":"2021-02-24T07:08:34.148Z","conditions":[{"x-obs-acl":"public-read"},{"bucket":"workoss"},{"key":"22.txt"},["content-length-range",0,
 		// MAX_UPLOAD_SIZE]]}
 		// 本地生成签名
-		LocalDateTime expireTime = DateUtils.plusSeconds(DateUtils.getCurrentDateTime(), 1200 - 5 * 60);
+		LocalDateTime expireTime = DateUtil.plusSeconds(DateUtil.getCurrentDateTime(), 1200 - 5 * 60);
 
 		Map<String, Object> policyContext = new HashMap<>(8);
-		policyContext.put("expiration", DateUtils.format(expireTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+		policyContext.put("expiration", DateUtil.format(expireTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 
 		List<Object> conditions = new ArrayList<>();
 		conditions.add(Collections.singletonMap("bucket", config.getBucketName()));
@@ -90,7 +86,7 @@ public class OBSClient extends AbstractS3Client {
 
 		String finalMimeType = mimeType;
 		return localSign(config, key, policyContext, storageSignature -> {
-			storageSignature.setExpire(DateUtils.getMillis(expireTime));
+			storageSignature.setExpire(DateUtil.getMillis(expireTime));
 			storageSignature.setMimeType(finalMimeType);
 			storageSignature.setSuccessActionStatus(successActionStatus);
 		});

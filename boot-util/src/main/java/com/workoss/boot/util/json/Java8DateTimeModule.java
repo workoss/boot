@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.DurationSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -40,13 +40,13 @@ public class Java8DateTimeModule {
 		LocalTimeDeserializer localTimeDeserializer = new LocalTimeDeserializer();
 		return new JavaTimeModule().addDeserializer(LocalDateTime.class, localDateTimeDeserializer)
 			.addSerializer(LocalDateTime.class,
-					new LocalDateTimeSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_TIME_PATTERN)))
+					new LocalDateTimeSerializer(DateUtil.getDateTimeFormatter(DateUtil.DEFAULT_DATE_TIME_PATTERN)))
 			.addDeserializer(LocalDate.class, localDateDeserializer)
 			.addSerializer(LocalDate.class,
-					new LocalDateSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_DATE_PATTERN)))
+					new LocalDateSerializer(DateUtil.getDateTimeFormatter(DateUtil.DEFAULT_DATE_PATTERN)))
 			.addDeserializer(LocalTime.class, localTimeDeserializer)
 			.addSerializer(LocalTime.class,
-					new LocalTimeSerializer(DateUtils.getDateTimeFormatter(DateUtils.DEFAULT_TIME_PATTERN)))
+					new LocalTimeSerializer(DateUtil.getDateTimeFormatter(DateUtil.DEFAULT_TIME_PATTERN)))
 			.addDeserializer(Duration.class, DurationDeserializer.INSTANCE)
 			.addSerializer(Duration.class, DurationSerializer.INSTANCE);
 	}

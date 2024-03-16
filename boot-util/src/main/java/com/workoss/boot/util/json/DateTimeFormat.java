@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.workoss.boot.util.json;
 
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.collection.CollectionUtils;
 
 import java.text.ParseException;
@@ -30,7 +30,7 @@ public class DateTimeFormat extends SimpleDateFormat {
 	private String[] patterns = new String[0];
 
 	public DateTimeFormat(String... patterns) {
-		super(DateUtils.DEFAULT_DATE_TIME_PATTERN);
+		super(DateUtil.DEFAULT_DATE_TIME_PATTERN);
 		if (CollectionUtils.isNotEmpty(patterns)) {
 			this.patterns = patterns;
 		}
@@ -38,7 +38,7 @@ public class DateTimeFormat extends SimpleDateFormat {
 
 	@Override
 	public Date parse(String source) throws ParseException {
-		return DateUtils.parseDate(source, patterns);
+		return DateUtil.parseDate(source, patterns);
 	}
 
 }

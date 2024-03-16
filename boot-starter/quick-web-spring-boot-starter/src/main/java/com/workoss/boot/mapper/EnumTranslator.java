@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.workoss.boot.mapper;
 
 import com.workoss.boot.model.IEnum;
-import com.workoss.boot.util.EnumUtil;
 import org.mapstruct.Named;
 import org.mapstruct.TargetType;
 

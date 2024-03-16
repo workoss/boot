@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
  * @author workoss
  */
 @SuppressWarnings("ALL")
-public class DateUtils {
+public class DateUtil {
 
 	/**
 	 * 日期默认格式
@@ -76,7 +76,7 @@ public class DateUtils {
 		PATTERN_PATTERNSTR_MAP.put(Pattern.compile("^\\d{2}\\d{2}\\d{2}$"), Pair.of(LocalTime.class, "HHmmss"));
 	}
 
-	private DateUtils() {
+	private DateUtil() {
 	}
 
 	public static DateTimeFormatter getDateTimeFormatter(String pattern) {

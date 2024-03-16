@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package com.workoss.boot.util.json;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.collection.CollectionUtils;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class LocalTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310
 	private String[] patterns = new String[0];
 
 	public LocalTimeDeserializer(String... patterns) {
-		super(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_TIME_PATTERN));
+		super(DateTimeFormatter.ofPattern(DateUtil.DEFAULT_TIME_PATTERN));
 		if (CollectionUtils.isNotEmpty(patterns)) {
 			this.patterns = patterns;
 		}
@@ -55,7 +55,7 @@ public class LocalTimeDeserializer extends com.fasterxml.jackson.datatype.jsr310
 			return _fromEmptyString(p, ctxt, string);
 		}
 		try {
-			return DateUtils.localTimeParse(string, patterns);
+			return DateUtil.localTimeParse(string, patterns);
 		}
 		catch (DateTimeException e) {
 			// ignore

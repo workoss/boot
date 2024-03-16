@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,10 @@ import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.service.token.AbstractTokenHandler;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.context.Context;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -113,7 +112,7 @@ public class OSSTokenHandler extends AbstractTokenHandler {
 			stsToken.setAccessKey(credentials.getAccessKeyId());
 			stsToken.setSecretKey(credentials.getAccessKeySecret());
 			stsToken
-				.setExpiration(DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
+				.setExpiration(DateUtil.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
 			// 放入域名
 			stsToken.setEndpoint(getDomain(context, bucketName));
 			return Mono.just(stsToken);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.util.MustacheTemplateUtil;
 
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.context.Context;
 import com.workoss.boot.util.security.CryptoUtil;
@@ -77,10 +77,10 @@ public abstract class AbstractTokenHandler implements TokenHandler {
 	protected UploadSign generateWebSign(String policyTemplate, Context<String, String> context, STSToken stsToken,
 			String bucketName, String key, String mimeType, String successActionStatus) {
 		long durationSeconds = Long.parseLong(context.get("token_duration_seconds", "1200"));
-		LocalDateTime expireTime = DateUtils.plusSeconds(DateUtils.getCurrentDateTime(), durationSeconds - 5 * 60);
+		LocalDateTime expireTime = DateUtil.plusSeconds(DateUtil.getCurrentDateTime(), durationSeconds - 5 * 60);
 
 		Map<String, String> policyContext = new HashMap<>(8);
-		policyContext.put("expiration", DateUtils.format(expireTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+		policyContext.put("expiration", DateUtil.format(expireTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 		policyContext.put("bucketName", bucketName);
 		policyContext.put("key", key);
 		policyContext.put("maxUploadSize", context.get("max_upload_size", "10485760000"));
@@ -117,7 +117,7 @@ public abstract class AbstractTokenHandler implements TokenHandler {
 		uploadSign.setKey(key);
 		uploadSign.setPolicy(policyBase64);
 		uploadSign.setSignature(signature);
-		uploadSign.setExpire(DateUtils.getMillis(expireTime));
+		uploadSign.setExpire(DateUtil.getMillis(expireTime));
 		return uploadSign;
 	}
 

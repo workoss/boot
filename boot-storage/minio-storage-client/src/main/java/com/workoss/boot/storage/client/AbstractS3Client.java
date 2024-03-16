@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import com.workoss.boot.storage.exception.StorageException;
 import com.workoss.boot.storage.model.*;
 import com.workoss.boot.storage.util.HttpUtil;
 import com.workoss.boot.storage.util.StorageUtil;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.StreamUtils;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.collection.CollectionUtils;
@@ -34,7 +34,6 @@ import io.minio.*;
 import io.minio.credentials.Provider;
 import io.minio.credentials.StaticProvider;
 import io.minio.errors.ErrorResponseException;
-import io.minio.errors.MinioException;
 import io.minio.messages.Bucket;
 import io.minio.messages.ErrorResponse;
 import io.minio.messages.Item;
@@ -173,7 +172,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			return buckets.stream()
 				.filter(bucket -> config.getBucketName().equals(bucket.name()))
 				.map(bucket -> new StorageBucketInfo(bucket.name(), null,
-						DateUtils.toDate(bucket.creationDate().toLocalDateTime())))
+						DateUtil.toDate(bucket.creationDate().toLocalDateTime())))
 				.findFirst()
 				.orElseGet(() -> null);
 		}
@@ -192,7 +191,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			}
 			return buckets.stream()
 				.map(bucket -> new StorageBucketInfo(bucket.name(), null,
-						DateUtils.toDate(bucket.creationDate().toLocalDateTime())))
+						DateUtil.toDate(bucket.creationDate().toLocalDateTime())))
 				.collect(Collectors.toList());
 		}
 		catch (Exception e) {
@@ -229,7 +228,7 @@ public abstract class AbstractS3Client implements StorageClient {
 			storageFileInfo.setKey(key);
 			storageFileInfo.setHost(formatHost());
 			storageFileInfo.setSize(response.size());
-			storageFileInfo.setLastModified(DateUtils.getMillis(response.lastModified().toLocalDateTime()));
+			storageFileInfo.setLastModified(DateUtil.getMillis(response.lastModified().toLocalDateTime()));
 			Map<String, Object> userMeta = new HashMap<>();
 			userMeta.putAll(response.userMetadata());
 			storageFileInfo.setMetaData(userMeta);
@@ -282,7 +281,7 @@ public abstract class AbstractS3Client implements StorageClient {
 					}
 					fileInfo.setSize(item.size());
 					if (item.lastModified() != null) {
-						fileInfo.setLastModified(DateUtils.getMillis(item.lastModified().toLocalDateTime()));
+						fileInfo.setLastModified(DateUtil.getMillis(item.lastModified().toLocalDateTime()));
 					}
 					Map<String, String> userMeta = item.userMetadata();
 					if (CollectionUtils.isNotEmpty(userMeta)) {

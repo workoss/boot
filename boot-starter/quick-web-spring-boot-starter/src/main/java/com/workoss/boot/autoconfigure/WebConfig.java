@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.workoss.boot.exception.ExceptionMapper;
-import com.workoss.boot.util.DateUtils;
-import com.workoss.boot.util.collection.CollectionUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.json.*;
 import com.workoss.boot.web.advice.GlobalExceptionHandlerAdvice;
 import com.workoss.boot.web.advice.GlobalResponseBodyAdvice;
@@ -43,7 +42,6 @@ import org.springframework.boot.autoconfigure.validation.ValidationAutoConfigura
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -88,10 +86,10 @@ public class WebConfig {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(Environment environment) {
         String datetimePattern = environment.getProperty("spring.mvc.format.date-time",
-                DateUtils.DEFAULT_DATE_TIME_PATTERN);
-        String datePattern = environment.getProperty("spring.mvc.format.date", DateUtils.DEFAULT_DATE_PATTERN);
-        String timePattern = environment.getProperty("spring.mvc.format.time", DateUtils.DEFAULT_TIME_PATTERN);
-        String timeZone = environment.getProperty("spring.jackson.time-zone", DateUtils.DEFAULT_TIME_ZONE);
+                DateUtil.DEFAULT_DATE_TIME_PATTERN);
+        String datePattern = environment.getProperty("spring.mvc.format.date", DateUtil.DEFAULT_DATE_PATTERN);
+        String timePattern = environment.getProperty("spring.mvc.format.time", DateUtil.DEFAULT_TIME_PATTERN);
+        String timeZone = environment.getProperty("spring.jackson.time-zone", DateUtil.DEFAULT_TIME_ZONE);
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datetimePattern);
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);

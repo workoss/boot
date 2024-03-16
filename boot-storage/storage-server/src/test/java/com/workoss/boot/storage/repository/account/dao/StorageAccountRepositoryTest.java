@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,11 @@ import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.repository.account.entity.StorageAccountEntity;
 import com.workoss.boot.storage.util.MustacheTemplateUtil;
 import com.workoss.boot.storage.util.ReactorUtil;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -117,7 +116,7 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 		// criteria = criteria.and("state").is(AccountState.OFF);
 
 		StorageAccountEntity defaultEntity = new StorageAccountEntity();
-		defaultEntity.setModifyTime(DateUtils.getCurrentDateTime());
+		defaultEntity.setModifyTime(DateUtil.getCurrentDateTime());
 
 		storageAccountRepository.findByAccountTypeAndState(ThirdPlatformType.OBS, AccountState.OFF, pageRequest)
 			// r2dbcEntityTemplate.select(StorageAccountEntity.class)
@@ -158,8 +157,8 @@ class StorageAccountRepositoryTest extends BaseSpringTest {
 			accountEntity.setAccessKey("8ACZFOMKJUAAY1XQWKXR");
 			accountEntity.setAccountType(ThirdPlatformType.OBS);
 			accountEntity.setState(AccountState.ON);
-			accountEntity.setCreateTime(DateUtils.getCurrentDateTime());
-			accountEntity.setCreateTime(DateUtils.getCurrentDateTime());
+			accountEntity.setCreateTime(DateUtil.getCurrentDateTime());
+			accountEntity.setCreateTime(DateUtil.getCurrentDateTime());
 			list.add(accountEntity);
 		}
 		storageAccountRepository.saveAll(list).as(StepVerifier::create).expectNextCount(100).verifyComplete();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.workoss.boot.storage.model.STSToken;
 import com.workoss.boot.storage.model.ThirdPlatformType;
 import com.workoss.boot.storage.model.UploadSign;
 import com.workoss.boot.storage.service.token.AbstractTokenHandler;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.context.Context;
 import com.workoss.boot.util.json.JsonMapper;
@@ -139,7 +139,7 @@ public class OBSTokenHandler extends AbstractTokenHandler {
 			stsToken.setAccessKey(credential.getAccess());
 			stsToken.setSecretKey(credential.getSecret());
 			stsToken.setExpiration(
-					DateUtils.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
+					DateUtil.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
 			String endpoint = getDomain(context, bucketName);
 			stsToken.setEndpoint(endpoint);
 			return Mono.just(stsToken);

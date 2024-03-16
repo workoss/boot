@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.workoss.boot.util.json;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.collection.CollectionUtils;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class LocalDateDeserializer extends com.fasterxml.jackson.datatype.jsr310
 	private String[] patterns = new String[0];
 
 	public LocalDateDeserializer(String... patterns) {
-		super(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_PATTERN));
+		super(DateTimeFormatter.ofPattern(DateUtil.DEFAULT_DATE_PATTERN));
 		if (CollectionUtils.isNotEmpty(patterns)) {
 			this.patterns = patterns;
 		}
@@ -67,7 +67,7 @@ public class LocalDateDeserializer extends com.fasterxml.jackson.datatype.jsr310
 			// as per [datatype-jsr310#37], only check for optional (and, incorrect...)
 			// time marker 'T'
 			// if we are using default formatter
-			return DateUtils.localDateParse(string, patterns);
+			return DateUtil.localDateParse(string, patterns);
 		}
 		catch (DateTimeException e) {
 			// ignore

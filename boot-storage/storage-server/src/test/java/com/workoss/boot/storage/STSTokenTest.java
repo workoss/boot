@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.*;
 import com.huaweicloud.sdk.iam.v3.region.IamRegion;
 import com.workoss.boot.storage.model.STSToken;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import com.workoss.boot.util.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
@@ -152,7 +152,7 @@ public class STSTokenTest {
 			stsToken.setAccessKey(credential.getAccess());
 			stsToken.setSecretKey(credential.getSecret());
 			stsToken.setExpiration(
-					DateUtils.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
+					DateUtil.parse(credential.getExpiresAt(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").plusHours(8));
 			System.out.println(stsToken.toString());
 		}
 		catch (ConnectionException e) {
@@ -212,7 +212,7 @@ public class STSTokenTest {
 			stsToken.setAccessKey(credentials.getAccessKeyId());
 			stsToken.setSecretKey(credentials.getAccessKeySecret());
 			stsToken
-				.setExpiration(DateUtils.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
+				.setExpiration(DateUtil.parse(credentials.getExpiration(), "yyyy-MM-dd'T'HH:mm:ss'Z'").plusHours(8));
 		}
 		catch (ServerException e) {
 			e.printStackTrace();

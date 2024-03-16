@@ -16,7 +16,6 @@
         <module>rule-engine</module>
         <module>cedar-java</module>
         <module>ocr-java</module>
-        <module>wasm-plugin</module>
     </modules>
 
 </project>

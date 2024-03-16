@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,12 @@ public interface IEnum<M, N, E extends Enum<E>> {
 
 	/**
 	 * 获取编码
-	 * @return
-	 */
+     */
 	M getCode();
 
 	/**
 	 * 获取文本
-	 * @return
-	 */
+     */
 	N getDesc();
 
 }

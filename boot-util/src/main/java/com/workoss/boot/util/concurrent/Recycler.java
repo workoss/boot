@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.workoss.boot.util.MathUtil;
 import com.workoss.boot.util.concurrent.fast.FastThreadLocal;
 
 /**
@@ -96,13 +95,13 @@ public abstract class Recycler<T> {
 	 * 当一个Link中的DefaultHandle元素达到16个时，会新创建一个Link进行存储，这些Link组成链表，当然
 	 * 所有的Link加起来的容量要<=最大可共享容量。
 	 */
-	private static final int LINK_CAPACITY = MathUtil.safeFindNextPositivePowerOfTwo(
+	private static final int LINK_CAPACITY = safeFindNextPositivePowerOfTwo(
 			Integer.parseInt(System.getProperty("io.netty.recycler.linkCapacity", String.valueOf(16))));
 
 	/**
 	 * 回收因子，默认为8。 即默认每8个对象，允许回收一次，直接扔掉7个，可以让recycler的容量缓慢的增大，避免爆发式的请求
 	 */
-	private static final int RATIO = MathUtil.safeFindNextPositivePowerOfTwo(
+	private static final int RATIO = safeFindNextPositivePowerOfTwo(
 			Integer.parseInt(System.getProperty("io.netty.recycler.ratio", String.valueOf(8))));
 
 	/**
@@ -127,7 +126,7 @@ public abstract class Recycler<T> {
 		@Override
 		protected Stack<T> initialValue() throws Exception {
 			return new Stack<>(Thread.currentThread(), MAX_CAPACITY_PER_THREAD, MAX_DELAYE_DQUEUES_PERTHREAD,
-					MAX_SHARED_CAPACITY_FACTOR, MathUtil.safeFindNextPositivePowerOfTwo(RATIO) - 1);
+					MAX_SHARED_CAPACITY_FACTOR, safeFindNextPositivePowerOfTwo(RATIO) - 1);
 		}
 
 		@Override
@@ -841,6 +840,16 @@ public abstract class Recycler<T> {
 
 		}
 
+	}
+
+	private static int safeFindNextPositivePowerOfTwo(int value) {
+		return value <= 0 ? 1 : value >= 0x40000000 ? 0x40000000 : findNextPositivePowerOfTwo(value);
+	}
+
+	private static int findNextPositivePowerOfTwo(final int value) {
+		assert value > Integer.MIN_VALUE && value < 0x40000000;
+		// ceil(log<sub>2</sub>(x)) = {@code 32 - numberOfLeadingZeros(x - 1)}
+		return 1 << (32 - Integer.numberOfLeadingZeros(value - 1));
 	}
 
 }

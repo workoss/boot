@@ -109,6 +109,11 @@
 			<artifactId>mapstruct-jdk8</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+		</dependency>
+
 	</dependencies>
 
 

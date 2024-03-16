@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 workoss (https://www.workoss.com)
+ * Copyright 2019-2024 workoss (https://www.workoss.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.workoss.boot.storage.web.advice;
 
 import com.workoss.boot.model.ResultInfo;
-import com.workoss.boot.util.DateUtils;
+import com.workoss.boot.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ReactiveAdapterRegistry;
@@ -74,7 +74,7 @@ public class GlobalResponseHandler extends ResponseBodyResultHandler {
 		Object returnValue = result.getReturnValue();
 		ServerHttpResponse response = exchange.getResponse();
 		response.beforeCommit(() -> {
-			response.getHeaders().add(HttpHeaders.DATE, DateUtils.getCurrentDateTime("yyyy-MM-dd HH:mm:ss.SSS"));
+			response.getHeaders().add(HttpHeaders.DATE, DateUtil.getCurrentDateTime("yyyy-MM-dd HH:mm:ss.SSS"));
 			return Mono.empty();
 		});
 		HttpStatusCode responseStatus = Optional.of(exchange.getResponse())
