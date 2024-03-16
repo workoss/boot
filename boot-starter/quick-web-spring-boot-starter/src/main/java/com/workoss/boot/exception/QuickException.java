@@ -26,9 +26,6 @@ public class QuickException extends BootException {
 
 	private Boolean cover = false;
 
-	public QuickException() {
-	}
-
 	public QuickException(String code) {
 		this(code, null, false);
 	}

@@ -15,6 +15,7 @@
  */
 package com.workoss.boot.common.typehandler;
 
+import com.workoss.boot.util.EnumUtil;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 

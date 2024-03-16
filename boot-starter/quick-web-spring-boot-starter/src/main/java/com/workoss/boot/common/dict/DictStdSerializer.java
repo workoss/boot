@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.workoss.boot.common.annotation.Dict;
 import com.workoss.boot.model.IEnum;
+import com.workoss.boot.util.EnumUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -18,10 +18,10 @@ package com.workoss.boot.modulith.events.mybatis;
 import com.workoss.boot.plugin.mybatis.DynamicDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
-import org.springframework.modulith.events.core.EventPublication;
 import org.springframework.modulith.events.core.EventPublicationRepository;
 import org.springframework.modulith.events.core.EventSerializer;
 import org.springframework.modulith.events.core.PublicationTargetIdentifier;
+import org.springframework.modulith.events.core.TargetEventPublication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -63,7 +63,7 @@ class MybatisEventPublicationRepository implements EventPublicationRepository {
 	}
 
 	@Override
-	public EventPublication create(EventPublication publication) {
+	public TargetEventPublication create(TargetEventPublication publication) {
 		String serializedEvent = this.serializeEvent(publication.getEvent());
 		Map<String, Object> params = new HashMap<>();
 		params.put("id", databaseType.uuidToDatabase(publication.getIdentifier()));
@@ -86,7 +86,7 @@ class MybatisEventPublicationRepository implements EventPublicationRepository {
 	}
 
 	@Override
-	public List<EventPublication> findIncompletePublications() {
+	public List<TargetEventPublication> findIncompletePublications() {
 		List<Map<String, Object>> mapList = dynamicDao.executeQuery(SQL_STATEMENT_FIND_UNCOMPLETED,
 				Collections.emptyMap());
 		if (mapList == null || mapList.isEmpty()) {
@@ -96,7 +96,12 @@ class MybatisEventPublicationRepository implements EventPublicationRepository {
 	}
 
 	@Override
-	public Optional<EventPublication> findIncompletePublicationsByEventAndTargetIdentifier(Object event,
+	public List<TargetEventPublication> findIncompletePublicationsPublishedBefore(Instant instant) {
+		return List.of();
+	}
+
+	@Override
+	public Optional<TargetEventPublication> findIncompletePublicationsByEventAndTargetIdentifier(Object event,
 			PublicationTargetIdentifier targetIdentifier) {
 		String listenerId = targetIdentifier.getValue();
 		Map<String, Object> params = new HashMap<>();
@@ -110,7 +115,12 @@ class MybatisEventPublicationRepository implements EventPublicationRepository {
 		return Optional.of(resultMapToPublication(mapList.get(0)));
 	}
 
-	private EventPublication resultMapToPublication(Map<String, Object> map) {
+	@Override
+	public void deletePublications(List<UUID> identifiers) {
+
+	}
+
+	private TargetEventPublication resultMapToPublication(Map<String, Object> map) {
 		UUID id = (UUID) map.get("ID");
 		var eventClass = loadClass(id, (String) map.get("EVENT_TYPE"));
 		if (eventClass == null) {
@@ -151,7 +161,7 @@ class MybatisEventPublicationRepository implements EventPublicationRepository {
 		return this.serializer.serialize(event).toString();
 	}
 
-	private static class MybatisEventPublication implements EventPublication {
+	private static class MybatisEventPublication implements TargetEventPublication {
 
 		private final UUID id;
 
