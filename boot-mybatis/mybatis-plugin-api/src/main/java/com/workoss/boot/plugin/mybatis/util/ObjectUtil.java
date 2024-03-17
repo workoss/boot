@@ -30,194 +30,194 @@ import java.util.List;
  */
 public class ObjectUtil {
 
-	private static final int INITIAL_HASH = 7;
+    private static final int INITIAL_HASH = 7;
 
-	private static final int MULTIPLIER = 31;
+    private static final int MULTIPLIER = 31;
 
-	public static boolean isBlank(CharSequence cs) {
-		int strLen;
-		if ((cs == null) || ((strLen = cs.length()) == 0)) {
-			return true;
-		}
+    public static boolean isBlank(CharSequence cs) {
+        int strLen;
+        if ((cs == null) || ((strLen = cs.length()) == 0)) {
+            return true;
+        }
 
-		for (int i = 0; i < strLen; i++) {
-			if (!Character.isWhitespace(cs.charAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	public static boolean isEmpty(Collection<?> collection) {
-		return (collection == null) || collection.isEmpty();
-	}
+    public static boolean isEmpty(Collection<?> collection) {
+        return (collection == null) || collection.isEmpty();
+    }
 
-	public static String underscoreName(String camelCaseName) {
-		StringBuilder result = new StringBuilder();
-		if (camelCaseName != null && camelCaseName.length() > 0) {
-			result.append(camelCaseName.substring(0, 1).toLowerCase());
-			for (int i = 1; i < camelCaseName.length(); i++) {
-				char ch = camelCaseName.charAt(i);
-				if (Character.isUpperCase(ch)) {
-					result.append("_");
-					result.append(Character.toLowerCase(ch));
-				}
-				else {
-					result.append(ch);
-				}
-			}
-		}
-		return result.toString();
-	}
+    public static String underscoreName(String camelCaseName) {
+        if (camelCaseName == null || camelCaseName.isBlank()) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
 
-	public static boolean isPresent(String className, @Nullable ClassLoader classLoader) {
-		if (classLoader == null) {
-			classLoader = getDefaultClassLoader();
-		}
-		try {
-			Class.forName(className, false, classLoader);
-			return true;
-		}
-		catch (ClassNotFoundException e) {
-			return false;
-		}
-	}
+        result.append(camelCaseName.substring(0, 1).toLowerCase());
+        for (int i = 1; i < camelCaseName.length(); i++) {
+            char ch = camelCaseName.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                result.append("_");
+                result.append(Character.toLowerCase(ch));
+            } else {
+                result.append(ch);
+            }
+        }
 
-	public static ClassLoader getDefaultClassLoader() {
-		ClassLoader cl = null;
-		try {
-			cl = Thread.currentThread().getContextClassLoader();
-		}
-		catch (Throwable ex) {
-			// Cannot access thread context ClassLoader - falling back...
-		}
-		if (cl == null) {
-			// No thread context class loader -> use class loader of this class.
-			cl = ObjectUtil.class.getClassLoader();
-			if (cl == null) {
-				// getClassLoader() returning null indicates the bootstrap
-				// ClassLoader
-				try {
-					cl = ClassLoader.getSystemClassLoader();
-				}
-				catch (Throwable ex) {
-					// Cannot access message ClassLoader - oh well, maybe the
-					// caller can live with null...
-				}
-			}
-		}
-		return cl;
-	}
+        return result.toString();
+    }
 
-	/**
-	 * Assert that an object is not {@code null}.
-	 * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>
-	 * @param object the object to check
-	 * @param message the exception message to use if the assertion fails
-	 * @throws IllegalArgumentException if the object is {@code null}
-	 */
-	public static void notNull(Object object, String message) {
-		if (object == null) {
-			throw new IllegalArgumentException(message);
-		}
-	}
+    public static boolean isPresent(String className, @Nullable ClassLoader classLoader) {
+        if (classLoader == null) {
+            classLoader = getDefaultClassLoader();
+        }
+        try {
+            Class.forName(className, false, classLoader);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
-	public static boolean nullSafeEquals(@Nullable Object o1, @Nullable Object o2) {
-		if (o1 == o2) {
-			return true;
-		}
-		if (o1 == null || o2 == null) {
-			return false;
-		}
-		if (o1.equals(o2)) {
-			return true;
-		}
-		if (o1.getClass().isArray() && o2.getClass().isArray()) {
-			return arrayEquals(o1, o2);
-		}
-		return false;
-	}
+    public static ClassLoader getDefaultClassLoader() {
+        ClassLoader cl = null;
+        try {
+            cl = Thread.currentThread().getContextClassLoader();
+        } catch (Throwable ex) {
+            // Cannot access thread context ClassLoader - falling back...
+        }
+        if (cl == null) {
+            // No thread context class loader -> use class loader of this class.
+            cl = ObjectUtil.class.getClassLoader();
+            if (cl == null) {
+                // getClassLoader() returning null indicates the bootstrap
+                // ClassLoader
+                try {
+                    cl = ClassLoader.getSystemClassLoader();
+                } catch (Throwable ex) {
+                    // Cannot access message ClassLoader - oh well, maybe the
+                    // caller can live with null...
+                }
+            }
+        }
+        return cl;
+    }
 
-	public static int nullSafeHashCode(@Nullable Object obj) {
-		if (obj == null) {
-			return 0;
-		}
-		if (obj.getClass().isArray()) {
-			if (obj instanceof Object[] objects) {
-				return nullSafeHashCode(objects);
-			}
-			if (obj instanceof boolean[] booleans) {
-				return nullSafeHashCode(booleans);
-			}
-			if (obj instanceof byte[] bytes) {
-				return nullSafeHashCode(bytes);
-			}
-			if (obj instanceof char[] chars) {
-				return nullSafeHashCode(chars);
-			}
-			if (obj instanceof double[] doubles) {
-				return nullSafeHashCode(doubles);
-			}
-			if (obj instanceof float[] floats) {
-				return nullSafeHashCode(floats);
-			}
-			if (obj instanceof int[] ints) {
-				return nullSafeHashCode(ints);
-			}
-			if (obj instanceof long[] longs) {
-				return nullSafeHashCode(longs);
-			}
-			if (obj instanceof short[] shorts) {
-				return nullSafeHashCode(shorts);
-			}
-		}
-		return obj.hashCode();
-	}
+    /**
+     * Assert that an object is not {@code null}.
+     * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>
+     *
+     * @param object  the object to check
+     * @param message the exception message to use if the assertion fails
+     * @throws IllegalArgumentException if the object is {@code null}
+     */
+    public static void notNull(Object object, String message) {
+        if (object == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 
-	/**
-	 * Return a hash code based on the contents of the specified array. If {@code array}
-	 * is {@code null}, this method returns 0.
-	 */
-	public static int nullSafeHashCode(@Nullable Object[] array) {
-		if (array == null) {
-			return 0;
-		}
-		int hash = INITIAL_HASH;
-		for (Object element : array) {
-			hash = MULTIPLIER * hash + nullSafeHashCode(element);
-		}
-		return hash;
-	}
+    public static boolean nullSafeEquals(@Nullable Object o1, @Nullable Object o2) {
+        if (o1 == o2) {
+            return true;
+        }
+        if (o1 == null || o2 == null) {
+            return false;
+        }
+        if (o1.equals(o2)) {
+            return true;
+        }
+        if (o1.getClass().isArray() && o2.getClass().isArray()) {
+            return arrayEquals(o1, o2);
+        }
+        return false;
+    }
 
-	private static boolean arrayEquals(Object o1, Object o2) {
-		if (o1 instanceof Object[] o3 && o2 instanceof Object[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof boolean[] o3 && o2 instanceof boolean[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof byte[] o3 && o2 instanceof byte[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof char[] o3 && o2 instanceof char[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof double[] o3 && o2 instanceof double[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof float[] o3 && o2 instanceof float[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof int[] o3 && o2 instanceof int[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof long[] o3 && o2 instanceof long[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		if (o1 instanceof short[] o3 && o2 instanceof short[] o4) {
-			return Arrays.equals(o3, o4);
-		}
-		return false;
-	}
+    public static int nullSafeHashCode(@Nullable Object obj) {
+        if (obj == null) {
+            return 0;
+        }
+        if (obj.getClass().isArray()) {
+            if (obj instanceof Object[] objects) {
+                return nullSafeHashCode(objects);
+            }
+            if (obj instanceof boolean[] booleans) {
+                return nullSafeHashCode(booleans);
+            }
+            if (obj instanceof byte[] bytes) {
+                return nullSafeHashCode(bytes);
+            }
+            if (obj instanceof char[] chars) {
+                return nullSafeHashCode(chars);
+            }
+            if (obj instanceof double[] doubles) {
+                return nullSafeHashCode(doubles);
+            }
+            if (obj instanceof float[] floats) {
+                return nullSafeHashCode(floats);
+            }
+            if (obj instanceof int[] ints) {
+                return nullSafeHashCode(ints);
+            }
+            if (obj instanceof long[] longs) {
+                return nullSafeHashCode(longs);
+            }
+            if (obj instanceof short[] shorts) {
+                return nullSafeHashCode(shorts);
+            }
+        }
+        return obj.hashCode();
+    }
+
+    /**
+     * Return a hash code based on the contents of the specified array. If {@code array}
+     * is {@code null}, this method returns 0.
+     */
+    public static int nullSafeHashCode(@Nullable Object[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;
+        for (Object element : array) {
+            hash = MULTIPLIER * hash + nullSafeHashCode(element);
+        }
+        return hash;
+    }
+
+    private static boolean arrayEquals(Object o1, Object o2) {
+        if (o1 instanceof Object[] o3 && o2 instanceof Object[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof boolean[] o3 && o2 instanceof boolean[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof byte[] o3 && o2 instanceof byte[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof char[] o3 && o2 instanceof char[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof double[] o3 && o2 instanceof double[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof float[] o3 && o2 instanceof float[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof int[] o3 && o2 instanceof int[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof long[] o3 && o2 instanceof long[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        if (o1 instanceof short[] o3 && o2 instanceof short[] o4) {
+            return Arrays.equals(o3, o4);
+        }
+        return false;
+    }
 
 }

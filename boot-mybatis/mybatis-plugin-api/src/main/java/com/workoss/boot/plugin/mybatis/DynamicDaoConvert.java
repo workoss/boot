@@ -26,7 +26,7 @@ public interface DynamicDaoConvert<S> {
 	/**
 	 * 参数转换成map
 	 * @param s 对象
-	 * @return
+	 * @return dao 入参转换
 	 */
 	Map<String, Object> convertParam(S s);
 

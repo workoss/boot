@@ -51,7 +51,7 @@ public interface DynamicDao {
 	 * @return 变更条数
 	 */
 	@UpdateProvider(type = BaseProvider.class, method = "executeUpdate")
-	int executeUpdate(@Param("sql") String sql, Map<String, Object> params);
+	int executeUpdate(@Param("sql") String sql, @Param("params") Map<String, Object> params);
 
 	/**
 	 * 执行查询

@@ -121,7 +121,6 @@ public class WebConfig {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-
         localeResolver.setDefaultLocale(Locale.CHINA);
         return localeResolver;
     }

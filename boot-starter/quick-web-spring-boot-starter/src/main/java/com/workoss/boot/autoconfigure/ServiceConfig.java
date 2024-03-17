@@ -22,8 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.task.TaskExecutorCustomizer;
-import org.springframework.boot.task.TaskSchedulerCustomizer;
+import org.springframework.boot.task.ThreadPoolTaskExecutorCustomizer;
+import org.springframework.boot.task.ThreadPoolTaskSchedulerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 
@@ -37,7 +37,7 @@ import org.springframework.core.annotation.Order;
 public class ServiceConfig {
 
 	@Bean
-	public TaskExecutorCustomizer taskExecutorCustomizer() {
+	public ThreadPoolTaskExecutorCustomizer taskExecutorCustomizer() {
 		return taskExecutor -> {
 			taskExecutor.setThreadGroupName("TASK");
 			// 如果设置过大 则修改成 小的 根据cpu来设置
@@ -54,7 +54,7 @@ public class ServiceConfig {
 	}
 
 	@Bean
-	public TaskSchedulerCustomizer taskSchedulerCustomizer() {
+	public ThreadPoolTaskSchedulerCustomizer taskSchedulerCustomizer() {
 		return taskScheduler -> {
 			taskScheduler.setThreadGroupName("TASK_SCHEDULER");
 			if (taskScheduler.getPoolSize() == Integer.MAX_VALUE) {
