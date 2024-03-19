@@ -118,7 +118,7 @@
 		<aws-java-sdk.version>1.12.681</aws-java-sdk.version>
 		<awssdk.version>2.25.12</awssdk.version>
 
-		<maven-assembly-plugin.version>3.7.0</maven-assembly-plugin.version>
+		<maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
 		<maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
 		<maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
