@@ -569,6 +569,12 @@
 				<scope>import</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>io.github.workoss</groupId>
+				<artifactId>jni</artifactId>
+				<version>1.0-SNAPSHOT</version>
+			</dependency>
+
 
 		</dependencies>
 	</dependencyManagement>

@@ -16,6 +16,7 @@
 package com.benjaminwan.ocrlibrary;
 
 import com.workoss.boot.util.jni.NativeLibraryLoader;
+import io.github.workoss.jni.JniLibLoader;
 
 import java.io.IOException;
 
@@ -35,6 +36,7 @@ public class OcrEngine {
         try {
             String strTmp = System.getProperty("java.io.tmpdir");
             libPath = strTmp+ocrType.name().toLowerCase();
+//            JniLibLoader.getInstance().loadLibrary(OcrEngine.class.getClassLoader(),"rapid-ocr",false);
             NativeLibraryLoader.getInstance()
                     .loadLibrary(OcrEngine.class.getClassLoader(),strTmp,ocrType.name().toLowerCase(),"rapid_ocr");
         } catch (IOException e) {

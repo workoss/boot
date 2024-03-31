@@ -17,9 +17,9 @@ package com.workoss.boot.engine;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.workoss.boot.util.Lazy;
-import com.workoss.boot.util.jni.NativeLibraryLoader;
 import com.workoss.boot.util.StringUtils;
 import com.workoss.boot.util.json.JsonMapper;
+import io.github.workoss.jni.JniLibLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +47,7 @@ public class ZenRuleEngine {
 	public ZenRuleEngine(ZenRuleEngineConfig config) {
 		this.config = config;
 		try {
-			NativeLibraryLoader.getInstance().loadLibrary(ZenRuleEngine.class.getClassLoader(), "zen_engine");
+			JniLibLoader.getInstance().loadLibrary(ZenRuleEngine.class.getClassLoader(), "zen-engine",false);
 		}
 		catch (IOException e) {
 			throw new RuleEngineException("load lib error");
