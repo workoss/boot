@@ -1,9 +1,9 @@
 [package]
-
+authors = ["workoss <workoss@icloud.com>"]
 edition = "2021"
 name = "cedar-java"
-
-version = "2.0.0"
+description = "rule engine desc"
+version = "0.1.0"
 
 [dependencies]
 cedar-policy = {version = "^2.4.1"}# Need latest version from github

@@ -21,6 +21,11 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.workoss</groupId>
+            <artifactId>jni</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
@@ -79,6 +84,27 @@
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>io.github.workoss</groupId>
+                <artifactId>rust-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>rust-build-id</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <release>true</release>
+                            <path>src/main/rust/</path>
+                            <copyTo>${project.build.directory}/classes</copyTo>
+                            <copyWithPlatformDir>false</copyWithPlatformDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <configuration>

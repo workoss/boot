@@ -36,9 +36,9 @@ public class OcrEngine {
         try {
             String strTmp = System.getProperty("java.io.tmpdir");
             libPath = strTmp+ocrType.name().toLowerCase();
-//            JniLibLoader.getInstance().loadLibrary(OcrEngine.class.getClassLoader(),"rapid-ocr",false);
-            NativeLibraryLoader.getInstance()
-                    .loadLibrary(OcrEngine.class.getClassLoader(),strTmp,ocrType.name().toLowerCase(),"rapid_ocr");
+            JniLibLoader.getInstance().loadLibrary(OcrEngine.class.getClassLoader(),strTmp,ocrType.name().toLowerCase(),"rapid-ocr",false);
+//            NativeLibraryLoader.getInstance()
+//                    .loadLibrary(OcrEngine.class.getClassLoader(),strTmp,ocrType.name().toLowerCase(),"rapid-ocr",false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +84,7 @@ public class OcrUtil {
             ocrEngine.setNumThread(ocrConfig.getNumThread());
             //移动模型到 临时目录
             String libPath = ocrEngine.getLibPath();
-            copyModelsToTemp(ocrType.name().toLowerCase() + "/models", libPath);
+            copyModelsToTemp(ocrType.name().toLowerCase(), libPath);
             switch (ocrType) {
                 case ONNX -> {
                     if (!ocrEngine.initModels(libPath, "ch_PP-OCRv4_det_infer.onnx",
@@ -111,7 +110,7 @@ public class OcrUtil {
         private void copyModelsToTemp(String soucePath, String tempPath) {
             List<Pair<String, InputStream>> pairs = FileUtil.findFiles(OcrEngine.class.getClassLoader(), soucePath);
             File parentFile = new File(tempPath);
-            if (!parentFile.exists()) {
+            if (!parentFile.exists() && !parentFile.mkdirs()) {
                 throw new IllegalArgumentException("动态链接库目录不存在");
             }
             try {

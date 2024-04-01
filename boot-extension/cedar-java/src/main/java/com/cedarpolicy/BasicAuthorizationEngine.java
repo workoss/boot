@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.workoss.boot.util.jni.NativeLibraryLoader;
+import io.github.workoss.jni.JniLibLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,8 +45,7 @@ public final class BasicAuthorizationEngine implements AuthorizationEngine {
 
 	static {
 		try {
-			NativeLibraryLoader.getInstance()
-				.loadLibrary(BasicAuthorizationEngine.class.getClassLoader(), "cedar_java");
+			JniLibLoader.getInstance().loadLibrary(BasicAuthorizationEngine.class.getClassLoader(), "cedar-java",false);
 		}
 		catch (IOException e) {
 			throw new RuntimeException("load cedar lib error");
