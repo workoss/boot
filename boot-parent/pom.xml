@@ -118,6 +118,8 @@
 		<aws-java-sdk.version>1.12.693</aws-java-sdk.version>
 		<awssdk.version>2.25.22</awssdk.version>
 
+		<rust-maven.version>1.0.1</rust-maven.version>
+
 		<maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
 		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -572,7 +574,7 @@
 			<dependency>
 				<groupId>io.github.workoss</groupId>
 				<artifactId>jni</artifactId>
-				<version>1.0-SNAPSHOT</version>
+				<version>${rust-maven.version}</version>
 			</dependency>
 
 
@@ -1015,6 +1017,12 @@
 					<groupId>net.bytebuddy</groupId>
 					<artifactId>byte-buddy-maven-plugin</artifactId>
 					<version>${byte-buddy.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>io.github.workoss</groupId>
+					<artifactId>rust-maven-plugin</artifactId>
+					<version>${rust-maven.version}</version>
 				</plugin>
 
 			</plugins>
