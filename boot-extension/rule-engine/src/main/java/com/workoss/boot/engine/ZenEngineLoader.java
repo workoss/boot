@@ -43,6 +43,20 @@ public class ZenEngineLoader {
 	 * @param input 入参
 	 * @return 表达式结果
 	 */
-	static native byte[] expression(byte[] expression, byte[] input);
+	static native byte[] evaluateExpression(byte[] expression, byte[] input);
 
+	/**
+	 * 执行表达式 true/false
+	 * @param expression 表达式
+	 * @param input 入参
+	 * @return true/false
+	 */
+	static native boolean evaluateUnaryExpression(byte[] expression, byte[] input);
+	/**
+	 * 模版渲染
+	 * @param template 模板
+	 * @param input 入参
+	 * @return 渲染结果
+	 */
+	static native byte[] renderTemplate(byte[] template, byte[] input);
 }

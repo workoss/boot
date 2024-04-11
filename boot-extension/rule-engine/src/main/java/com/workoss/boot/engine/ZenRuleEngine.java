@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
 /**
  * @author workoss
  */
@@ -47,9 +46,8 @@ public class ZenRuleEngine {
 	public ZenRuleEngine(ZenRuleEngineConfig config) {
 		this.config = config;
 		try {
-			JniLibLoader.getInstance().loadLibrary(ZenRuleEngine.class.getClassLoader(), "zen-engine",false);
-		}
-		catch (IOException e) {
+			JniLibLoader.getInstance().loadLibrary(ZenRuleEngine.class.getClassLoader(), "zen-engine", false);
+		} catch (IOException e) {
 			throw new RuleEngineException("load lib error");
 		}
 	}
@@ -57,7 +55,7 @@ public class ZenRuleEngine {
 	/**
 	 * 表达式执行
 	 * @param expression 表达式
-	 * @param json 上下文
+	 * @param json       上下文
 	 * @return 表达式结果
 	 * @throws RuleEngineException 异常
 	 */
@@ -65,7 +63,7 @@ public class ZenRuleEngine {
 		if (StringUtils.isBlank(expression)) {
 			throw new RuleEngineException("expression should not be null");
 		}
-		byte[] body = ZenEngineLoader.expression(expression.getBytes(StandardCharsets.UTF_8),
+		byte[] body = ZenEngineLoader.evaluateExpression(expression.getBytes(StandardCharsets.UTF_8),
 				JsonMapper.toJSONBytes(json));
 		JsonNode response = JsonMapper.parse(body);
 		log.atDebug().log("[EXPRE] expression:{} resp:{}", expression, response);
@@ -87,15 +85,13 @@ public class ZenRuleEngine {
 	/**
 	 * 执行方法
 	 * <p>
-	 * const handler=(input,{moment,dayjs,Big,env})=>{console.log(input);const
-	 * momentValid=typeof
-	 * moment==="function"&&Object.keys(moment).includes('isDayjs');const
-	 * dayjsValid=typeof dayjs==='function'&&Object.keys(moment).includes('isDayjs');const
-	 * bigjsValid=typeof
+	 * const handler=(input,{moment,dayjs,Big,env})=>{console.log(input);const momentValid=typeof
+	 * moment==="function"&&Object.keys(moment).includes('isDayjs');const dayjsValid=typeof
+	 * dayjs==='function'&&Object.keys(moment).includes('isDayjs');const bigjsValid=typeof
 	 * Big==='function';return{totalAmount:input.price*input.quantity,momentValid,dayjsValid,bigjsValid};}
 	 * </p>
 	 * @param handlerFunc js handler方法 可以修改body和 return
-	 * @param json 上下文
+	 * @param json        上下文
 	 * @return js func return
 	 * @throws RuleEngineException 异常
 	 */
@@ -104,9 +100,9 @@ public class ZenRuleEngine {
 			throw new RuleEngineException("handler function should not be null");
 		}
 		handlerFunc = handlerFunc.replaceAll("\n", StringUtils.EMPTY)
-			.replaceAll("\t", " ")
-			.replaceAll("\\\\\"", "'")
-			.replaceAll("\"", "'");
+				.replaceAll("\t", " ")
+				.replaceAll("\\\\\"", "'")
+				.replaceAll("\"", "'");
 		ZenRuleEngineConfig zenRuleEngineConfig = DEFAULT_CONFIG.get();
 		if (handlerFunc.contains("console.log")) {
 			zenRuleEngineConfig.setTrace(true);
@@ -121,7 +117,7 @@ public class ZenRuleEngine {
 			EvaluateTraceResult traceResult = trace.get("afef8a1c-1bce-411a-bb02-fb5887d81030");
 			if (traceResult != null) {
 				log.atInfo()
-					.log("[RULE_ENGINE] function trace:{}", JsonMapper.toJSONString(traceResult.getTraceData()));
+						.log("[RULE_ENGINE] function trace:{}", JsonMapper.toJSONString(traceResult.getTraceData()));
 			}
 		}
 		return evaluate.getResult();
@@ -130,7 +126,7 @@ public class ZenRuleEngine {
 	/**
 	 * 执行规则
 	 * @param decision 规则内容
-	 * @param json 入参
+	 * @param json     入参
 	 * @return 执行结果，错误返回 RuleEngineException 异常
 	 */
 	public EvaluateResult evaluate(byte[] decision, JsonNode json) throws RuleEngineException {
@@ -157,8 +153,7 @@ public class ZenRuleEngine {
 	public boolean validate(byte[] decision) {
 		try {
 			return validateDecision(decision);
-		}
-		catch (RuleEngineException e) {
+		} catch (RuleEngineException e) {
 			log.warn("[RULE_ENGINE] valid error:{}", e.toString());
 		}
 		return false;

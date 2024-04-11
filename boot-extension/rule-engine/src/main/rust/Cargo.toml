@@ -11,9 +11,10 @@ crate_type = ["cdylib"]
 [dependencies]
 jni = "0.21"
 serde_json = "1.0"
-tokio = {version = "1.36", features = ["rt", "macros", "rt-multi-thread"]}
-zen-engine = "0.18"
-zen-expression = "0.18"
+tokio = {version = "1.37", features = ["rt", "macros", "rt-multi-thread"]}
+zen-engine = "0.20"
+zen-expression = "0.20"
+zen-tmpl = "0.20"
 
 [profile.release]
 codegen-units = 1 

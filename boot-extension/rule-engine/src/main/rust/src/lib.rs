@@ -6,20 +6,41 @@ use jni::JNIEnv;
 use serde_json::{error, Error, Value};
 use tokio::runtime::Handle;
 use tokio::task::JoinError;
+use zen_engine::handler::custom_node_adapter::{CustomNodeAdapter, NoopCustomNode};
+use zen_engine::handler::node::NodeResponse;
 use zen_engine::loader::NoopLoader;
 use zen_engine::model::DecisionContent;
 use zen_engine::{DecisionEngine, EvaluationOptions};
 use zen_expression::{Isolate, IsolateError};
 
-static RULE_ENGINE_LAZY: OnceLock<DecisionEngine<NoopLoader>> = OnceLock::new();
+static RULE_ENGINE_LAZY: OnceLock<DecisionEngine<NoopLoader, NoopCustomNode>> = OnceLock::new();
+
+pub struct HttpCustomNode {}
+
+impl Default for HttpCustomNode {
+    fn default() -> Self {
+        Self {}
+    }
+}
+
+impl HttpCustomNode {}
+
+impl CustomNodeAdapter for HttpCustomNode {
+    async fn handle(
+        &self,
+        request: CustomNodeRequest<'_>,
+    ) -> impl std::future::Future<Output = zen_engine::handler::node::NodeResult> + Send {
+        todo!()
+    }
+}
 
 /*
  * 初始化懒加载获取 决策引擎
  */
-fn get_rule_engine() -> &'static DecisionEngine<NoopLoader> {
+fn get_rule_engine() -> &'static DecisionEngine<NoopLoader, NoopCustomNode> {
     RULE_ENGINE_LAZY.get_or_init(|| {
         println!("initializing rule engine");
-        DecisionEngine::default()
+        DecisionEngine::default().with_adapter(Arc::new(CustomNodeAdapter {}))
     })
 }
 
@@ -47,21 +68,21 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
             "com/workoss/boot/engine/RuleEngineException",
             decision_result.err().unwrap().to_string(),
         )
-            .unwrap();
+        .unwrap();
         return JByteArray::default();
     }
     let decision_engine = get_rule_engine().create_decision(decision_result.unwrap().into());
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
     let job_handler = tokio::task::spawn_blocking(move || {
-        Handle::current().block_on(decision_engine
-                .evaluate_with_opts(
-                    &input_content,
-                    EvaluationOptions {
-                        trace: Some(trace.eq(&1)),
-                        max_depth: Some(max_depth as u8),
-                    },
-                ))
-    }).await;
+        Handle::current().block_on(decision_engine.evaluate_with_opts(
+            &input_content,
+            EvaluationOptions {
+                trace: Some(trace.eq(&1)),
+                max_depth: Some(max_depth as u8),
+            },
+        ))
+    })
+    .await;
 
     return match job_handler {
         Ok(response_result) => match response_result {
@@ -73,7 +94,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
                     "com/workoss/boot/engine/RuleEngineException",
                     error.to_string(),
                 )
-                    .unwrap();
+                .unwrap();
                 JByteArray::default()
             }
         },
@@ -82,7 +103,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_evalua
                 "com/workoss/boot/engine/RuleEngineException",
                 "hook time out",
             )
-                .unwrap();
+            .unwrap();
             JByteArray::default()
         }
     };
@@ -107,7 +128,7 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
             "com/workoss/boot/engine/RuleEngineException",
             decision_result.err().unwrap().to_string(),
         )
-            .unwrap();
+        .unwrap();
         return 0;
     }
     return match get_rule_engine()
@@ -120,7 +141,7 @@ pub extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_validate<'lo
                 "com/workoss/boot/engine/RuleEngineException",
                 error.to_string(),
             )
-                .unwrap();
+            .unwrap();
             return 0;
         }
     };
@@ -139,11 +160,13 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
     let expression_content = String::from_utf8(expression).unwrap();
     let input_content: Value = serde_json::from_slice(input.as_slice()).unwrap();
 
-    let join_handle: Result<Result<Value, IsolateError>, JoinError> = tokio::task::spawn_blocking(move || {
-        Handle::current().block_on(async {
-            Isolate::with_environment(&input_content).run_standard(&expression_content)
+    let join_handle: Result<Result<Value, IsolateError>, JoinError> =
+        tokio::task::spawn_blocking(move || {
+            Handle::current().block_on(async {
+                Isolate::with_environment(&input_content).run_standard(&expression_content)
+            })
         })
-    }).await;
+        .await;
 
     return match join_handle {
         Ok(value_result) => match value_result {
@@ -155,7 +178,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
                     "com/workoss/boot/engine/RuleEngineException",
                     error.to_string(),
                 )
-                    .unwrap();
+                .unwrap();
                 JByteArray::default()
             }
         },
@@ -164,7 +187,7 @@ pub async extern "system" fn Java_com_workoss_boot_engine_ZenEngineLoader_expres
                 "com/workoss/boot/engine/RuleEngineException",
                 "hook time out",
             )
-                .unwrap();
+            .unwrap();
             JByteArray::default()
         }
     };
