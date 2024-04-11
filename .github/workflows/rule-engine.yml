@@ -60,7 +60,7 @@ jobs:
       - name: rust build
         run: |
           echo $PWD 
-          cd boot-extension/rule-engine
+          cd boot-extension/rule-engine/src/main/rust
           echo $PWD
           rustup target add ${{ matrix.arch }}-pc-windows-msvc 
           cargo build --release --target ${{ matrix.arch }}-pc-windows-msvc
@@ -68,8 +68,8 @@ jobs:
           RUSTFLAGS: -Ctarget-feature=+crt-static
       - name: Copy
         run: |
-          cd boot-extension/rule-engine
-          cp  ./target/${{ matrix.arch }}-pc-windows-msvc/release/zen_engine.dll ./src/main/resources/zen_engine-windows-${{ matrix.arch }}.dll
+          cd boot-extension/rule-engine/src/main/rust
+          cp  ./target/${{ matrix.arch }}-pc-windows-msvc/release/zen_engine.dll ../resources/zen_engine-windows-${{ matrix.arch }}.dll
       - name: Upload
         run: |
           cd boot-extension/rule-engine
@@ -108,14 +108,14 @@ jobs:
       - name: rust build
         run: |
           echo $PWD 
-          cd boot-extension/rule-engine
+          cd boot-extension/rule-engine/src/main/rust
           echo $PWD
           rustup target add ${{ matrix.arch }}-unknown-linux-gnu
           cargo build --release --target ${{ matrix.arch }}-unknown-linux-gnu
       - name: Copy
         run: |
-          cd boot-extension/rule-engine
-          cp -f target/${{ matrix.arch }}-unknown-linux-gnu/release/libzen_engine.so ./src/main/resources/libzen_engine-linux-${{ matrix.arch }}.so
+          cd boot-extension/rule-engine/src/main/rust
+          cp -f target/${{ matrix.arch }}-unknown-linux-gnu/release/libzen_engine.so ../resources/libzen_engine-linux-${{ matrix.arch }}.so
       - name: Upload
         run: |
           cd boot-extension/rule-engine
@@ -154,14 +154,14 @@ jobs:
       - name: rust build
         run: |
           echo $PWD 
-          cd boot-extension/rule-engine
+          cd boot-extension/rule-engine/src/main/rust
           echo $PWD
           rustup target add ${{ matrix.arch }}-apple-darwin
           cargo build --release --target ${{ matrix.arch }}-apple-darwin
       - name: Copy
         run: |
-          cd boot-extension/rule-engine
-          cp -f target/${{ matrix.arch }}-apple-darwin/release/libzen_engine.dylib ./src/main/resources/libzen_engine-osx-${{ matrix.arch }}.dylib
+          cd boot-extension/rule-engine/src/main/rust
+          cp -f target/${{ matrix.arch }}-apple-darwin/release/libzen_engine.dylib ./resources/libzen_engine-osx-${{ matrix.arch }}.dylib
       - name: Upload
         run: |
           cd boot-extension/rule-engine
