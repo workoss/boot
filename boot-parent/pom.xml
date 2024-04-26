@@ -116,7 +116,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.708</aws-java-sdk.version>
-		<awssdk.version>2.25.38</awssdk.version>
+		<awssdk.version>2.25.39</awssdk.version>
 
 		<rust-maven.version>1.0.2</rust-maven.version>
 
