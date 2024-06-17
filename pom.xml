@@ -17,7 +17,7 @@
         <module>boot-domain</module>
     </modules>
 	<properties>
-		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+		<maven-release-plugin.version>3.1.0</maven-release-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.42</spring-javaformat-maven-plugin.version>
 		<license-maven-plugin.version>4.5</license-maven-plugin.version>
 		<versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
