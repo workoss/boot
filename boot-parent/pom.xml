@@ -115,8 +115,8 @@
 
 		<jsr305.version>3.0.2</jsr305.version>
 
-		<aws-java-sdk.version>1.12.741</aws-java-sdk.version>
-		<awssdk.version>2.26.1</awssdk.version>
+		<aws-java-sdk.version>1.12.744</aws-java-sdk.version>
+		<awssdk.version>2.26.3</awssdk.version>
 
 		<rust-maven.version>1.0.2</rust-maven.version>
 
@@ -128,8 +128,10 @@
 		<maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
 		<maven-source-plugin.version>3.3.1</maven-source-plugin.version>
 		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+
 		<maven-surefire-plugin.version>3.3.0</maven-surefire-plugin.version>
-		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+		<maven-release-plugin.version>3.1.0</maven-release-plugin.version>
+
 		<maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
 		<maven-war-plugin.version>3.4.0</maven-war-plugin.version>
 		<maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -138,7 +140,7 @@
 		<maven-help-plugin.version>3.4.1</maven-help-plugin.version>
 		<maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
 		<maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
-		<maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
+		<maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>4.0.0-M15</maven-site-plugin.version>
 		<flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.42</spring-javaformat-maven-plugin.version>
