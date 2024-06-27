@@ -98,7 +98,7 @@
 		<lombok.version>1.18.32</lombok.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 
-		<junit-jupiter.version>5.10.2</junit-jupiter.version>
+		<junit-jupiter.version>5.10.3</junit-jupiter.version>
 		<mockito-core.version>5.12.0</mockito-core.version>
 
 		<debezium.version>2.6.2.Final</debezium.version>
