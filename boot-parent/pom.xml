@@ -73,7 +73,7 @@
 		<spring-boot.version>3.3.2</spring-boot.version>
 
 		<spring-cloud-dependencies.version>2023.0.3</spring-cloud-dependencies.version>
-		<spring-data-bom.version>2024.0.2</spring-data-bom.version>
+		<spring-data-bom.version>2024.0.3</spring-data-bom.version>
 		<spring-security-bom.version>6.3.1</spring-security-bom.version>
 		<spring-modulith.version>1.2.2</spring-modulith.version>
 
