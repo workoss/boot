@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.cedarpolicy</groupId>
             <artifactId>cedar-java</artifactId>
-            <version>3.4.0</version>
+            <version>4.0.0</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
