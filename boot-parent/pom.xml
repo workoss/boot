@@ -149,7 +149,7 @@
 		<versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
 		<license-maven-plugin.version>4.6</license-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
-		<maven-gpg-plugin.version>3.2.6</maven-gpg-plugin.version>
+		<maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
 	</properties>
 
 	<dependencyManagement>
