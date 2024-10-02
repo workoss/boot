@@ -109,7 +109,7 @@
 		<feign-bom.version>13.4</feign-bom.version>
 
 		<springdoc-openapi.version>2.2.0</springdoc-openapi.version>
-		<swagger.version>2.2.24</swagger.version>
+		<swagger.version>2.2.25</swagger.version>
 		<druid.version>1.2.23</druid.version>
 		<h2.version>2.3.232</h2.version>
 		<rocksdbjni.version>9.6.1</rocksdbjni.version>
