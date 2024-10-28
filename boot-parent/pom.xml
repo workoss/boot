@@ -119,7 +119,7 @@
 		<aws-java-sdk.version>1.12.777</aws-java-sdk.version>
 		<awssdk.version>2.29.0</awssdk.version>
 
-		<rust-maven.version>1.0.2</rust-maven.version>
+		<rust-maven.version>1.0.3</rust-maven.version>
 
 		<maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
 		<maven-deploy-plugin.version>3.1.3</maven-deploy-plugin.version>
