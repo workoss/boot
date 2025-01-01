@@ -81,7 +81,7 @@
 
 		<spring-boot-admin.version>3.4.1</spring-boot-admin.version>
 
-		<mybatis.version>3.5.17</mybatis.version>
+		<mybatis.version>3.5.18</mybatis.version>
 		<mybatis-spring.version>3.0.4</mybatis-spring.version>
 		<mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
 
