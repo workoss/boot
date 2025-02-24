@@ -79,7 +79,7 @@
 
 		<jmolecules.version>2023.2.1</jmolecules.version>
 
-		<spring-boot-admin.version>3.4.2</spring-boot-admin.version>
+		<spring-boot-admin.version>3.4.4</spring-boot-admin.version>
 
 		<mybatis.version>3.5.19</mybatis.version>
 		<mybatis-spring.version>3.0.4</mybatis-spring.version>
