@@ -73,7 +73,7 @@
 		<spring-boot.version>3.4.4</spring-boot.version>
 
 		<spring-cloud-dependencies.version>2024.0.1</spring-cloud-dependencies.version>
-		<spring-data-bom.version>2024.1.4</spring-data-bom.version>
+		<spring-data-bom.version>2024.1.5</spring-data-bom.version>
 		<spring-security-bom.version>6.4.5</spring-security-bom.version>
 		<spring-modulith.version>1.3.4</spring-modulith.version>
 
@@ -117,7 +117,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.782</aws-java-sdk.version>
-		<awssdk.version>2.31.25</awssdk.version>
+		<awssdk.version>2.31.26</awssdk.version>
 
 		<rust-maven.version>1.0.3</rust-maven.version>
 
