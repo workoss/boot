@@ -99,7 +99,7 @@
 		<mapstruct.version>1.6.3</mapstruct.version>
 
 		<junit-jupiter.version>5.12.2</junit-jupiter.version>
-		<mockito-core.version>5.17.0</mockito-core.version>
+		<mockito-core.version>5.18.0</mockito-core.version>
 
 		<debezium.version>3.1.1.Final</debezium.version>
 		<byte-buddy.version>1.17.5</byte-buddy.version>
