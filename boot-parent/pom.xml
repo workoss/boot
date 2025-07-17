@@ -62,7 +62,7 @@
 		<jackson-bom.version>2.19.1</jackson-bom.version>
 		<netty-bom.version>4.2.3.Final</netty-bom.version>
 		<asm.version>9.8</asm.version>
-		<reactor-bom.version>2024.0.7</reactor-bom.version>
+		<reactor-bom.version>2024.0.8</reactor-bom.version>
 		<rsocket-bom.version>1.1.5</rsocket-bom.version>
 
 		<hibernate-validator.version>9.0.1.Final</hibernate-validator.version>
@@ -117,7 +117,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.788</aws-java-sdk.version>
-		<awssdk.version>2.31.78</awssdk.version>
+		<awssdk.version>2.32.1</awssdk.version>
 
 		<rust-maven.version>1.0.3</rust-maven.version>
 
@@ -133,7 +133,7 @@
 		<maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
 		<maven-release-plugin.version>3.1.1</maven-release-plugin.version>
 
-		<maven-enforcer-plugin.version>3.6.0</maven-enforcer-plugin.version>
+		<maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
 		<maven-war-plugin.version>3.4.0</maven-war-plugin.version>
 		<maven-install-plugin.version>3.1.4</maven-install-plugin.version>
 		<maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
