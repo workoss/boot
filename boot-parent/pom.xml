@@ -75,7 +75,7 @@
 		<spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
 		<spring-data-bom.version>2025.0.2</spring-data-bom.version>
 		<spring-security-bom.version>6.5.2</spring-security-bom.version>
-		<spring-modulith.version>1.4.1</spring-modulith.version>
+		<spring-modulith.version>1.4.2</spring-modulith.version>
 
 		<jmolecules.version>2023.3.2</jmolecules.version>
 
