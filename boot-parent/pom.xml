@@ -146,7 +146,7 @@
 		<flatten-maven-plugin.version>1.7.2</flatten-maven-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.46</spring-javaformat-maven-plugin.version>
 		<git-commit-id-maven-plugin.version>9.0.2</git-commit-id-maven-plugin.version>
-		<versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
+		<versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
 		<license-maven-plugin.version>5.0.0</license-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
