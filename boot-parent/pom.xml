@@ -95,7 +95,7 @@
 
 		<caffeine.version>3.2.2</caffeine.version>
 
-		<lombok.version>1.18.40</lombok.version>
+		<lombok.version>1.18.42</lombok.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 
 		<junit-jupiter.version>5.13.4</junit-jupiter.version>
