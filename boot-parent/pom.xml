@@ -82,7 +82,7 @@
 		<spring-boot-admin.version>3.5.6</spring-boot-admin.version>
 
 		<mybatis.version>3.5.19</mybatis.version>
-		<mybatis-spring.version>3.0.5</mybatis-spring.version>
+		<mybatis-spring.version>4.0.0</mybatis-spring.version>
 		<mybatis-spring-boot-starter.version>3.0.5</mybatis-spring-boot-starter.version>
 
 		<HikariCP.version>7.0.2</HikariCP.version>
@@ -101,7 +101,7 @@
 		<junit-jupiter.version>6.0.1</junit-jupiter.version>
 		<mockito-core.version>5.20.0</mockito-core.version>
 
-		<debezium.version>3.3.1.Final</debezium.version>
+		<debezium.version>3.3.2.Final</debezium.version>
 		<byte-buddy.version>1.18.2</byte-buddy.version>
 		<scalecube-cluster.version>2.7.6</scalecube-cluster.version>
 		<cloudevents.version>4.0.1</cloudevents.version>
@@ -127,7 +127,8 @@
 		<maven-dependency-plugin.version>3.9.0</maven-dependency-plugin.version>
 		<maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
 		<maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
-		<maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+
+		<maven-source-plugin.version>3.4.0</maven-source-plugin.version>
 		<maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
 
 		<maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
