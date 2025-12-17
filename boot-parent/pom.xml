@@ -67,7 +67,7 @@
 
 		<hibernate-validator.version>9.1.0.Final</hibernate-validator.version>
 
-		<aspectj.version>1.9.25</aspectj.version>
+		<aspectj.version>1.9.25.1</aspectj.version>
 
 		<spring.version>7.0.2</spring.version>
 		<spring-boot.version>3.5.7</spring-boot.version>
