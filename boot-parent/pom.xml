@@ -106,7 +106,7 @@
 		<scalecube-cluster.version>2.7.7</scalecube-cluster.version>
 		<cloudevents.version>4.0.1</cloudevents.version>
 		<picocli.version>4.7.7</picocli.version>
-		<feign-bom.version>13.6</feign-bom.version>
+		<feign-bom.version>13.8</feign-bom.version>
 
 		<springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 		<swagger.version>2.2.42</swagger.version>
