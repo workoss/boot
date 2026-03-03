@@ -101,8 +101,9 @@
 		<junit-jupiter.version>6.0.3</junit-jupiter.version>
 		<mockito-core.version>5.22.0</mockito-core.version>
 
-		<debezium.version>3.4.1.Final</debezium.version>
+		<debezium.version>3.4.2.Final</debezium.version>
 		<byte-buddy.version>1.18.7</byte-buddy.version>
+
 		<scalecube-cluster.version>2.7.7</scalecube-cluster.version>
 		<cloudevents.version>4.0.1</cloudevents.version>
 		<picocli.version>4.7.7</picocli.version>
@@ -117,7 +118,7 @@
 		<jsr305.version>3.0.2</jsr305.version>
 
 		<aws-java-sdk.version>1.12.796</aws-java-sdk.version>
-		<awssdk.version>2.42.3</awssdk.version>
+		<awssdk.version>2.42.4</awssdk.version>
 
 		<rust-maven.version>1.0.3</rust-maven.version>
 
