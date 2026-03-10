@@ -110,7 +110,7 @@
 
 		<springdoc-openapi.version>2.2.0</springdoc-openapi.version>
 		<swagger.version>2.2.44</swagger.version>
-		<druid.version>1.2.27</druid.version>
+		<druid.version>1.2.28</druid.version>
 		<h2.version>2.4.240</h2.version>
 		<rocksdbjni.version>10.4.2</rocksdbjni.version>
 
