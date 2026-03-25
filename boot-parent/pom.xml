@@ -112,7 +112,7 @@
 		<swagger.version>2.2.45</swagger.version>
 		<druid.version>1.2.27</druid.version>
 		<h2.version>2.4.240</h2.version>
-		<rocksdbjni.version>10.6.2</rocksdbjni.version>
+		<rocksdbjni.version>10.8.3</rocksdbjni.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
 
