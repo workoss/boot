@@ -145,7 +145,7 @@
 		<maven-site-plugin.version>4.0.0-M16</maven-site-plugin.version>
 		<flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
 		<spring-javaformat-maven-plugin.version>0.0.46</spring-javaformat-maven-plugin.version>
-		<git-commit-id-maven-plugin.version>9.1.0</git-commit-id-maven-plugin.version>
+		<git-commit-id-maven-plugin.version>10.0.0</git-commit-id-maven-plugin.version>
 		<versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
 		<license-maven-plugin.version>5.0.0</license-maven-plugin.version>
 		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
