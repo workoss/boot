@@ -65,7 +65,7 @@
 		<reactor-bom.version>2025.0.6</reactor-bom.version>
 		<rsocket-bom.version>1.1.5</rsocket-bom.version>
 
-		<hibernate-validator.version>9.1.1.Final</hibernate-validator.version>
+		<hibernate-validator.version>9.1.2.Final</hibernate-validator.version>
 
 		<aspectj.version>1.9.25.1</aspectj.version>
 
