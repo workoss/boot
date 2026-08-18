@@ -144,7 +144,7 @@
 		<maven-failsafe-plugin.version>3.5.6</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>4.0.0-M16</maven-site-plugin.version>
 		<flatten-maven-plugin.version>1.8.0</flatten-maven-plugin.version>
-		<spring-javaformat-maven-plugin.version>0.0.46</spring-javaformat-maven-plugin.version>
+		<spring-javaformat-maven-plugin.version>0.0.48</spring-javaformat-maven-plugin.version>
 		<git-commit-id-maven-plugin.version>10.0.0</git-commit-id-maven-plugin.version>
 		<versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
 		<license-maven-plugin.version>5.1.1</license-maven-plugin.version>
